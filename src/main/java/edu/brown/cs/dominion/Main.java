@@ -16,7 +16,7 @@ import static spark.Spark.*;
  * Created by henry on 3/22/2017.
  */
 public class Main {
-  private static final int DEFAULT_PORT = 4567;
+  private static final int DEFAULT_PORT = 4568;
   private UserRegistry users;
 
   public static void main(String[] args) {

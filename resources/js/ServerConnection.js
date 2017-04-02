@@ -1,4 +1,4 @@
-const testSocket = new WebSocket("ws://localhost:4567/socket");
+const testSocket = new WebSocket("ws://localhost:4568/socket");
 let userId;
 
 const getCookie = function(name) {
