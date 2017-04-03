@@ -1,9 +1,9 @@
-const testSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/socket");
+const sock = new WebSocket("ws://" + location.hostname + ":" + location.port + "/socket");
 let userId;
 let messageFuntions = [];
 
 const send = function(type, message) {
-    testSocket.send(type + ":" + userId + ":" + message);
+    sock.send(type + ":" + userId + ":" + message);
 }
 
 messageFuntions.userid = function (id) {
@@ -17,17 +17,17 @@ const getCookie = function(name) {
     if (parts.length == 2) return parts.pop().split(";").shift();
 };
 
-testSocket.onopen = function () {
+sock.onopen = function () {
     if (getCookie("id") == null) {
-        testSocket.send("newid:");
+        sock.send("newid:");
     } else {
         userId = getCookie("id");
-        testSocket.send("oldid:" + userId);
+        sock.send("oldid:" + userId);
         console.log("User ID Remembered: " + userId);
     }
 };
 
-testSocket.onmessage = function (event) {
+sock.onmessage = function (event) {
     const str = event.data;
     const semi = str.indexOf(':');
     const type = str.substring(0, semi);
