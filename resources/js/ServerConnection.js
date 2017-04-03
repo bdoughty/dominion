@@ -1,5 +1,15 @@
-const testSocket = new WebSocket("ws://localhost:4568/socket");
+const testSocket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/socket");
 let userId;
+let messageFuntions = [];
+
+const send = function(type, message) {
+    testSocket.send(type + ":" + userId + ":" + message);
+}
+
+messageFuntions.userid = function (id) {
+    document.cookie = "id = " + id;
+    console.log("User ID Received: " + id);
+};
 
 const getCookie = function(name) {
     const value = "; " + document.cookie;
@@ -9,19 +19,22 @@ const getCookie = function(name) {
 
 testSocket.onopen = function () {
     if (getCookie("id") == null) {
-        testSocket.send("register:newid");
+        testSocket.send("newid:");
     } else {
         userId = getCookie("id");
-        testSocket.send("register:" + userId);
-        alert("User ID Remembered: " + userId);
+        testSocket.send("oldid:" + userId);
+        console.log("User ID Remembered: " + userId);
     }
 };
 
 testSocket.onmessage = function (event) {
     const str = event.data;
-    if (str.startsWith("userid")) {
-        const userId = str.substring(7);
-        document.cookie = "id" + userId;
-        alert("User ID Received: " + userId);
+    const semi = str.indexOf(':');
+    const type = str.substring(0, semi);
+    if(str.length > semi + 1) {
+        const message = str.substring(semi + 1);
+        messageFuntions[type](message);
+    } else {
+        messageFuntions[type]();
     }
 };

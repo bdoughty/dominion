@@ -1,5 +1,6 @@
 package edu.brown.cs.dominion;
 
+import com.google.gson.Gson;
 import edu.brown.cs.dominion.io.UserRegistry;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -16,12 +17,14 @@ import static spark.Spark.*;
  * Created by henry on 3/22/2017.
  */
 public class Main {
-  private static final int DEFAULT_PORT = 4568;
+  private static final int DEFAULT_PORT = 4567;
   private UserRegistry users;
 
   public static void main(String[] args) {
     Main m = new Main();
     m.run(args);
+    Gson gson = new Gson();
+    System.out.println(gson.toJson(new int[][]{{1,2}, {3,4}}));
   }
 
   private Main() {
