@@ -1,8 +1,15 @@
-package edu.brown.cs.dominion.io;
+package edu.brown.cs.dominion.games;
 
 import edu.brown.cs.dominion.Card;
+import edu.brown.cs.dominion.User;
+import edu.brown.cs.dominion.io.AJAX;
+import edu.brown.cs.dominion.io.UserRegistry;
+import edu.brown.cs.dominion.io.send.ClientUpdateMap;
+
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -11,39 +18,47 @@ import java.util.function.Function;
  *
  * Created by henry on 3/22/2017.
  */
-public class GameEventWrapper {
+public class GameManager {
   private UserRegistry users;
+  private Map<User, Game> gamesByUser;
+  private List<Game> games;
 
-  public GameEventWrapper(GameEventListener gel, UserRegistry users) {
+  public GameManager(UserRegistry users) {
     this.users = users;
-    this.gel = gel;
+    gamesByUser = new HashMap<>();
+    games = new LinkedList<>();
   }
 
-  private GameEventListener gel;
   private Function<Card, ClientUpdateMap> callback;
 
   @AJAX(names = {"userId", "boughtCards"})
   public ClientUpdateMap buys(Integer userId, List<Integer> buys){
-    List<Card> cards = map(buys, Card::getCardFromCardId);
-    return chk(gel.endBuyPhase(users.getUserById(userId), cards));
+    List<Card> cards = map(buys, Card::getCardFromId);
+    User user = users.getUserById(userId);
+    Game g = gamesByUser.get(user);
+    return chk(g.endBuyPhase(user, cards));
   }
 
   @AJAX(names = {"userId", "cardId"})
   public ClientUpdateMap action(Integer userId, Integer cardId){
-    return chk(gel.doAction(users.getUserById(userId),
-        Card.getCardFromCardId(cardId)));
+    User user = users.getUserById(userId);
+    Game g = gamesByUser.get(user);
+    return chk(g.doAction(user, Card.getCardFromId(cardId)));
   }
 
+  //TODO WHAT IS THIS!!??!?!?!?!?
   @AJAX(names = {"userId", "cardId"})
-  public ClientUpdateMap action(Integer userId){
-    return chk(gel.endActionPhase(users.getUserById(userId)));
+  public ClientUpdateMap endActionPhase(Integer userId){
+    User user = users.getUserById(userId);
+    Game g = gamesByUser.get(user);
+    return chk(g.endActionPhase(user));
   }
 
   @AJAX(names = {"userId", "cardId"})
   public ClientUpdateMap selection(Integer userId, Integer cardId){
     assert callback != null;
 
-    return chk(callback.apply(Card.getCardFromCardId(cardId))).finishSelect();
+    return chk(callback.apply(Card.getCardFromId(cardId))).finishSelect();
   }
 
   private <T, K> List<K> map(List<T> list, Function<T, K> convert) {

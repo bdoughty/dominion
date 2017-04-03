@@ -1,24 +1,21 @@
 package edu.brown.cs.dominion.io;
 
 import com.google.gson.Gson;
-import edu.brown.cs.dominion.user.User;
+import edu.brown.cs.dominion.User;
+import edu.brown.cs.dominion.io.send.Sender;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
-/**
- * Created by henry on 3/23/2017.
- */
-public class UserSet implements Collection<User> {
+public class UserSet implements Collection<User>, Sender {
   private static final Gson GSON = new Gson();
-
   Collection<User> users;
 
-  public void sendAll(Object o) {
-    //TODO
+  @Override
+  public boolean send(String s) {
+    users.forEach(user -> user.send(s));
+    return true;
   }
-
 
   /*
           Decorator and Constructor (Wrapper) Methods Below

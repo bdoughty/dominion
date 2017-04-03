@@ -1,5 +1,6 @@
 package edu.brown.cs.dominion;
 
+import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import edu.brown.cs.dominion.io.UserRegistry;
 import joptsimple.OptionParser;
@@ -10,6 +11,7 @@ import spark.Response;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 
 import static spark.Spark.*;
 
@@ -23,8 +25,8 @@ public class Main {
   public static void main(String[] args) {
     Main m = new Main();
     m.run(args);
-    Gson gson = new Gson();
-    System.out.println(gson.toJson(new int[][]{{1,2}, {3,4}}));
+    Gson g = new Gson();
+    System.out.println(g.toJson(ImmutableList.of(1,2,3)));
   }
 
   private Main() {
@@ -46,15 +48,10 @@ public class Main {
 
     webSocket("/socket", users);
 
+    //TODO get rid of this, for some reason it is necessary for the server to
+    // start right now.
     get("/hello", (req, res) -> "Hello World");
   }
-
-
-
-
-
-
-
 
 
   /**

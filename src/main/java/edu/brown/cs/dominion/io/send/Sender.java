@@ -1,4 +1,4 @@
-package edu.brown.cs.dominion.user;
+package edu.brown.cs.dominion.io.send;
 
 /**
  * Interface To Allow The Sending of Data Across the Websocket.

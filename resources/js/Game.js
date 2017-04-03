@@ -16,11 +16,16 @@ class ClientGame {
         this.gamePhase = "action";
         this.holding = false;
 
+        //Note this pile array is loaded [y][x]
         this.pileArray = pileArray;
         this.toBuy = [];
-        this.deck = [];
+        this.deck = 10;
         this.hand = [];
-        this.discardPile = [];
+        this.discardPile = 0;
+
+        this.toSelect = false;
+        this.toSelectHand = [];
+        this.toSelectBoard = [];
     }
 
     getSelf() {
@@ -48,9 +53,8 @@ class Player {
 }
 
 class Chat {
-    constructor(roomId) {
+    constructor() {
         this.chat = [];
-        this.roomId = roomId;
     }
 
     addMessage(color, message, name) {
@@ -59,5 +63,9 @@ class Chat {
             message: message,
             name: name
         });
+    }
+
+    addMessage(chatItem) {
+        this.chat.push(chatItem);
     }
 }

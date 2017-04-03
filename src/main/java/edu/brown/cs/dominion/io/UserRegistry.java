@@ -1,7 +1,6 @@
 package edu.brown.cs.dominion.io;
 
-import edu.brown.cs.dominion.user.MessageType;
-import edu.brown.cs.dominion.user.User;
+import edu.brown.cs.dominion.User;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
@@ -13,7 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import static edu.brown.cs.dominion.user.MessageType.*;
+import static edu.brown.cs.dominion.io.send.MessageType.*;
 
 /**
  * A way that hooks into the WebSocket system in order to keep track of all

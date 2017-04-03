@@ -1,8 +1,7 @@
-package edu.brown.cs.dominion.io;
+package edu.brown.cs.dominion.io.send;
 
 import com.google.gson.Gson;
 import edu.brown.cs.dominion.Card;
-import edu.brown.cs.dominion.user.User;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -14,7 +13,7 @@ import java.util.function.Function;
 /**
  * Created by henry on 3/22/2017.
  */
-public class ClientUpdateMap implements Jsonable{
+public class ClientUpdateMap implements Jsonable {
   private transient static final Gson GSON = new Gson();
   private Map<String, Object> data;
   private transient Function<Card, ClientUpdateMap> callback;
@@ -55,6 +54,26 @@ public class ClientUpdateMap implements Jsonable{
     data.put("select", true);
     data.put("handSelect", map(handIds, Card::getId));
     data.put("boardSelect", map(boardIds, Card::getId));
+    return this;
+  }
+
+  public ClientUpdateMap hand(List<Card> cards) {
+    data.put("hand", map(cards, Card::getId));
+    return this;
+  }
+
+  public ClientUpdateMap deckRemaining(int numCards) {
+    data.put("decksize", numCards);
+    return this;
+  }
+
+  public ClientUpdateMap discardPileSize(int numCards) {
+    data.put("discardsize", numCards);
+    return this;
+  }
+
+  public ClientUpdateMap holdUntilInformed() {
+    data.put("holding", true);
     return this;
   }
 

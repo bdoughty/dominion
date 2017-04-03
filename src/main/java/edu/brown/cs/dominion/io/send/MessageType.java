@@ -1,10 +1,13 @@
-package edu.brown.cs.dominion.user;
+package edu.brown.cs.dominion.io.send;
 
 /**
  * Created by henry on 4/2/2017.
  */
 public enum MessageType {
-  NEWID ("userid");
+  NEWID ("userid"),
+  UPDATE_MAP ("updatemap"),
+  STOP_HOLD ("stophold"),
+  CHAT ("chat");
 
   private final String name;
   MessageType(String name){

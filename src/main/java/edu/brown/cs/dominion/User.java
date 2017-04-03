@@ -1,11 +1,10 @@
-package edu.brown.cs.dominion.user;
+package edu.brown.cs.dominion;
 
+import edu.brown.cs.dominion.io.send.Sender;
 import org.eclipse.jetty.websocket.api.Session;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -14,16 +13,17 @@ import java.util.Set;
  *
  * Created by henry on 3/22/2017.
  */
-public class User implements Sender{
+public class User implements Sender {
   private int id;
-  private Color c;
+  private String color;
   private String name;
-  private Set<Session> sessions;
+  private transient Set<Session> sessions;
 
   public User(int id) {
     sessions = new HashSet<>();
-    c = makeColor();
+    color = makeColor();
     this.id = id;
+    this.name = "idname: " + id;
   }
 
   public void addSession(Session s) {
@@ -55,18 +55,32 @@ public class User implements Sender{
     }
   }
 
+  /**
+   * Getter for id.
+   * @return user id.
+   */
   public int getId() {
     return id;
   }
 
-  public String getColor() {
+  /**
+   * Getter for the color in html friendly form.
+   * @return the color as a string.
+   */
+  public String getColor(){
+    return color;
+  }
+
+  private String makeColor(){
+    Color c = Color.getHSBColor((float) Math.random(), 0.5f, 0.5f);
     return "rgb("+ c.getRed() + "," + c.getGreen() + "," + c.getBlue() + ")";
   }
 
-  private Color makeColor(){
-    return Color.getHSBColor((float) Math.random(), 0.5f, 0.5f);
-  }
-
+  /**
+   * Send a message to all sessions associated with this user.
+   * @param message the message to send.
+   * @return if the message was successfully sent to at least one session.
+   */
   @Override
   public boolean send(String message) {
     boolean sent = false;
