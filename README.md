@@ -1,27 +1,28 @@
-# cs0320 Term Project
+# DominionFront
 
-**Team Members:** _Fill this in!_
-Sol Zitter
-Ben Doughty
-Brendan Le
-Henry Stone
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.0.
 
-**Project Idea:** _Fill this in!_
+## Development server
 
-Dominion Multiplayer Card Game
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-**Mentor TA:** _Put your mentor TA's name and email here once you're assigned one!_
+## Code scaffolding
 
-## Project Requirements
-_This portion of the README is due March 8th (see the project handout)!_
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive/pipe/service/class/module`.
 
-https://docs.google.com/a/brown.edu/document/d/1S7Yn5-4c57bUifcHwQGHtDAIXlwFO_fYcHr3zk-i3bY/edit?usp=sharing
+## Build
 
-## Project Specs and Mockup
-_A link to your specifications document and your mockup will go here!_
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
 
-## Project Design Presentation
-_A link to your design presentation/document will go here!_
+## Running unit tests
 
-## How to Build and Run
-_A necessary part of any README!_
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+## Running end-to-end tests
+
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Before running the tests make sure you are serving the app via `ng serve`.
+
+## Further help
+
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
