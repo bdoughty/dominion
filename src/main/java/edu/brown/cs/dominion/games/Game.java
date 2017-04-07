@@ -26,6 +26,7 @@ public class Game extends UserSet implements GameEventListener{
   public ClientUpdateMap endBuyPhase(User u, List<Card> toBuy) {
     //TODO
     return null;
+
   }
 
   @Override
@@ -51,4 +52,6 @@ public class Game extends UserSet implements GameEventListener{
     //TODO
     return null;
   }
+
+
 }

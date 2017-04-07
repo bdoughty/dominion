@@ -9,7 +9,7 @@ import java.util.Iterator;
 
 public class UserSet implements Collection<User>, Sender {
   private static final Gson GSON = new Gson();
-  Collection<User> users;
+  private Collection<User> users;
 
   @Override
   public boolean send(String s) {

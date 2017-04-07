@@ -1,5 +1,6 @@
 package edu.brown.cs.dominion;
 
+import edu.brown.cs.dominion.io.send.MessageType;
 import edu.brown.cs.dominion.io.send.Sender;
 import org.eclipse.jetty.websocket.api.Session;
 import java.awt.Color;

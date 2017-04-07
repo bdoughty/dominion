@@ -26,7 +26,7 @@ public class Main {
     Main m = new Main();
     m.run(args);
     Gson g = new Gson();
-    System.out.println(g.toJson(ImmutableList.of(1,2,3)));
+    System.out.println(g.toJson(new User(4)));
   }
 
   private Main() {
