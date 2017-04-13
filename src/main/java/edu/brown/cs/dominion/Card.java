@@ -1,24 +1,43 @@
 package edu.brown.cs.dominion;
 
+import edu.brown.cs.dominion.action.ActionCenter;
+
 /**
  * Created by henry on 3/22/2017.
  */
-public abstract class Card{
+public abstract class Card {
   private int id;
   private int cost;
-  //Note all other variables should be transient to avoid lengthy GSON
-  // calls.
+  private transient int victoryPoints;
+  private transient int monetaryValue;
 
   public int getId() {
-    return getId();
+    return id;
   }
+
+  public int getCost() {
+    return cost;
+  }
+
+  public int getVictoryPoints() {
+    return victoryPoints;
+  }
+
+  public int getMonetaryValue() {
+    return monetaryValue;
+  }
+
   public static Card getCardFromId(int id) {
-    //TODO this
+    // TODO this
     return null;
   }
 
   public static Card getCardFromName(String name) {
-    //TODO this
+    // TODO this
     return null;
+  }
+
+  public void play(ActionCenter ac) {
+
   }
 }

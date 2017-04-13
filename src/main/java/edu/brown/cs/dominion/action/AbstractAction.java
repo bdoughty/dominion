@@ -1,8 +1,8 @@
 package edu.brown.cs.dominion.action;
 
-import edu.brown.cs.dominion.gameutil.Card;
+import edu.brown.cs.dominion.Card;
 
-public abstract class AbstractAction implements Card {
+public abstract class AbstractAction extends Card {
 
   protected int cost;
 
@@ -14,12 +14,12 @@ public abstract class AbstractAction implements Card {
   }
 
   @Override
-  public int getValue() {
+  public int getMonetaryValue() {
     return 0;
   }
 
   @Override
-  public int getPoints() {
+  public int getVictoryPoints() {
     return 0;
   }
 

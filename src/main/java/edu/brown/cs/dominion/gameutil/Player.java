@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.money.Copper;
 import edu.brown.cs.dominion.victory.Estate;
 
@@ -114,7 +115,7 @@ public class Player {
     this.buys = 1;
 
     for (Card c : this.hand) {
-      this.baseMoney += c.getValue();
+      this.baseMoney += c.getMonetaryValue();
     }
 
   }
@@ -153,11 +154,11 @@ public class Player {
     int points = 0;
 
     for (Card c : this.deck) {
-      points += c.getPoints();
+      points += c.getVictoryPoints();
     }
 
     for (Card c : this.hand) {
-      points += c.getPoints();
+      points += c.getVictoryPoints();
     }
 
     return points;

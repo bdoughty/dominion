@@ -2,6 +2,8 @@ package edu.brown.cs.dominion.gameutil;
 
 import java.util.function.Supplier;
 
+import edu.brown.cs.dominion.Card;
+
 public class Pile {
 
   private int size;

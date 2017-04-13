@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.money.Copper;
 import edu.brown.cs.dominion.money.Gold;
 import edu.brown.cs.dominion.money.Money;

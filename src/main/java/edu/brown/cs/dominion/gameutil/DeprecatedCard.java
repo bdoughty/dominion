@@ -2,15 +2,15 @@ package edu.brown.cs.dominion.gameutil;
 
 import edu.brown.cs.dominion.action.ActionCenter;
 
-public interface Card {
+public interface DeprecatedCard {
 
   void play(ActionCenter ac);
 
   int getCost();
 
-  int getValue();
+  int getMonetaryValue();
 
-  int getPoints();
+  int getVictoryPoints();
 
   int getId();
 

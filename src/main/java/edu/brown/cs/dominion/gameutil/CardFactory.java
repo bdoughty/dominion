@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.action.Cellar;
 import edu.brown.cs.dominion.action.Market;
 import edu.brown.cs.dominion.action.Militia;
