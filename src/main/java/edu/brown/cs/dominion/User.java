@@ -1,12 +1,14 @@
 package edu.brown.cs.dominion;
 
-import edu.brown.cs.dominion.io.send.MessageType;
-import edu.brown.cs.dominion.io.send.Sender;
-import org.eclipse.jetty.websocket.api.Session;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.eclipse.jetty.websocket.api.Session;
+
+import edu.brown.cs.dominion.gameutil.Player;
+import edu.brown.cs.dominion.io.send.Sender;
 
 /**
  * A wrapper for session that allows users to contain extra information
@@ -19,6 +21,7 @@ public class User implements Sender {
   private String color;
   private String name;
   private transient Set<Session> sessions;
+  private transient Player player;
 
   public User(int id) {
     sessions = new HashSet<>();
@@ -36,7 +39,7 @@ public class User implements Sender {
   }
 
   public boolean removeSession(Session s) {
-    if(sessions.contains(s)) {
+    if (sessions.contains(s)) {
       sessions.remove(s);
       return true;
     }
@@ -46,6 +49,7 @@ public class User implements Sender {
   /**
    * Getter for the name of the user, will return a string conversion of the
    * users ID.
+   * 
    * @return the name of the user.
    */
   public String getName() {
@@ -58,6 +62,7 @@ public class User implements Sender {
 
   /**
    * Getter for id.
+   * 
    * @return user id.
    */
   public int getId() {
@@ -66,20 +71,23 @@ public class User implements Sender {
 
   /**
    * Getter for the color in html friendly form.
+   * 
    * @return the color as a string.
    */
-  public String getColor(){
+  public String getColor() {
     return color;
   }
 
-  private String makeColor(){
+  private String makeColor() {
     Color c = Color.getHSBColor((float) Math.random(), 0.5f, 0.5f);
-    return "rgb("+ c.getRed() + "," + c.getGreen() + "," + c.getBlue() + ")";
+    return "rgb(" + c.getRed() + "," + c.getGreen() + "," + c.getBlue() + ")";
   }
 
   /**
    * Send a message to all sessions associated with this user.
-   * @param message the message to send.
+   * 
+   * @param message
+   *          the message to send.
    * @return if the message was successfully sent to at least one session.
    */
   @Override
@@ -90,8 +98,8 @@ public class User implements Sender {
         s.getRemote().sendString(message);
         sent = true;
       } catch (IOException e) {
-        System.out.println("ERROR: sending message " + message + " to the " +
-            "user #" + id);
+        System.out.println(
+            "ERROR: sending message " + message + " to the " + "user #" + id);
       }
     }
     return sent;
