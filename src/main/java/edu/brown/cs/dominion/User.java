@@ -46,6 +46,10 @@ public class User implements Sender {
     return false;
   }
 
+  public Player getPlayer() {
+    return player;
+  }
+
   /**
    * Getter for the name of the user, will return a string conversion of the
    * users ID.
