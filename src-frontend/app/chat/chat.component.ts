@@ -29,8 +29,10 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._chatSocketService.addListener('chat', (message) => {
-      this.chatModel.addMessage({name: 'Testing', color: 'Testing', message: message});
+    this._chatSocketService.addListener('chat', (messageString) => {
+      let message = JSON.parse(messageString);
+      // this.chatModel.addMessage({name: 'Testing', color: 'Testing', message: messageString});
+      this.chatModel.addMessage(message);
     });
   }
 

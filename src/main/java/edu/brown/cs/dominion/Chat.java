@@ -15,7 +15,7 @@ import java.util.Set;
  * Created by henry on 4/2/2017.
  */
 public class Chat {
-  private static Gson GSON;
+  private static Gson GSON = new Gson();
 
   public Chat() {}
 
