@@ -2,7 +2,9 @@ package edu.brown.cs.dominion;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
+import edu.brown.cs.dominion.io.HomeWebsocket;
 import edu.brown.cs.dominion.io.UserRegistry;
+import edu.brown.cs.dominion.io.Websocket;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import spark.ExceptionHandler;
@@ -21,16 +23,16 @@ import static spark.Spark.*;
 public class Main {
   private static final int DEFAULT_PORT = 4567;
   private UserRegistry users;
+  private HomeWebsocket home;
 
   public static void main(String[] args) {
     Main m = new Main();
     m.run(args);
-    Gson g = new Gson();
-    System.out.println(g.toJson(new User(4)));
   }
 
   private Main() {
     users = new UserRegistry();
+    home = new HomeWebsocket();
   }
 
   private void run(String[] args) {
@@ -46,7 +48,7 @@ public class Main {
     externalStaticFileLocation("resources");
     exception(Exception.class, new ExceptionPrinter());
 
-    webSocket("/socket", users);
+    webSocket("/homechat", new Websocket(users, home));
 
     //TODO get rid of this, for some reason it is necessary for the server to
     // start right now.
