@@ -5,11 +5,11 @@ interface Message {
 }
 
 export class Chat {
-  public messages:Message[] = [];
+  public messages: Message[] = [];
 
-  constructor() { }
+  constructor() {}
 
-  addMessageFromComponents(color:string, message:string, name:string) {
+  addMessageFromComponents(color: string, message: string, name: string) {
     this.messages.push({
       color: color,
       message: message,

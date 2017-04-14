@@ -11,8 +11,8 @@ html, body {
 }
 
 body {
-  background: url('assets/bg.jpg') center center;
-  background-size: cover;
+  /*background: url('assets/bg.jpg') center center;*/
+  /*background-size: cover;*/
 }
 
 body::after {
@@ -49,6 +49,7 @@ input {
   padding: 12px;
   border: 1px solid #DDD;
 }
+
 input:focus {
   outline: none;
   background: #FCFCFC;

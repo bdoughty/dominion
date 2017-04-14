@@ -115,41 +115,6 @@
   position: relative;
 }
 
-.pane-content .messages {
-  height: 100%;
-  display: flex;
-  flex-direction: column-reverse;
-  padding: 0 14px 50px 14px;
-}
-.pane-content .message {
-  padding: 4px;
-  display: flex;
-}
-
-.pane-content .name {
-  padding-right: 12px;
-  line-height: 20px;
-}
-
-.pane-content .message-content {
-  line-height: 20px;
-  font-weight: 300;
-}
-.pane-content .input-container {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  left: 0;
-}
-.pane-content .input-container input {
-  width: 100%;
-  border: none;
-  font-size: 0.95em;
-  font-weight: 300;
-  background: rgba(50, 50, 50, 0.8);
-  color: white;
-  border-top: 1px solid #999;
-}
 
 .pane#game-info .pane-content {
   display: flex;

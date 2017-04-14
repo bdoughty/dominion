@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {UserIdService} from "../shared/user-id.service";
-import {Chat} from "./models/chat.model";
+import {Chat} from "../chat/chat.model";
 import {Player} from "./models/player.model";
 import {Pile} from "./models/pile.model";
 import {ClientGame} from "./models/client-game.model";
 import {GameService} from "./game.service";
-import {environment} from "../../environments/environment";
+import {SocketService} from "../shared/socket.service";
 
 @Component({
   selector: 'dmn-game',
@@ -19,16 +19,31 @@ export class GameComponent implements OnInit {
 
   constructor(
     private _userIdService: UserIdService,
-    private _gameService: GameService) {}
+    private _gameService: GameService,
+    private _socketService: SocketService
+  ) {}
 
   ngOnInit(): void {
-    console.log(environment.production);
+    let pile1 = new Pile(123, 3, 3);
+    let player = new Player(4234, "name1", "#123123");
+
+    let state = {
+      pile: [
+        [pile1, pile1, pile1, pile1],
+        [pile1, pile1, pile1, pile1],
+        [pile1, pile1, pile1, pile1],
+        [pile1, pile1, pile1, pile1]
+      ],
+      players: [player, player, player]
+    };
+    this.initGameFromState(state);
   }
 
-  initGame(gameInitString) {
-    const gameStateFromServer = JSON.parse(gameInitString);
+  initGameFromState(state) {
+    let gameStateFromServer = state;
     const players = gameStateFromServer.players;
     const playerMap = {};
+
     players.forEach(function (p) {
       playerMap[p.id] = new Player(p.id, p.color, p.name);
     });

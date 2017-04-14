@@ -12,6 +12,7 @@ import {UserIdService} from "./shared/user-id.service";
 import {GameService} from "./game/game.service";
 import {SocketService} from "./shared/socket.service";
 import {appRoutes} from "./routes";
+import {ChatComponent} from "./chat/chat.component";
 
 @NgModule({
   declarations: [
@@ -21,8 +22,9 @@ import {appRoutes} from "./routes";
 
     GameComponent,
     LobbyComponent,
-    CreationComponent
+    CreationComponent,
 
+    ChatComponent
   ],
   imports: [
     BrowserModule,
