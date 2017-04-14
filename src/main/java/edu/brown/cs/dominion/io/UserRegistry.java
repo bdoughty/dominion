@@ -1,6 +1,8 @@
 package edu.brown.cs.dominion.io;
 
 import edu.brown.cs.dominion.User;
+import edu.brown.cs.dominion.games.MessageListener;
+import edu.brown.cs.dominion.games.UserMessageListener;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
@@ -24,7 +26,8 @@ public class UserRegistry implements Collection<User>{
   private int nextId;
   private Map<Integer, User> usersById;
   private Map<Session, User> usersBySession;
-  private Map<String, MessageConsumer> commands;
+  private Map<String, MessageListener> messageListeners;
+  private Map<User, Map<String, UserMessageListener>> userMessageListeners;
 
   public User getUserById(int id) {
     return usersById.get(id);
@@ -34,10 +37,11 @@ public class UserRegistry implements Collection<User>{
     nextId = 0;
     usersById = new HashMap<>();
     usersBySession = new HashMap<>();
-    commands = new HashMap<>();
+    messageListeners = new HashMap<>();
+    userMessageListeners = new HashMap<>();
 
-    commands.put("newid", this::registerNewUser);
-    commands.put("oldid", this::tryToRegisterOldUser);
+    messageListeners.put("newid", this::registerNewUser);
+    messageListeners.put("oldid", this::tryToRegisterOldUser);
   }
 
   private void tryToRegisterOldUser(Session ses, String mes) {
@@ -54,6 +58,7 @@ public class UserRegistry implements Collection<User>{
   private void registerNewUser(Session ses, String mes) {
     User u = new User(nextId);
     u.addSession(ses);
+    userMessageListeners.put(u, new HashMap<>());
     usersBySession.put(ses, u);
     usersById.put(nextId, u);
     u.send(NEWID, nextId);
@@ -81,16 +86,22 @@ public class UserRegistry implements Collection<User>{
   @OnWebSocketMessage
   public void onMessage(Session sess, String message) {
     try {
+
       String commandType = message.substring(0, message.indexOf(':'));
       commandType = commandType.toLowerCase(Locale.getDefault());
-      MessageConsumer command = commands.get(commandType);
 
-      if (command == null) {
-        throw new RuntimeException("No command mapped for \"" + commandType +
-            "\"");
+      if (messageListeners.containsKey(commandType)) {
+        MessageListener command = messageListeners.get(commandType);
+        command.handleMessage(sess, message.substring(message.indexOf(':') + 1));
+      } else if (usersBySession.containsKey(sess)) {
+        User u = usersBySession.get(sess);
+        if (userMessageListeners.containsKey(u)) {
+          Map<String, UserMessageListener> umls = userMessageListeners.get(u);
+          UserMessageListener uml = umls.get(commandType);
+          uml.handleMessage(u, message.substring(message.indexOf(':') + 1));
+        }
       }
 
-      command.accept(sess, message.substring(message.indexOf(':') + 1));
     } catch (IndexOutOfBoundsException e) {
       throw new RuntimeException("No semicolon contained in the message " +
           message);
