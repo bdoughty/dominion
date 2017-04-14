@@ -9,7 +9,7 @@ import {CreationComponent} from "./creation-page/creation-page.component";
 import {GameComponent} from "./game/game.component";
 import {UserIdService} from "./shared/user-id.service";
 import {GameService} from "./game/game.service";
-import {MessageService} from "./shared/message-functions.service";
+import {SocketService} from "./shared/socket.service";
 
 @NgModule({
   declarations: [
@@ -30,7 +30,7 @@ import {MessageService} from "./shared/message-functions.service";
   providers: [
     UserIdService,
     GameService,
-    MessageService
+    SocketService
   ],
   bootstrap: [AppComponent]
 })

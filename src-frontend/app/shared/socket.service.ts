@@ -1,5 +1,4 @@
 import {Injectable} from "@angular/core";
-import {MessageService} from "./message-functions.service";
 import {UserIdService} from "./user-id.service";
 
 @Injectable()
@@ -7,8 +6,7 @@ export class SocketService {
   public sock = new WebSocket("ws://" + location.hostname + ":" + location.port + "/socket");
   public userId;
 
-  constructor(public _messageService: MessageService,
-              public _userIdService: UserIdService) {
+  constructor(public _userIdService: UserIdService) {
 
     this.sock.onopen = () => {
       if (this.getCookie("id") != null) {
@@ -26,9 +24,9 @@ export class SocketService {
       const type = str.substring(0, semi);
       if (str.length > semi + 1) {
         const message = str.substring(semi + 1);
-        this._messageService[type](message);
+        // this._messageService[type](message);
       } else {
-        this._messageService[type]();
+        // this._messageService[type]();
       }
     };
   }

@@ -5,13 +5,14 @@ import {Player} from "./models/player.model";
 import {Pile} from "./models/pile.model";
 import {ClientGame} from "./models/client-game.model";
 import {GameService} from "./game.service";
+import {environment} from "../../environments/environment";
 
 @Component({
   selector: 'dmn-game',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.css']
-
-}) export class GameComponent implements OnInit {
+})
+export class GameComponent implements OnInit {
   public title = 'Dominion';
   public game = null;
   public gameChat = new Chat();
@@ -21,7 +22,7 @@ import {GameService} from "./game.service";
     private _gameService: GameService) {}
 
   ngOnInit(): void {
-
+    console.log(environment.production);
   }
 
   initGame(gameInitString) {
@@ -77,7 +78,6 @@ import {GameService} from "./game.service";
       if (update.holding === "undefined") {
         this.game.holding = update.holding;
       }
-
     }
   }
 

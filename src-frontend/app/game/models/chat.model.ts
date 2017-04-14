@@ -1,7 +1,7 @@
-interface Message{
-    color:string;
-    message:string;
-    name:string;
+interface Message {
+    color: string;
+    message: string;
+    name: string;
 }
 
 export class Chat {
@@ -17,7 +17,7 @@ export class Chat {
     });
   }
 
-  addMessage(chatItem : Message){
+  addMessage(chatItem: Message) {
      this.messages.push(chatItem);
   }
 }
