@@ -6,7 +6,7 @@
 }
 
 .message-container {
-  overflow: autok;
+  overflow: auto;
   overflow-x: hidden;
 }
 

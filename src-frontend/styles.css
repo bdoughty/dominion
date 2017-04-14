@@ -11,8 +11,8 @@ html, body {
 }
 
 body {
-  /*background: url('assets/bg.jpg') center center;*/
-  /*background-size: cover;*/
+  background: url('assets/bg.jpg') center center;
+  background-size: cover;
 }
 
 body::after {

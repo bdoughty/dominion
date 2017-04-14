@@ -13,6 +13,7 @@ export class AbstractSocketService {
 
     this.addListener('userid', (userId) => {
       _userIdService.id = userId;
+      document.cookie = "id=" + userId;
       console.log("Loaded id " + userId);
     });
 

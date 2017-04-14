@@ -113,7 +113,7 @@ public class Websocket {
     String type = message.substring(0, message.indexOf(':')).toLowerCase();
     String data = message.substring(message.indexOf(':') + 1);
     if (commands.containsKey(type)) {
-      commands.get(type).handleMessage(this, sess, message);
+      commands.get(type).handleMessage(this, sess, data);
     } else if (usersBySession.containsKey(sess)) {
       User u = usersBySession.get(sess);
       if(userCommands.get(u).containsKey(type)){
