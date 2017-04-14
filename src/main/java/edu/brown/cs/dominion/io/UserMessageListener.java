@@ -1,6 +1,7 @@
-package edu.brown.cs.dominion.games;
+package edu.brown.cs.dominion.io;
 
 import edu.brown.cs.dominion.User;
+import edu.brown.cs.dominion.io.Websocket;
 
 /**
  * An interface to allow classes to pull different messages from the central
@@ -9,5 +10,5 @@ import edu.brown.cs.dominion.User;
  */
 @FunctionalInterface
 public interface UserMessageListener {
-  void handleMessage(User u, String messageData);
+  void handleMessage(Websocket ws, User u, String messageData);
 }

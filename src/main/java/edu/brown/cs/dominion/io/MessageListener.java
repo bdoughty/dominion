@@ -1,5 +1,6 @@
-package edu.brown.cs.dominion.games;
+package edu.brown.cs.dominion.io;
 
+import edu.brown.cs.dominion.io.Websocket;
 import org.eclipse.jetty.websocket.api.Session;
 
 /**
@@ -9,5 +10,5 @@ import org.eclipse.jetty.websocket.api.Session;
  */
 @FunctionalInterface
 public interface MessageListener {
-  void handleMessage(Session user, String messageData);
+  void handleMessage(Websocket ws, Session user, String messageData);
 }
