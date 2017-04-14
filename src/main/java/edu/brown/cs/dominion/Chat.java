@@ -17,24 +17,14 @@ import java.util.Set;
 public class Chat {
   private static Gson GSON;
 
-  Collection<Session> users;
+  public Chat() {}
 
-  public Chat(Collection<Session> sessions) {
-    this.users = sessions;
-    GSON = new Gson();
-  }
-
-  public void sendMessage(String name, String color, String message){
+  public String getMessage(String name, String color, String message){
     JsonObject container = new JsonObject();
     container.addProperty("name", name);
     container.addProperty("color", color);
     container.addProperty("message", message);
     String toSend = GSON.toJson(container);
-
-    for (Session s : users) {
-      try {
-        s.getRemote().sendString(toSend);
-      } catch (IOException e) { e.printStackTrace(); /* TODO */ }
-    }
+    return toSend;
   }
 }

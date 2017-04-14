@@ -19,7 +19,7 @@ public class User{
   public User(int id) {
     color = makeColor();
     this.id = id;
-    this.name = "idname: " + id;
+    this.name = id == 0 ? "Mrs. McCave" : "Dave " + id;
   }
 
   public boolean hasPlayer() {
