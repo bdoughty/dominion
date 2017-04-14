@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Chat} from "./chat.model";
 import {UserIdService} from "../shared/user-id.service";
-import {SocketService} from "../shared/socket.service";
+import {ChatSocketService} from "../shared/chatsocket.service";
 
 @Component({
   selector: 'dmn-chat',
@@ -14,7 +14,7 @@ export class ChatComponent implements OnInit {
 
   constructor(
     private _userIdService: UserIdService,
-    private _socketService: SocketService
+    private _chatSocketService: ChatSocketService
   ) {
     this.chatModel.addMessage({
       name: 'Another',
@@ -29,20 +29,13 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._socketService.addListener('chat', (message) => {
+    this._chatSocketService.addListener('chat', (message) => {
       this.chatModel.addMessage({name: 'Testing', color: 'Testing', message: message});
     });
   }
 
   onEnter(value) {
-    console.log(value);
-
-    this.chatModel.addMessage({
-      name: 'Testing',
-      color: 'Testing',
-      message: value
-    });
-
+    this._chatSocketService.send('chat', value);
     this.currentMessage = "";
   }
 }

@@ -10,9 +10,9 @@ import {CreationComponent} from "./creation-page/creation-page.component";
 import {GameComponent} from "./game/game.component";
 import {UserIdService} from "./shared/user-id.service";
 import {GameService} from "./game/game.service";
-import {SocketService} from "./shared/socket.service";
 import {appRoutes} from "./routes";
 import {ChatComponent} from "./chat/chat.component";
+import {ChatSocketService} from "./shared/chatsocket.service";
 
 @NgModule({
   declarations: [
@@ -35,7 +35,8 @@ import {ChatComponent} from "./chat/chat.component";
   providers: [
     UserIdService,
     GameService,
-    SocketService
+    ChatSocketService
+    // SocketService
   ],
   bootstrap: [AppComponent]
 })

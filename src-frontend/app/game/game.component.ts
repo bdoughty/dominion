@@ -5,7 +5,6 @@ import {Player} from "./models/player.model";
 import {Pile} from "./models/pile.model";
 import {ClientGame} from "./models/client-game.model";
 import {GameService} from "./game.service";
-import {SocketService} from "../shared/socket.service";
 
 @Component({
   selector: 'dmn-game',
@@ -20,7 +19,6 @@ export class GameComponent implements OnInit {
   constructor(
     private _userIdService: UserIdService,
     private _gameService: GameService,
-    private _socketService: SocketService
   ) {}
 
   ngOnInit(): void {

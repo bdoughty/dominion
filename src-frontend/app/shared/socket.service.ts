@@ -1,21 +1,19 @@
-import {Injectable} from "@angular/core";
 import {UserIdService} from "./user-id.service";
 import {environment} from "../../environments/environment";
 import {Observable} from "rxjs/Observable";
 
-@Injectable()
-export class SocketService {
+export class AbstractSocketService {
   public sock;
   public userId;
   public messages: Observable<string>;
   public listeners = {};
 
-  constructor(public _userIdService: UserIdService) {
-    this.sock = new WebSocket("ws://" + location.hostname + ":" + environment.port + "/socket");
+  constructor(public _userIdService: UserIdService, private endpoint: string) {
+    this.sock = new WebSocket("ws://" + location.hostname + ":" + environment.port + endpoint);
 
     this.addListener('userid', (userId) => {
       _userIdService.id = userId;
-      console.log("Loaded id");
+      console.log("Loaded id " + userId);
     });
 
     this.sock.onopen = () => {
@@ -51,9 +49,8 @@ export class SocketService {
     }
   }
 
-
   public send(type, message) {
-    this.sock.send(type + ":" + this.userId + ":" + message);
+    this.sock.send(type + ":" + message);
   }
 
   public getCookie(name: string) {

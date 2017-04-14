@@ -73,7 +73,7 @@ public class Websocket {
       User u = users.getById(id);
       usersBySession.put(ses, u);
       userSessions.put(u, ses);
-
+      serve.newSession(ws, u, ses);
     } else {
       registerNewUser(ws, ses, mes);
     }
@@ -85,6 +85,7 @@ public class Websocket {
     userSessions.put(u, ses);
     userCommands.put(u, new HashMap<>());
     send(ses, NEWID, u.getId());
+    serve.newUser(ws, u);
   }
 
   private void closeSession(Session s){
@@ -117,7 +118,7 @@ public class Websocket {
       User u = usersBySession.get(sess);
       if(userCommands.get(u).containsKey(type)){
         UserMessageListener uml = userCommands.get(u).get(type);
-        uml.handleMessage(this, u, message);
+        uml.handleMessage(this, u, data);
       } else {
         System.out.println("unrecognized command for this user");
       }

@@ -75,7 +75,6 @@ local.properties
 .DS_Store
 
 # compiled output
-/dist
 /tmp
 /out-tsc
 
