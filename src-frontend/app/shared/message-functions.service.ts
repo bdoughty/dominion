@@ -1,28 +1,16 @@
-import {Component, OnInit} from '@angular/core';
-import {UserIdService} from "../shared/user-id.service";
-import {Chat} from "./models/chat.model";
-import {Player} from "./models/player.model";
-import {Pile} from "./models/pile.model";
-import {ClientGame} from "./models/client-game.model";
-import {GameService} from "./game.service";
+import {Injectable} from '@angular/core';
+import {Chat} from "../game/models/chat.model";
+import {ClientGame} from "../game/models/client-game.model";
+import {Pile} from "../game/models/pile.model";
+import {Player} from "../game/models/player.model";
+import {UserIdService} from "./user-id.service";
 
-@Component({
-  selector: 'dmn-game',
-  templateUrl: './game.component.html',
-  styleUrls: ['./game.component.css']
 
-}) export class GameComponent implements OnInit {
-  public title = 'Dominion';
-  public game = null;
-  public gameChat = new Chat();
-
-  constructor(
-    private _userIdService: UserIdService,
-    private _gameService: GameService) {}
-
-  ngOnInit(): void {
-
-  }
+@Injectable()
+export class MessageService {
+  constructor(private _userIdService: UserIdService) {}
+  private game = null;
+  private gameChat = null;
 
   initGame(gameInitString) {
     const gameStateFromServer = JSON.parse(gameInitString);
@@ -89,3 +77,4 @@ import {GameService} from "./game.service";
     this.gameChat.addMessage(JSON.parse(msg));
   }
 }
+
