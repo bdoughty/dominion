@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
-import {MessageService} from "../shared/message-functions.service";
 import {UserIdService} from "../shared/user-id.service";
 
 @Injectable()
 export class GameService {
 
   constructor(
-    private _messageService: MessageService,
     private _userIdService: UserIdService) {}
 
   //TODO, maybe not the best way to store / load this method
   public updateMapFromJson(response: string) {
-    this._messageService.updateMap(response);
+    // this._messageService.updateMap(response);
   }
 
   public updateMapPost(url: string, params: any) {

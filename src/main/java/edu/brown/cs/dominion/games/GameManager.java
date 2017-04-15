@@ -34,14 +34,14 @@ public class GameManager {
   @AJAX(names = {"userId", "boughtCards"})
   public ClientUpdateMap buys(Integer userId, List<Integer> buys){
     List<Card> cards = map(buys, Card::getCardFromId);
-    User user = users.getUserById(userId);
+    User user = users.getById(userId);
     Game g = gamesByUser.get(user);
     return chk(g.endBuyPhase(user, cards));
   }
 
   @AJAX(names = {"userId", "cardId"})
   public ClientUpdateMap action(Integer userId, Integer cardId){
-    User user = users.getUserById(userId);
+    User user = users.getById(userId);
     Game g = gamesByUser.get(user);
     return chk(g.doAction(user, Card.getCardFromId(cardId)));
   }
@@ -49,7 +49,7 @@ public class GameManager {
   //TODO WHAT IS THIS!!??!?!?!?!?
   @AJAX(names = {"userId", "cardId"})
   public ClientUpdateMap endActionPhase(Integer userId){
-    User user = users.getUserById(userId);
+    User user = users.getById(userId);
     Game g = gamesByUser.get(user);
     return chk(g.endActionPhase(user));
   }

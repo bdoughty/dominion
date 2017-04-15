@@ -1,20 +1,26 @@
-import {Injectable} from "@angular/core";
-import {MessageService} from "./message-functions.service";
 import {UserIdService} from "./user-id.service";
+import {environment} from "../../environments/environment";
+import {Observable} from "rxjs/Observable";
 
-@Injectable()
-export class SocketService {
-  public sock = new WebSocket("ws://" + location.hostname + ":" + location.port + "/socket");
+export class AbstractSocketService {
+  public sock;
   public userId;
+  public messages: Observable<string>;
+  public listeners = {};
 
-  constructor(public _messageService: MessageService,
-              public _userIdService: UserIdService) {
+  constructor(public _userIdService: UserIdService, private endpoint: string) {
+    this.sock = new WebSocket("ws://" + location.hostname + ":" + environment.port + endpoint);
+
+    this.addListener('userid', (userId) => {
+      _userIdService.id = userId;
+      document.cookie = "id=" + userId;
+      console.log("Loaded id " + userId);
+    });
 
     this.sock.onopen = () => {
       if (this.getCookie("id") != null) {
         this.userId = this.getCookie("id");
         this.sock.send("oldid:" + this.userId);
-        console.log("User ID Remembered: " + this.userId);
       } else {
         this.sock.send("newid:");
       }
@@ -24,17 +30,28 @@ export class SocketService {
       const str = event.data;
       const semi = str.indexOf(':');
       const type = str.substring(0, semi);
-      if (str.length > semi + 1) {
-        const message = str.substring(semi + 1);
-        this._messageService[type](message);
-      } else {
-        this._messageService[type]();
+
+      if (this.listeners[type]) {
+        if (str.length > semi + 1) {
+          const message = str.substring(semi + 1);
+          this.listeners[type].forEach((func) => func(message));
+        } else {
+          this.listeners[type].forEach((func) => func());
+        }
       }
-    };
+    }
+  }
+
+  public addListener(name: string, func: Function) {
+    if (!this.listeners[name]) {
+      this.listeners[name] = [func];
+    } else {
+      this.listeners[name].push(func);
+    }
   }
 
   public send(type, message) {
-    this.sock.send(type + ":" + this.userId + ":" + message);
+    this.sock.send(type + ":" + message);
   }
 
   public getCookie(name: string) {

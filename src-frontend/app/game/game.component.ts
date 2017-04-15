@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {UserIdService} from "../shared/user-id.service";
-import {Chat} from "./models/chat.model";
+import {Chat} from "../chat/chat.model";
 import {Player} from "./models/player.model";
 import {Pile} from "./models/pile.model";
 import {ClientGame} from "./models/client-game.model";
@@ -10,24 +10,38 @@ import {GameService} from "./game.service";
   selector: 'dmn-game',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.css']
-
-}) export class GameComponent implements OnInit {
+})
+export class GameComponent implements OnInit {
   public title = 'Dominion';
   public game = null;
   public gameChat = new Chat();
 
   constructor(
     private _userIdService: UserIdService,
-    private _gameService: GameService) {}
+    private _gameService: GameService,
+  ) {}
 
   ngOnInit(): void {
+    let pile1 = new Pile(123, 3, 3);
+    let player = new Player(4234, "name1", "#123123");
 
+    let state = {
+      pile: [
+        [pile1, pile1, pile1, pile1],
+        [pile1, pile1, pile1, pile1],
+        [pile1, pile1, pile1, pile1],
+        [pile1, pile1, pile1, pile1]
+      ],
+      players: [player, player, player]
+    };
+    this.initGameFromState(state);
   }
 
-  initGame(gameInitString) {
-    const gameStateFromServer = JSON.parse(gameInitString);
+  initGameFromState(state) {
+    let gameStateFromServer = state;
     const players = gameStateFromServer.players;
     const playerMap = {};
+
     players.forEach(function (p) {
       playerMap[p.id] = new Player(p.id, p.color, p.name);
     });
@@ -77,7 +91,6 @@ import {GameService} from "./game.service";
       if (update.holding === "undefined") {
         this.game.holding = update.holding;
       }
-
     }
   }
 
