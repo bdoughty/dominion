@@ -1,6 +1,6 @@
 package edu.brown.cs.dominion;
 
-import edu.brown.cs.dominion.action.ActionCenter;
+import edu.brown.cs.dominion.gameutil.GameHandler;
 
 /**
  * Created by henry on 3/22/2017.
@@ -44,7 +44,7 @@ public abstract class Card {
     return null;
   }
 
-  public void play(ActionCenter ac) {
+  public void play(GameHandler ac) {
 
   }
 }

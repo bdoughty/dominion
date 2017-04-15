@@ -35,17 +35,17 @@ public class Player {
 
   private List<Card> initializeDeck() {
     List<Card> deck = new LinkedList<>();
-    deck.add(new Copper());
-    deck.add(new Copper());
-    deck.add(new Copper());
-    deck.add(new Copper());
-    deck.add(new Copper());
-    deck.add(new Copper());
-    deck.add(new Copper());
-    deck.add(new Estate());
-    deck.add(new Estate());
-    deck.add(new Estate());
+
+    for (int i = 0; i < 7; i++) {
+      deck.add(new Copper());
+    }
+
+    for (int i = 0; i < 3; i++) {
+      deck.add(new Estate());
+    }
+
     Collections.shuffle(deck);
+
     return deck;
   }
 
@@ -80,6 +80,14 @@ public class Player {
     for (int i = 0; i < numCards; i++) {
       draw();
     }
+  }
+
+  public void buyCard(Card boughtCard) {
+    this.discardPile.add(boughtCard);
+  }
+
+  public int getMoney() {
+    return (baseMoney + additionalMoney);
   }
 
   public void discard(List<Integer> toDiscard) {
@@ -148,6 +156,10 @@ public class Player {
 
   public void incrementAdditionalMoney(int adnlMoney) {
     this.additionalMoney += adnlMoney;
+  }
+
+  public void decrementAdditionalMoney(int adnlMoney) {
+    this.additionalMoney -= adnlMoney;
   }
 
   public int scoreDeck() {

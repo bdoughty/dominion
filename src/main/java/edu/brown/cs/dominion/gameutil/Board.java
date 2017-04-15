@@ -64,9 +64,13 @@ public class Board {
    *          id of the card to be purchased
    * @return the purchased card
    */
-  public Card buyCard(int id) {
+  public Card buyCard(int id, int currMoney) {
     if (piles.containsKey(id)) {
-      return piles.get(id).draw();
+      if (piles.get(id).getCost() <= currMoney) {
+        return piles.get(id).draw();
+      } else {
+        throw new TooExpensiveException("Can't afford card " + id);
+      }
     } else {
       throw new IllegalArgumentException("No card with id: " + id);
     }

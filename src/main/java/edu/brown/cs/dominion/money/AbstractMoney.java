@@ -1,7 +1,7 @@
 package edu.brown.cs.dominion.money;
 
 import edu.brown.cs.dominion.Card;
-import edu.brown.cs.dominion.action.ActionCenter;
+import edu.brown.cs.dominion.gameutil.GameHandler;
 
 public abstract class AbstractMoney extends Card {
 
@@ -10,7 +10,7 @@ public abstract class AbstractMoney extends Card {
   }
 
   @Override
-  public void play(ActionCenter ac) {
+  public void play(GameHandler ac) {
     throw new UnsupportedOperationException("can't play money");
   }
 

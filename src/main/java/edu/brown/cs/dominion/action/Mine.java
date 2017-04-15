@@ -1,5 +1,7 @@
 package edu.brown.cs.dominion.action;
 
+import edu.brown.cs.dominion.gameutil.GameHandler;
+
 public class Mine extends AbstractAction {
 
   public Mine() {
@@ -7,7 +9,7 @@ public class Mine extends AbstractAction {
   }
 
   @Override
-  public void play(ActionCenter ac) {
+  public void play(GameHandler ac) {
     // TODO Auto-generated method stub
 
   }
