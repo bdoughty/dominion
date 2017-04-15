@@ -55,7 +55,8 @@ export class GameComponent implements OnInit {
       })
     });
 
-    this.game = new ClientGame(playerMap, pileArray, turnList, this._userIdService.id);
+    this.game =
+      new ClientGame(playerMap, pileArray, turnList, this._userIdService.id);
   }
 
   updateMap(updateMap) {

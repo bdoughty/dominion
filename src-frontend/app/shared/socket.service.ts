@@ -1,26 +1,25 @@
 import {UserIdService} from "./user-id.service";
+
 import {environment} from "../../environments/environment";
-import {Observable} from "rxjs/Observable";
 
 export class AbstractSocketService {
-  public sock;
-  public userId;
-  public messages: Observable<string>;
   public listeners = {};
+  public sock;
 
   constructor(public _userIdService: UserIdService, private endpoint: string) {
     this.sock = new WebSocket("ws://" + location.hostname + ":" + environment.port + endpoint);
 
     this.addListener('userid', (userId) => {
-      _userIdService.id = userId;
+      this._userIdService.id = userId;
       document.cookie = "id=" + userId;
       console.log("Loaded id " + userId);
     });
 
     this.sock.onopen = () => {
       if (this.getCookie("id") != null) {
-        this.userId = this.getCookie("id");
-        this.sock.send("oldid:" + this.userId);
+        let userId = this.getCookie("id");
+        this.sock.send("oldid:" + userId);
+        this._userIdService.id = userId;
       } else {
         this.sock.send("newid:");
       }
@@ -60,10 +59,3 @@ export class AbstractSocketService {
     if (parts.length == 2) return parts.pop().split(";").shift();
   }
 }
-
-// messageFuntions.userid = function (id) {
-//   document.cookie = "id = " + id;
-//   console.log("User ID Received: " + id);
-// };
-
-
