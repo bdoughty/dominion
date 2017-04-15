@@ -3,8 +3,7 @@ package edu.brown.cs.dominion.action;
 public class Woodcutter extends AbstractAction {
 
   public Woodcutter() {
-    this.cost = 3;
-    this.id = 15;
+    super(15, 3);
   }
 
   @Override

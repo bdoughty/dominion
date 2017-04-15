@@ -3,8 +3,7 @@ package edu.brown.cs.dominion.action;
 public class Village extends AbstractAction {
 
   public Village() {
-    this.cost = 3;
-    this.id = 14;
+    super(14, 3);
   }
 
   @Override

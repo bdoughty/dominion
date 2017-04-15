@@ -11,6 +11,13 @@ public abstract class Card {
   private transient int victoryPoints;
   private transient int monetaryValue;
 
+  public Card(int id, int cost, int victoryPoints, int monetaryValue) {
+    this.id = id;
+    this.cost = cost;
+    this.victoryPoints = victoryPoints;
+    this.monetaryValue = monetaryValue;
+  }
+
   public int getId() {
     return id;
   }

@@ -3,8 +3,7 @@ package edu.brown.cs.dominion.action;
 public class Smithy extends AbstractAction {
 
   public Smithy() {
-    this.cost = 4;
-    this.id = 13;
+    super(13, 4);
   }
 
   @Override

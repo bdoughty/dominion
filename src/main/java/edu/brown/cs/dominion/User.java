@@ -10,7 +10,7 @@ import edu.brown.cs.dominion.gameutil.Player;
  *
  * Created by henry on 3/22/2017.
  */
-public class User{
+public class User {
   private int id;
   private String color;
   private String name;

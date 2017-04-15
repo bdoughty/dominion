@@ -20,6 +20,14 @@ public class Board {
 
   private List<Card> trash;
 
+  /**
+   * Constructor for a board. Takes in a list of ids for which action cards
+   * should be used this game and initializes the necessary piles by calling
+   * boardSetUp().
+   *
+   * @param actionCardIds
+   *          list (of length 10) of action card ids
+   */
   public Board(List<Integer> actionCardIds) {
     assert (actionCardIds.size() == 10);
     boardSetUp(actionCardIds);
@@ -49,6 +57,13 @@ public class Board {
     trash = new LinkedList<>();
   }
 
+  /**
+   * Buys a card from the board given an integer value.
+   *
+   * @param id
+   *          id of the card to be purchased
+   * @return the purchased card
+   */
   public Card buyCard(int id) {
     if (piles.containsKey(id)) {
       return piles.get(id).draw();
@@ -57,10 +72,22 @@ public class Board {
     }
   }
 
+  /**
+   * Adds a card from the users hand to the trash pile.
+   *
+   * @param c
+   *          card to be trashed
+   */
   public void trashCard(Card c) {
     trash.add(c);
   }
 
+  /**
+   * Determines whether the game termination conditions have been met.
+   *
+   * @return true, if the game is over (3 piles or Provinces exhausted) or false
+   *         if not
+   */
   public boolean gameHasEnded() {
     int emptyPiles = 0;
 

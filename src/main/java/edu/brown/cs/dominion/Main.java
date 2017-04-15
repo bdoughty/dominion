@@ -1,7 +1,14 @@
 package edu.brown.cs.dominion;
 
-import com.google.common.collect.ImmutableList;
-import com.google.gson.Gson;
+import static spark.Spark.exception;
+import static spark.Spark.externalStaticFileLocation;
+import static spark.Spark.get;
+import static spark.Spark.port;
+import static spark.Spark.webSocket;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import edu.brown.cs.dominion.io.HomeWebsocket;
 import edu.brown.cs.dominion.io.UserRegistry;
 import edu.brown.cs.dominion.io.Websocket;
@@ -10,12 +17,6 @@ import joptsimple.OptionSet;
 import spark.ExceptionHandler;
 import spark.Request;
 import spark.Response;
-
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.ArrayList;
-
-import static spark.Spark.*;
 
 /**
  * Created by henry on 3/22/2017.
@@ -50,16 +51,14 @@ public class Main {
 
     webSocket("/homechat", new Websocket(users, home));
 
-    //TODO get rid of this, for some reason it is necessary for the server to
+    // TODO get rid of this, for some reason it is necessary for the server to
     // start right now.
     get("/hello", (req, res) -> "Hello World");
   }
 
-
   /**
-   * Display an error page when an exception occurs in the server.
-   * From STARS git.
-   * @author jj
+   * Display an error page when an exception occurs in the server. From STARS
+   * git.
    */
   private static class ExceptionPrinter implements ExceptionHandler {
     @Override
@@ -75,17 +74,3 @@ public class Main {
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

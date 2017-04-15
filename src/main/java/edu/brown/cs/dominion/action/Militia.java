@@ -3,8 +3,7 @@ package edu.brown.cs.dominion.action;
 public class Militia extends AbstractAction {
 
   public Militia() {
-    this.cost = 4;
-    this.id = 9;
+    super(9, 4);
   }
 
   @Override

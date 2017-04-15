@@ -3,8 +3,7 @@ package edu.brown.cs.dominion.action;
 public class Market extends AbstractAction {
 
   public Market() {
-    this.cost = 5;
-    this.id = 8;
+    super(8, 5);
   }
 
   @Override

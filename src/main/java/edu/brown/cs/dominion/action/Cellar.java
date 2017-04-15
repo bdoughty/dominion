@@ -3,8 +3,7 @@ package edu.brown.cs.dominion.action;
 public class Cellar extends AbstractAction {
 
   public Cellar() {
-    this.cost = 2;
-    this.id = 7;
+    super(7, 2);
   }
 
   @Override
