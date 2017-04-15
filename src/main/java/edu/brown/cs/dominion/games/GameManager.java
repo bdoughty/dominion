@@ -3,8 +3,11 @@ package edu.brown.cs.dominion.games;
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.io.AJAX;
+import edu.brown.cs.dominion.io.SocketServer;
 import edu.brown.cs.dominion.io.UserRegistry;
+import edu.brown.cs.dominion.io.Websocket;
 import edu.brown.cs.dominion.io.send.ClientUpdateMap;
+import org.eclipse.jetty.websocket.api.Session;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -18,7 +21,7 @@ import java.util.function.Function;
  *
  * Created by henry on 3/22/2017.
  */
-public class GameManager {
+public class GameManager implements SocketServer{
   private UserRegistry users;
   private Map<User, Game> gamesByUser;
   private List<Game> games;
@@ -72,5 +75,15 @@ public class GameManager {
       callback = c.getCallback();
     }
     return c;
+  }
+
+  @Override
+  public void newUser(Websocket ws, User u) {
+
+  }
+
+  @Override
+  public void newSession(Websocket ws, User u, Session s) {
+
   }
 }
