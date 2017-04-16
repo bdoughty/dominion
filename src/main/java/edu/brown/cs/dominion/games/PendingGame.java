@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by henry on 4/15/2017.
  */
-public class PendingGame {
+public class PendingGame{
   private List<User> users;
   private int maxusers;
   private int[] actioncardids;
