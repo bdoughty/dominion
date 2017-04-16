@@ -144,7 +144,8 @@ public class GameManager implements SocketServer{
 
   public void leave(User u){
     if(pendingByUser.containsKey(u)){
-      pendingByUser.remove(u);
+      PendingGame g = pendingByUser.remove(u);
+      g.removeUser(u);
     }
   }
 }
