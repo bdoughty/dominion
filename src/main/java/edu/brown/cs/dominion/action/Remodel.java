@@ -1,14 +1,15 @@
 package edu.brown.cs.dominion.action;
 
+import edu.brown.cs.dominion.gameutil.GameHandler;
+
 public class Remodel extends AbstractAction {
 
   public Remodel() {
-    this.cost = 4;
-    this.id = 12;
+    super(12, 4);
   }
 
   @Override
-  public void play(ActionCenter ac) {
+  public void play(GameHandler ac) {
     // TODO Auto-generated method stub
 
   }

@@ -1,14 +1,15 @@
 package edu.brown.cs.dominion.action;
 
+import edu.brown.cs.dominion.gameutil.GameHandler;
+
 public class Workshop extends AbstractAction {
 
   public Workshop() {
-    this.cost = 3;
-    this.id = 16;
+    super(16, 3);
   }
 
   @Override
-  public void play(ActionCenter ac) {
+  public void play(GameHandler ac) {
     // TODO Auto-generated method stub
 
   }

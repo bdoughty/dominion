@@ -5,12 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import edu.brown.cs.dominion.action.ActionCenter;
-
 public class Game {
 
   private Queue<Player> players;
-  private ActionCenter ac;
+  private GameHandler gh;
   private Board board;
 
   public Game(List<Integer> playerIds, List<Integer> cardIds) {
@@ -20,7 +18,7 @@ public class Game {
       this.players.add(new Player(pid));
     }
 
-    this.ac = new ActionCenter();
+    // this.gh = new GameHandler();
     this.board = new Board(cardIds);
   }
 

@@ -1,0 +1,21 @@
+package edu.brown.cs.dominion.games;
+
+import edu.brown.cs.dominion.User;
+
+import java.util.List;
+
+/**
+ * Created by henry on 4/15/2017.
+ */
+public class PendingGame {
+  private List<User> users;
+  private int maxUsers;
+  private int[] actionCardIds;
+  private String name;
+
+  public PendingGame(String name, int maxUsers, int[] actionCardIds) {
+    this.name = name;
+    this.maxUsers = maxUsers;
+    this.actionCardIds = actionCardIds;
+  }
+}

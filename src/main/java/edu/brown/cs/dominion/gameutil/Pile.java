@@ -27,4 +27,9 @@ public class Pile {
     return this.size == 0;
   }
 
+  // ugly, but will suffice for noe
+  public int getCost() {
+    return this.card.get().getCost();
+  }
+
 }

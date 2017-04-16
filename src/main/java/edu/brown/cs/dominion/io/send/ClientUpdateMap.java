@@ -2,11 +2,13 @@ package edu.brown.cs.dominion.io.send;
 
 import com.google.gson.Gson;
 import edu.brown.cs.dominion.Card;
+import edu.brown.cs.dominion.User;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -16,7 +18,8 @@ import java.util.function.Function;
 public class ClientUpdateMap implements Jsonable {
   private transient static final Gson GSON = new Gson();
   private Map<String, Object> data;
-  private transient Function<Card, ClientUpdateMap> callback;
+  private transient SelectCallback callback;
+  private transient User callbackUser;
 
   public ClientUpdateMap() {
     data = new HashMap<>();
@@ -37,20 +40,12 @@ public class ClientUpdateMap implements Jsonable {
     return this;
   }
 
-  public ClientUpdateMap requireSelect(List<Card> handIds,
+  public ClientUpdateMap requireSelect(User u,
+                                       List<Card> handIds,
                                        List<Card> boardIds,
-                                       Consumer<Card> response) {
-    callback = (c -> {response.accept(c); return new ClientUpdateMap();});
-    data.put("select", true);
-    data.put("handSelect", map(handIds, Card::getId));
-    data.put("boardSelect", map(boardIds, Card::getId));
-    return this;
-  }
-
-  public ClientUpdateMap requireSelect(List<Card> handIds,
-                                       List<Card> boardIds,
-                                       Function<Card, ClientUpdateMap> response) {
+                                       SelectCallback response) {
     callback = response;
+    callbackUser = u;
     data.put("select", true);
     data.put("handSelect", map(handIds, Card::getId));
     data.put("boardSelect", map(boardIds, Card::getId));
@@ -90,7 +85,7 @@ public class ClientUpdateMap implements Jsonable {
     return callback != null;
   }
 
-  public Function<Card, ClientUpdateMap> getCallback() {
+  public SelectCallback getCallback() {
     return callback;
   }
 
@@ -102,5 +97,9 @@ public class ClientUpdateMap implements Jsonable {
 
   public boolean isEmpty() {
     return data.isEmpty();
+  }
+
+  public User getCallbackUser() {
+    return callbackUser;
   }
 }

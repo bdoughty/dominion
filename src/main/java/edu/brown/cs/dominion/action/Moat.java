@@ -1,14 +1,15 @@
 package edu.brown.cs.dominion.action;
 
+import edu.brown.cs.dominion.gameutil.GameHandler;
+
 public class Moat extends AbstractAction {
 
   public Moat() {
-    this.cost = 2;
-    this.id = 11;
+    super(11, 2);
   }
 
   @Override
-  public void play(ActionCenter ac) {
+  public void play(GameHandler ac) {
     ac.currentDraw(2);
   }
 

@@ -1,14 +1,15 @@
 package edu.brown.cs.dominion.action;
 
+import edu.brown.cs.dominion.gameutil.GameHandler;
+
 public class Militia extends AbstractAction {
 
   public Militia() {
-    this.cost = 4;
-    this.id = 9;
+    super(9, 4);
   }
 
   @Override
-  public void play(ActionCenter ac) {
+  public void play(GameHandler ac) {
     ac.incrementAdditionalMoney(2);
     ac.militia();
   }

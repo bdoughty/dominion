@@ -1,14 +1,15 @@
 package edu.brown.cs.dominion.action;
 
+import edu.brown.cs.dominion.gameutil.GameHandler;
+
 public class Mine extends AbstractAction {
 
   public Mine() {
-    this.cost = 5;
-    this.id = 10;
+    super(10, 5);
   }
 
   @Override
-  public void play(ActionCenter ac) {
+  public void play(GameHandler ac) {
     // TODO Auto-generated method stub
 
   }

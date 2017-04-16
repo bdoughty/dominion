@@ -1,14 +1,15 @@
 package edu.brown.cs.dominion.action;
 
+import edu.brown.cs.dominion.gameutil.GameHandler;
+
 public class Cellar extends AbstractAction {
 
   public Cellar() {
-    this.cost = 2;
-    this.id = 7;
+    super(7, 2);
   }
 
   @Override
-  public void play(ActionCenter ac) {
+  public void play(GameHandler ac) {
     // TODO Auto-generated method stub
 
   }

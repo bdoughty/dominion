@@ -1,67 +1,69 @@
 package edu.brown.cs.dominion.games;
 
+import com.google.common.collect.ImmutableList;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.User;
-import edu.brown.cs.dominion.io.AJAX;
 import edu.brown.cs.dominion.io.SocketServer;
 import edu.brown.cs.dominion.io.UserRegistry;
 import edu.brown.cs.dominion.io.Websocket;
 import edu.brown.cs.dominion.io.send.ClientUpdateMap;
+import edu.brown.cs.dominion.io.send.SelectCallback;
 import org.eclipse.jetty.websocket.api.Session;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import static edu.brown.cs.dominion.io.send.MessageType.*;
+
 /**
- * A wrapper that adds various ajax functionality to the server and then
- * cleans the data for use by the GameEvenListener.
+ * A wrapper that adds various ajax functionality to the server and then cleans
+ * the data for use by the GameEvenListener.
  *
  * Created by henry on 3/22/2017.
  */
 public class GameManager implements SocketServer{
+  private static Gson GSON = new Gson();
+  private static JsonParser PARSE = new JsonParser();
+
   private UserRegistry users;
   private Map<User, Game> gamesByUser;
   private List<Game> games;
+  private List<PendingGame> pendingGames;
 
-  public GameManager(UserRegistry users) {
+  private GameManager(UserRegistry users) {
     this.users = users;
     gamesByUser = new HashMap<>();
     games = new LinkedList<>();
+    callbacks = new HashMap<>();
   }
 
-  private Function<Card, ClientUpdateMap> callback;
+  private Map<User, SelectCallback> callbacks;
 
-  @AJAX(names = {"userId", "boughtCards"})
-  public ClientUpdateMap buys(Integer userId, List<Integer> buys){
-    List<Card> cards = map(buys, Card::getCardFromId);
-    User user = users.getById(userId);
+  private ClientUpdateMap buys(User user, List<Integer> buys) {
     Game g = gamesByUser.get(user);
-    return chk(g.endBuyPhase(user, cards));
+    return chk(g.endBuyPhase(user, buys));
   }
 
-  @AJAX(names = {"userId", "cardId"})
-  public ClientUpdateMap action(Integer userId, Integer cardId){
-    User user = users.getById(userId);
+  private ClientUpdateMap action(User user, int cardLocation) {
     Game g = gamesByUser.get(user);
-    return chk(g.doAction(user, Card.getCardFromId(cardId)));
+    return chk(g.doAction(user, cardLocation));
   }
 
-  //TODO WHAT IS THIS!!??!?!?!?!?
-  @AJAX(names = {"userId", "cardId"})
-  public ClientUpdateMap endActionPhase(Integer userId){
-    User user = users.getById(userId);
+  private ClientUpdateMap endActionPhase(User user) {
     Game g = gamesByUser.get(user);
     return chk(g.endActionPhase(user));
   }
 
-  @AJAX(names = {"userId", "cardId"})
-  public ClientUpdateMap selection(Integer userId, Integer cardId){
-    assert callback != null;
-
-    return chk(callback.apply(Card.getCardFromId(cardId))).finishSelect();
+  private ClientUpdateMap selection(User u, boolean inHand, int location) {
+    assert callbacks.containsKey(u);
+    return chk(callbacks.get(u).call(inHand, location));
   }
 
   private <T, K> List<K> map(List<T> list, Function<T, K> convert) {
@@ -71,19 +73,51 @@ public class GameManager implements SocketServer{
   }
 
   private ClientUpdateMap chk(ClientUpdateMap c) {
-    if(c.hasCallback()) {
-      callback = c.getCallback();
-    }
-    return c;
+    if (c.hasCallback()) {
+      callbacks.put(c.getCallbackUser(), c.getCallback());
+    } return c;
   }
 
   @Override
-  public void newUser(Websocket ws, User u) {
+  public void newUser(Websocket ws, User user) {
+    ws.registerUserCommand(user, DO_ACTION,
+      (w, u, m) -> {
+        JsonObject data = PARSE.parse(m).getAsJsonObject();
+        action(user, data.get("handloc").getAsInt());
+      });
+
+    ws.registerUserCommand(user, SELECTION,
+      (w, u, m) -> {
+        JsonObject data = PARSE.parse(m).getAsJsonObject();
+        boolean inHand = data.get("inhand").getAsBoolean();
+        int location = data.get("loc").getAsInt();
+        selection(u, inHand, location);
+      });
+
+    ws.registerUserCommand(user, END_ACTION,
+      (w, u, m) -> endActionPhase(u));
+
+    ws.registerUserCommand(user, END_BUY,
+      (w, u, m) -> {
+        JsonArray data = PARSE.parse(m).getAsJsonArray();
+        List<Integer> buys = new LinkedList<>();
+        for(JsonElement e : data){
+          buys.add(e.getAsInt());
+        }
+        buys(u, buys);
+    });
 
   }
 
   @Override
-  public void newSession(Websocket ws, User u, Session s) {
+  public void newSession(Websocket ws, User user, Session s) {
 
+  }
+
+  public List<PendingGame> getPendingGames() {
+    return ImmutableList.of(new PendingGame("JJ's Face", 5,
+      new int[]{0,1,2,3,4,5,6,7,8,9}));
+    //TODO RETURN ACTUAL PENDING GAMES
+    //return pendingGames;
   }
 }

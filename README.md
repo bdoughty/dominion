@@ -1,11 +1,7 @@
  # cs0320 Term Project
   
-  **Team Members:** _Fill this in!_
- -hey guys
- +Sol Zitter
- +Ben Doughty
- +Brendan Le
- +Henry Stone
+  **Team Members:**
+Sol Zitter, Ben Doughty, Brendan Le, Henry Stone
   
   **Project Idea:** _Fill this in!_
   
@@ -14,10 +10,7 @@
   **Mentor TA:** _Put your mentor TA's name and email here once you're assigned one!_
   
   ## Project Requirements
-  _This portion of the README is due March 8th (see the project handout)!_
-  
- -_Fill in your project requirements here!_
- +https://docs.google.com/a/brown.edu/document/d/1S7Yn5-4c57bUifcHwQGHtDAIXlwFO_fYcHr3zk-i3bY/edit?usp=sharing
+https://docs.google.com/a/brown.edu/document/d/1S7Yn5-4c57bUifcHwQGHtDAIXlwFO_fYcHr3zk-i3bY
   
   ## Project Specs and Mockup
   _A link to your specifications document and your mockup will go here!_

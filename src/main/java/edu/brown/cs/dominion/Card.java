@@ -1,6 +1,6 @@
 package edu.brown.cs.dominion;
 
-import edu.brown.cs.dominion.action.ActionCenter;
+import edu.brown.cs.dominion.gameutil.GameHandler;
 
 /**
  * Created by henry on 3/22/2017.
@@ -10,6 +10,13 @@ public abstract class Card {
   private int cost;
   private transient int victoryPoints;
   private transient int monetaryValue;
+
+  public Card(int id, int cost, int victoryPoints, int monetaryValue) {
+    this.id = id;
+    this.cost = cost;
+    this.victoryPoints = victoryPoints;
+    this.monetaryValue = monetaryValue;
+  }
 
   public int getId() {
     return id;
@@ -37,7 +44,7 @@ public abstract class Card {
     return null;
   }
 
-  public void play(ActionCenter ac) {
+  public void play(GameHandler ac) {
 
   }
 }

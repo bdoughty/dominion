@@ -1,14 +1,15 @@
 package edu.brown.cs.dominion.action;
 
+import edu.brown.cs.dominion.gameutil.GameHandler;
+
 public class Village extends AbstractAction {
 
   public Village() {
-    this.cost = 3;
-    this.id = 14;
+    super(14, 3);
   }
 
   @Override
-  public void play(ActionCenter ac) {
+  public void play(GameHandler ac) {
     ac.incrementActions();
     ac.incrementActions();
     ac.currentDraw(1);

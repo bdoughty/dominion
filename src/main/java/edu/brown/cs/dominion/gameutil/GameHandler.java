@@ -1,16 +1,17 @@
-package edu.brown.cs.dominion.action;
+package edu.brown.cs.dominion.gameutil;
 
-import java.util.Set;
+import java.util.Queue;
 
-import edu.brown.cs.dominion.gameutil.Player;
-
-public class ActionCenter {
+public class GameHandler {
 
   private Player current;
-  private Set<Player> others;
+  private Queue<Player> others;
+  private Board board;
 
-  public ActionCenter() {
-
+  public GameHandler(Queue<Player> players, Board board) {
+    this.others = players;
+    this.board = board;
+    this.current = this.others.poll();
   }
 
   public void incrementActions() {

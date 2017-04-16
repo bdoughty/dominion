@@ -7,7 +7,13 @@ public enum MessageType {
   NEWID ("userid"),
   UPDATE_MAP ("updatemap"),
   STOP_HOLD ("stophold"),
-  CHAT ("chat");
+  CHAT ("chat"),
+  END_BUY ("endbuy"),
+  END_ACTION ("endaction"),
+  DO_ACTION ("doaction"),
+  SELECTION ("select"),
+  PENDING_GAMES ("pending");
+
 
   private final String name;
   MessageType(String name){

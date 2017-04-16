@@ -1,14 +1,15 @@
 package edu.brown.cs.dominion.action;
 
+import edu.brown.cs.dominion.gameutil.GameHandler;
+
 public class Woodcutter extends AbstractAction {
 
   public Woodcutter() {
-    this.cost = 3;
-    this.id = 15;
+    super(15, 3);
   }
 
   @Override
-  public void play(ActionCenter ac) {
+  public void play(GameHandler ac) {
     ac.incrementBuys();
     ac.incrementAdditionalMoney(2);
   }
