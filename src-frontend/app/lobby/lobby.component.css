@@ -116,12 +116,13 @@
   display: flex;
 }
 .game .card {
-  /* TODO: Replace with real image */
   width: 17px;
   height: 24px;
-  background: #222;
   border-radius: 2px;
   margin: 0 2px;
+}
+.game .card img {
+  width: 100%;
 }
 
 .pane#chat .pane-content {
@@ -187,10 +188,11 @@
   justify-content: space-between;
 }
 #game-info .card {
-  width: 50px;
-  height: 80px;
   margin: 4px;
-  background: #222;
+}
+#game-info .card img {
+  width: 100%;
+  height: auto;
 }
 #game-info .card:hover {
   cursor: pointer;

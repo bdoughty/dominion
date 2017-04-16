@@ -18,6 +18,10 @@ export class LobbyComponent implements OnInit {
     this._chatSocketService.addListener('pending', (messageString) => {
       this.pendings = JSON.parse(messageString);
     });
+
+    this._chatSocketService.addListener('joinresponse', (messageString) => {
+      console.log(JSON.parse(messageString));
+    });
   }
 
   select(pending) {
@@ -26,6 +30,7 @@ export class LobbyComponent implements OnInit {
 
   join() {
     console.log(this.selectedGame);
-    this._chatSocketService.send('join', this.selectedGame.id);
+    this._chatSocketService.send('join',
+      JSON.stringify({gameid: this.selectedGame.id}));
   }
 }

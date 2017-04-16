@@ -26,10 +26,11 @@ public class HomeWebsocket implements SocketServer, UserMessageListener {
   }
 
   @Override
-  public void newUser(Websocket ws, User u) {
-    ws.registerUserCommand(u, CHAT, this);
-    ws.registerUserCommand(u, JOIN_GAME,
+  public void newUser(Websocket ws, User user) {
+    ws.registerUserCommand(user, CHAT, this);
+    ws.registerUserCommand(user, JOIN_GAME,
       (w, u, m) -> {
+      System.out.println(m);
         JsonObject o = PARSE.parse(m).getAsJsonObject();
         int gameid = o.get("gameid").getAsInt();
         boolean joined = gm.joinGame(u, gameid);

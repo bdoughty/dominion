@@ -96,7 +96,7 @@ public class Websocket {
 
   public void registerUserCommand(User u, MessageType command, UserMessageListener
                                   uml){
-    userCommands.get(u).put(command.name().toLowerCase(), uml);
+    userCommands.get(u).put(command.toString().toLowerCase(), uml);
   }
 
   @OnWebSocketConnect
