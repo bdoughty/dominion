@@ -22,10 +22,17 @@ export class LobbyComponent implements OnInit {
     this._chatSocketService.addListener('joinresponse', (messageString) => {
       console.log(JSON.parse(messageString));
     });
+
+    this._chatSocketService.addListener('leaveresponse', (a) => {});
   }
 
   select(pending) {
     this.selectedGame = pending;
+  }
+
+  leave() {
+    this._chatSocketService.send('leave', "");
+    console.log("left");
   }
 
   join() {
