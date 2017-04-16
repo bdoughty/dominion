@@ -29,4 +29,8 @@ public class PendingGame extends GameStub{
       return true;
     }
   }
+
+  public void removeUser(User u) {
+    users.remove(u);
+  }
 }
