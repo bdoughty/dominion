@@ -1,18 +1,20 @@
-<div class="messages">
-  <div class="message-container">
-    <div class="message" *ngFor="let message of chatModel.messages">
-      <div class="name" [style.color]="message.color">
-        {{ message.name }}
-      </div>
-      <div class="message-content">
-        {{ message.message }}
+<div class="chat-container">
+    <div class="messages">
+      <div class="message-container">
+        <div class="message" *ngFor="let message of chatModel.messages">
+          <div class="name" [style.color]="message.color">
+            {{ message.name }}
+          </div>
+          <div class="message-content">
+            {{ message.message }}
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-<div class="input-container">
-  <input #chatInput
-         type="text"
-         (keyup.enter)="onEnter(chatInput.value)"
-         [(ngModel)]="currentMessage"/>
+    <div class="input-container">
+      <input #chatInput
+             type="text"
+             (keyup.enter)="onEnter(chatInput.value)"
+             [(ngModel)]="currentMessage"/>
+    </div>
 </div>

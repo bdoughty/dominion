@@ -1,0 +1,190 @@
+#game {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: url('../../assets/parchment-002.jpg') center center;
+
+  background-size: cover;
+
+  //&::after {
+  //  content: '';
+  //  display: block;
+  //  position: absolute;
+  //  top: 0;
+  //  left: 0;
+  //  right: 0;
+  //  bottom: 0;
+  //  pointer-events: none;
+  //  background: rgba(0, 0, 0, 0.3);
+  //  z-index: 1;
+  //}
+
+  #board {
+    flex-grow: 1;
+    display: flex;
+
+    /* -------- LEFT BAR --------- */
+    #left-bar {
+      width: 220px;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 20px;
+
+      #stats {
+        padding: 20px 80px 20px 20px;
+        font-size: 18px;
+        font-weight: 300;
+        color: white;
+
+        .stat {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 12px;
+
+          .stat-label {
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.8em;
+          }
+        }
+      }
+
+      #cart {
+        background: rgba(black, 0.5);
+        flex-grow: 1;
+        margin-right: 60px;
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+      }
+    }
+
+    /* ---------- PILES ---------- */
+    #piles {
+      flex-grow: 1;
+      padding: 30px;
+
+      .pile-row {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 28px;
+
+        .pile {
+          width: 100px;
+          border-radius: 3px;
+          background: black;
+          padding: 3px;
+          padding-bottom: 0px;
+
+          img {
+            width: 100%;
+            height: auto;
+          }
+        }
+      }
+    }
+
+    /* -------RIGHT BAR ---------- */
+    #right-bar-container {
+      width: 320px;
+      padding: 12px;
+
+      #right-bar {
+        background: white;
+        box-shadow: 0 1px 2px rgba(black, 0.12), 0 1px 3px rgba(black, 0.24);
+
+        .turns {
+          display: flex;
+          flex-direction: column;
+
+          .turn {
+            padding: 18px 14px;
+            border-bottom: 1px solid #DDD;
+
+            .current-turn-message {
+              display: none;
+            }
+
+            &.current-turn {
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              color: white;
+              height: 100px;
+
+              .current-turn-message {
+                display: block;
+                text-transform: uppercase;
+                font-size: 0.9em;
+                margin-bottom: 12px;
+              }
+
+              background: #555ec6;
+              order: -1;
+            }
+
+
+            &.current-turn {
+              .turn-info {
+                font-weight: 300;
+              }
+            }
+
+            .turn-info {
+              display: flex;
+              justify-content: space-between;
+            }
+          }
+        }
+
+        .chat-container {
+        }
+      }
+    }
+  }
+
+  /* ----------- HUD ------------- */
+  #hud {
+    height: 200px;
+    display: flex;
+    align-items: stretch;
+    box-shadow: 0 1px 2px rgba(black, 0.12), 0 1px 3px rgba(black, 0.24);
+
+    .left {
+      background: pink;
+      width: 200px;
+    }
+
+    .hand-container {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .hand {
+        display: inline-block;
+
+        .card {
+          margin: 0 12px;
+        }
+      }
+    }
+
+    .deck {
+      background: blue;
+      width: 200px;
+    }
+  }
+}
+
+.card {
+  width: 100px;
+  display: inline-block;
+  padding: 3px 3px 0px;
+  border-radius: 3px;
+  background: black;
+
+  img {
+    width: 100%;
+  }
+}
