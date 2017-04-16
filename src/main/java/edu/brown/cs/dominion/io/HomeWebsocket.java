@@ -37,11 +37,13 @@ public class HomeWebsocket implements SocketServer, UserMessageListener {
         message.addProperty("gameid", gameid);
         message.addProperty("didjoin", joined);
         w.send(u, JOIN_RESPONSE, GSON.toJson(message));
+        sendAllUpdateGames(w);
       });
     ws.registerUserCommand(user, LEAVE,
       (w, u, m) -> {
         gm.leave(u);
         w.send(u, LEAVE_RESPONSE, "");
+        sendAllUpdateGames(w);
       });
   }
 
@@ -53,5 +55,9 @@ public class HomeWebsocket implements SocketServer, UserMessageListener {
   @Override
   public void handleMessage(Websocket ws, User u, String messageData) {
     ws.sendAll(CHAT, homechat.getMessage(u.getName(), u.getColor(), messageData));
+  }
+
+  private void sendAllUpdateGames(Websocket ws){
+    ws.sendAll(PENDING_GAMES, GSON.toJson(gm.getPendingGames()));
   }
 }

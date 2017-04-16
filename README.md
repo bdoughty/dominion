@@ -39,7 +39,7 @@ Register Old ID "oldid": Client -> Server
 Leave Game "leave": Client -> Server
   data = {}
   
-  
+Create Game "/creategame"
   
   
 Join Game "join": Client -> Server
