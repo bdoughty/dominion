@@ -43,15 +43,9 @@
         display: flex;
         justify-content: space-around;
         margin-bottom: 28px; }
-        #game #board #piles .pile-row .pile {
-          width: 100px;
-          border-radius: 3px;
-          background: black;
-          padding: 3px;
-          padding-bottom: 0px; }
-          #game #board #piles .pile-row .pile img {
-            width: 100%;
-            height: auto; }
+        #game #board #piles .pile-row .card {
+          width: 120px;
+          font-size: 0; }
     #game #board #right-bar-container {
       width: 320px;
       padding: 12px; }
@@ -108,10 +102,39 @@
 .card {
   width: 100px;
   display: inline-block;
-  padding: 3px 3px 0px;
   border-radius: 3px;
-  background: black; }
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.24);
+  overflow: hidden; }
+  .card .card-label {
+    font-size: 14px;
+    font-weight: 300;
+    padding: 8px;
+    color: #222;
+    background: rgba(255, 255, 255, 0.75); }
+    .card .card-label .name {
+      margin-bottom: 8px;
+      text-transform: uppercase; }
+    .card .card-label .description {
+      font-size: 0.85em; }
+  .card .card-footer {
+    background: rgba(255, 255, 255, 0.75);
+    height: 30px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center; }
+    .card .card-footer .gold {
+      height: 22px;
+      width: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 8px;
+      border-radius: 10px;
+      border: 1px solid #997733;
+      font-size: 12px;
+      font-weight: 100; }
   .card img {
-    width: 100%; }
+    width: 100%;
+    position: relative; }
 
 /*# sourceMappingURL=game.component.css.map */
