@@ -9,13 +9,13 @@ import java.util.List;
  */
 public class PendingGame {
   private List<User> users;
-  private int maxUsers;
-  private int[] actionCardIds;
+  private int maxusers;
+  private int[] actioncardids;
   private String name;
 
   public PendingGame(String name, int maxUsers, int[] actionCardIds) {
     this.name = name;
-    this.maxUsers = maxUsers;
-    this.actionCardIds = actionCardIds;
+    this.maxusers = maxUsers;
+    this.actioncardids = actionCardIds;
   }
 }

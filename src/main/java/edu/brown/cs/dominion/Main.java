@@ -9,6 +9,7 @@ import static spark.Spark.webSocket;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import edu.brown.cs.dominion.games.GameManager;
 import edu.brown.cs.dominion.io.HomeWebsocket;
 import edu.brown.cs.dominion.io.UserRegistry;
 import edu.brown.cs.dominion.io.Websocket;
@@ -33,7 +34,8 @@ public class Main {
 
   private Main() {
     users = new UserRegistry();
-    home = new HomeWebsocket();
+    GameManager gm = new GameManager(users);
+    home = new HomeWebsocket(gm);
   }
 
   private void run(String[] args) {
@@ -49,7 +51,7 @@ public class Main {
     externalStaticFileLocation("resources");
     exception(Exception.class, new ExceptionPrinter());
 
-    webSocket("/homechat", new Websocket(users, home));
+    webSocket("/home", new Websocket(users, home));
 
     // TODO get rid of this, for some reason it is necessary for the server to
     // start right now.

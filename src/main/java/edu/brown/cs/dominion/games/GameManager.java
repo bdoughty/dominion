@@ -6,7 +6,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.io.SocketServer;
 import edu.brown.cs.dominion.io.UserRegistry;
@@ -37,7 +36,7 @@ public class GameManager implements SocketServer{
   private List<Game> games;
   private List<PendingGame> pendingGames;
 
-  private GameManager(UserRegistry users) {
+  public GameManager(UserRegistry users) {
     this.users = users;
     gamesByUser = new HashMap<>();
     games = new LinkedList<>();
