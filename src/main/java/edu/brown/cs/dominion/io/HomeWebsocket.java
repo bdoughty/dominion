@@ -39,6 +39,11 @@ public class HomeWebsocket implements SocketServer, UserMessageListener {
         message.addProperty("didjoin", joined);
         w.send(u, JOIN_RESPONSE, GSON.toJson(message));
       });
+    ws.registerUserCommand(user, LEAVE,
+      (w, u, m) -> {
+        gm.leave(u);
+        w.send(u, LEAVE_RESPONSE, "");
+      });
   }
 
   @Override

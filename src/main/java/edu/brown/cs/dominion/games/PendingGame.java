@@ -21,9 +21,12 @@ public class PendingGame extends GameStub{
     this.users = new LinkedList<>();
   }
 
-  public PendingGame addUser(User u){
-    assert users.size() < maxusers;
-    users.add(u);
-    return this;
+  public boolean addUser(User u){
+    if(users.size() == maxusers || users.contains(u)) {
+      return false;
+    } else {
+      users.add(u);
+      return true;
+    }
   }
 }

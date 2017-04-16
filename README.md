@@ -36,6 +36,9 @@ Register New ID "newid": Client -> Server
 Register Old ID "oldid": Client -> Server
   data = int
   
+Leave Game "leave": Client -> Server
+  data = {}
+  
   
   
   
@@ -57,3 +60,6 @@ Pending Games "pending": Server -> Client
           
 Join Game Response "joinresponse": Server -> Client
   data = [didjoin:boolean, gameid:int]
+  
+Leave Game Response "leaveresponse": Server -> Client
+  data = {}
