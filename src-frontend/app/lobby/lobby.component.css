@@ -37,6 +37,8 @@
   background: #FAFAFA;
 }
 
+
+
 .pane#header .pane-content {
 }
 .pane#header h1 {
@@ -130,12 +132,18 @@
 }
 
 
-.pane#game-info .pane-content {
+#game-info .pane-content {
+  height: 100%;
+}
+
+.pane#game-info .pane-content-inner {
   display: flex;
   padding: 32px;
   flex-direction: column;
   justify-content: space-around;
+  height: 100%;
 }
+
 #game-info .game-info-header {
   display: flex;
   padding: 0 12px;
