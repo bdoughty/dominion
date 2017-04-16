@@ -45,7 +45,7 @@ public class GameManager implements SocketServer{
     games = new LinkedList<>();
     callbacks = new HashMap<>();
     pendingGames = new HashMap<>();
-    PendingGame p = new PendingGame("JJ's secret tail", 4, new int[]{1,2,3,
+    PendingGame p = new PendingGame("JJ's secret tail", 4, new int[]{0,1,2,3,
       4,5,6,7,8,9});
     p.addUser(new User(1));
     p.addUser(new User(2));
