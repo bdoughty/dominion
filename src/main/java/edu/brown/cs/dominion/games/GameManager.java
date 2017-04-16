@@ -13,6 +13,8 @@ import edu.brown.cs.dominion.io.Websocket;
 import edu.brown.cs.dominion.io.send.ClientUpdateMap;
 import edu.brown.cs.dominion.io.send.SelectCallback;
 import org.eclipse.jetty.websocket.api.Session;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,13 +36,17 @@ public class GameManager implements SocketServer{
   private UserRegistry users;
   private Map<User, Game> gamesByUser;
   private List<Game> games;
-  private List<PendingGame> pendingGames;
+  private Map<Integer, PendingGame> pendingGames;
 
   public GameManager(UserRegistry users) {
     this.users = users;
     gamesByUser = new HashMap<>();
     games = new LinkedList<>();
     callbacks = new HashMap<>();
+    pendingGames = new HashMap<>();
+    PendingGame p = new PendingGame("JJ's secret tail", 4, new int[]{1,2,3,
+      4,5,6,7,8,9}).addUser(new User(1)).addUser(new User(2));
+    pendingGames.put(p.getId(), p);
   }
 
   private Map<User, SelectCallback> callbacks;
@@ -114,9 +120,18 @@ public class GameManager implements SocketServer{
   }
 
   public List<PendingGame> getPendingGames() {
-    return ImmutableList.of(new PendingGame("JJ's Face", 5,
-      new int[]{0,1,2,3,4,5,6,7,8,9}));
-    //TODO RETURN ACTUAL PENDING GAMES
-    //return pendingGames;
+    return new ArrayList<>(pendingGames.values());
+  }
+
+  public boolean joinGame(User u, int id){
+    if (gamesByUser.containsKey(u)) {
+      System.out.println("ERROR: user tried to join game but is already in a " +
+        "game");
+      return false;
+    } else {
+      //TODO error catching
+      pendingGames.get(id).addUser(u);
+      return true;
+    }
   }
 }

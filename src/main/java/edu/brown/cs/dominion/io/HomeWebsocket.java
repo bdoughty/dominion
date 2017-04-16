@@ -1,6 +1,8 @@
 package edu.brown.cs.dominion.io;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import edu.brown.cs.dominion.Chat;
 import edu.brown.cs.dominion.User;
 import static edu.brown.cs.dominion.io.send.MessageType.*;
@@ -14,6 +16,7 @@ import org.eclipse.jetty.websocket.api.Session;
  */
 public class HomeWebsocket implements SocketServer, UserMessageListener {
   private static Gson GSON = new Gson();
+  private static JsonParser PARSE = new JsonParser();
   private Chat homechat;
   private GameManager gm;
 
@@ -25,7 +28,16 @@ public class HomeWebsocket implements SocketServer, UserMessageListener {
   @Override
   public void newUser(Websocket ws, User u) {
     ws.registerUserCommand(u, CHAT, this);
-
+    ws.registerUserCommand(u, JOIN_GAME,
+      (w, u, m) -> {
+        JsonObject o = PARSE.parse(m).getAsJsonObject();
+        int gameid = o.get("gameid").getAsInt();
+        boolean joined = gm.joinGame(u, gameid);
+        JsonObject message = new JsonObject();
+        message.addProperty("gameid", gameid);
+        message.addProperty("didjoin", joined);
+        w.send(u, JOIN_RESPONSE, GSON.toJson(message));
+      });
   }
 
   @Override
