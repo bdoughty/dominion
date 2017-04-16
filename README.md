@@ -36,15 +36,15 @@ Register New ID "newid": Client -> Server
 Register Old ID "oldid": Client -> Server
   data = int
   
+  
+  
+  
 Join Game "join": Client -> Server
   data = {gameid:int}
-
-  
-  
-  
   
 Pending Games "pending": Server -> Client
   data = [
+            id:int
             name:string, 
             maxusers:int, 
             actioncardids:[int], 

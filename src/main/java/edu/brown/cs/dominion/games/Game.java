@@ -16,7 +16,7 @@ import edu.brown.cs.dominion.io.send.GameInit;
 /**
  * Created by henry on 4/2/2017.
  */
-public class Game implements GameEventListener {
+public class Game extends GameStub implements GameEventListener{
 
   private Queue<User> usersTurns;
   private User current;

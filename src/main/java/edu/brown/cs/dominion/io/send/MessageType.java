@@ -12,7 +12,9 @@ public enum MessageType {
   END_ACTION ("endaction"),
   DO_ACTION ("doaction"),
   SELECTION ("select"),
-  PENDING_GAMES ("pending");
+  PENDING_GAMES ("pending"),
+  JOIN_GAME ("join"),
+  JOIN_RESPONSE ("joinresponse");
 
 
   private final String name;

@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by henry on 4/15/2017.
  */
-public class PendingGame{
+public class PendingGame extends GameStub{
   private List<User> users;
   private int maxusers;
   private int[] actioncardids;
@@ -19,5 +19,11 @@ public class PendingGame{
     this.maxusers = maxUsers;
     this.actioncardids = actionCardIds;
     this.users = new LinkedList<>();
+  }
+
+  public PendingGame addUser(User u){
+    assert users.size() < maxusers;
+    users.add(u);
+    return this;
   }
 }
