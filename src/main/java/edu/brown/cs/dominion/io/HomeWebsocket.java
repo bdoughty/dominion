@@ -26,9 +26,9 @@ public class HomeWebsocket implements SocketServer, UserMessageListener {
   }
 
   @Override
-  public void newUser(Websocket ws, User u) {
-    ws.registerUserCommand(u, CHAT, this);
-    ws.registerUserCommand(u, JOIN_GAME,
+  public void newUser(Websocket ws, User user) {
+    ws.registerUserCommand(user, CHAT, this);
+    ws.registerUserCommand(user, JOIN_GAME,
       (w, u, m) -> {
         JsonObject o = PARSE.parse(m).getAsJsonObject();
         int gameid = o.get("gameid").getAsInt();
@@ -37,6 +37,11 @@ public class HomeWebsocket implements SocketServer, UserMessageListener {
         message.addProperty("gameid", gameid);
         message.addProperty("didjoin", joined);
         w.send(u, JOIN_RESPONSE, GSON.toJson(message));
+      });
+    ws.registerUserCommand(user, LEAVE,
+      (w, u, m) -> {
+        gm.leave(u);
+        w.send(u, LEAVE_RESPONSE, "");
       });
   }
 

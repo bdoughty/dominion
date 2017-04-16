@@ -14,7 +14,9 @@ public enum MessageType {
   SELECTION ("select"),
   PENDING_GAMES ("pending"),
   JOIN_GAME ("join"),
-  JOIN_RESPONSE ("joinresponse");
+  JOIN_RESPONSE ("joinresponse"),
+  LEAVE ("leave"),
+  LEAVE_RESPONSE ("leaveresponse");
 
 
   private final String name;

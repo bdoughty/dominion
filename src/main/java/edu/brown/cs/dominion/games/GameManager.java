@@ -37,6 +37,7 @@ public class GameManager implements SocketServer{
   private Map<User, Game> gamesByUser;
   private List<Game> games;
   private Map<Integer, PendingGame> pendingGames;
+  private Map<User, PendingGame> pendingByUser;
 
   public GameManager(UserRegistry users) {
     this.users = users;
@@ -45,8 +46,11 @@ public class GameManager implements SocketServer{
     callbacks = new HashMap<>();
     pendingGames = new HashMap<>();
     PendingGame p = new PendingGame("JJ's secret tail", 4, new int[]{1,2,3,
-      4,5,6,7,8,9}).addUser(new User(1)).addUser(new User(2));
+      4,5,6,7,8,9});
+    p.addUser(new User(1));
+    p.addUser(new User(2));
     pendingGames.put(p.getId(), p);
+    pendingByUser = new HashMap<>();
   }
 
   private Map<User, SelectCallback> callbacks;
@@ -124,14 +128,23 @@ public class GameManager implements SocketServer{
   }
 
   public boolean joinGame(User u, int id){
-    if (gamesByUser.containsKey(u)) {
+    if (gamesByUser.containsKey(u) || pendingByUser.containsKey(u)) {
       System.out.println("ERROR: user tried to join game but is already in a " +
         "game");
       return false;
     } else {
-      //TODO error catching
-      pendingGames.get(id).addUser(u);
-      return true;
+      if(pendingGames.containsKey(id)){
+        return pendingGames.get(id).addUser(u);
+      } else {
+        System.out.println("ERROR: no game by that id exists");
+        return false;
+      }
+    }
+  }
+
+  public void leave(User u){
+    if(pendingByUser.containsKey(u)){
+      pendingByUser.remove(u);
     }
   }
 }
