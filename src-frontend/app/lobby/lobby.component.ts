@@ -23,4 +23,9 @@ export class LobbyComponent implements OnInit {
   select(pending) {
     this.selectedGame = pending;
   }
+
+  join() {
+    console.log(this.selectedGame);
+    this._chatSocketService.send('join', this.selectedGame.id);
+  }
 }
