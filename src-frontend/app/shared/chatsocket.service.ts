@@ -5,6 +5,6 @@ import {UserIdService} from "./user-id.service";
 @Injectable()
 export class ChatSocketService extends AbstractSocketService {
   constructor(public _userIdService: UserIdService) {
-    super(_userIdService, "/homechat");
+    super(_userIdService, "/home");
   }
 }

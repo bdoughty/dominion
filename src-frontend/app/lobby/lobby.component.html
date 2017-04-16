@@ -10,6 +10,18 @@
           </div>
         </div>
         <ul class="games">
+          <li class="game" *ngFor="let pending of pendings" (click)="select(pending)">
+            <div class="game-name">{{ pending.name }}</div>
+            <div class="players">{{ pending.users.length }} / {{ pending.maxusers }}</div>
+            <div class="cards">
+              <div class="card" *ngFor="let card of pending.actioncardids">
+                <img src="../../assets/card{{ card }}.jpg">
+              </div>
+            </div>
+          </li>
+        </ul>
+        <!--
+        <ul class="games">
           <li class="game">
             <div class="game-name">Awesome_Gam32</div>
             <div class="players">3/4 Players</div>
@@ -30,16 +42,6 @@
             <div class="game-name">Awesome_Gam32</div>
             <div class="players">3/4 Players</div>
             <div class="cards">
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
             </div>
           </li>
           <li class="game">
@@ -75,6 +77,7 @@
             </div>
           </li>
         </ul>
+        -->
       </div>
     </div>
   </div>
@@ -86,47 +89,47 @@
     </div>
     <div class="pane" id="game-info">
       <div class="pane-content">
-        <div class="game-info-header">
-          <div class="game-name">
-            Awesome_Gam32
-          </div>
-          <div class="join-status">
-            Joined, waiting for users...
-          </div>
-        </div>
-        <div class="players-list">
-          <div class="players-list-title">
-            Players
-          </div>
-          <div class="players">
-            <div class="player">
-              xXxB3n_tha_GodxXx
+        <div class="pane-content-inner" *ngIf="selectedGame">
+
+          <div class="game-info-header">
+            <div class="game-name">
+              {{ selectedGame.name }}
             </div>
-            <div class="player">
-              x.X.D.a.|.G.3.n.3.n.3.r.4.a.l.X.x
-            </div>
-            <div class="player">
-              x.X.D.a.|.G.3.n.3.n.3.r.4.a.l.X.x
-            </div>
-            <div class="player">
-              &quot;); DROP TABLE users; --
+            <div class="join-status" *ngIf="joiningGame">
+              Joined, waiting for users...
             </div>
           </div>
-        </div>
-        <div class="join-game">
-          <button>Join Game</button>
-        </div>
-        <div class="cards">
-          <div class="card"></div>
-          <div class="card"></div>
-          <div class="card"></div>
-          <div class="card"></div>
-          <div class="card"></div>
-          <div class="card"></div>
-          <div class="card"></div>
-          <div class="card"></div>
-          <div class="card"></div>
-          <div class="card"></div>
+          <div class="players-list">
+            <div class="players-list-title">
+              Players
+            </div>
+            <div class="players">
+              <div class="player" *ngFor="let player of selectedGame.users">
+                {{ player.name }}
+              </div>
+              <!--<div class="player">-->
+              <!--xXxB3n_tha_GodxXx-->
+              <!--</div>-->
+              <!--<div class="player">-->
+              <!--x.X.D.a.|.G.3.n.3.n.3.r.4.a.l.X.x-->
+              <!--</div>-->
+              <!--<div class="player">-->
+              <!--x.X.D.a.|.G.3.n.3.n.3.r.4.a.l.X.x-->
+              <!--</div>-->
+              <!--<div class="player">-->
+              <!--&quot;); DROP TABLE users; &#45;&#45;-->
+              <!--</div>-->
+            </div>
+          </div>
+          <div class="join-game">
+            <button (click)="join()">Join Game</button>
+            <button (click)="leave()">Leave Game</button>
+          </div>
+          <div class="cards">
+            <div class="card" *ngFor="let card of selectedGame.actioncardids">
+              <img src="../../assets/card{{ card }}.jpg">
+            </div>
+          </div>
         </div>
       </div>
     </div>

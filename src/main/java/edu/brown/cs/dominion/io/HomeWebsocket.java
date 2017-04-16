@@ -30,6 +30,7 @@ public class HomeWebsocket implements SocketServer, UserMessageListener {
     ws.registerUserCommand(user, CHAT, this);
     ws.registerUserCommand(user, JOIN_GAME,
       (w, u, m) -> {
+      System.out.println(m);
         JsonObject o = PARSE.parse(m).getAsJsonObject();
         int gameid = o.get("gameid").getAsInt();
         boolean joined = gm.joinGame(u, gameid);

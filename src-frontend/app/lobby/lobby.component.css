@@ -37,6 +37,8 @@
   background: #FAFAFA;
 }
 
+
+
 .pane#header .pane-content {
 }
 .pane#header h1 {
@@ -114,12 +116,13 @@
   display: flex;
 }
 .game .card {
-  /* TODO: Replace with real image */
   width: 17px;
   height: 24px;
-  background: #222;
   border-radius: 2px;
   margin: 0 2px;
+}
+.game .card img {
+  width: 100%;
 }
 
 .pane#chat .pane-content {
@@ -130,12 +133,18 @@
 }
 
 
-.pane#game-info .pane-content {
+#game-info .pane-content {
+  height: 100%;
+}
+
+.pane#game-info .pane-content-inner {
   display: flex;
   padding: 32px;
   flex-direction: column;
   justify-content: space-around;
+  height: 100%;
 }
+
 #game-info .game-info-header {
   display: flex;
   padding: 0 12px;
@@ -179,10 +188,11 @@
   justify-content: space-between;
 }
 #game-info .card {
-  width: 50px;
-  height: 80px;
   margin: 4px;
-  background: #222;
+}
+#game-info .card img {
+  width: 100%;
+  height: auto;
 }
 #game-info .card:hover {
   cursor: pointer;
