@@ -25,16 +25,6 @@ export class GameComponent implements OnInit {
     let pile1 = new Pile(123, 3, 3);
     let player = new Player(4234, "name1", "#123123");
 
-    let state = {
-      pile: [
-        [pile1, pile1, pile1, pile1],
-        [pile1, pile1, pile1, pile1],
-        [pile1, pile1, pile1, pile1],
-        [pile1, pile1, pile1, pile1]
-      ],
-      players: [player, player, player]
-    };
-    this.initGameFromState(state);
   }
 
   initGameFromState(state) {
