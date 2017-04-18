@@ -74,3 +74,9 @@ Game Init "init": Server -> Client
     users:[{id:int, name:string, color:String}],
     cardids:[int],
   }
+  
+New Turn "turn": Server -> Client
+  data = {
+    playerid:int
+  }
+

@@ -18,7 +18,8 @@ public enum MessageType {
   LEAVE ("leave"),
   LEAVE_RESPONSE ("leaveresponse"),
   REDIRECT ("redirect"),
-  INIT_GAME ("init");
+  INIT_GAME ("init"),
+  NEW_TURN("turn");
 
 
   private final String name;

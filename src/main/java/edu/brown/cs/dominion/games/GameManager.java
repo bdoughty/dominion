@@ -1,11 +1,11 @@
 package edu.brown.cs.dominion.games;
 
-import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.io.SocketServer;
 import edu.brown.cs.dominion.io.UserRegistry;
@@ -128,7 +128,20 @@ public class GameManager implements SocketServer{
   @Override
   public void newSession(Websocket ws, User user, Session s) {
     if(gamesByUser.containsKey(user)){
+      Game g = gamesByUser.get(user);
+      List<Integer> actionIds = g.getBoard().getActionCardIds();
 
+
+      JsonObject container = new JsonObject();
+      container.addProperty("gameid", g.getId());
+      JsonArray arr = new JsonArray();
+      for(int i = 0;i < 10;i++){
+        arr.set(i, new JsonPrimitive(actionIds.get(i)));
+      }
+      container.add("cardids", arr);
+      container.add("users", GSON.toJsonTree(g.getUsers()));
+
+      ws.send(s, INIT_GAME, GSON.toJson(container));
     } else {
       System.out.println("User is not in a game");
     }

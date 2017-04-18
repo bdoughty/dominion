@@ -30,6 +30,10 @@ public class Game extends GameStub implements GameEventListener{
     this.board = new Board(actionCardIds);
   }
 
+  public Queue<User> getUsers(){
+    return usersTurns;
+  }
+
   @Override
   public ClientUpdateMap endBuyPhase(User u, List<Integer> toBuy) {
     assert (current.equals(u));
@@ -52,7 +56,10 @@ public class Game extends GameStub implements GameEventListener{
 
     // I'm not sure which updates need to be passed back for all of these.
     return null;
+  }
 
+  public Board getBoard(){
+    return board;
   }
 
   @Override

@@ -17,7 +17,7 @@ import edu.brown.cs.dominion.victory.Province;
 public class Board {
 
   private Map<Integer, Pile> piles;
-
+  private List<Integer> actionCardIds;
   private List<Card> trash;
 
   /**
@@ -33,7 +33,12 @@ public class Board {
     boardSetUp(actionCardIds);
   }
 
+  public List<Integer> getActionCardIds(){
+    return actionCardIds;
+  }
+
   private void boardSetUp(List<Integer> actionCardIds) {
+    this.actionCardIds = actionCardIds;
     piles = new HashMap<>();
 
     // building board
