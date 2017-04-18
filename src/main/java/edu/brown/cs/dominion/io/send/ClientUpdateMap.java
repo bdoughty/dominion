@@ -3,6 +3,7 @@ package edu.brown.cs.dominion.io.send;
 import com.google.gson.Gson;
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.User;
+import edu.brown.cs.dominion.games.Game;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -15,14 +16,20 @@ import java.util.function.Function;
 /**
  * Created by henry on 3/22/2017.
  */
-public class ClientUpdateMap implements Jsonable {
+public class ClientUpdateMap {
   private transient static final Gson GSON = new Gson();
   private Map<String, Object> data;
+  private Map<String, Object> dataGlobal;
   private transient SelectCallback callback;
   private transient User callbackUser;
 
-  public ClientUpdateMap() {
+  private transient List<User> users;
+
+  public ClientUpdateMap(Game g) {
     data = new HashMap<>();
+    dataGlobal = new HashMap<>();
+    this.users = g.getAllUsers();
+
   }
 
   public ClientUpdateMap actionCount(int actions) {
@@ -77,9 +84,25 @@ public class ClientUpdateMap implements Jsonable {
     return this;
   }
 
-  public String prepare() {
+  public ClientUpdateMap turn(int userId){
+    dataGlobal.put("userid", userId);
+    return this;
+  }
+
+
+  public boolean hasUser(){
+    return data.size() > 0;
+  }
+
+  public boolean hasGlobal(){
+    return dataGlobal.size() > 0;
+  }
+
+  public String prepareUser() {
     return GSON.toJson(data);
   }
+
+  public String prepareGlobal() { return GSON.toJson(dataGlobal); }
 
   public boolean hasCallback() {
     return callback != null;
@@ -101,5 +124,9 @@ public class ClientUpdateMap implements Jsonable {
 
   public User getCallbackUser() {
     return callbackUser;
+  }
+
+  public List<User> getUsers(){
+    return users;
   }
 }

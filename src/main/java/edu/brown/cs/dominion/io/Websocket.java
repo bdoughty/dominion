@@ -119,7 +119,7 @@ public class Websocket {
 
   @OnWebSocketConnect
   public void onConnect(Session user) throws Exception {
-    //Do Nothing
+    // Do nothing
   }
 
   @OnWebSocketClose
