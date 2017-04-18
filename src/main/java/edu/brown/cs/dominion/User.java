@@ -67,6 +67,10 @@ public class User {
     return "rgb(" + c.getRed() + "," + c.getGreen() + "," + c.getBlue() + ")";
   }
 
+  public void initPlayer(){
+    player = new Player(id);
+  }
+
   private String makeName(int id){
     switch (id) {
       case 0: return "Mrs. McCave";

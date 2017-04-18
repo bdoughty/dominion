@@ -25,6 +25,7 @@ public class Game extends GameStub implements GameEventListener{
   // I'm still playing around with when to use User and when to use Player, so
   // this will probably get cleaner.
   public Game(List<User> usersTurns, List<Integer> actionCardIds) {
+    usersTurns.forEach(User::initPlayer);
     this.usersTurns = new LinkedList<>(usersTurns);
     this.current = this.usersTurns.poll();
     this.board = new Board(actionCardIds);
