@@ -188,4 +188,20 @@ public class Player {
     }
   }
 
+  public int getActions() {
+    return actions;
+  }
+
+  public int getBuys() {
+    return buys;
+  }
+
+  public List<Card> getHand(){ return hand; }
+  public List<Card> getDeck(){ return deck; }
+  public List<Card> getDiscard(){
+    List<Card> discard = new LinkedList<>(discardPile);
+    discard.addAll(playedPile);
+    return discard;
+  }
+
 }
