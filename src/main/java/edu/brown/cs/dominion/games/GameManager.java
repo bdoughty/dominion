@@ -1,11 +1,11 @@
 package edu.brown.cs.dominion.games;
 
-import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.io.SocketServer;
 import edu.brown.cs.dominion.io.UserRegistry;
@@ -45,11 +45,19 @@ public class GameManager implements SocketServer{
     games = new LinkedList<>();
     callbacks = new HashMap<>();
     pendingGames = new HashMap<>();
-    PendingGame p = new PendingGame("JJ's secret tail", 4, new int[]{0,1,2,3,
-      4,5,6,7,8,9});
-    p.addUser(new User(1));
-    p.addUser(new User(2));
+
+    //TODO GET RID OF DUMMY
+    PendingGame p = new PendingGame("JJ's secret tail", 1, new int[]{7,8,9,
+      10,11,12,13,14,15,16});
     pendingGames.put(p.getId(), p);
+
+    PendingGame p2 = new PendingGame("JJ's secret tail", 2, new int[]{7,8,9,
+      10,11,12,13,14,15,16});
+    pendingGames.put(p2.getId(), p2);
+
+    PendingGame p3 = new PendingGame("JJ's secret tail", 3, new int[]{7,8,9,
+      10,11,12,13,14,15,16});
+    pendingGames.put(p3.getId(), p3);
     pendingByUser = new HashMap<>();
   }
 
@@ -115,26 +123,51 @@ public class GameManager implements SocketServer{
         }
         buys(u, buys);
     });
-
   }
 
   @Override
   public void newSession(Websocket ws, User user, Session s) {
+    if(gamesByUser.containsKey(user)){
+      Game g = gamesByUser.get(user);
+      List<Integer> actionIds = g.getBoard().getActionCardIds();
 
+
+      JsonObject container = new JsonObject();
+      container.addProperty("gameid", g.getId());
+      container.add("cardids", GSON.toJsonTree(actionIds));
+      List<User> us = new LinkedList<>(g.getUsers());
+      us.add(0, g.getCurrent());
+      container.add("users", GSON.toJsonTree(us));
+
+      ws.send(s, INIT_GAME, GSON.toJson(container));
+      ws.send(s, UPDATE_MAP, chk(g.fullUpdate(user)));
+    } else {
+      System.out.println("User is not in a game");
+    }
   }
 
   public List<PendingGame> getPendingGames() {
     return new ArrayList<>(pendingGames.values());
   }
 
-  public boolean joinGame(User u, int id){
+  public boolean joinGame(Websocket ws, User u, int id){
     if (gamesByUser.containsKey(u) || pendingByUser.containsKey(u)) {
       System.out.println("ERROR: user tried to join game but is already in a " +
         "game");
       return false;
     } else {
       if(pendingGames.containsKey(id)){
-        return pendingGames.get(id).addUser(u);
+        PendingGame pg = pendingGames.get(id);
+        pendingByUser.put(u, pg);
+        boolean didJoin = pg.addUser(u);
+        if(pg.full()){
+          Game g = pg.convertAndRedirect(ws);
+          games.add(g);
+          pg.getUsers().forEach(us -> gamesByUser.put(us, g));
+          pg.getUsers().forEach(us -> pendingByUser.remove(us));
+          pendingGames.remove(id);
+        }
+        return didJoin;
       } else {
         System.out.println("ERROR: no game by that id exists");
         return false;

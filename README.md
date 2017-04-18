@@ -39,7 +39,8 @@ Register Old ID "oldid": Client -> Server
 Leave Game "leave": Client -> Server
   data = {}
   
-Create Game "/creategame"
+Create Game "/creategame": AJAX
+  data = {tbd}
   
   
 Join Game "join": Client -> Server
@@ -63,3 +64,19 @@ Join Game Response "joinresponse": Server -> Client
   
 Leave Game Response "leaveresponse": Server -> Client
   data = {}
+  
+  
+  
+  
+Game Init "init": Server -> Client
+  data = {
+    gameid:int,
+    users:[{id:int, name:string, color:String}],
+    cardids:[int],
+  }
+  
+New Turn "turn": Server -> Client
+  data = {
+    playerid:int
+  }
+

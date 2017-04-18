@@ -16,7 +16,10 @@ public enum MessageType {
   JOIN_GAME ("join"),
   JOIN_RESPONSE ("joinresponse"),
   LEAVE ("leave"),
-  LEAVE_RESPONSE ("leaveresponse");
+  LEAVE_RESPONSE ("leaveresponse"),
+  REDIRECT ("redirect"),
+  INIT_GAME ("init"),
+  NEW_TURN("turn");
 
 
   private final String name;

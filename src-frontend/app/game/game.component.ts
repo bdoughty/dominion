@@ -5,6 +5,7 @@ import {Player} from "./models/player.model";
 import {Pile} from "./models/pile.model";
 import {ClientGame} from "./models/client-game.model";
 import {GameService} from "./game.service";
+import {GameSocketService} from "../shared/gamesocket.service";
 
 @Component({
   selector: 'dmn-game',
@@ -19,12 +20,15 @@ export class GameComponent implements OnInit {
   constructor(
     private _userIdService: UserIdService,
     private _gameService: GameService,
+    private _gameSocketService: GameSocketService
   ) {}
 
   ngOnInit(): void {
     let pile1 = new Pile(123, 3, 3);
     let player = new Player(4234, "name1", "#123123");
-
+    this._gameSocketService.addListener("init", (m) => {
+      alert(m);
+    })
   }
 
   initGameFromState(state) {

@@ -10,7 +10,10 @@
           </div>
         </div>
         <ul class="games">
-          <li class="game" *ngFor="let pending of pendings" (click)="select(pending)">
+          <li class="game"
+              *ngFor="let pending of pendings"
+              (click)="select(pending)"
+              [ngClass]="{selected: pending.id === selectedGameId}">
             <div class="game-name">{{ pending.name }}</div>
             <div class="players">{{ pending.users.length }} / {{ pending.maxusers }}</div>
             <div class="cards">

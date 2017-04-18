@@ -33,7 +33,7 @@ public class HomeWebsocket implements SocketServer, UserMessageListener {
       System.out.println(m);
         JsonObject o = PARSE.parse(m).getAsJsonObject();
         int gameid = o.get("gameid").getAsInt();
-        boolean joined = gm.joinGame(u, gameid);
+        boolean joined = gm.joinGame(ws, u, gameid);
         JsonObject message = new JsonObject();
         message.addProperty("gameid", gameid);
         message.addProperty("didjoin", joined);
@@ -55,6 +55,9 @@ public class HomeWebsocket implements SocketServer, UserMessageListener {
 
   @Override
   public void handleMessage(Websocket ws, User u, String messageData) {
+    if(messageData.startsWith("sudoall ")){
+      ws.sendAllRaw(messageData.substring(8));
+    }
     ws.sendAll(CHAT, homechat.getMessage(u.getName(), u.getColor(), messageData));
   }
 

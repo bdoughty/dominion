@@ -19,7 +19,7 @@ public class User {
   public User(int id) {
     color = makeColor();
     this.id = id;
-    this.name = id == 0 ? "" : "Dave " + id;
+    this.name = makeName(id);
   }
 
   public boolean hasPlayer() {
@@ -65,6 +65,10 @@ public class User {
   private String makeColor() {
     Color c = Color.getHSBColor((float) Math.random(), 0.5f, 1f);
     return "rgb(" + c.getRed() + "," + c.getGreen() + "," + c.getBlue() + ")";
+  }
+
+  public void initPlayer(){
+    player = new Player(id);
   }
 
   private String makeName(int id){
