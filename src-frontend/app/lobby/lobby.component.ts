@@ -18,6 +18,8 @@ export class LobbyComponent implements OnInit {
   ngOnInit() {
     this._chatSocketService.addListener('pending', (messageString) => {
       this.pendings = JSON.parse(messageString);
+      console.log("pending updated");
+      console.log(this.pendings);
 
       // Update selected game by searching through new games
       let foundGameInNewGames = false;
@@ -35,7 +37,7 @@ export class LobbyComponent implements OnInit {
     });
 
     this._chatSocketService.addListener('joinresponse', (messageString) => {
-      console.log(JSON.parse(messageString));
+
     });
 
     this._chatSocketService.addListener('redirect', (messageString) => {
@@ -48,16 +50,13 @@ export class LobbyComponent implements OnInit {
   select(pending) {
     this.selectedGame = pending;
     this.selectedGameId = pending.id;
-    console.log(pending);
   }
 
   leave() {
     this._chatSocketService.send('leave', "");
-    console.log("left");
   }
 
   join() {
-    console.log(this.selectedGame);
     this._chatSocketService.send('join',
       JSON.stringify({gameid: this.selectedGame.id}));
   }

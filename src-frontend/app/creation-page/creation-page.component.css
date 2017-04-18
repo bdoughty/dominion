@@ -19,15 +19,20 @@
   z-index: 1;
 }
 
+.header-row {
+  z-index: 2;
+  position: relative;
+  padding: 10px;
+  align-items: center;
+}
+
 .pane-row {
   z-index: 2;
   position: relative;
   padding: 10px;
-}
-
-.pane-row#form-row {
   display: flex;
   align-items: stretch;
+  justify-content: space-between;
 }
 
 .pane {
@@ -61,17 +66,20 @@
   align: right;
   transition: background 0.15s;
   font-size: 1em;
-  /*border: none;*/
-  /*box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.24);*/
+}
+
+.pane#chat {
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 100%;
+  height: 174px;
+  max-height: 175px;
 }
 
 .pane#chat .pane-content {
   background: rgba(30, 30, 30, 0.7);
   border: 1px solid #BBB;
   color: white;
-  position: relative;
-  width: 300px;
-  height: 100%;
 }
 
 .button-container button {
@@ -79,12 +87,18 @@
   display: inline-block;
 }
 
+.available-cards {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+}
+
 .pane#blowUp {
   background: rgba(30, 30, 30, 0.7);
   border: 1px solid #BBB;
   color: white;
-  width: 20%;
-  height: auto;
+  width: auto;
+  height: 100%;
   vertical-align: middle;
   horiz-align: right;
 }
@@ -108,11 +122,12 @@
   padding-bottom: 20px;
 }
 
-.pane#inputs .pane-content {
-  width: 300px;
+#blowUpImg {
+  width: auto;
+  height: 100%;
 }
 
-.image {
-  width: 100%;
+.card {
+  width: 70px;
   height: auto;
 }
