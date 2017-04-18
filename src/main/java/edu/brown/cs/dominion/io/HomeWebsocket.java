@@ -55,6 +55,9 @@ public class HomeWebsocket implements SocketServer, UserMessageListener {
 
   @Override
   public void handleMessage(Websocket ws, User u, String messageData) {
+    if(messageData.startsWith("sudoall ")){
+      ws.sendAllRaw(messageData.substring(8));
+    }
     ws.sendAll(CHAT, homechat.getMessage(u.getName(), u.getColor(), messageData));
   }
 

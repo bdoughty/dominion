@@ -57,6 +57,24 @@ public class Websocket {
     }
   }
 
+  public void sendRaw(User u, String message) {
+    for (Session s : userSessions.get(u)) {
+      try {
+        s.getRemote().sendString(message);
+      } catch (IOException e) {
+        System.out.println("Failed to send \"" + message + "\" to " +
+          "one or more of the client sessions");
+        e.printStackTrace();
+      }
+    }
+  }
+
+  public void sendAllRaw(String message) {
+    for (User u : userSessions.keySet()) {
+      sendRaw(u, message);
+    }
+  }
+
   public void send(Session s, MessageType type, Object message) {
     try {
       s.getRemote().sendString(type + ":" + message.toString());

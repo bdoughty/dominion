@@ -32,9 +32,11 @@ public class Main {
     m.run(args);
   }
 
+  private GameManager gm;
+
   private Main() {
     users = new UserRegistry();
-    GameManager gm = new GameManager(users);
+    gm = new GameManager(users);
     home = new HomeWebsocket(gm);
   }
 
@@ -52,6 +54,7 @@ public class Main {
     exception(Exception.class, new ExceptionPrinter());
 
     webSocket("/home", new Websocket(users, home));
+    webSocket("/game", new Websocket(users, gm));
 
     // TODO get rid of this, for some reason it is necessary for the server to
     // start right now.

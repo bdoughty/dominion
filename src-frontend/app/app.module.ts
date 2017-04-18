@@ -13,6 +13,7 @@ import {GameService} from "./game/game.service";
 import {appRoutes} from "./routes";
 import {ChatComponent} from "./chat/chat.component";
 import {ChatSocketService} from "./shared/chatsocket.service";
+import {GameSocketService} from "./shared/gamesocket.service";
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import {ChatSocketService} from "./shared/chatsocket.service";
   providers: [
     UserIdService,
     GameService,
-    ChatSocketService
+    ChatSocketService,
+    GameSocketService
     // SocketService
   ],
   bootstrap: [AppComponent]

@@ -120,7 +120,7 @@ public class GameManager implements SocketServer{
 
   @Override
   public void newSession(Websocket ws, User user, Session s) {
-
+    ws.send(s, INIT_GAME, "");
   }
 
   public List<PendingGame> getPendingGames() {
