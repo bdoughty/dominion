@@ -1,17 +1,16 @@
 package edu.brown.cs.dominion.io.send;
 
-import com.google.gson.Gson;
-import edu.brown.cs.dominion.Card;
-import edu.brown.cs.dominion.User;
-import edu.brown.cs.dominion.games.Game;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Function;
+
+import com.google.gson.Gson;
+
+import edu.brown.cs.dominion.Card;
+import edu.brown.cs.dominion.User;
+import edu.brown.cs.dominion.games.Game;
 
 /**
  * Created by henry on 3/22/2017.
@@ -47,10 +46,8 @@ public class ClientUpdateMap {
     return this;
   }
 
-  public ClientUpdateMap requireSelect(User u,
-                                       List<Card> handIds,
-                                       List<Card> boardIds,
-                                       SelectCallback response) {
+  public ClientUpdateMap requireSelect(User u, List<Card> handIds,
+      List<Card> boardIds, SelectCallback response) {
     callback = response;
     callbackUser = u;
     data.put("select", true);
@@ -84,17 +81,21 @@ public class ClientUpdateMap {
     return this;
   }
 
-  public ClientUpdateMap turn(int userId){
+  public ClientUpdateMap turn(int userId) {
     dataGlobal.put("userid", userId);
     return this;
   }
 
+  public ClientUpdateMap winner(List<User> u) {
+    dataGlobal.put("winner", u);
+    return this;
+  }
 
-  public boolean hasUser(){
+  public boolean hasUser() {
     return data.size() > 0;
   }
 
-  public boolean hasGlobal(){
+  public boolean hasGlobal() {
     return dataGlobal.size() > 0;
   }
 
@@ -102,7 +103,9 @@ public class ClientUpdateMap {
     return GSON.toJson(data);
   }
 
-  public String prepareGlobal() { return GSON.toJson(dataGlobal); }
+  public String prepareGlobal() {
+    return GSON.toJson(dataGlobal);
+  }
 
   public boolean hasCallback() {
     return callback != null;
@@ -126,7 +129,7 @@ public class ClientUpdateMap {
     return callbackUser;
   }
 
-  public List<User> getUsers(){
+  public List<User> getUsers() {
     return users;
   }
 }

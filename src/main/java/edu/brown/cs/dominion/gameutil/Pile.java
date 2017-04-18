@@ -8,28 +8,30 @@ public class Pile {
 
   private int size;
   private Supplier<Card> card;
+  private int cost;
 
   public Pile(Supplier<Card> card, int size) {
     this.size = size;
     this.card = card;
+    this.cost = this.card.get().getCost();
   }
 
   public Card draw() {
     if (!isEmpty()) {
       size--;
-      return card.get();
+      return (card.get());
     } else {
       throw new UnsupportedOperationException("empty pile");
     }
   }
 
   public boolean isEmpty() {
-    return this.size == 0;
+    return (size == 0);
   }
 
-  // ugly, but will suffice for noe
+  // ugly, but will suffice for now
   public int getCost() {
-    return this.card.get().getCost();
+    return cost;
   }
 
 }

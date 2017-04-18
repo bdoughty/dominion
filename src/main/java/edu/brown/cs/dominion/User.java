@@ -1,8 +1,7 @@
 package edu.brown.cs.dominion;
 
 import java.awt.Color;
-
-import edu.brown.cs.dominion.gameutil.Player;
+import java.util.Objects;
 
 /**
  * A wrapper for session that allows users to contain extra information
@@ -14,7 +13,7 @@ public class User {
   private int id;
   private String color;
   private String name;
-  private transient Player player;
+  // private transient Player player;
 
   public User(int id) {
     color = makeColor();
@@ -22,13 +21,30 @@ public class User {
     this.name = makeName(id);
   }
 
-  public boolean hasPlayer() {
-    return player != null;
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    } else if (o instanceof User) {
+      User that = (User) o;
+      return (this.id == that.id);
+    } else {
+      return false;
+    }
   }
 
-  public Player getPlayer() {
-    return player;
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
   }
+
+  // public boolean hasPlayer() {
+  // return player != null;
+  // }
+  //
+  // public Player getPlayer() {
+  // return player;
+  // }
 
   /**
    * Getter for the name of the user, will return a string conversion of the
@@ -67,38 +83,64 @@ public class User {
     return "rgb(" + c.getRed() + "," + c.getGreen() + "," + c.getBlue() + ")";
   }
 
-  public void initPlayer(){
-    player = new Player(id);
-  }
+  // public void initPlayer() {
+  // player = new Player();
+  // }
 
-  private String makeName(int id){
+  private String makeName(int id) {
     switch (id) {
-      case 0: return "Mrs. McCave";
-      case 1: return "Dave";
-      case 2: return "Bodkin Van Horn";
-      case 3: return "Hoos-Foos";
-      case 4: return "Snimm";
-      case 5: return "Hot-Shot";
-      case 6: return "Sunny Jim";
-      case 7: return "Shadrack";
-      case 8: return "Blincky";
-      case 9: return "Stuffy";
-      case 10: return "Stinky";
-      case 11: return "Putt-Putt";
-      case 12: return "Moon Face";
-      case 13: return "Marvin O'Gravel Ballon Face";
-      case 14: return "Ziggy";
-      case 15: return "Soggy Muff";
-      case 16: return "Buffalo Bill";
-      case 17: return "Biffalo Buff";
-      case 18: return "Sneepy";
-      case 19: return "Weepy Weed";
-      case 20: return "Paris Garters";
-      case 21: return "Harris Tweed";
-      case 22: return "Sir Michael Carmichael Zutt";
-      case 23: return "Oliver Boliver Butt";
-      case 24: return "Zanzibar Buck-Buck McFate";
-      default: return "Dave " + (id - 23);
+      case 0:
+        return "Mrs. McCave";
+      case 1:
+        return "Dave";
+      case 2:
+        return "Bodkin Van Horn";
+      case 3:
+        return "Hoos-Foos";
+      case 4:
+        return "Snimm";
+      case 5:
+        return "Hot-Shot";
+      case 6:
+        return "Sunny Jim";
+      case 7:
+        return "Shadrack";
+      case 8:
+        return "Blincky";
+      case 9:
+        return "Stuffy";
+      case 10:
+        return "Stinky";
+      case 11:
+        return "Putt-Putt";
+      case 12:
+        return "Moon Face";
+      case 13:
+        return "Marvin O'Gravel Ballon Face";
+      case 14:
+        return "Ziggy";
+      case 15:
+        return "Soggy Muff";
+      case 16:
+        return "Buffalo Bill";
+      case 17:
+        return "Biffalo Buff";
+      case 18:
+        return "Sneepy";
+      case 19:
+        return "Weepy Weed";
+      case 20:
+        return "Paris Garters";
+      case 21:
+        return "Harris Tweed";
+      case 22:
+        return "Sir Michael Carmichael Zutt";
+      case 23:
+        return "Oliver Boliver Butt";
+      case 24:
+        return "Zanzibar Buck-Buck McFate";
+      default:
+        return "Dave " + (id - 23);
     }
   }
 }
