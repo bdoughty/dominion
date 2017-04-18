@@ -5,8 +5,8 @@
           <div class="name" [style.color]="message.color">
             {{ message.name }}
           </div>
-          <div class="message-content">
-            {{ message.message }}
+          <div class="message-content" [innerHtml]="message.message">
+            <!--{{ message.message }}-->
           </div>
         </div>
       </div>
