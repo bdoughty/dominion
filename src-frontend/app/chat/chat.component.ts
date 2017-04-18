@@ -19,10 +19,17 @@ export class ChatComponent implements OnInit {
     this._chatSocketService.addListener('chat', (messageString) => {
       let message = JSON.parse(messageString);
       this.chatModel.addMessage(message);
+
+      console.log("recieving");
+      console.log(message);
     });
   }
 
   onEnter(value) {
+
+    console.log("sending");
+    console.log(value);
+
     this._chatSocketService.send('chat', value);
     this.currentMessage = "";
   }

@@ -25,24 +25,20 @@ export class GameComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-
     this.game = new ClientGame([new Player(0, "#333", "dlajdflkajsfd")], 0);
 
-    // this.game = new Promise((resolve, reject) => {
-      this._gameSocketService.addListener("init", (message) => {
-        if (message === undefined) return;
-        console.log(message);
+    this._gameSocketService.addListener("init", (message) => {
+      if (message === undefined) return;
+      console.log(message);
 
-        let gameState = JSON.parse(message);
-        let game = this.gameFromState(gameState);
-        this.game = game;
-        console.log(this.game);
+      let gameState = JSON.parse(message);
+      let game = this.gameFromState(gameState);
+      this.game = game;
+      console.log(this.game);
 
-        // this.initGameFromState(initObj);
-        // { gameid:int, users:[{id:int, name:string, color:String}], cardids:[int], }
-      });
-    // });
-
+      // this.initGameFromState(initObj);
+      // { gameid:int, users:[{id:int, name:string, color:String}], cardids:[int], }
+    });
 
     this._gameSocketService.addListener("updatemap", (message) => {
       console.log(message);
@@ -68,13 +64,13 @@ export class GameComponent implements OnInit {
   updateMap(update) {
     if (this.game != null) {
       if (update.actions === "undefined") {
-        this.game.getOwnPlayer().actions = update.actions;
+        this.game.actions = update.actions;
       }
       if (update.buys === "undefined") {
-        this.game.getOwnPlayer().buys = update.buys;
+        this.game.buys = update.buys;
       }
       if (update.gold === "undefined") {
-        this.game.getOwnPlayer().gold = update.gold;
+        this.game.gold = update.gold;
       }
 
       if (update.select === "undefined") {
