@@ -112,7 +112,12 @@
   width: 300px;
 }
 
-.image {
+#blowUpImg {
   width: 100%;
+  height: auto;
+}
+
+.card {
+  width: 70px;
   height: auto;
 }
