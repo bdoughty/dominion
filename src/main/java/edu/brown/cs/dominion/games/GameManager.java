@@ -45,8 +45,8 @@ public class GameManager implements SocketServer{
     games = new LinkedList<>();
     callbacks = new HashMap<>();
     pendingGames = new HashMap<>();
-    PendingGame p = new PendingGame("JJ's secret tail", 4, new int[]{0,1,2,3,
-      4,5,6,7,8,9});
+    PendingGame p = new PendingGame("JJ's secret tail", 3, new int[]{7,8,9,
+      10,11,12,13,14,15,16});
     p.addUser(new User(1));
     p.addUser(new User(2));
     pendingGames.put(p.getId(), p);
@@ -127,14 +127,24 @@ public class GameManager implements SocketServer{
     return new ArrayList<>(pendingGames.values());
   }
 
-  public boolean joinGame(User u, int id){
+  public boolean joinGame(Websocket ws, User u, int id){
     if (gamesByUser.containsKey(u) || pendingByUser.containsKey(u)) {
       System.out.println("ERROR: user tried to join game but is already in a " +
         "game");
       return false;
     } else {
       if(pendingGames.containsKey(id)){
-        return pendingGames.get(id).addUser(u);
+        PendingGame pg = pendingGames.get(id);
+        pendingByUser.put(u, pg);
+        boolean didJoin = pg.addUser(u);
+        if(pg.full()){
+          Game g = pg.convertAndRedirect(ws);
+          games.add(g);
+          pg.getUsers().forEach(us -> gamesByUser.put(us, g));
+          pg.getUsers().forEach(us -> pendingByUser.remove(us));
+          pendingGames.remove(id);
+        }
+        return didJoin;
       } else {
         System.out.println("ERROR: no game by that id exists");
         return false;

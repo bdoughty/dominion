@@ -23,6 +23,10 @@ export class LobbyComponent implements OnInit {
       console.log(JSON.parse(messageString));
     });
 
+    this._chatSocketService.addListener('redirect', (messageString) => {
+      window.location.replace(messageString);
+    });
+
     this._chatSocketService.addListener('leaveresponse', (a) => {});
   }
 

@@ -16,7 +16,8 @@ public enum MessageType {
   JOIN_GAME ("join"),
   JOIN_RESPONSE ("joinresponse"),
   LEAVE ("leave"),
-  LEAVE_RESPONSE ("leaveresponse");
+  LEAVE_RESPONSE ("leaveresponse"),
+  REDIRECT ("redirect");
 
 
   private final String name;
