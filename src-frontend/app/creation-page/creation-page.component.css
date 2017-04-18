@@ -80,7 +80,7 @@ form {
 }
 
 .header {
-  padding: 10px;
+  padding: 0.5vmin;
   align-items: center;
   display: flex;
   justify-content: space-between;
@@ -89,11 +89,11 @@ form {
 .header-label {
   padding-top: 10px;
   padding-left: 10px;
+  font-size: 2.5vmin;
 }
 
 .header input {
   width: 25vmin;
-  align: right;
   transition: background 0.15s;
 }
 
@@ -114,17 +114,10 @@ form {
   display: inline-block;
 }
 
-.available-cards {
-  display: flex;
-  align-items: stretch;
-  justify-content: space-between;
-}
-
-.pane#blowUp {
+#blowUp {
   background: rgba(30, 30, 30, 0.7);
   border: 1px solid #BBB;
   color: white;
-  width: auto;
   height: 100%;
   vertical-align: middle;
   horiz-align: right;
@@ -141,11 +134,6 @@ form {
 
 .pane#inputs {
   vertical-align: middle;
-}
-
-.pane#inputs .header {
-  padding-top: 10px;
-  padding-bottom: 10px;
 }
 
 #blowUpImg {
@@ -170,8 +158,10 @@ form {
   height: auto;
 }
 
+#cards-row {
+  height: 70%;
+}
+
 #cards {
   margin-right: 10px;
 }
-
-
