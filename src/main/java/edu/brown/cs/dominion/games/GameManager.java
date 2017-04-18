@@ -65,22 +65,22 @@ public class GameManager implements SocketServer{
 
   private ClientUpdateMap buys(User user, List<Integer> buys) {
     Game g = gamesByUser.get(user);
-    return chk(g.endBuyPhase(user, buys));
+    return g.endBuyPhase(user, buys);
   }
 
   private ClientUpdateMap action(User user, int cardLocation) {
     Game g = gamesByUser.get(user);
-    return chk(g.doAction(user, cardLocation));
+    return g.doAction(user, cardLocation);
   }
 
   private ClientUpdateMap endActionPhase(User user) {
     Game g = gamesByUser.get(user);
-    return chk(g.endActionPhase(user));
+    return g.endActionPhase(user);
   }
 
   private ClientUpdateMap selection(User u, boolean inHand, int location) {
     assert callbacks.containsKey(u);
-    return chk(callbacks.get(u).call(inHand, location));
+    return callbacks.get(u).call(inHand, location);
   }
 
   private <T, K> List<K> map(List<T> list, Function<T, K> convert) {
@@ -100,7 +100,8 @@ public class GameManager implements SocketServer{
     ws.registerUserCommand(user, DO_ACTION,
       (w, u, m) -> {
         JsonObject data = PARSE.parse(m).getAsJsonObject();
-        action(user, data.get("handloc").getAsInt());
+        sendClientUpdateMap(ws, u, action(user, data.get("handloc").getAsInt
+          ()));
       });
 
     ws.registerUserCommand(user, SELECTION,
@@ -108,11 +109,11 @@ public class GameManager implements SocketServer{
         JsonObject data = PARSE.parse(m).getAsJsonObject();
         boolean inHand = data.get("inhand").getAsBoolean();
         int location = data.get("loc").getAsInt();
-        selection(u, inHand, location);
+        sendClientUpdateMap(ws, u, selection(u, inHand, location));
       });
 
     ws.registerUserCommand(user, END_ACTION,
-      (w, u, m) -> endActionPhase(u));
+      (w, u, m) -> sendClientUpdateMap(ws, u, endActionPhase(u)));
 
     ws.registerUserCommand(user, END_BUY,
       (w, u, m) -> {
@@ -121,7 +122,7 @@ public class GameManager implements SocketServer{
         for(JsonElement e : data){
           buys.add(e.getAsInt());
         }
-        buys(u, buys);
+        sendClientUpdateMap(ws, u, buys(u, buys));
     });
   }
 
@@ -135,12 +136,10 @@ public class GameManager implements SocketServer{
       JsonObject container = new JsonObject();
       container.addProperty("gameid", g.getId());
       container.add("cardids", GSON.toJsonTree(actionIds));
-      List<User> us = new LinkedList<>(g.getUsers());
-      us.add(0, g.getCurrent());
-      container.add("users", GSON.toJsonTree(us));
+      container.add("users", GSON.toJsonTree(g.getAllUsers()));
 
       ws.send(s, INIT_GAME, GSON.toJson(container));
-      ws.send(s, UPDATE_MAP, chk(g.fullUpdate(user)).prepare());
+      ws.send(s, UPDATE_MAP, g.fullUpdate(user));
     } else {
       System.out.println("User is not in a game");
     }
@@ -179,6 +178,18 @@ public class GameManager implements SocketServer{
     if(pendingByUser.containsKey(u)){
       PendingGame g = pendingByUser.remove(u);
       g.removeUser(u);
+    }
+  }
+
+  public void sendClientUpdateMap(Websocket ws, User u, ClientUpdateMap c) {
+    c = chk(c);
+    if (c.hasUser()) {
+      ws.send(u, UPDATE_MAP, c.prepareUser());
+    }
+    if (c.hasGlobal()) {
+      for (User user : c.getUsers()) {
+        ws.send(user, GLOBAL_UPDATE_MAP, c.prepareGlobal());
+      }
     }
   }
 }

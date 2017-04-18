@@ -29,15 +29,27 @@ export class ClientGame {
     }
   }
 
-  getBuys() {
+  get buys() {
     return this.getOwnPlayer().buys;
   }
 
-  getActions() {
+  set buys(buys: number) {
+    this.getOwnPlayer().buys = buys;
+  }
+
+  get actions() {
     return this.getOwnPlayer().actions;
   }
 
-  getGold() {
+  set actions(actions: number) {
+    this.getOwnPlayer().actions = actions;
+  }
+
+  get gold() {
     return this.getOwnPlayer().gold;
+  }
+
+  set gold(gold: number) {
+    this.getOwnPlayer().gold = gold;
   }
 }

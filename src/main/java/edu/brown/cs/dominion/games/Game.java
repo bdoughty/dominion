@@ -17,7 +17,7 @@ import edu.brown.cs.dominion.io.send.GameInit;
  * Created by henry on 4/2/2017.
  */
 public class Game extends GameStub implements GameEventListener{
-
+  private List<User> allUsers;
   private Queue<User> usersTurns;
   private User current;
   private Board board;
@@ -26,6 +26,7 @@ public class Game extends GameStub implements GameEventListener{
   // this will probably get cleaner.
   public Game(List<User> usersTurns, List<Integer> actionCardIds) {
     usersTurns.forEach(User::initPlayer);
+    this.allUsers = new LinkedList<>(usersTurns);
     this.usersTurns = new LinkedList<>(usersTurns);
     this.current = this.usersTurns.poll();
     this.board = new Board(actionCardIds);
@@ -35,8 +36,8 @@ public class Game extends GameStub implements GameEventListener{
     return current;
   }
 
-  public Queue<User> getUsers(){
-    return usersTurns;
+  public List<User> getAllUsers(){
+    return allUsers;
   }
 
   @Override
@@ -87,8 +88,7 @@ public class Game extends GameStub implements GameEventListener{
 
   @Override
   public ClientUpdateMap fullUpdate(User u) {
-    ClientUpdateMap cm = new ClientUpdateMap();
-    u.getPlayer().draw(5);
+    ClientUpdateMap cm = new ClientUpdateMap(this);
     cm.actionCount(u.getPlayer().getActions());
     cm.buyCount(u.getPlayer().getActions());
     cm.deckRemaining(u.getPlayer().getDeck().size());
