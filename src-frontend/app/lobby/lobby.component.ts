@@ -9,6 +9,7 @@ import {ChatSocketService} from "../shared/chatsocket.service";
 export class LobbyComponent implements OnInit {
   public pendings;
   public selectedGame;
+  public selectedGameId;
   public joiningGame = false;
 
   constructor(private _chatSocketService: ChatSocketService) {
@@ -17,6 +18,20 @@ export class LobbyComponent implements OnInit {
   ngOnInit() {
     this._chatSocketService.addListener('pending', (messageString) => {
       this.pendings = JSON.parse(messageString);
+
+      // Update selected game by searching through new games
+      let foundGameInNewGames = false;
+      if (this.selectedGameId !== undefined) {
+        this.pendings.forEach((pendingGame) => {
+          if (pendingGame.id === this.selectedGameId) {
+            foundGameInNewGames = true;
+            this.selectedGame = pendingGame;
+          }
+        });
+      }
+      if (!foundGameInNewGames) {
+        this.selectedGame = undefined;
+      }
     });
 
     this._chatSocketService.addListener('joinresponse', (messageString) => {
@@ -32,6 +47,8 @@ export class LobbyComponent implements OnInit {
 
   select(pending) {
     this.selectedGame = pending;
+    this.selectedGameId = pending.id;
+    console.log(pending);
   }
 
   leave() {

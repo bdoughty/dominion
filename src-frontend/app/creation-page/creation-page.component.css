@@ -1,4 +1,118 @@
-body {
+.creation-container {
+  position: relative;
+  overflow: auto;
+  height: 100%;
   background: url('../../assets/bg.jpg') center center;
   background-size: cover;
+}
+
+.creation-container::after {
+  content: '';
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 1;
+}
+
+.pane-row {
+  z-index: 2;
+  position: relative;
+  padding: 10px;
+}
+
+.pane-row#form-row {
+  display: flex;
+  align-items: stretch;
+}
+
+.pane {
+  position: relative;
+  display: inline-block;
+}
+
+.pane-content {
+  height: 100%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.24);
+  background: #FAFAFA;
+}
+
+#header h1 {
+  color: white;
+  font-weight: 100;
+  font-size: 5em;
+  text-shadow: 0px 0px 10px rgba(0, 0, 0, 1);
+  text-align: center;
+  text-transform: uppercase;
+  margin: 0px;
+}
+
+.header {
+  padding: 10px;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+.header input {
+  align: right;
+  transition: background 0.15s;
+  font-size: 1em;
+  /*border: none;*/
+  /*box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.24);*/
+}
+
+.pane#chat .pane-content {
+  background: rgba(30, 30, 30, 0.7);
+  border: 1px solid #BBB;
+  color: white;
+  position: relative;
+  width: 300px;
+  height: 100%;
+}
+
+.button-container button {
+  margin: 0 10px;
+  display: inline-block;
+}
+
+.pane#blowUp {
+  background: rgba(30, 30, 30, 0.7);
+  border: 1px solid #BBB;
+  color: white;
+  width: 20%;
+  height: auto;
+  vertical-align: middle;
+  horiz-align: right;
+}
+
+.header select {
+  font-size: 1.25em;
+  width: 60px;
+  height: 50px;
+  text-align: center;
+  color: #666;
+  font-weight: 300;
+}
+
+.pane#inputs {
+  width: 45%;
+  vertical-align: middle;
+}
+
+.pane#inputs .header {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.pane#inputs .pane-content {
+  width: 300px;
+}
+
+.image {
+  width: 100%;
+  height: auto;
 }

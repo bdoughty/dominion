@@ -1,2 +1,69 @@
-Creation page
+<div class="creation-container">
+  <div class="pane-row">
+    <div id="header"><h1>Create New Game</h1></div>
+  </div>
+  <form method="POST">
+    <div class="pane-row" id="form-row">
+      <div class="pane" id="inputs">
+        <div class="pane-content">
+          <div class="header">
+            Game Name:
+            <input name="gameName" placeholder="Name" />
+          </div>
+          <div class="header">
+            Target Number of Players:
+            <select name="numPlayers">
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="pane" id="chat">
+        <div class="pane-content">
+          <dmn-chat></dmn-chat>
+        </div>
+      </div>
+      <div class="pane" id="presets">
+        <div class="pane-content">
+          <div class="header">PRESETS</div>
+          <table class="presets-table">
+            <tr>
+              <td>
+                <div class="button-container">
+                  <button>Basic</button>
+                </div>
+              </td>
+              <td>
+                <div class="button-container">
+                  <button>Big Money</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="button-container">
+                  <button>Random</button>
+                </div>
+              </td>
+              <td>
+                <div class="button-container">
+                  <button>Sabotage</button>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="pane-row">
+      <div class="pane" id="cards">
 
+      </div>
+      <div class="pane" id="blowUp">
+        <img class="image" src="../../assets/card0.jpg" />
+      </div>
+    </div>
+  </form>
+</div>

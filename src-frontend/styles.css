@@ -33,6 +33,11 @@ input {
   border: 1px solid #DDD;
 }
 
+select {
+  padding: 100px;
+  border: 1px solid #DDD;
+}
+
 input:focus {
   outline: none;
   background: #FCFCFC;
