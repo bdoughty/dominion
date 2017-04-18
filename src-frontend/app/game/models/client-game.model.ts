@@ -33,15 +33,11 @@ export class ClientGame {
     return this.getOwnPlayer().buys;
   }
 
-  // get buys() {
-  //   return this.getOwnPlayer().buys;
-  // }
-  //
-  // get actions() {
-  //   return this.getOwnPlayer().actions;
-  // }
-  //
-  // get gold() {
-  //   return this.getOwnPlayer().gold;
-  // }
+  getActions() {
+    return this.getOwnPlayer().actions;
+  }
+
+  getGold() {
+    return this.getOwnPlayer().gold;
+  }
 }

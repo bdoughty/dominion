@@ -44,9 +44,10 @@ export class GameComponent implements OnInit {
     // });
 
 
-    // this._gameSocketService.addListener("updatemap", (message) => {
-    //   this.updateMap(JSON.parse(message));
-    // });
+    this._gameSocketService.addListener("updatemap", (message) => {
+      console.log(message);
+      this.updateMap(JSON.parse(message));
+    });
   }
 
   gameFromState(state) {
@@ -67,14 +68,15 @@ export class GameComponent implements OnInit {
   updateMap(update) {
     if (this.game != null) {
       if (update.actions === "undefined") {
-        this.game.getSelf().actions = update.actions;
+        this.game.getOwnPlayer().actions = update.actions;
       }
       if (update.buys === "undefined") {
-        this.game.getSelf().buys = update.buys;
+        this.game.getOwnPlayer().buys = update.buys;
       }
       if (update.gold === "undefined") {
-        this.game.getSelf().gold = update.gold;
+        this.game.getOwnPlayer().gold = update.gold;
       }
+
       if (update.select === "undefined") {
         if (update.select) {
           this.game.toSelect = true;
