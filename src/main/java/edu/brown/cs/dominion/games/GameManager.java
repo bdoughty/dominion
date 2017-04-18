@@ -45,11 +45,21 @@ public class GameManager implements SocketServer{
     games = new LinkedList<>();
     callbacks = new HashMap<>();
     pendingGames = new HashMap<>();
-    PendingGame p = new PendingGame("JJ's secret tail", 3, new int[]{7,8,9,
+
+    //TODO GET RID OF DUMMY
+    PendingGame p = new PendingGame("JJ's secret tail", 1, new int[]{7,8,9,
       10,11,12,13,14,15,16});
-    p.addUser(new User(1));
-    p.addUser(new User(2));
     pendingGames.put(p.getId(), p);
+
+    PendingGame p2 = new PendingGame("JJ's secret tail", 2, new int[]{7,8,9,
+      10,11,12,13,14,15,16});
+    pendingGames.put(p.getId(), p2);
+
+    PendingGame p3 = new PendingGame("JJ's secret tail", 3, new int[]{7,8,9,
+      10,11,12,13,14,15,16});
+    pendingGames.put(p.getId(), p3);
+
+
     pendingByUser = new HashMap<>();
   }
 
