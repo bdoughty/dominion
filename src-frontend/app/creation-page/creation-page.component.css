@@ -19,6 +19,13 @@
   z-index: 1;
 }
 
+.header-row {
+  z-index: 2;
+  position: relative;
+  padding: 10px;
+  align-items: center;
+}
+
 .pane-row {
   z-index: 2;
   position: relative;
@@ -61,14 +68,18 @@
   font-size: 1em;
 }
 
+.pane#chat {
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 100%;
+  height: 174px;
+  max-height: 175px;
+}
+
 .pane#chat .pane-content {
   background: rgba(30, 30, 30, 0.7);
   border: 1px solid #BBB;
   color: white;
-  position: relative;
-  width: 400px;
-  height: 100%;
-  max-height: 175px;
 }
 
 .button-container button {
@@ -86,8 +97,8 @@
   background: rgba(30, 30, 30, 0.7);
   border: 1px solid #BBB;
   color: white;
-  width: 20%;
-  height: auto;
+  width: auto;
+  height: 100%;
   vertical-align: middle;
   horiz-align: right;
 }
@@ -111,13 +122,9 @@
   padding-bottom: 20px;
 }
 
-.pane#inputs .pane-content {
-  width: 300px;
-}
-
 #blowUpImg {
-  width: 100%;
-  height: auto;
+  width: auto;
+  height: 100%;
 }
 
 .card {
