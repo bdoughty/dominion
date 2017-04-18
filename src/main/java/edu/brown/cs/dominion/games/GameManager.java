@@ -53,13 +53,11 @@ public class GameManager implements SocketServer{
 
     PendingGame p2 = new PendingGame("JJ's secret tail", 2, new int[]{7,8,9,
       10,11,12,13,14,15,16});
-    pendingGames.put(p.getId(), p2);
+    pendingGames.put(p2.getId(), p2);
 
     PendingGame p3 = new PendingGame("JJ's secret tail", 3, new int[]{7,8,9,
       10,11,12,13,14,15,16});
-    pendingGames.put(p.getId(), p3);
-
-
+    pendingGames.put(p3.getId(), p3);
     pendingByUser = new HashMap<>();
   }
 
@@ -125,11 +123,15 @@ public class GameManager implements SocketServer{
         }
         buys(u, buys);
     });
-
   }
 
   @Override
   public void newSession(Websocket ws, User user, Session s) {
+    if(gamesByUser.containsKey(user)){
+
+    } else {
+      System.out.println("User is not in a game");
+    }
     ws.send(s, INIT_GAME, "");
   }
 

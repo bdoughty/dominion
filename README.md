@@ -70,10 +70,7 @@ Leave Game Response "leaveresponse": Server -> Client
   
 Game Init "init": Server -> Client
   data = {
-    gameid:int
-    users:[
-                        {id:int,
-                         name:string,
-                         color:String}
-                      ]
+    gameid:int,
+    users:[{id:int, name:string, color:String}],
+    cardids:[int],
   }
