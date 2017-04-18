@@ -30,6 +30,10 @@ public class Game extends GameStub implements GameEventListener{
     this.board = new Board(actionCardIds);
   }
 
+  public User getCurrent(){
+    return current;
+  }
+
   public Queue<User> getUsers(){
     return usersTurns;
   }

@@ -134,12 +134,10 @@ public class GameManager implements SocketServer{
 
       JsonObject container = new JsonObject();
       container.addProperty("gameid", g.getId());
-      JsonArray arr = new JsonArray();
-      for(int i = 0;i < 10;i++){
-        arr.set(i, new JsonPrimitive(actionIds.get(i)));
-      }
-      container.add("cardids", arr);
-      container.add("users", GSON.toJsonTree(g.getUsers()));
+      container.add("cardids", GSON.toJsonTree(actionIds));
+      List<User> us = new LinkedList<>(g.getUsers());
+      us.add(0, g.getCurrent());
+      container.add("users", GSON.toJsonTree(us));
 
       ws.send(s, INIT_GAME, GSON.toJson(container));
     } else {

@@ -27,7 +27,7 @@ export class GameComponent implements OnInit {
     let pile1 = new Pile(123, 3, 3);
     let player = new Player(4234, "name1", "#123123");
     this._gameSocketService.addListener("init", (m) => {
-      alert("init");
+      alert(m);
     })
   }
 
