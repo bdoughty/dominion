@@ -3,15 +3,19 @@
     <div id="header"><h1>Create New Game</h1></div>
   </div>
   <form method="POST">
-    <div class="pane-row" id="form-row">
+    <div id="form-row">
       <div class="pane" id="inputs">
         <div class="pane-content">
-          <div class="header">
+          <div class="header-label">
             Game Name:
-            <input name="gameName" placeholder="Name" />
           </div>
           <div class="header">
+            <input name="gameName" placeholder="Name" />
+          </div>
+          <div class="header-label">
             Target Number of Players:
+          </div>
+          <div class="header">
             <select name="numPlayers">
               <option value="2">2</option>
               <option value="3">3</option>
@@ -57,77 +61,21 @@
         </div>
       </div>
     </div>
-    <div class="pane-row">
+    <div id="cards-row">
       <div class="pane" id="cards">
-        <table class="available-cards">
-          <tr>
-            <td class="card-cell" id="cell0">
-              <img class="card" id="card0" src="../../assets/card0.jpg" />
-            </td>
-            <td class="card-cell" id="cell1">
-              <img class="card" id="card1" src="../../assets/card1.jpg" />
-            </td>
-            <td class="card-cell" id="cell2">
-              <img class="card" id="card2" src="../../assets/card2.jpg" />
-            </td>
-            <td class="card-cell" id="cell3">
-              <img class="card" id="card3" src="../../assets/card3.jpg" />
-            </td>
-            <td class="card-cell" id="cell4">
-              <img class="card" id="card4" src="../../assets/card4.jpg" />
-            </td>
-            <td class="card-cell" id="cell5">
-              <img class="card" id="card5" src="../../assets/card5.jpg" />
-            </td>
-            <td class="card-cell" id="cell6">
-              <img class="card" id="card6" src="../../assets/card6.jpg" />
-            </td>
-            <td class="card-cell" id="cell7">
-              <img class="card" id="card7" src="../../assets/card7.jpg" />
-            </td>
-            <td class="card-cell" id="cell8">
-              <img class="card" id="card8" src="../../assets/card8.jpg" />
-            </td>
-            <td class="card-cell" id="cell9">
-              <img class="card" id="card9" src="../../assets/card9.jpg" />
-            </td>
-          </tr>
-          <tr>
-            <td class="card-cell" id="cell10">
-              <img class="card" id="card10" src="../../assets/card10.jpg" />
-            </td>
-            <td class="card-cell" id="cell11">
-              <img class="card" id="card11" src="../../assets/card11.jpg" />
-            </td>
-            <td class="card-cell" id="cell12">
-              <img class="card" id="card12" src="../../assets/card12.jpg" />
-            </td>
-            <td class="card-cell" id="cell13">
-              <img class="card" id="card13" src="../../assets/card13.jpg" />
-            </td>
-            <td class="card-cell" id="cell14">
-              <img class="card" id="card14" src="../../assets/card14.jpg" />
-            </td>
-            <td class="card-cell" id="cell15">
-              <img class="card" id="card15" src="../../assets/card15.jpg" />
-            </td>
-            <td class="card-cell" id="cell16">
-              <img class="card" id="card16" src="../../assets/card16.jpg" />
-            </td>
-            <td class="card-cell" id="cell17">
-              <img class="card" id="card17" src="../../assets/card17.jpg" />
-            </td>
-            <td class="card-cell" id="cell18">
-              <img class="card" id="card18" src="../../assets/card18.jpg" />
-            </td>
-            <td class="card-cell" id="cell19">
-              <img class="card" id="card19" src="../../assets/card19.jpg" />
-            </td>
-          </tr>
-        </table>
+        <div class="card-row">
+          <div *ngFor="let i of [0,1,2,3,4,5,6,7,8,9]" class="card">
+            <img id="card{{ i }}" class="cardImg" src="../../assets/card{{ i }}.jpg" />
+          </div>
+        </div>
+        <div class="card-row">
+          <div *ngFor="let j of [10,11,12,13,14,15,16,17,18,19]" class="card">
+            <img id="card{{ j }}" class="cardImg" src="../../assets/card{{ j }}.jpg" />
+          </div>
+        </div>
       </div>
       <div class="pane" id="blowUp">
-        <img id="blowUpImg" class="image" src="../../assets/card0.jpg" style="visibility: visible;"/>
+        <img id="blowUpImg" class="image" src="../../assets/card0.jpg" style="visibility: hidden;"/>
       </div>
     </div>
   </form>
