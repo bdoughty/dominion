@@ -6,6 +6,7 @@ import {Pile} from "./models/pile.model";
 import {ClientGame} from "./models/client-game.model";
 import {GameService} from "./game.service";
 import {GameSocketService} from "../shared/gamesocket.service";
+import {Card} from "./models/card.model";
 
 @Component({
   selector: 'dmn-game',
@@ -14,7 +15,7 @@ import {GameSocketService} from "../shared/gamesocket.service";
 })
 export class GameComponent implements OnInit {
   public title = 'Dominion';
-  public game = null;
+  public game;
   public gameChat = new Chat();
 
   constructor(
@@ -24,37 +25,46 @@ export class GameComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    let pile1 = new Pile(123, 3, 3);
-    let player = new Player(4234, "name1", "#123123");
-    this._gameSocketService.addListener("init", (m) => {
-      alert(m);
-    })
+
+    this.game = new ClientGame([new Player(0, "#333", "dlajdflkajsfd")], 0);
+
+    // this.game = new Promise((resolve, reject) => {
+      this._gameSocketService.addListener("init", (message) => {
+        if (message === undefined) return;
+        console.log(message);
+
+        let gameState = JSON.parse(message);
+        let game = this.gameFromState(gameState);
+        this.game = game;
+        console.log(this.game);
+
+        // this.initGameFromState(initObj);
+        // { gameid:int, users:[{id:int, name:string, color:String}], cardids:[int], }
+      });
+    // });
+
+
+    // this._gameSocketService.addListener("updatemap", (message) => {
+    //   this.updateMap(JSON.parse(message));
+    // });
   }
 
-  initGameFromState(state) {
-    let gameStateFromServer = state;
-    const players = gameStateFromServer.players;
-    const playerMap = {};
-
-    players.forEach(function (p) {
-      playerMap[p.id] = new Player(p.id, p.color, p.name);
-    });
-    const turnList = players.map(function (p) {
-      return p.id;
-    });
-    const cards = gameStateFromServer.cards;
-    const pileArray = cards.map(function (row) {
-      return row.map(function (p) {
-        return new Pile(p.card.id, p.card.cost, p.count);
-      })
+  gameFromState(state) {
+    console.log(state.users);
+    const players = state.users.map(player => {
+      return new Player(player.id, player.color, player.name);
     });
 
-    this.game =
-      new ClientGame(playerMap, pileArray, turnList, this._userIdService.id);
+    const cards = state.cardids.map(cardid => {
+      new Card(cardid);
+    });
+
+    console.log(players);
+
+    return new ClientGame(players, this._userIdService.id);
   }
 
-  updateMap(updateMap) {
-    const update = JSON.parse(updateMap);
+  updateMap(update) {
     if (this.game != null) {
       if (update.actions === "undefined") {
         this.game.getSelf().actions = update.actions;

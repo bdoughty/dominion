@@ -3,14 +3,14 @@
     <div id="left-bar">
       <div id="stats">
         <div class="stat">
-          <span class="stat-label">Actions:</span> 4
+          <span class="stat-label">Actions:</span> {{ game.getBuys() }}
         </div>
-        <div class="stat">
-          <span class="stat-label">Buys:</span> 3
-        </div>
-        <div class="stat">
-          <span class="stat-label">Gold:</span> 0
-        </div>
+        <!--<div class="stat">-->
+          <!--<span class="stat-label">Buys:</span> {{ game.buys | async }}-->
+        <!--</div>-->
+        <!--<div class="stat">-->
+          <!--<span class="stat-label">Gold:</span> {{ game.gold | async }}-->
+        <!--</div>-->
       </div>
       <div id="cart">
       </div>

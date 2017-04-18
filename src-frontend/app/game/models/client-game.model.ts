@@ -1,5 +1,4 @@
-import {Pile} from "./pile.model";
-
+import {Player} from "./player.model";
 export class ClientGame {
 
   public turn: number = 0;
@@ -13,17 +12,36 @@ export class ClientGame {
   public toSelectHand = [];
   public toSelectBoard = [];
 
-  constructor(public players,
-              public pileArray: Pile[],
-              public turnList,
+  constructor(public players: Player[],
               public ownPlayerId) {
+
   }
 
-  getSelf() {
-    return this.players[this.ownPlayerId];
+  // getCurrentPlayer() {
+  //   return this.players[this.players[this.turn]];
+  // }
+
+  getOwnPlayer() {
+    for (let i = 0; i<this.players.length; i++) {
+      if (this.players[i].id == this.ownPlayerId) {
+        return this.players[i];
+      }
+    }
   }
 
-  getCurrentPlayer() {
-    return this.players[this.turnList[this.turn]];
+  getBuys() {
+    return this.getOwnPlayer().buys;
   }
+
+  // get buys() {
+  //   return this.getOwnPlayer().buys;
+  // }
+  //
+  // get actions() {
+  //   return this.getOwnPlayer().actions;
+  // }
+  //
+  // get gold() {
+  //   return this.getOwnPlayer().gold;
+  // }
 }
