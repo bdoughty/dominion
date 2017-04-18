@@ -24,15 +24,33 @@
   position: relative;
   padding: 10px;
   align-items: center;
+  height: 8%;
 }
 
-.pane-row {
+#cards-row {
   z-index: 2;
   position: relative;
   padding: 10px;
   display: flex;
   align-items: stretch;
   justify-content: space-between;
+}
+
+form {
+  height: 92%;
+}
+
+#form-row {
+  z-index: 2;
+  position: relative;
+  padding: 10px;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  height: 30%;
+  max-height: 30%;
+  font-size: 2vmin;
+  display: flex;
 }
 
 .pane {
@@ -46,14 +64,19 @@
   background: #FAFAFA;
 }
 
+#header {
+  height: 100%;
+}
+
 #header h1 {
   color: white;
   font-weight: 100;
-  font-size: 5em;
-  text-shadow: 0px 0px 10px rgba(0, 0, 0, 1);
+  height: 100%;
+  font-size: 7vmin;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 1);
   text-align: center;
   text-transform: uppercase;
-  margin: 0px;
+  margin: 0;
 }
 
 .header {
@@ -62,18 +85,22 @@
   display: flex;
   justify-content: space-between;
 }
-.header input {
-  align: right;
-  transition: background 0.15s;
-  font-size: 1em;
+
+.header-label {
+  padding-top: 10px;
+  padding-left: 10px;
 }
 
-.pane#chat {
+.header input {
+  width: 25vmin;
+  align: right;
+  transition: background 0.15s;
+}
+
+#chat {
   margin-left: 10px;
   margin-right: 10px;
   width: 100%;
-  height: 174px;
-  max-height: 175px;
 }
 
 .pane#chat .pane-content {
@@ -104,22 +131,21 @@
 }
 
 .header select {
-  font-size: 1.25em;
-  width: 60px;
-  height: 50px;
+  font-size: 3vmin;
+  width: 7vmin;
+  height: 100%;
   text-align: center;
   color: #666;
   font-weight: 300;
 }
 
 .pane#inputs {
-  width: 45%;
   vertical-align: middle;
 }
 
 .pane#inputs .header {
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 #blowUpImg {
@@ -127,7 +153,25 @@
   height: 100%;
 }
 
+.card-row {
+  margin-bottom: 10px;
+}
+
 .card {
-  width: 70px;
+  width: 10%;
+  height: auto;
+  display: inline-block;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.cardImg {
+  width: 100%;
   height: auto;
 }
+
+#cards {
+  margin-right: 10px;
+}
+
+

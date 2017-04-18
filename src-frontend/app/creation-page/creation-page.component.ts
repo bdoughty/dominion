@@ -10,17 +10,17 @@ import { Component, OnInit } from '@angular/core';
 
   ngOnInit() {
     console.log("hello");
-    for(let i = 0; i < 20; i++) {
-      document.getElementById("card" + i).addEventListener("onmouseenter", event => {
-        this.blowUp.innerHTML = "<img class='image' id='blowUpImg' src='../../assets/card" + i + ".jpg' />";
-        document.getElementById("blowUpImg").style.visibility = "visible";
-        console.log("mouse entered " + i);
-      });
-
-      document.getElementById("card" + i).addEventListener("onmouseleave", event => {
-        document.getElementById("blowUpImg").style.visibility = "hidden";
-      });
-    }
+    // for(let i = 0; i < 20; i++) {
+    //   document.getElementById("card" + i).addEventListener("onmouseenter", event => {
+    //     this.blowUp.innerHTML = "<img class='image' id='blowUpImg' src='../../assets/card" + i + ".jpg' />";
+    //     document.getElementById("blowUpImg").style.visibility = "visible";
+    //     console.log("mouse entered " + i);
+    //   });
+    //
+    //   document.getElementById("card" + i).addEventListener("onmouseleave", event => {
+    //     document.getElementById("blowUpImg").style.visibility = "hidden";
+    //   });
+    // }
   }
 }
 
