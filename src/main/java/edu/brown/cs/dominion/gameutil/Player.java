@@ -10,10 +10,6 @@ import edu.brown.cs.dominion.money.Copper;
 import edu.brown.cs.dominion.victory.Estate;
 
 public class Player {
-
-  private int id;
-  private String name;
-
   private List<Card> deck;
   private List<Card> hand;
   private List<Card> discardPile;
@@ -24,9 +20,7 @@ public class Player {
   private int baseMoney;
   private int additionalMoney;
 
-  public Player(int id) {
-    this.id = id;
-    this.name = null;
+  public Player() {
     this.deck = initializeDeck();
     this.hand = new ArrayList<>();
     this.discardPile = new LinkedList<>();
@@ -47,18 +41,6 @@ public class Player {
     Collections.shuffle(deck);
 
     return deck;
-  }
-
-  public int getId() {
-    return this.id;
-  }
-
-  public String getName() {
-    return this.name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
   }
 
   private void draw() {
@@ -176,18 +158,6 @@ public class Player {
     return points;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    } else if (o instanceof Player) {
-      Player that = (Player) o;
-      return (this.id == that.id);
-    } else {
-      return false;
-    }
-  }
-
   public int getActions() {
     return actions;
   }
@@ -196,9 +166,15 @@ public class Player {
     return buys;
   }
 
-  public List<Card> getHand(){ return hand; }
-  public List<Card> getDeck(){ return deck; }
-  public List<Card> getDiscard(){
+  public List<Card> getHand() {
+    return hand;
+  }
+
+  public List<Card> getDeck() {
+    return deck;
+  }
+
+  public List<Card> getDiscard() {
     List<Card> discard = new LinkedList<>(discardPile);
     discard.addAll(playedPile);
     return discard;
