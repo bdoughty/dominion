@@ -47,15 +47,15 @@ public class GameManager implements SocketServer{
     pendingGames = new HashMap<>();
 
     //TODO GET RID OF DUMMY
-    PendingGame p = new PendingGame("JJ's secret tail", 1, new int[]{7,8,9,
+    PendingGame p = new PendingGame("GAME1", 1, new int[]{7,8,9,
       10,11,12,13,14,15,16});
     pendingGames.put(p.getId(), p);
 
-    PendingGame p2 = new PendingGame("JJ's secret tail", 2, new int[]{7,8,9,
+    PendingGame p2 = new PendingGame("GAME2", 2, new int[]{7,8,9,
       10,11,12,13,14,15,16});
     pendingGames.put(p2.getId(), p2);
 
-    PendingGame p3 = new PendingGame("JJ's secret tail", 3, new int[]{7,8,9,
+    PendingGame p3 = new PendingGame("GAME3", 3, new int[]{7,8,9,
       10,11,12,13,14,15,16});
     pendingGames.put(p3.getId(), p3);
     pendingByUser = new HashMap<>();

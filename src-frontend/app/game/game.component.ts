@@ -44,6 +44,11 @@ export class GameComponent implements OnInit {
       console.log(message);
       this.updateMap(JSON.parse(message));
     });
+
+    this._gameSocketService.addListener("globalmap", (message) => {
+      console.log("global update:" + message);
+      this.globalMap(JSON.parse(message));
+    })
   }
 
   gameFromState(state) {
@@ -56,6 +61,17 @@ export class GameComponent implements OnInit {
     });
 
     return new ClientGame(players, this._userIdService.id, cards);
+  }
+
+  globalMap(update) {
+    if (this.game != null) {
+      if (update.turn !== "undefined") {
+        this.game.setTurn();
+      }
+      if (update.winner !== "undefined") {
+        alert("")
+      }
+    }
   }
 
   updateMap(update) {

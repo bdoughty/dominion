@@ -25,6 +25,14 @@ export class ClientGame {
     })
   }
 
+  public setTurn(id: number) {
+    for (let i = 0; i<this.players.length; i++) {
+      if (id == this.players[i].id) {
+        this.turn = i;
+      }
+    }
+  }
+
   getOwnPlayer() {
     for (let i = 0; i<this.players.length; i++) {
       if (this.players[i].id == this.ownPlayerId) {
