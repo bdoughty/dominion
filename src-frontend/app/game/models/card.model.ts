@@ -92,15 +92,24 @@ export class Card {
   }
 
   get name() {
-    return cardInfo[this.id].name;
+    if (cardInfo[this.id]) {
+      return cardInfo[this.id].name;
+    }
+    return "No Name";
   }
 
   get text() {
-    return cardInfo[this.id].text;
+    if (cardInfo[this.id]) {
+      return cardInfo[this.id].text;
+    }
+    return "Placeholder text";
   }
 
   get cost() {
-    return cardInfo[this.id].cost;
+    if (cardInfo[this.id]) {
+      return cardInfo[this.id].cost;
+    }
+    return 0;
   }
 }
 
