@@ -8,13 +8,11 @@ import { Component } from '@angular/core';
   private selected = new Set();
 
   entered(cardId) {
-    console.log("entered " + cardId);
     document.getElementById("blowUp").innerHTML = "<img id='blowUpImg' src='../../assets/" + cardId + ".jpg' " +
       "style='visibility: visible; width: auto; height: 100%;' />";
   }
 
   left() {
-    console.log("left");
     document.getElementById("blowUpImg").style.visibility = "hidden";
   }
 
