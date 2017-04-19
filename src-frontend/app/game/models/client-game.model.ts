@@ -7,22 +7,23 @@ export class ClientGame {
   public holding: boolean = false;
   public toBuy = [];
   public deck: number = 10;
-  public hand = [];
+  public hand: Card[] = [];
   public discardPile: number = 0;
   public toSelect: boolean = false;
   public toSelectHand = [];
   public toSelectBoard = [];
 
-  public nonactionCards: Card[] = [];
-  public actionCards: number[] = [1,2,3,4,5,6,7,8,9,10];
+  public nonactionCards: Card[] =
+    [new Card(0), new Card(1), new Card(2), new Card(3), new Card(4), new Card(5)];
+  public actionCards: Card[] = [];
 
   constructor(public players: Player[],
-              public ownPlayerId) {
+              public ownPlayerId: number,
+              actionCards: number[]) {
+    actionCards.forEach((id) => {
+      this.actionCards.push(new Card(id));
+    })
   }
-
-  // getCurrentPlayer() {
-  //   return this.players[this.players[this.turn]];
-  // }
 
   getOwnPlayer() {
     for (let i = 0; i<this.players.length; i++) {

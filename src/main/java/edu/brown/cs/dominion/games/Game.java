@@ -1,10 +1,6 @@
 package edu.brown.cs.dominion.games;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import edu.brown.cs.dominion.Card;
@@ -26,6 +22,7 @@ public class Game extends GameStub implements GameEventListener {
   private Board board;
 
   public Game(List<User> usersTurns, List<Integer> actionCardIds) {
+    userPlayers = new HashMap<>();
     usersTurns.forEach(u -> userPlayers.put(u, new Player()));
     this.allUsers = new LinkedList<>(usersTurns);
     this.usersTurns = new LinkedList<>(usersTurns);

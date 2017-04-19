@@ -25,6 +25,7 @@ public class Player {
     this.hand = new ArrayList<>();
     this.discardPile = new LinkedList<>();
     this.playedPile = new LinkedList<>();
+    draw(5);
   }
 
   private List<Card> initializeDeck() {

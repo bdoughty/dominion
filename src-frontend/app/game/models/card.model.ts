@@ -1,3 +1,21 @@
+const cardInfo = {
+  0: {
+    name: 'Copper',
+    text: '',
+    cost: 0
+  },
+  1: {
+    name: 'Silver',
+    text: '',
+    cost: 3
+  },
+  2: {
+    name: 'Gold',
+    text: '',
+    cost: 6
+  }
+};
+
 export class Card {
   constructor(public id) {
   }
@@ -14,3 +32,4 @@ export class Card {
     return 2;
   }
 }
+

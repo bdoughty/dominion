@@ -139,7 +139,7 @@ public class GameManager implements SocketServer{
       container.add("users", GSON.toJsonTree(g.getAllUsers()));
 
       ws.send(s, INIT_GAME, GSON.toJson(container));
-      ws.send(s, UPDATE_MAP, g.fullUpdate(user));
+      ws.send(s, UPDATE_MAP, g.fullUpdate(user).prepareUser());
     } else {
       System.out.println("User is not in a game");
     }
