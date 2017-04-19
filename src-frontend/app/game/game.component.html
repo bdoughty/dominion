@@ -23,60 +23,15 @@
         </div>
       </div>
       <div class="pile-row">
-        <div class="card" *ngFor="let card of game.actionCards.slice(0, 5)">
+        <div class="card" *ngFor="let card of game.actionCards.slice(0, 6)">
           <dmn-card [card]="card"></dmn-card>
         </div>
       </div>
       <div class="pile-row">
-        <div class="card" *ngFor="let card of game.actionCards.slice(5, 10)">
+        <div class="card" *ngFor="let card of game.actionCards.slice(6, 12)">
           <dmn-card [card]="card"></dmn-card>
         </div>
       </div>
-
-      <!--<div class="pile-row">-->
-      <!--<div class="card">-->
-      <!--<img src="../../assets/cardimage0.jpg">-->
-      <!--<div class="card-label">-->
-      <!--<div class="name">Village</div>-->
-      <!--<div class="description">-->
-      <!--+1 Card<br/>-->
-      <!--+2 Actions-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--<div class="card-footer">-->
-      <!--<div class="gold">2</div>-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--<div class="card">-->
-      <!--<div class="card-title">-->
-      <!--Market-->
-      <!--</div>-->
-      <!--<img src="../../assets/cardimage0.jpg">-->
-      <!--<div class="card-label">-->
-      <!--Market info-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--<div class="card"><img src="../../assets/cardimage0.jpg">Market</div>-->
-      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
-      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
-      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
-      <!--</div>-->
-      <!--<div class="pile-row">-->
-      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
-      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
-      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
-      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
-      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
-      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
-      <!--</div>-->
-      <!--<div class="pile-row">-->
-      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
-      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
-      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
-      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
-      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
-      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
-      <!--</div>-->
     </div>
     <div id="right-bar-container">
       <div id="right-bar">
@@ -122,36 +77,21 @@
   <div id="hud" *ngIf="game">
     <div class="left">
       <div class="discard">
-        <dmn-card [count]="12"></dmn-card>
-        <!--<div class="card">-->
-          <!--<div class="counter-container">-->
-            <!--<div class="counter">12</div>-->
-          <!--</div>-->
-          <!--<img src="../../assets/cardback.jpg">-->
-        <!--</div>-->
-      </div>
-      <div class="played">
-        <div class="card">
-          <img src="../../assets/village.jpg">
-        </div>
+        <dmn-card [count]="33"></dmn-card>
       </div>
     </div>
     <div class="hand-container">
       <div class="hand">
-        <div class="card"><img src="../../assets/village.jpg"></div>
-        <div class="card"><img src="../../assets/village.jpg"></div>
-        <div class="card"><img src="../../assets/village.jpg"></div>
-        <div class="card"><img src="../../assets/village.jpg"></div>
-        <div class="card"><img src="../../assets/village.jpg"></div>
+        <dmn-card card="dummyCard"></dmn-card>
+        <dmn-card card="dummyCard"></dmn-card>
+        <dmn-card card="dummyCard"></dmn-card>
+        <dmn-card card="dummyCard"></dmn-card>
+        <dmn-card card="dummyCard"></dmn-card>
+        <dmn-card card="dummyCard"></dmn-card>
       </div>
     </div>
     <div class="deck">
-      <div class="card">
-        <div class="counter-container">
-          <div class="counter">12</div>
-        </div>
-        <img src="../../assets/cardback.jpg">
-      </div>
+      <dmn-card [count]="33"></dmn-card>
     </div>
   </div>
 </div>

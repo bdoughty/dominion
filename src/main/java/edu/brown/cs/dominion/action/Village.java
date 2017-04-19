@@ -1,6 +1,6 @@
 package edu.brown.cs.dominion.action;
 
-import edu.brown.cs.dominion.gameutil.GameHandler;
+import edu.brown.cs.dominion.games.Game;
 
 public class Village extends AbstractAction {
 
@@ -9,10 +9,10 @@ public class Village extends AbstractAction {
   }
 
   @Override
-  public void play(GameHandler ac) {
-    ac.incrementActions();
-    ac.incrementActions();
-    ac.currentDraw(1);
+  public void play(Game g) {
+    g.incrementActions();
+    g.incrementActions();
+    g.currentDraw(1);
   }
 
 }

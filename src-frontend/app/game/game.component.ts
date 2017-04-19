@@ -16,6 +16,7 @@ export class GameComponent implements OnInit {
   public title = 'Dominion';
   public game;
   public gameChat = new Chat();
+  public dummyCard;
 
   constructor(
     private _userIdService: UserIdService,
@@ -24,14 +25,16 @@ export class GameComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.dummyCard = new Card(0);
+    console.log(this.dummyCard);
+
     this._gameSocketService.addListener("init", (message) => {
       if (message === undefined) return;
-      console.log(message);
 
       let gameState = JSON.parse(message);
       let game = this.gameFromState(gameState);
       this.game = game;
-      console.log(this.game);
+
 
       // this.initGameFromState(initObj);
       // { gameid:int, users:[{id:int, name:string, color:String}], cardids:[int], }
@@ -41,10 +44,14 @@ export class GameComponent implements OnInit {
       console.log(message);
       this.updateMap(JSON.parse(message));
     });
+
+    this._gameSocketService.addListener("globalmap", (message) => {
+      console.log("global update:" + message);
+      this.globalMap(JSON.parse(message));
+    })
   }
 
   gameFromState(state) {
-    console.log(state.users);
     const players = state.users.map(player => {
       return new Player(player.id, player.color, player.name);
     });
@@ -53,9 +60,18 @@ export class GameComponent implements OnInit {
       new Card(cardid);
     });
 
-    console.log(players);
+    return new ClientGame(players, this._userIdService.id, cards);
+  }
 
-    return new ClientGame(players, this._userIdService.id);
+  globalMap(update) {
+    if (this.game != null) {
+      if (update.turn !== "undefined") {
+        this.game.setTurn();
+      }
+      if (update.winner !== "undefined") {
+        alert("")
+      }
+    }
   }
 
   updateMap(update) {

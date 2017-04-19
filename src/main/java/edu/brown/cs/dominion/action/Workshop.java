@@ -1,6 +1,6 @@
 package edu.brown.cs.dominion.action;
 
-import edu.brown.cs.dominion.gameutil.GameHandler;
+import edu.brown.cs.dominion.games.Game;
 
 public class Workshop extends AbstractAction {
 
@@ -9,7 +9,7 @@ public class Workshop extends AbstractAction {
   }
 
   @Override
-  public void play(GameHandler ac) {
+  public void play(Game g) {
     // TODO Auto-generated method stub
 
   }

@@ -1,10 +1,6 @@
 package edu.brown.cs.dominion.games;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import edu.brown.cs.dominion.Card;
@@ -26,6 +22,7 @@ public class Game extends GameStub implements GameEventListener {
   private Board board;
 
   public Game(List<User> usersTurns, List<Integer> actionCardIds) {
+    userPlayers = new HashMap<>();
     usersTurns.forEach(u -> userPlayers.put(u, new Player()));
     this.allUsers = new LinkedList<>(usersTurns);
     this.usersTurns = new LinkedList<>(usersTurns);
@@ -96,26 +93,55 @@ public class Game extends GameStub implements GameEventListener {
 
   @Override
   public ClientUpdateMap doAction(User u, int LocInHand) {
-    // TODO
-    return null;
+    assert (current.equals(u));
+    Player p = userPlayers.get(u);
+    // TODO error check this to make sure it's an action, valid pos, etc.
+    Card c = p.getHand().get(LocInHand);
+    c.play(this);
+
+    ClientUpdateMap cm = new ClientUpdateMap(this);
+    playerUpdateMap(cm, p);
+
+    return cm;
   }
 
   @Override
   public ClientUpdateMap endActionPhase(User u) {
-    // TODO
-    return null;
+    assert (current.equals(u));
+    Player p = userPlayers.get(u);
+    p.setActions(0);
+
+    ClientUpdateMap cm = new ClientUpdateMap(this);
+    playerUpdateMap(cm, p);
+
+    return cm;
   }
 
   @Override
   public ClientUpdateMap fullUpdate(User u) {
     ClientUpdateMap cm = new ClientUpdateMap(this);
     playerUpdateMap(cm, userPlayers.get(u));
-    // cm.actionCount(userPlayers.get(u).getActions());
-    // cm.buyCount(userPlayers.get(u).getBuys());
-    // cm.deckRemaining(userPlayers.get(u).getDeck().size());
-    // cm.goldCount(userPlayers.get(u).getMoney());
-    // cm.hand(userPlayers.get(u).getHand());
     return cm;
+  }
+
+  public void incrementBuys() {
+    Player p = userPlayers.get(current);
+    p.incrementBuys();
+  }
+
+  public void incrementAdditionalMoney(int adnlMoney) {
+    Player p = userPlayers.get(current);
+    p.incrementAdditionalMoney(adnlMoney);
+  }
+
+  public void incrementActions() {
+    Player p = userPlayers.get(current);
+    p.incrementActions();
+  }
+
+  public void currentDraw(int numCards) {
+    Player p = userPlayers.get(current);
+    p.draw(numCards);
   }
 
 }

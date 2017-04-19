@@ -75,8 +75,21 @@ Game Init "init": Server -> Client
     cardids:[int],
   }
   
-New Turn "turn": Server -> Client
+Global Update "globalmap" ->
   data = {
-    playerid:int
+    ?turn:int
+    ?winner:[{id:int, name:string, color:String}]
   }
 
+Update Map "updatemap": Server -> Client
+  data = {
+    ?actions:int,
+    ?buys:int,
+    ?gold:int,
+    ?select:boolean true ->
+      handSelect:[int],
+      boardSelect:[int],
+    ?hand:[int],
+    ?decksize:int,
+    ?holding:boolean
+  }

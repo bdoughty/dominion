@@ -1,6 +1,6 @@
 package edu.brown.cs.dominion.action;
 
-import edu.brown.cs.dominion.gameutil.GameHandler;
+import edu.brown.cs.dominion.games.Game;
 
 public class Market extends AbstractAction {
 
@@ -9,11 +9,11 @@ public class Market extends AbstractAction {
   }
 
   @Override
-  public void play(GameHandler ac) {
-    ac.currentDraw(1);
-    ac.incrementActions();
-    ac.incrementBuys();
-    ac.incrementAdditionalMoney(1);
+  public void play(Game g) {
+    g.currentDraw(1);
+    g.incrementActions();
+    g.incrementBuys();
+    g.incrementAdditionalMoney(1);
   }
 
 }

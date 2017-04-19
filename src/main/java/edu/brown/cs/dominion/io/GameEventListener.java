@@ -10,10 +10,7 @@ import edu.brown.cs.dominion.io.send.ClientUpdateMap;
  */
 public interface GameEventListener {
   ClientUpdateMap endBuyPhase(User u, List<Integer> toBuy);
-
   ClientUpdateMap doAction(User u, int locInHand);
-
   ClientUpdateMap endActionPhase(User u);
-
   ClientUpdateMap fullUpdate(User u);
 }
