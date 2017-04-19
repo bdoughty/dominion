@@ -30,57 +30,58 @@ const cardInfo = {
     cost: 8
   },
   6: {
-    name: 'Cellar',
-    text: '',
-    cost: 6
+    name: 'Curse',
+    text: '-1 Victory Point',
+    cost: 0
   },
   7: {
-    name: 'Market',
-    text: '',
-    cost: 6
+    name: 'Cellar',
+    text: '+1 action <br/> Discard any number of cards. </br> +1 Card per' +
+    ' each card discarded',
+    cost: 2
   },
   8: {
+    name: 'Market',
+    text: '+1 Card <br/> +1 Action <br/> +1 Buy <br/> +1 Money',
+    cost: 5
+  },
+  9: {
     name: 'Militia',
     text: '',
     cost: 6
   },
-  9: {
+  10: {
     name: 'Mine',
     text: '',
     cost: 6
   },
-  10: {
+  11: {
     name: 'Moat',
     text: '',
     cost: 6
   },
-  11: {
+  12: {
     name: 'Remodel',
     text: '',
     cost: 6
   },
-  12: {
-    name: 'Gold',
-    text: '',
-    cost: 6
-  },
   13: {
-    name: 'Gold',
+    name: 'Smithy',
     text: '',
     cost: 6
   },
   14: {
-    name: 'Gold',
+    name: 'Village',
     text: '',
     cost: 6
   },
   15: {
-    name: 'Gold',
+    name: 'Woodcutter',
     text: '',
     cost: 6
   },
   16: {
-    name: 'Gold',
+    name: 'Workshop',
     text: '',
     cost: 6
   }
@@ -91,15 +92,15 @@ export class Card {
   }
 
   get name() {
-    return "Village";
+    return cardInfo[this.id].name;
   }
 
   get text() {
-    return "+1 Card<br/>+2 Action";
+    return cardInfo[this.id].text;
   }
 
   get cost() {
-    return 2;
+    return cardInfo[this.id].cost;
   }
 }
 
