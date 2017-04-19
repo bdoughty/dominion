@@ -1,13 +1,14 @@
 <div class="chat-container">
     <div class="messages">
-      <div class="message-container">
-        <div class="message" *ngFor="let message of chatModel.messages">
+      <div class="message-container" id="chat-messages">
+        <div class="message" *ngFor="let message of chatModel.messages; let i = index; let l = last" id="message{{ i }}">
           <div class="name" [style.color]="message.color">
             {{ message.name }}
           </div>
           <div class="message-content" [innerHtml]="message.message">
             <!--{{ message.message }}-->
           </div>
+          {{ l ? updateScroll() : null }}
         </div>
       </div>
     </div>

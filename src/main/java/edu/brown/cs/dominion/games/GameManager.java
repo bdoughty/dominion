@@ -54,15 +54,15 @@ public class GameManager implements SocketServer {
     pendingGames = new HashMap<>();
 
     // TODO GET RID OF DUMMY
-    PendingGame p = new PendingGame("JJ's secret tail", 1,
+    PendingGame p = new PendingGame("GAME1", 1,
         new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
     pendingGames.put(p.getId(), p);
 
-    PendingGame p2 = new PendingGame("JJ's secret tail", 2,
+    PendingGame p2 = new PendingGame("GAME2", 2,
         new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
     pendingGames.put(p2.getId(), p2);
 
-    PendingGame p3 = new PendingGame("JJ's secret tail", 3,
+    PendingGame p3 = new PendingGame("GAME3", 3,
         new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
     pendingGames.put(p3.getId(), p3);
     pendingByUser = new HashMap<>();
@@ -142,7 +142,7 @@ public class GameManager implements SocketServer {
       container.add("users", GSON.toJsonTree(g.getAllUsers()));
 
       ws.send(s, INIT_GAME, GSON.toJson(container));
-      ws.send(s, UPDATE_MAP, g.fullUpdate(user));
+      ws.send(s, UPDATE_MAP, g.fullUpdate(user).prepareUser());
     } else {
       System.out.println("User is not in a game");
     }

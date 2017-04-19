@@ -9,7 +9,7 @@ import {Card} from "../models/card.model";
 export class CardComponent {
   @Input() public card: Card;
   @Input() public count: number;
-  
+
   constructor() {}
 
   imageSource() {

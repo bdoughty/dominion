@@ -9,6 +9,7 @@ import {ChatSocketService} from "../shared/chatsocket.service";
 })
 export class ChatComponent implements OnInit {
   private chatModel = new Chat();
+  private needToUpdate = false;
   public currentMessage: string;
 
   constructor(
@@ -20,17 +21,19 @@ export class ChatComponent implements OnInit {
       let message = JSON.parse(messageString);
       this.chatModel.addMessage(message);
 
-      console.log("recieving");
-      console.log(message);
+      this.needToUpdate = true;
     });
   }
 
   onEnter(value) {
-
-    console.log("sending");
-    console.log(value);
-
     this._chatSocketService.send('chat', value);
     this.currentMessage = "";
+  }
+
+  updateScroll() {
+    if(this.needToUpdate) {
+      document.getElementById("message" + (this.chatModel.messages.length - 1)).scrollIntoView(true);
+    }
+    this.needToUpdate = false;
   }
 }
