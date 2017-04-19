@@ -82,7 +82,7 @@ public class ClientUpdateMap {
   }
 
   public ClientUpdateMap turn(int userId) {
-    dataGlobal.put("userid", userId);
+    dataGlobal.put("turn", userId);
     return this;
   }
 

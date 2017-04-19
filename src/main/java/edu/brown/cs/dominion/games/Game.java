@@ -110,11 +110,6 @@ public class Game extends GameStub implements GameEventListener {
   public ClientUpdateMap fullUpdate(User u) {
     ClientUpdateMap cm = new ClientUpdateMap(this);
     playerUpdateMap(cm, userPlayers.get(u));
-    // cm.actionCount(userPlayers.get(u).getActions());
-    // cm.buyCount(userPlayers.get(u).getBuys());
-    // cm.deckRemaining(userPlayers.get(u).getDeck().size());
-    // cm.goldCount(userPlayers.get(u).getMoney());
-    // cm.hand(userPlayers.get(u).getHand());
     return cm;
   }
 
