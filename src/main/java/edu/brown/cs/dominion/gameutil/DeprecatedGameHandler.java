@@ -8,6 +8,7 @@ public class DeprecatedGameHandler {
   private Queue<Player> others;
   private Board board;
 
+  @Deprecated
   public DeprecatedGameHandler(Queue<Player> players, Board board) {
     this.others = players;
     this.board = board;

@@ -29,7 +29,6 @@ public class Pile {
     return (size == 0);
   }
 
-  // ugly, but will suffice for now
   public int getCost() {
     return cost;
   }

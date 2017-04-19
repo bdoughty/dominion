@@ -1,14 +1,15 @@
 package edu.brown.cs.dominion.io.send;
 
+import java.util.List;
+
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.Pile;
 import edu.brown.cs.dominion.User;
 
-import java.util.List;
-
 /**
  * Created by henry on 4/2/2017.
  */
+@Deprecated
 public class GameInit {
   private List<User> players;
   private Pile[][] cards;

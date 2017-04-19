@@ -1,18 +1,12 @@
 package edu.brown.cs.dominion.games;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
-import edu.brown.cs.dominion.User;
-import edu.brown.cs.dominion.io.SocketServer;
-import edu.brown.cs.dominion.io.UserRegistry;
-import edu.brown.cs.dominion.io.Websocket;
-import edu.brown.cs.dominion.io.send.ClientUpdateMap;
-import edu.brown.cs.dominion.io.send.SelectCallback;
-import org.eclipse.jetty.websocket.api.Session;
+import static edu.brown.cs.dominion.io.send.MessageType.DO_ACTION;
+import static edu.brown.cs.dominion.io.send.MessageType.END_ACTION;
+import static edu.brown.cs.dominion.io.send.MessageType.END_BUY;
+import static edu.brown.cs.dominion.io.send.MessageType.GLOBAL_UPDATE_MAP;
+import static edu.brown.cs.dominion.io.send.MessageType.INIT_GAME;
+import static edu.brown.cs.dominion.io.send.MessageType.SELECTION;
+import static edu.brown.cs.dominion.io.send.MessageType.UPDATE_MAP;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +15,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import static edu.brown.cs.dominion.io.send.MessageType.*;
+import org.eclipse.jetty.websocket.api.Session;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import edu.brown.cs.dominion.User;
+import edu.brown.cs.dominion.io.SocketServer;
+import edu.brown.cs.dominion.io.UserRegistry;
+import edu.brown.cs.dominion.io.Websocket;
+import edu.brown.cs.dominion.io.send.ClientUpdateMap;
+import edu.brown.cs.dominion.io.send.SelectCallback;
 
 /**
  * A wrapper that adds various ajax functionality to the server and then cleans
@@ -29,7 +36,7 @@ import static edu.brown.cs.dominion.io.send.MessageType.*;
  *
  * Created by henry on 3/22/2017.
  */
-public class GameManager implements SocketServer{
+public class GameManager implements SocketServer {
   private static Gson GSON = new Gson();
   private static JsonParser PARSE = new JsonParser();
 
@@ -46,17 +53,17 @@ public class GameManager implements SocketServer{
     callbacks = new HashMap<>();
     pendingGames = new HashMap<>();
 
-    //TODO GET RID OF DUMMY
-    PendingGame p = new PendingGame("JJ's secret tail", 1, new int[]{7,8,9,
-      10,11,12,13,14,15,16});
+    // TODO GET RID OF DUMMY
+    PendingGame p = new PendingGame("JJ's secret tail", 1,
+        new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
     pendingGames.put(p.getId(), p);
 
-    PendingGame p2 = new PendingGame("JJ's secret tail", 2, new int[]{7,8,9,
-      10,11,12,13,14,15,16});
+    PendingGame p2 = new PendingGame("JJ's secret tail", 2,
+        new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
     pendingGames.put(p2.getId(), p2);
 
-    PendingGame p3 = new PendingGame("JJ's secret tail", 3, new int[]{7,8,9,
-      10,11,12,13,14,15,16});
+    PendingGame p3 = new PendingGame("JJ's secret tail", 3,
+        new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
     pendingGames.put(p3.getId(), p3);
     pendingByUser = new HashMap<>();
   }
@@ -80,7 +87,7 @@ public class GameManager implements SocketServer{
 
   private ClientUpdateMap selection(User u, boolean inHand, int location) {
     assert callbacks.containsKey(u);
-    return callbacks.get(u).call(inHand, location);
+    return callbacks.get(u).call(u, inHand, location);
   }
 
   private <T, K> List<K> map(List<T> list, Function<T, K> convert) {
@@ -92,46 +99,42 @@ public class GameManager implements SocketServer{
   private ClientUpdateMap chk(ClientUpdateMap c) {
     if (c.hasCallback()) {
       callbacks.put(c.getCallbackUser(), c.getCallback());
-    } return c;
+    }
+    return c;
   }
 
   @Override
   public void newUser(Websocket ws, User user) {
-    ws.registerUserCommand(user, DO_ACTION,
-      (w, u, m) -> {
-        JsonObject data = PARSE.parse(m).getAsJsonObject();
-        sendClientUpdateMap(ws, u, action(user, data.get("handloc").getAsInt
-          ()));
-      });
+    ws.registerUserCommand(user, DO_ACTION, (w, u, m) -> {
+      JsonObject data = PARSE.parse(m).getAsJsonObject();
+      sendClientUpdateMap(ws, u, action(user, data.get("handloc").getAsInt()));
+    });
 
-    ws.registerUserCommand(user, SELECTION,
-      (w, u, m) -> {
-        JsonObject data = PARSE.parse(m).getAsJsonObject();
-        boolean inHand = data.get("inhand").getAsBoolean();
-        int location = data.get("loc").getAsInt();
-        sendClientUpdateMap(ws, u, selection(u, inHand, location));
-      });
+    ws.registerUserCommand(user, SELECTION, (w, u, m) -> {
+      JsonObject data = PARSE.parse(m).getAsJsonObject();
+      boolean inHand = data.get("inhand").getAsBoolean();
+      int location = data.get("loc").getAsInt();
+      sendClientUpdateMap(ws, u, selection(u, inHand, location));
+    });
 
     ws.registerUserCommand(user, END_ACTION,
-      (w, u, m) -> sendClientUpdateMap(ws, u, endActionPhase(u)));
+        (w, u, m) -> sendClientUpdateMap(ws, u, endActionPhase(u)));
 
-    ws.registerUserCommand(user, END_BUY,
-      (w, u, m) -> {
-        JsonArray data = PARSE.parse(m).getAsJsonArray();
-        List<Integer> buys = new LinkedList<>();
-        for(JsonElement e : data){
-          buys.add(e.getAsInt());
-        }
-        sendClientUpdateMap(ws, u, buys(u, buys));
+    ws.registerUserCommand(user, END_BUY, (w, u, m) -> {
+      JsonArray data = PARSE.parse(m).getAsJsonArray();
+      List<Integer> buys = new LinkedList<>();
+      for (JsonElement e : data) {
+        buys.add(e.getAsInt());
+      }
+      sendClientUpdateMap(ws, u, buys(u, buys));
     });
   }
 
   @Override
   public void newSession(Websocket ws, User user, Session s) {
-    if(gamesByUser.containsKey(user)){
+    if (gamesByUser.containsKey(user)) {
       Game g = gamesByUser.get(user);
       List<Integer> actionIds = g.getBoard().getActionCardIds();
-
 
       JsonObject container = new JsonObject();
       container.addProperty("gameid", g.getId());
@@ -149,17 +152,17 @@ public class GameManager implements SocketServer{
     return new ArrayList<>(pendingGames.values());
   }
 
-  public boolean joinGame(Websocket ws, User u, int id){
+  public boolean joinGame(Websocket ws, User u, int id) {
     if (gamesByUser.containsKey(u) || pendingByUser.containsKey(u)) {
-      System.out.println("ERROR: user tried to join game but is already in a " +
-        "game");
+      System.out.println(
+          "ERROR: user tried to join game but is already in a " + "game");
       return false;
     } else {
-      if(pendingGames.containsKey(id)){
+      if (pendingGames.containsKey(id)) {
         PendingGame pg = pendingGames.get(id);
         pendingByUser.put(u, pg);
         boolean didJoin = pg.addUser(u);
-        if(pg.full()){
+        if (pg.full()) {
           Game g = pg.convertAndRedirect(ws);
           games.add(g);
           pg.getUsers().forEach(us -> gamesByUser.put(us, g));
@@ -174,8 +177,8 @@ public class GameManager implements SocketServer{
     }
   }
 
-  public void leave(User u){
-    if(pendingByUser.containsKey(u)){
+  public void leave(User u) {
+    if (pendingByUser.containsKey(u)) {
       PendingGame g = pendingByUser.remove(u);
       g.removeUser(u);
     }

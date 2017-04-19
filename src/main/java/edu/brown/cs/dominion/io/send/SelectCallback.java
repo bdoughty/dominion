@@ -1,5 +1,7 @@
 package edu.brown.cs.dominion.io.send;
 
+import edu.brown.cs.dominion.User;
+
 /**
  * Created by henry on 4/15/2017.
  */
@@ -7,9 +9,12 @@ package edu.brown.cs.dominion.io.send;
 public interface SelectCallback {
   /**
    * Callback for a select card message to the user
-   * @param inHand card selected from hand or from board
-   * @param loc the location of the card in the hand or on the board.
+   * 
+   * @param inHand
+   *          card selected from hand or from board
+   * @param loc
+   *          the location of the card in the hand or on the board.
    * @return updateMap to the user.
    */
-  ClientUpdateMap call(boolean inHand, int loc);
+  ClientUpdateMap call(User u, boolean inHand, int loc);
 }
