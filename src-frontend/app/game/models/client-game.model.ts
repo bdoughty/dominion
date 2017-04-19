@@ -1,4 +1,5 @@
 import {Player} from "./player.model";
+import {Card} from "./card.model";
 export class ClientGame {
 
   public turn: number = 0;
@@ -12,9 +13,11 @@ export class ClientGame {
   public toSelectHand = [];
   public toSelectBoard = [];
 
+  public nonactionCards: Card[] = [];
+  public actionCards: number[] = [1,2,3,4,5,6,7,8,9,10];
+
   constructor(public players: Player[],
               public ownPlayerId) {
-
   }
 
   // getCurrentPlayer() {

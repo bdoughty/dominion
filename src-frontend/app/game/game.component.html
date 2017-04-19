@@ -1,5 +1,5 @@
 <div id="game">
-  <div id="board">
+  <div id="board" *ngIf="game">
     <div id="left-bar">
       <div id="stats">
         <div class="stat">
@@ -17,68 +17,66 @@
     </div>
     <div id="piles">
 
-      <!--<div class="pile-row">-->
-        <!--<div class="card" *ngfor="let card of firstRow">-->
-
-        <!--</div>-->
-      <!--</div>-->
-      <!--<div class="pile-row">-->
-        <!--<div class="card" *ngfor="let card of cards">-->
-
-        <!--</div>-->
-      <!--</div>-->
-      <!--<div class="pile-row">-->
-        <!--<div class="card" *ngfor="let card of cards">-->
-
-        <!--</div>-->
-      <!--</div>-->
-
-
-
       <div class="pile-row">
-        <div class="card">
-          <img src="../../assets/cardimage0.jpg">
-          <div class="card-label">
-            <div class="name">Village</div>
-            <div class="description">
-              +1 Card<br/>
-              +2 Actions
-            </div>
-          </div>
-          <div class="card-footer">
-            <div class="gold">2</div>
-          </div>
+        <div class="card" *ngFor="let card of game.nonactionCards">
+          <dmn-card [card]="card"></dmn-card>
         </div>
-        <div class="card">
-          <div class="card-title">
-            Market
-          </div>
-          <img src="../../assets/cardimage0.jpg">
-          <div class="card-label">
-            Market info
-          </div>
+      </div>
+      <div class="pile-row">
+        <div class="card" *ngFor="let card of game.actionCards.slice(0, 5)">
+          <dmn-card [card]="card"></dmn-card>
         </div>
-        <div class="card"><img src="../../assets/cardimage0.jpg">Market</div>
-        <div class="card"><img src="../../assets/cardimage0.jpg"></div>
-        <div class="card"><img src="../../assets/cardimage0.jpg"></div>
-        <div class="card"><img src="../../assets/cardimage0.jpg"></div>
       </div>
       <div class="pile-row">
-        <div class="card"><img src="../../assets/cardimage0.jpg"></div>
-        <div class="card"><img src="../../assets/cardimage0.jpg"></div>
-        <div class="card"><img src="../../assets/cardimage0.jpg"></div>
-        <div class="card"><img src="../../assets/cardimage0.jpg"></div>
-        <div class="card"><img src="../../assets/cardimage0.jpg"></div>
-        <div class="card"><img src="../../assets/cardimage0.jpg"></div>
+        <div class="card" *ngFor="let card of game.actionCards.slice(5, 10)">
+          <dmn-card [card]="card"></dmn-card>
+        </div>
       </div>
-      <div class="pile-row">
-        <div class="card"><img src="../../assets/cardimage0.jpg"></div>
-        <div class="card"><img src="../../assets/cardimage0.jpg"></div>
-        <div class="card"><img src="../../assets/cardimage0.jpg"></div>
-        <div class="card"><img src="../../assets/cardimage0.jpg"></div>
-        <div class="card"><img src="../../assets/cardimage0.jpg"></div>
-        <div class="card"><img src="../../assets/cardimage0.jpg"></div>
-      </div>
+
+      <!--<div class="pile-row">-->
+      <!--<div class="card">-->
+      <!--<img src="../../assets/cardimage0.jpg">-->
+      <!--<div class="card-label">-->
+      <!--<div class="name">Village</div>-->
+      <!--<div class="description">-->
+      <!--+1 Card<br/>-->
+      <!--+2 Actions-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--<div class="card-footer">-->
+      <!--<div class="gold">2</div>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--<div class="card">-->
+      <!--<div class="card-title">-->
+      <!--Market-->
+      <!--</div>-->
+      <!--<img src="../../assets/cardimage0.jpg">-->
+      <!--<div class="card-label">-->
+      <!--Market info-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--<div class="card"><img src="../../assets/cardimage0.jpg">Market</div>-->
+      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
+      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
+      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
+      <!--</div>-->
+      <!--<div class="pile-row">-->
+      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
+      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
+      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
+      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
+      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
+      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
+      <!--</div>-->
+      <!--<div class="pile-row">-->
+      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
+      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
+      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
+      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
+      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
+      <!--<div class="card"><img src="../../assets/cardimage0.jpg"></div>-->
+      <!--</div>-->
     </div>
     <div id="right-bar-container">
       <div id="right-bar">
@@ -118,18 +116,19 @@
       </div>
     </div>
   </div>
-  <div id="end-phase-row">
+  <div id="end-phase-row" *ngIf="game">
     <button>End Phase</button>
   </div>
-  <div id="hud">
+  <div id="hud" *ngIf="game">
     <div class="left">
       <div class="discard">
-        <div class="card">
-          <div class="counter-container">
-            <div class="counter">12</div>
-          </div>
-          <img src="../../assets/cardback.jpg">
-        </div>
+        <dmn-card [count]="12"></dmn-card>
+        <!--<div class="card">-->
+          <!--<div class="counter-container">-->
+            <!--<div class="counter">12</div>-->
+          <!--</div>-->
+          <!--<img src="../../assets/cardback.jpg">-->
+        <!--</div>-->
       </div>
       <div class="played">
         <div class="card">

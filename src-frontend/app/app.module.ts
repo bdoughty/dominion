@@ -14,6 +14,7 @@ import {appRoutes} from "./routes";
 import {ChatComponent} from "./chat/chat.component";
 import {ChatSocketService} from "./shared/chatsocket.service";
 import {GameSocketService} from "./shared/gamesocket.service";
+import {CardComponent} from "./game/card/card.component";
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import {GameSocketService} from "./shared/gamesocket.service";
     LobbyComponent,
     CreationComponent,
 
-    ChatComponent
+    ChatComponent,
+    CardComponent
   ],
   imports: [
     BrowserModule,

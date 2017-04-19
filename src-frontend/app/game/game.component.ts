@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {UserIdService} from "../shared/user-id.service";
 import {Chat} from "../chat/chat.model";
 import {Player} from "./models/player.model";
-import {Pile} from "./models/pile.model";
 import {ClientGame} from "./models/client-game.model";
 import {GameService} from "./game.service";
 import {GameSocketService} from "../shared/gamesocket.service";
@@ -25,8 +24,6 @@ export class GameComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.game = new ClientGame([new Player(0, "#333", "dlajdflkajsfd")], 0);
-
     this._gameSocketService.addListener("init", (message) => {
       if (message === undefined) return;
       console.log(message);

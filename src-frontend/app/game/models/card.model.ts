@@ -2,6 +2,10 @@ export class Card {
   constructor(public id) {
   }
 
+  get name() {
+    return "Village";
+  }
+
   get text() {
     return "+1 Card<br/>+2 Action";
   }
