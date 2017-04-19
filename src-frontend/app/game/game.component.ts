@@ -5,7 +5,7 @@ import {Player} from "./models/player.model";
 import {ClientGame} from "./models/client-game.model";
 import {GameService} from "./game.service";
 import {GameSocketService} from "../shared/gamesocket.service";
-import {Card} from "./models/card.model";
+import {Card} from "./card/card.model";
 
 @Component({
   selector: 'dmn-game',

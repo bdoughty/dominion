@@ -7,6 +7,7 @@
   //background: black;
   overflow: hidden;
   position: relative;
+  font-size: 0;
 
   .counter-container {
     position: absolute;
@@ -39,16 +40,19 @@
     font-size: 14px;
     font-weight: 300;
     padding: 8px;
+    padding-bottom: 0;
     color: #222;
     background: rgba(white, 0.75);
 
     .name {
-      margin-bottom: 8px;
+      margin-bottom: 4px;
       text-transform: uppercase;
+      font-weight: bold;
+      font-size: 0.8em;
     }
 
     .description {
-      font-size: 0.85em;
+      font-size: 0.8em;
     }
 
   }
@@ -61,17 +65,18 @@
     align-items: center;
 
     .gold {
-      height: 22px;
-      width: 22px;
+      height: 18px;
+      width: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
 
       margin: 0 8px;
-      border-radius: 10px;
+      border-radius: 9px;
       border: 1px solid #997733;
-      font-size: 12px;
-      font-weight: 100;
+      font-size: 10px;
+      //font-weight: 100;
+      position: relative;
     }
   }
 

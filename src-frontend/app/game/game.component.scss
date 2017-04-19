@@ -64,11 +64,12 @@
     #piles {
       flex-grow: 1;
       padding: 30px;
+      display: flex;
+      flex-direction: column;
 
       .pile-row {
         display: flex;
         justify-content: space-around;
-        margin-bottom: 28px;
 
         .card {
           width: 120px;

@@ -1,5 +1,5 @@
 import {Component, Input} from "@angular/core";
-import {Card} from "../models/card.model";
+import {Card} from "./card.model";
 
 @Component({
   selector: 'dmn-card',
@@ -18,7 +18,8 @@ export class CardComponent {
 
   imageSource() {
     if (this.card) {
-      return "../../../assets/cardimage" + this.card.id + ".jpg";
+      // return "../../../assets/cardimage" + this.card.id + ".jpg";
+      return "../../../assets/cardimage0.jpg";
     } else {
       return "../../../assets/cardback.jpg";
     }

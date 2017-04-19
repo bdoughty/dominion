@@ -1,5 +1,5 @@
 import {Player} from "./player.model";
-import {Card} from "./card.model";
+import {Card} from "../card/card.model";
 export class ClientGame {
 
   public turn: number = 0;

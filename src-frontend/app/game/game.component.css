@@ -38,11 +38,13 @@
         border-bottom-right-radius: 8px; }
     #game #board #piles {
       flex-grow: 1;
-      padding: 30px; }
+      padding: 30px;
+      display: flex;
+      flex-direction: column; }
       #game #board #piles .pile-row {
         display: flex;
         justify-content: space-around;
-        margin-bottom: 28px; }
+        margin-bottom: 8px; }
         #game #board #piles .pile-row .card {
           width: 120px;
           font-size: 0; }
@@ -120,8 +122,9 @@
       align-items: center; }
 
 .card {
-  width: img;
-    width-width: 100%;
-    width-height: auto; }
+  width: 100px; }
+  .card img {
+    width: 100%;
+    height: auto; }
 
 /*# sourceMappingURL=game.component.css.map */
