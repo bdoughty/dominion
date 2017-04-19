@@ -162,6 +162,10 @@ public class Player {
     return actions;
   }
 
+  public void setActions(int a) {
+    actions = a;
+  }
+
   public int getBuys() {
     return buys;
   }

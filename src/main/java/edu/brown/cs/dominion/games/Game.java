@@ -96,14 +96,28 @@ public class Game extends GameStub implements GameEventListener {
 
   @Override
   public ClientUpdateMap doAction(User u, int LocInHand) {
-    // TODO
-    return null;
+    assert (current.equals(u));
+    Player p = userPlayers.get(u);
+    // TODO error check this to make sure it's an action, valid pos, etc.
+    Card c = p.getHand().get(LocInHand);
+    c.play(this);
+
+    ClientUpdateMap cm = new ClientUpdateMap(this);
+    playerUpdateMap(cm, p);
+
+    return cm;
   }
 
   @Override
   public ClientUpdateMap endActionPhase(User u) {
-    // TODO
-    return null;
+    assert (current.equals(u));
+    Player p = userPlayers.get(u);
+    p.setActions(0);
+
+    ClientUpdateMap cm = new ClientUpdateMap(this);
+    playerUpdateMap(cm, p);
+
+    return cm;
   }
 
   @Override
@@ -116,6 +130,26 @@ public class Game extends GameStub implements GameEventListener {
     // cm.goldCount(userPlayers.get(u).getMoney());
     // cm.hand(userPlayers.get(u).getHand());
     return cm;
+  }
+
+  public void incrementBuys() {
+    Player p = userPlayers.get(current);
+    p.incrementBuys();
+  }
+
+  public void incrementAdditionalMoney(int adnlMoney) {
+    Player p = userPlayers.get(current);
+    p.incrementAdditionalMoney(adnlMoney);
+  }
+
+  public void incrementActions() {
+    Player p = userPlayers.get(current);
+    p.incrementActions();
+  }
+
+  public void currentDraw(int numCards) {
+    Player p = userPlayers.get(current);
+    p.draw(numCards);
   }
 
 }

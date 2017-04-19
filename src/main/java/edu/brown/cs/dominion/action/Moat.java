@@ -1,6 +1,6 @@
 package edu.brown.cs.dominion.action;
 
-import edu.brown.cs.dominion.gameutil.GameHandler;
+import edu.brown.cs.dominion.games.Game;
 
 public class Moat extends AbstractAction {
 
@@ -9,8 +9,8 @@ public class Moat extends AbstractAction {
   }
 
   @Override
-  public void play(GameHandler ac) {
-    ac.currentDraw(2);
+  public void play(Game g) {
+    g.currentDraw(2);
   }
 
 }

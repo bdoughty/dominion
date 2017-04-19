@@ -1,6 +1,6 @@
 package edu.brown.cs.dominion.action;
 
-import edu.brown.cs.dominion.gameutil.GameHandler;
+import edu.brown.cs.dominion.games.Game;
 
 public class Smithy extends AbstractAction {
 
@@ -9,8 +9,8 @@ public class Smithy extends AbstractAction {
   }
 
   @Override
-  public void play(GameHandler ac) {
-    ac.currentDraw(3);
+  public void play(Game g) {
+    g.currentDraw(3);
   }
 
 }
