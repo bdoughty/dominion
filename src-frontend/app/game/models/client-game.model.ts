@@ -13,6 +13,7 @@ export class ClientGame {
   public toSelectHand = [];
   public toSelectBoard = [];
 
+
   public nonactionCards: Card[] =
     [new Card(0), new Card(1), new Card(2), new Card(3), new Card(4), new Card(5)];
   public actionCards: Card[] = [];
@@ -26,11 +27,12 @@ export class ClientGame {
   }
 
   public setTurn(id: number) {
-    for (let i = 0; i<this.players.length; i++) {
+    for (let i = 0; i < this.players.length; i++) {
       if (id == this.players[i].id) {
         this.turn = i;
       }
     }
+    this.players.pop()
   }
 
   getOwnPlayer() {

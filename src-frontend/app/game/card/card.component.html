@@ -1,6 +1,6 @@
 <div class="card">
   <img src="{{ imageSource() }}">
-  <div class="counter-container" *ngIf="count !== 'undefined'">
+  <div class="counter-container" *ngIf="hasCount()">
     <div class="counter">{{count}}</div>
   </div>
   <div class="card-label" *ngIf="card">

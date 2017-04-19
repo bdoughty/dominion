@@ -56,13 +56,14 @@ export class GameComponent implements OnInit {
       new Card(cardid);
     });
 
+    console.log(players);
     return new ClientGame(players, this._userIdService.id, cards);
   }
 
   globalMap(update) {
     if (this.game != null) {
       if (update.turn !== "undefined") {
-        this.game.setTurn();
+        this.game.setTurn(update.turn);
       }
       if (update.winner !== "undefined") {
         alert("")
@@ -72,17 +73,17 @@ export class GameComponent implements OnInit {
 
   updateMap(update) {
     if (this.game != null) {
-      if (update.actions !== "undefined") {
+      if (typeof update.actions !== 'undefined') {
         this.game.actions = update.actions;
       }
-      if (update.buys !== "undefined") {
+      if (typeof update.buys !== "undefined") {
         this.game.buys = update.buys;
       }
-      if (update.gold !== "undefined") {
+      if (typeof update.gold !== "undefined") {
         this.game.gold = update.gold;
       }
 
-      if (update.select !== "undefined") {
+      if (typeof update.select !== "undefined") {
         if (update.select) {
           this.game.toSelect = true;
           this.game.toSelectHand = update.handSelect;
@@ -91,16 +92,16 @@ export class GameComponent implements OnInit {
           this.game.toSelect = false;
         }
       }
-      if (update.hand !== "undefined") {
+      if (typeof update.hand !== "undefined") {
         this.game.hand = update.hand.map(cardid => {return new Card(cardid)});
       }
-      if (update.decksize !== "undefined") {
+      if (typeof update.decksize !== "undefined") {
         this.game.decksize = update.decksize;
       }
-      if (update.discardsize !== "undefined") {
+      if (typeof update.discardsize !== "undefined") {
         this.game.discardsize = update.discardsize;
       }
-      if (update.holding !== "undefined") {
+      if (typeof update.holding !== "undefined") {
         this.game.holding = update.holding;
       }
     }

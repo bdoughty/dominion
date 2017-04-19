@@ -12,6 +12,10 @@ export class CardComponent {
 
   constructor() {}
 
+  hasCount() {
+    return typeof this.count !== 'undefined';
+  }
+
   imageSource() {
     if (this.card) {
       return "../../../assets/cardimage" + this.card.id + ".jpg";
