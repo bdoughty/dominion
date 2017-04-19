@@ -77,21 +77,16 @@
   <div id="hud" *ngIf="game">
     <div class="left">
       <div class="discard">
-        <dmn-card [count]="33"></dmn-card>
+        <dmn-card [count]="game.discardsize"></dmn-card>
       </div>
     </div>
     <div class="hand-container">
       <div class="hand">
-        <dmn-card card="dummyCard"></dmn-card>
-        <dmn-card card="dummyCard"></dmn-card>
-        <dmn-card card="dummyCard"></dmn-card>
-        <dmn-card card="dummyCard"></dmn-card>
-        <dmn-card card="dummyCard"></dmn-card>
-        <dmn-card card="dummyCard"></dmn-card>
+        <dmn-card *ngFor="let card of game.hand" [card]="card"></dmn-card>
       </div>
     </div>
     <div class="deck">
-      <dmn-card [count]="33"></dmn-card>
+      <dmn-card [count]="game.decksize"></dmn-card>
     </div>
   </div>
 </div>

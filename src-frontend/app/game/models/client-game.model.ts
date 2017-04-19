@@ -6,9 +6,9 @@ export class ClientGame {
   public gamePhase: string = "action";
   public holding: boolean = false;
   public toBuy = [];
-  public deck: number = 10;
   public hand: Card[] = [];
-  public discardPile: number = 0;
+  public discardsize: number = 0;
+  public decksize: number = 10;
   public toSelect: boolean = false;
   public toSelectHand = [];
   public toSelectBoard = [];

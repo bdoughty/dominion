@@ -1,13 +1,13 @@
 <div class="card">
   <img src="{{ imageSource() }}">
-  <div class="counter-container">
-    <div class="counter" *ngIf="count">12</div>
+  <div class="counter-container" *ngIf="count !== 'undefined'">
+    <div class="counter">{{count}}</div>
   </div>
   <div class="card-label" *ngIf="card">
     <div class="name">{{ card.name }}</div>
     <div class="description" [innerHtml]="card.text"></div>
   </div>
   <div class="card-footer" *ngIf="card">
-    <div class="gold">2</div>
+    <div class="gold">{{ card.cost }}</div>
   </div>
 </div>

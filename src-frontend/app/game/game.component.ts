@@ -16,7 +16,6 @@ export class GameComponent implements OnInit {
   public title = 'Dominion';
   public game;
   public gameChat = new Chat();
-  public dummyCard;
 
   constructor(
     private _userIdService: UserIdService,
@@ -25,9 +24,6 @@ export class GameComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.dummyCard = new Card(0);
-    console.log(this.dummyCard);
-
     this._gameSocketService.addListener("init", (message) => {
       if (message === undefined) return;
 
@@ -76,17 +72,17 @@ export class GameComponent implements OnInit {
 
   updateMap(update) {
     if (this.game != null) {
-      if (update.actions === "undefined") {
+      if (update.actions !== "undefined") {
         this.game.actions = update.actions;
       }
-      if (update.buys === "undefined") {
+      if (update.buys !== "undefined") {
         this.game.buys = update.buys;
       }
-      if (update.gold === "undefined") {
+      if (update.gold !== "undefined") {
         this.game.gold = update.gold;
       }
 
-      if (update.select === "undefined") {
+      if (update.select !== "undefined") {
         if (update.select) {
           this.game.toSelect = true;
           this.game.toSelectHand = update.handSelect;
@@ -95,16 +91,16 @@ export class GameComponent implements OnInit {
           this.game.toSelect = false;
         }
       }
-      if (update.hand === "undefined") {
-        this.game.hand = update.hand;
+      if (update.hand !== "undefined") {
+        this.game.hand = update.hand.map(cardid => {return new Card(cardid)});
       }
-      if (update.decksize === "undefined") {
-        this.game.deck = update.decksize;
+      if (update.decksize !== "undefined") {
+        this.game.decksize = update.decksize;
       }
-      if (update.discardsize === "undefined") {
-        this.game.discardPile = update.discardsize;
+      if (update.discardsize !== "undefined") {
+        this.game.discardsize = update.discardsize;
       }
-      if (update.holding === "undefined") {
+      if (update.holding !== "undefined") {
         this.game.holding = update.holding;
       }
     }
