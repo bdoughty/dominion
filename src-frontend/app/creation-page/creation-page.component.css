@@ -162,6 +162,18 @@ form {
   height: 70%;
 }
 
-#cards {
+#card-select-and-submit {
   margin-right: 10px;
+}
+
+.wide-button-container {
+  width: 100%;
+  background-color: darkred;
+  vertical-align: bottom;
+}
+
+.wide-button {
+  width: 100%;
+  height: 100%;
+  font-size: 5vmin;
 }

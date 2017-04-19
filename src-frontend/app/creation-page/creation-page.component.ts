@@ -28,8 +28,16 @@ import { Component } from '@angular/core';
     }
   }
 
-  submitForm() {
-
+  validate() {
+    if(this.selected.size == 10) {
+      if((<HTMLInputElement>document.getElementById("gameName")).value != "") {
+        console.log("I would have submitted");
+      } else {
+        alert("You must supply a game name to begin a game!");
+      }
+    } else {
+      alert("You must select exactly 10 cards to begin a game!");
+    }
   }
 }
 

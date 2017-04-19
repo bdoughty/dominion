@@ -10,13 +10,13 @@
             Game Name:
           </div>
           <div class="header">
-            <input name="gameName" placeholder="Name" />
+            <input name="gameName" id="gameName" placeholder="Name" />
           </div>
           <div class="header-label">
             Target Number of Players:
           </div>
           <div class="header">
-            <select name="numPlayers">
+            <select name="numPlayers" id="numPlayers">
               <option value="2">2</option>
               <option value="3">3</option>
               <option value="4">4</option>
@@ -62,7 +62,7 @@
       </div>
     </div>
     <div id="cards-row">
-      <div class="pane" id="cards">
+      <div class="pane" id="card-select-and-submit">
         <div class="card-row">
           <div *ngFor="let i of [0,1,2,3,4,5,6,7,8,9]" class="card">
             <img id="card{{ i }}" class="cardImg" src="../../assets/card{{ i }}.jpg" (mouseenter)="entered('card' + i)" (mouseleave)="left()" (click)="clicked('card' + i)" />
@@ -72,6 +72,9 @@
           <div *ngFor="let j of [10,11,12,13,14,15,16,17,18,19]" class="card">
             <img id="card{{ j }}" class="cardImg" src="../../assets/card{{ j }}.jpg" (mouseenter)="entered('card' + j)" (mouseleave)="left()" (click)="clicked('card' + j)" />
           </div>
+        </div>
+        <div class="wide-button-container">
+          <button class="wide-button" (click)="validate()">Start The Game</button>
         </div>
       </div>
       <div class="pane" id="blowUp">
