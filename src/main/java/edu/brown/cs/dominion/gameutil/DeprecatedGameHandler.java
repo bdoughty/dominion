@@ -2,13 +2,13 @@ package edu.brown.cs.dominion.gameutil;
 
 import java.util.Queue;
 
-public class GameHandler {
+public class DeprecatedGameHandler {
 
   private Player current;
   private Queue<Player> others;
   private Board board;
 
-  public GameHandler(Queue<Player> players, Board board) {
+  public DeprecatedGameHandler(Queue<Player> players, Board board) {
     this.others = players;
     this.board = board;
     this.current = this.others.poll();

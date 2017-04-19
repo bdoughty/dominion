@@ -56,7 +56,7 @@
       font-size: 12px;
       font-weight: 100; }
   .card img {
-    width: 100%;
+    width: 100% !important;
     position: relative;
     z-index: 10; }
 
