@@ -20,7 +20,7 @@ export class CardComponent {
   imageSource() {
     if (this.card) {
       // return "../../../assets/cardimage" + this.card.id + ".jpg";
-      return "../../../assets/cardimage0.jpg";
+      return "url('../../../assets/cardimage0.jpg')";
     } else {
       return "../../../assets/cardback.jpg";
     }

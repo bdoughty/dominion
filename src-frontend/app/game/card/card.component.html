@@ -1,8 +1,12 @@
 <div class="card" (click)="select()" [ngClass]="{selected: selected}">
-  <img src="{{ imageSource() }}">
+
+
+  <img src="{{ imageSource() }}" *ngIf="hasCount()">
   <div class="counter-container" *ngIf="hasCount()">
     <div class="counter">{{count}}</div>
   </div>
+
+  <div class="image" *ngIf="card" [style.background-image]="imageSource()"></div>
   <div class="card-label" *ngIf="card">
     <div class="name">{{ card.name }}</div>
     <div class="description" [innerHtml]="card.text"></div>
