@@ -14,8 +14,7 @@
     #game #board #left-bar {
       width: 220px;
       display: flex;
-      flex-direction: column;
-      padding-bottom: 20px; }
+      flex-direction: column; }
       #game #board #left-bar #stats {
         padding: 20px 80px 20px 20px;
         font-size: 18px;
@@ -36,15 +35,26 @@
         margin-right: 60px;
         border-top-right-radius: 8px;
         border-bottom-right-radius: 8px; }
+      #game #board #left-bar button {
+        margin: 12px;
+        border: none;
+        min-width: 200px;
+        font-size: 1.2em;
+        font-weight: 100;
+        color: white;
+        background: rgba(70, 78, 164, 0.9);
+        height: 50px;
+        line-height: 50px;
+        padding: 0; }
     #game #board #piles {
       flex-grow: 1;
       padding: 30px;
       display: flex;
-      flex-direction: column; }
+      flex-direction: column;
+      justify-content: space-around; }
       #game #board #piles .pile-row {
         display: flex;
-        justify-content: space-around;
-        margin-bottom: 8px; }
+        justify-content: space-around; }
         #game #board #piles .pile-row .card {
           width: 120px;
           font-size: 0; }
@@ -80,18 +90,6 @@
             #game #board #right-bar-container #right-bar .turns .turn .turn-info {
               display: flex;
               justify-content: space-between; }
-  #game #end-phase-row button {
-    margin-left: 10px;
-    margin-bottom: 20px;
-    border: none;
-    min-width: 200px;
-    font-size: 1.2em;
-    font-weight: 100;
-    color: white;
-    background: rgba(70, 78, 164, 0.9);
-    height: 50px;
-    line-height: 50px;
-    padding: 0; }
   #game #hud {
     height: 200px;
     display: flex;
@@ -102,10 +100,6 @@
       font-size: 0; }
       #game #hud .card .counter {
         font-size: 24px; }
-    #game #hud .left {
-      display: flex;
-      align-items: center;
-      flex-grow: 1; }
     #game #hud .hand-container {
       flex-grow: 7;
       display: flex;
@@ -115,16 +109,10 @@
         display: inline-block; }
         #game #hud .hand-container .hand .card {
           margin: 0 12px; }
-    #game #hud .deck {
+    #game #hud .left, #game #hud .deck {
       flex-grow: 1;
       display: flex;
       justify-content: center;
       align-items: center; }
-
-.card {
-  width: 100px; }
-  .card img {
-    width: 100%;
-    height: auto; }
 
 /*# sourceMappingURL=game.component.css.map */

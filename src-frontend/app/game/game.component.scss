@@ -29,7 +29,6 @@
       width: 220px;
       display: flex;
       flex-direction: column;
-      padding-bottom: 20px;
 
       #stats {
         padding: 20px 80px 20px 20px;
@@ -58,6 +57,19 @@
         border-top-right-radius: 8px;
         border-bottom-right-radius: 8px;
       }
+
+      button {
+        margin: 12px;
+        border: none;
+        min-width: 200px;
+        font-size: 1.2em;
+        font-weight: 100;
+        color: white;
+        background: rgba(#464ea4, 0.9);
+        height: 50px;
+        line-height: 50px;
+        padding: 0;
+      }
     }
 
     /* ---------- PILES ---------- */
@@ -66,6 +78,7 @@
       padding: 30px;
       display: flex;
       flex-direction: column;
+      justify-content: space-around;
 
       .pile-row {
         display: flex;
@@ -151,23 +164,6 @@
     }
   }
 
-  #end-phase-row {
-
-    button {
-      margin-left: 10px;
-      margin-bottom: 20px;
-      border: none;
-      min-width: 200px;
-      font-size: 1.2em;
-      font-weight: 100;
-      color: white;
-      background: rgba(#464ea4, 0.9);
-      height: 50px;
-      line-height: 50px;
-      padding: 0;
-    }
-  }
-
   /* ----------- HUD ------------- */
   #hud {
     height: 200px;
@@ -184,12 +180,6 @@
       }
     }
 
-    .left {
-      display: flex;
-      align-items: center;
-      flex-grow: 1;
-    }
-
     .hand-container {
       flex-grow: 7;
       display: flex;
@@ -204,24 +194,11 @@
         }
       }
     }
-
-    .deck {
+    .left, .deck {
       flex-grow: 1;
       display: flex;
       justify-content: center;
       align-items: center;
-
-      .card {
-      }
     }
-  }
-}
-
-.card {
-  width: 100px;
-
-  img {
-    width: 100%;
-    height: auto;
   }
 }

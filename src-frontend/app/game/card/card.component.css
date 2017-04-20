@@ -5,7 +5,24 @@
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.24);
   overflow: hidden;
   position: relative;
-  font-size: 0; }
+  font-size: 0;
+  background: rgba(255, 255, 255, 0.75);
+  transition: background 0.15s; }
+  .card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.2);
+    z-index: 12;
+    opacity: 0;
+    transition: opacity 0.2s; }
+  .card:hover {
+    cursor: pointer; }
+    .card:hover::after {
+      opacity: 1; }
   .card .counter-container {
     position: absolute;
     top: 0;
@@ -33,8 +50,7 @@
     font-weight: 300;
     padding: 8px;
     padding-bottom: 0;
-    color: #222;
-    background: rgba(255, 255, 255, 0.75); }
+    color: #222; }
     .card .card-label .name {
       margin-bottom: 4px;
       text-transform: uppercase;
@@ -43,7 +59,6 @@
     .card .card-label .description {
       font-size: 0.8em; }
   .card .card-footer {
-    background: rgba(255, 255, 255, 0.75);
     height: 30px;
     display: flex;
     justify-content: flex-end;
