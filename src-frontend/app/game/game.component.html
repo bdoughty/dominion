@@ -34,7 +34,8 @@
     <div id="right-bar-container">
       <div id="right-bar">
         <div class="turns">
-          <div *ngFor="let player of game.players" class="turn">
+          <div *ngFor="let player of game.players; let i = index;"
+               class="turn" [ngClass]="{currentTurn: i === 0}">
             <div class="current-turn-message">Current Turn</div>
             <div class="turn-info">
               <div class="name">{{player.name}}</div>

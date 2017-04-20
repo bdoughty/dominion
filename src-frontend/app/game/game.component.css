@@ -72,7 +72,7 @@
             border-bottom: 1px solid #DDD; }
             #game #board #right-bar-container #right-bar .turns .turn .current-turn-message {
               display: none; }
-            #game #board #right-bar-container #right-bar .turns .turn.current-turn {
+            #game #board #right-bar-container #right-bar .turns .turn.currentTurn {
               display: flex;
               flex-direction: column;
               justify-content: space-between;
@@ -80,12 +80,12 @@
               height: 100px;
               background: #555ec6;
               order: -1; }
-              #game #board #right-bar-container #right-bar .turns .turn.current-turn .current-turn-message {
+              #game #board #right-bar-container #right-bar .turns .turn.currentTurn .current-turn-message {
                 display: block;
                 text-transform: uppercase;
                 font-size: 0.9em;
                 margin-bottom: 12px; }
-            #game #board #right-bar-container #right-bar .turns .turn.current-turn .turn-info {
+            #game #board #right-bar-container #right-bar .turns .turn.currentturn .turn-info {
               font-weight: 300; }
             #game #board #right-bar-container #right-bar .turns .turn .turn-info {
               display: flex;

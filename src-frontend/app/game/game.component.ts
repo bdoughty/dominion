@@ -30,10 +30,6 @@ export class GameComponent implements OnInit {
       let gameState = JSON.parse(message);
       let game = this.gameFromState(gameState);
       this.game = game;
-
-
-      // this.initGameFromState(initObj);
-      // { gameid:int, users:[{id:int, name:string, color:String}], cardids:[int], }
     });
 
     this._gameSocketService.addListener("updatemap", (message) => {

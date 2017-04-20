@@ -126,7 +126,7 @@
               display: none;
             }
 
-            &.current-turn {
+            &.currentTurn {
               display: flex;
               flex-direction: column;
               justify-content: space-between;
@@ -145,7 +145,7 @@
             }
 
 
-            &.current-turn {
+            &.currentTurn {
               .turn-info {
                 font-weight: 300;
               }

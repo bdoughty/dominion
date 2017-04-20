@@ -32,7 +32,6 @@ export class ClientGame {
         this.turn = i;
       }
     }
-    this.players.pop()
   }
 
   getOwnPlayer() {
