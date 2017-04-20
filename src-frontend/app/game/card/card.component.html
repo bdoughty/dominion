@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" (click)="select()" [ngClass]="{selected: selected}">
   <img src="{{ imageSource() }}">
   <div class="counter-container" *ngIf="hasCount()">
     <div class="counter">{{count}}</div>

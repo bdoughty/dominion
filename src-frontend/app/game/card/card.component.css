@@ -7,8 +7,9 @@
   position: relative;
   font-size: 0;
   background: rgba(255, 255, 255, 0.75);
-  transition: background 0.15s; }
-  .card::after {
+  background: #E9E5E0;
+  transition: background 0.15s, transform 0.15s; }
+  .card::after, .card::before {
     content: '';
     position: absolute;
     top: 0;
@@ -19,8 +20,17 @@
     z-index: 12;
     opacity: 0;
     transition: opacity 0.2s; }
+  .card.selected {
+    z-index: 20; }
+    .card.selected::after {
+      background: rgba(255, 255, 255, 0.1); }
+    .card.selected::before {
+      background: rgba(127, 216, 255, 0.4);
+      opacity: 1 !important; }
   .card:hover {
-    cursor: pointer; }
+    cursor: pointer;
+    transform: scale(1.2);
+    z-index: 21; }
     .card:hover::after {
       opacity: 1; }
   .card .counter-container {

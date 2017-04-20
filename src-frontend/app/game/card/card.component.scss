@@ -9,9 +9,12 @@
   position: relative;
   font-size: 0;
   background: rgba(white, 0.75);
-  transition: background 0.15s;
+  background: #E9E5E0;
+  transition: background 0.15s, transform 0.15s;
 
-  &::after {
+  // After is hover filter
+  // Before is selected filter
+  &::after, &::before {
     content: '';
     position: absolute;
     top: 0;
@@ -24,8 +27,23 @@
     transition: opacity 0.2s;
   }
 
+  &.selected {
+    z-index: 20;
+
+    &::after {
+      background: rgba(white, 0.1);
+    }
+
+    &::before {
+      background: rgba(#7fd8ff, 0.4);
+      opacity: 1 !important;
+    }
+  }
+
   &:hover {
     cursor: pointer;
+    transform: scale(1.2);
+    z-index: 21;
 
     &::after {
       opacity: 1;

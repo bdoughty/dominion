@@ -9,6 +9,7 @@ import {Card} from "./card.model";
 export class CardComponent {
   @Input() public card: Card;
   @Input() public count: number;
+  public selected: boolean;
 
   constructor() {}
 
@@ -23,5 +24,9 @@ export class CardComponent {
     } else {
       return "../../../assets/cardback.jpg";
     }
+  }
+
+  select() {
+    this.selected = !this.selected;
   }
 }
