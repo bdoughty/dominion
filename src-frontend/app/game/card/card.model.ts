@@ -36,7 +36,7 @@ const cardInfo = {
   },
   7: {
     name: 'Cellar',
-    text: '+1 action <br/> Discard any number of cards. </br> +1 Card per' +
+    text: '+1 action, Discard any number of cards. <br/> +1 Card per' +
     ' each card discarded',
     cost: 2
   },
@@ -47,42 +47,45 @@ const cardInfo = {
   },
   9: {
     name: 'Militia',
-    text: '',
+    text: '+2 Money <br/> Each other player discards down to 3 cards in his hand',
     cost: 6
   },
   10: {
     name: 'Mine',
-    text: '',
+    text: 'Trash a Treasure card from your hand. Gain a Treasure card costing' +
+    ' up to 3 more; put it into your hand.',
     cost: 6
   },
   11: {
     name: 'Moat',
-    text: '',
+    text: '+2 Cards. When another player plays an Attack card, you may reveal' +
+    ' this from your hand to become unaffected.',
     cost: 6
   },
   12: {
     name: 'Remodel',
-    text: '',
+    text: 'Trash a card from your hand. Gain a card costing up to 2 more than' +
+    ' the trashed card.',
     cost: 6
   },
   13: {
     name: 'Smithy',
-    text: '',
+    text: '+3 Cards',
     cost: 6
   },
   14: {
     name: 'Village',
-    text: '',
+    text: '+1 Cards<br/>+2 Actions',
     cost: 6
   },
   15: {
     name: 'Woodcutter',
-    text: '',
+    text: '+1 Buy<br/>+2 Money',
     cost: 6
   },
   16: {
     name: 'Workshop',
-    text: '',
+    text: 'Gain a card costing up to 4 Money',
     cost: 6
   }
 };

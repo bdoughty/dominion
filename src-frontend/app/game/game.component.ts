@@ -49,7 +49,7 @@ export class GameComponent implements OnInit {
     });
 
     this._gameSocketService.addListener("updatemap", (message) => {
-      console.log("update map:")
+      console.log("update map:");
       console.log(message);
       this.updateMap(JSON.parse(message));
     });
@@ -70,8 +70,9 @@ export class GameComponent implements OnInit {
     });
 
     const cards = state.cardids.map(cardid => {
-      new Card(cardid);
+      return new Card(cardid);
     });
+    console.log(cards);
 
     return new ClientGame(players, this._userIdService.id, cards);
   }

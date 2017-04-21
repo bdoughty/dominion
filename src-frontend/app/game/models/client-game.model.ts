@@ -16,14 +16,10 @@ export class ClientGame {
 
   public nonactionCards: Card[] =
     [new Card(0), new Card(1), new Card(2), new Card(3), new Card(4), new Card(5)];
-  public actionCards: Card[] = [];
 
   constructor(public players: Player[],
               public ownPlayerId: number,
-              actionCards: number[]) {
-    actionCards.forEach((id) => {
-      this.actionCards.push(new Card(id));
-    });
+              public actionCards: Card[]) {
   }
 
   public setTurn(id: number) {
