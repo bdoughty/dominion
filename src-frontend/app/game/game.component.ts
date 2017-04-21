@@ -84,7 +84,9 @@ export class GameComponent implements OnInit {
   }
 
   addToCart(card: Card) {
-    this.game.addToCart(card.id);
+    if (this.game.phase === 'buy') {
+      this.game.addToCart(card.id);
+    }
   }
 
   removeFromCart(card: Card) {
@@ -155,10 +157,6 @@ export class GameComponent implements OnInit {
         this.game.holding = update.holding;
       }
     }
-  }
-
-  stophold(msg) {
-    this.game.holding = false;
   }
 
   chat(msg) {
