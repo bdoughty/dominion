@@ -13,21 +13,37 @@
         </div>
       </div>
       <div id="cart">
+        <div class="cart-inner">
+          <dmn-card *ngFor="let card of game.cart"
+                    [card]="card"
+                    (click)="removeFromCart(card)">
+
+          </dmn-card>
+        </div>
       </div>
       <button>End {{ game.phase }} Phase</button>
     </div>
     <div id="piles">
 
       <div class="pile-row">
-        <dmn-card [card]="card" *ngFor="let card of game.nonactionCards">
+        <dmn-card [card]="card"
+                  *ngFor="let card of game.nonactionCards"
+                  (click)="addToCart(card)"
+        >
         </dmn-card>
       </div>
       <div class="pile-row">
-        <dmn-card [card]="card" *ngFor="let card of game.actionCards.slice(0, 6)">
+        <dmn-card [card]="card"
+                  *ngFor="let card of game.actionCards.slice(0, 6)"
+                  (click)="addToCart(card)"
+        >
         </dmn-card>
       </div>
       <div class="pile-row">
-        <dmn-card [card]="card" *ngFor="let card of game.actionCards.slice(6, 12)">
+        <dmn-card [card]="card"
+                  *ngFor="let card of game.actionCards.slice(6, 12)"
+                  (click)="addToCart(card)"
+        >
         </dmn-card>
       </div>
     </div>

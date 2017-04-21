@@ -83,6 +83,14 @@ export class GameComponent implements OnInit {
     throw "Phase is " + this.game.phase + ". Must be 'action' or 'buy'";
   }
 
+  addToCart(card: Card) {
+    this.game.addToCart(card.id);
+  }
+
+  removeFromCart(card: Card) {
+    this.game.cart.splice(this.game.cart.indexOf(card), 1);
+  }
+
   gameFromState(state) {
     const players = state.users.map(player => {
       return new Player(player.id, player.color, player.name);

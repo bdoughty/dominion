@@ -31,8 +31,9 @@ export class ChatComponent implements OnInit {
   }
 
   updateScroll() {
-    if(this.needToUpdate) {
-      document.getElementById("message" + (this.chatModel.messages.length - 1)).scrollIntoView(true);
+    if (this.needToUpdate) {
+      document.getElementById("message" +
+        (this.chatModel.messages.length - 1)).scrollIntoView(true);
     }
     this.needToUpdate = false;
   }

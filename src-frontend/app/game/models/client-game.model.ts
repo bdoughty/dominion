@@ -5,7 +5,7 @@ export class ClientGame {
   public turn: number = 0;
   public phase: string = "action";
   public holding: boolean = false;
-  public toBuy = [];
+  public cart = [];
   public hand: Card[] = [];
   public discardsize: number = 0;
   public decksize: number = 10;
@@ -20,6 +20,10 @@ export class ClientGame {
   constructor(public players: Player[],
               public ownPlayerId: number,
               public actionCards: Card[]) {
+  }
+
+  public addToCart(id: number) {
+    this.cart.push(new Card(id));
   }
 
   public setTurn(id: number) {
