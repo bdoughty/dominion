@@ -80,15 +80,14 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 1.5em;
+      font-size: 24px;
     }
   }
 
   .card-label {
     font-size: 14px;
     font-weight: 300;
-    padding: 8px;
-    padding-bottom: 0;
+    padding: 8px 8px 0;
     color: #222;
 
     .name {
@@ -131,4 +130,8 @@
     position: relative;
     z-index: 10;
   }
+}
+
+dmn-card {
+  position: relative;
 }

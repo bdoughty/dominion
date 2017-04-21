@@ -23,7 +23,7 @@ export class ClientGame {
               actionCards: number[]) {
     actionCards.forEach((id) => {
       this.actionCards.push(new Card(id));
-    })
+    });
   }
 
   public setTurn(id: number) {
@@ -40,6 +40,10 @@ export class ClientGame {
         return this.players[i];
       }
     }
+  }
+
+  removeCardInHand(card: Card) {
+    this.hand.splice(this.hand.indexOf(card), 1);
   }
 
   get buys() {

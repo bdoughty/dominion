@@ -4,12 +4,13 @@ import {Card} from "./card.model";
 @Component({
   selector: 'dmn-card',
   templateUrl: './card.component.html',
-  styleUrls: ['./card.component.css']
+  styleUrls: ['./card.component.css'],
 })
 export class CardComponent {
   @Input() public card: Card;
   @Input() public count: number;
   public selected: boolean;
+  public state = 'inhand';
 
   constructor() {}
 
@@ -26,7 +27,11 @@ export class CardComponent {
     }
   }
 
+  play() {
+  }
+
   select() {
+    this.state = 'played';
     this.selected = !this.selected;
   }
 }

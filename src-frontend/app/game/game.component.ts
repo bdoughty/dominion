@@ -6,11 +6,27 @@ import {ClientGame} from "./models/client-game.model";
 import {GameService} from "./game.service";
 import {GameSocketService} from "../shared/gamesocket.service";
 import {Card} from "./card/card.model";
+import {trigger, state, style, animate, transition} from "@angular/animations";
 
 @Component({
   selector: 'dmn-game',
   templateUrl: './game.component.html',
-  styleUrls: ['./game.component.css']
+  styleUrls: ['./game.component.css'],
+  animations: [
+    trigger('cardState', [
+      state('inhand', style({
+        position: 'relative',
+        top: '0'
+      })),
+      transition('* => void', [
+        animate('1000ms ease', style({
+          top: '-500px',
+          opacity: '0',
+          'max-width': '0'
+        }))
+      ])
+    ])
+  ]
 })
 export class GameComponent implements OnInit {
   public title = 'Dominion';
@@ -33,6 +49,7 @@ export class GameComponent implements OnInit {
     });
 
     this._gameSocketService.addListener("updatemap", (message) => {
+      console.log("update map:")
       console.log(message);
       this.updateMap(JSON.parse(message));
     });
@@ -41,6 +58,10 @@ export class GameComponent implements OnInit {
       console.log("global update:" + message);
       this.globalMap(JSON.parse(message));
     })
+  }
+
+  play(card: Card) {
+    this.game.removeCardInHand(card);
   }
 
   gameFromState(state) {
@@ -52,7 +73,6 @@ export class GameComponent implements OnInit {
       new Card(cardid);
     });
 
-    console.log(players);
     return new ClientGame(players, this._userIdService.id, cards);
   }
 

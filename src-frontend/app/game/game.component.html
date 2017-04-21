@@ -57,7 +57,10 @@
     </div>
     <div class="hand-container">
       <div class="hand">
-        <dmn-card *ngFor="let card of game.hand" [card]="card"></dmn-card>
+        <dmn-card *ngFor="let card of game.hand"
+                  (click)="play(card)"
+                  [card]="card"
+                  [@cardState]="'inhand'"></dmn-card>
       </div>
     </div>
     <div class="deck">
