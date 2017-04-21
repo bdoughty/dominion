@@ -32,11 +32,11 @@
     .card.selected::before {
       background: rgba(127, 216, 255, 0.4);
       opacity: 1 !important; }
-  .card:hover {
+  .card.isCard:hover {
     cursor: pointer;
     transform: scale(1.2);
     z-index: 21; }
-    .card:hover::after {
+    .card.isCard:hover::after {
       opacity: 1; }
   .card .counter-container {
     position: absolute;

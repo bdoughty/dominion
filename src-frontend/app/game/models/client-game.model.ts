@@ -3,7 +3,7 @@ import {Card} from "../card/card.model";
 export class ClientGame {
 
   public turn: number = 0;
-  public gamePhase: string = "action";
+  public phase: string = "action";
   public holding: boolean = false;
   public toBuy = [];
   public hand: Card[] = [];

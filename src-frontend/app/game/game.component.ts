@@ -42,8 +42,11 @@ export class GameComponent implements OnInit {
   ngOnInit(): void {
     this._gameSocketService.addListener("init", (message) => {
       if (message === undefined) return;
-
       let gameState = JSON.parse(message);
+
+      console.log("init map:");
+      console.log(gameState);
+
       let game = this.gameFromState(gameState);
       this.game = game;
     });
@@ -61,7 +64,23 @@ export class GameComponent implements OnInit {
   }
 
   play(card: Card) {
+    this._gameSocketService.send('doaction',
+      JSON.stringify({handid: card.handPosition}));
+    console.log("SENDING 'doaction'");
+    console.log(JSON.stringify({handid: card.handPosition}));
     this.game.removeCardInHand(card);
+  }
+
+  endPhase() {
+    if (this.game.phase === 'action') {
+      console.log("SENDING 'endaction'");
+      return this._gameSocketService.send('endaction', '');
+    } else if (this.game.phase === 'buy') {
+      const cart = [];
+      console.log("SENDING 'endbuy'");
+      return this._gameSocketService.send('endbuy', JSON.stringify(cart));
+    }
+    throw "Phase is " + this.game.phase + ". Must be 'action' or 'buy'";
   }
 
   gameFromState(state) {
@@ -69,10 +88,10 @@ export class GameComponent implements OnInit {
       return new Player(player.id, player.color, player.name);
     });
 
+    let i = 0;
     const cards = state.cardids.map(cardid => {
       return new Card(cardid);
     });
-    console.log(cards);
 
     return new ClientGame(players, this._userIdService.id, cards);
   }
@@ -110,7 +129,13 @@ export class GameComponent implements OnInit {
         }
       }
       if (typeof update.hand !== "undefined") {
-        this.game.hand = update.hand.map(cardid => {return new Card(cardid)});
+
+        let i = 0;
+        this.game.hand = update.hand.map(cardid => {
+          let card = new Card(cardid);
+          card.handPosition = i++;
+          return card;
+        });
       }
       if (typeof update.decksize !== "undefined") {
         this.game.decksize = update.decksize;
