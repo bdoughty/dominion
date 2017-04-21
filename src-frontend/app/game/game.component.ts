@@ -93,10 +93,6 @@ export class GameComponent implements OnInit {
     }
   }
 
-  removeFromCart(card: Card) {
-    this.game.cart.splice(this.game.cart.indexOf(card), 1);
-  }
-
   gameFromState(state) {
     const players = state.users.map(player => {
       return new Player(player.id, player.color, player.name);

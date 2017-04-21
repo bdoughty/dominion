@@ -9,6 +9,8 @@ import {Card} from "./card.model";
 export class CardComponent {
   @Input() public card: Card;
   @Input() public count: number;
+  @Input() public disabled: boolean = false;
+  public selectable: boolean = false;
   public selected: boolean;
 
   constructor() {}

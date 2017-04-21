@@ -16,7 +16,7 @@
         <div class="cart-inner">
           <dmn-card *ngFor="let card of game.cart"
                     [card]="card"
-                    (click)="removeFromCart(card)">
+                    (click)="game.removeFromCart(card)">
 
           </dmn-card>
         </div>
@@ -27,6 +27,7 @@
 
       <div class="pile-row">
         <dmn-card [card]="card"
+                  [disabled]="!game.canBuy(card)"
                   *ngFor="let card of game.nonactionCards"
                   (click)="addToCart(card)"
         >
@@ -34,6 +35,7 @@
       </div>
       <div class="pile-row">
         <dmn-card [card]="card"
+                  [disabled]="!game.canBuy(card)"
                   *ngFor="let card of game.actionCards.slice(0, 6)"
                   (click)="addToCart(card)"
         >
@@ -41,6 +43,7 @@
       </div>
       <div class="pile-row">
         <dmn-card [card]="card"
+                  [disabled]="!game.canBuy(card)"
                   *ngFor="let card of game.actionCards.slice(6, 12)"
                   (click)="addToCart(card)"
         >

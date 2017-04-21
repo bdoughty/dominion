@@ -34,7 +34,7 @@
 
   // After is hover filter
   // Before is selected filter
-  &::after, &::before {
+  &::after, &::before, .disable-filter {
     content: '';
     position: absolute;
     top: 0;
@@ -45,6 +45,14 @@
     z-index: 12;
     opacity: 0;
     transition: opacity 0.2s;
+  }
+
+  .disable-filter {
+    background: rgba(197, 197, 197, 0.74)
+  }
+
+  &.disabled .disable-filter {
+    opacity: 1;
   }
 
   &.selected {

@@ -20,7 +20,7 @@
     height: 75px;
     background-position: center center;
     background-size: cover; }
-  .card::after, .card::before {
+  .card::after, .card::before, .card .disable-filter {
     content: '';
     position: absolute;
     top: 0;
@@ -31,6 +31,10 @@
     z-index: 12;
     opacity: 0;
     transition: opacity 0.2s; }
+  .card .disable-filter {
+    background: rgba(197, 197, 197, 0.74); }
+  .card.disabled .disable-filter {
+    opacity: 1; }
   .card.selected {
     z-index: 20; }
     .card.selected::after {

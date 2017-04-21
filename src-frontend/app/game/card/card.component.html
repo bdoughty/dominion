@@ -1,7 +1,9 @@
 <div class="card {{ type() }}"
      (click)="select()"
-     [ngClass]="{selected: selected, isCard: !!card}"
+     [ngClass]="{selected: selectable && selected,
+                 isCard: !!card, disabled: disabled}"
 >
+  <div class="disable-filter"></div>
   <img src="{{ imageSource() }}" *ngIf="hasCount()">
   <div class="counter-container" *ngIf="hasCount()">
     <div class="counter">{{count}}</div>

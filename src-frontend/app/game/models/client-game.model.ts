@@ -3,7 +3,6 @@ import {Card} from "../card/card.model";
 export class ClientGame {
 
   public turn: number = 0;
-  public phase: string = "action";
   public holding: boolean = false;
   public cart = [];
   public hand: Card[] = [];
@@ -12,7 +11,7 @@ export class ClientGame {
   public toSelect: boolean = false;
   public toSelectHand = [];
   public toSelectBoard = [];
-
+  public phase: string = "action";
 
   public nonactionCards: Card[] =
     [new Card(0), new Card(1), new Card(2), new Card(3), new Card(4), new Card(5)];
@@ -23,7 +22,18 @@ export class ClientGame {
   }
 
   public addToCart(id: number): void {
-    this.cart.push(new Card(id));
+    let card = new Card(id);
+    if (this.canBuy(card)) {
+      this.cart.push(card);
+      this.gold -= card.cost;
+      this.buys -= 1;
+    }
+  }
+
+  public removeFromCart(card: Card): void {
+    this.gold += card.cost;
+    this.buys += 1;
+    this.cart.splice(this.cart.indexOf(card), 1);
   }
 
   public setTurn(id: number): void {
@@ -48,6 +58,10 @@ export class ClientGame {
 
   public removeCardInHand(card: Card): void {
     this.hand.splice(this.hand.indexOf(card), 1);
+  }
+
+  public canBuy(card: Card) {
+    return (this.phase !== 'buy') || card.cost <= this.gold && this.buys > 0;
   }
 
   get buys() {
