@@ -10,7 +10,6 @@ export class CardComponent {
   @Input() public card: Card;
   @Input() public count: number;
   public selected: boolean;
-  public state = 'inhand';
 
   constructor() {}
 
@@ -21,17 +20,21 @@ export class CardComponent {
   imageSource() {
     if (this.card) {
       // return "../../../assets/cardimage" + this.card.id + ".jpg";
-      return "url('../../../assets/cardimage0.jpg')";
+      return "url('../../../assets/cardimage/card" + this.card.id + ".jpg')";
     } else {
       return "../../../assets/cardback.jpg";
     }
   }
 
-  play() {
+  type() {
+    if (this.hasCount()) {
+      return "";
+    } else {
+      return this.card.type;
+    }
   }
 
   select() {
-    this.state = 'played';
     this.selected = !this.selected;
   }
 }

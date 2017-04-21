@@ -151,6 +151,7 @@
   justify-content: space-between;
   align-items: center;
 }
+
 #game-info .game-name {
   font-size: 1.4em;
 }
@@ -189,6 +190,7 @@
 }
 #game-info .card {
   margin: 4px;
+  width: 100px;
 }
 #game-info .card img {
   width: 100%;

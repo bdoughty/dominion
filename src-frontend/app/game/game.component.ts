@@ -47,8 +47,7 @@ export class GameComponent implements OnInit {
       console.log("init map:");
       console.log(gameState);
 
-      let game = this.gameFromState(gameState);
-      this.game = game;
+      this.game = this.gameFromState(gameState);
     });
 
     this._gameSocketService.addListener("updatemap", (message) => {
@@ -64,11 +63,13 @@ export class GameComponent implements OnInit {
   }
 
   play(card: Card) {
-    this._gameSocketService.send('doaction',
-      JSON.stringify({handid: card.handPosition}));
-    console.log("SENDING 'doaction'");
-    console.log(JSON.stringify({handid: card.handPosition}));
-    this.game.removeCardInHand(card);
+    if (this.game.isOwnTurn()) {
+      this._gameSocketService.send('doaction',
+        JSON.stringify({handid: card.handPosition}));
+      console.log("SENDING 'doaction'");
+      console.log(JSON.stringify({handid: card.handPosition}));
+      this.game.removeCardInHand(card);
+    }
   }
 
   endPhase() {
@@ -76,8 +77,11 @@ export class GameComponent implements OnInit {
       console.log("SENDING 'endaction'");
       return this._gameSocketService.send('endaction', '');
     } else if (this.game.phase === 'buy') {
-      const cart = [];
       console.log("SENDING 'endbuy'");
+      let cart: number[] = [];
+      this.game.cart.forEach(card => {
+        cart.push(card.id);
+      });
       return this._gameSocketService.send('endbuy', JSON.stringify(cart));
     }
     throw "Phase is " + this.game.phase + ". Must be 'action' or 'buy'";
@@ -98,7 +102,6 @@ export class GameComponent implements OnInit {
       return new Player(player.id, player.color, player.name);
     });
 
-    let i = 0;
     const cards = state.cardids.map(cardid => {
       return new Card(cardid);
     });

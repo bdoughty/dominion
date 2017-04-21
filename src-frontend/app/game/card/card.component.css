@@ -10,6 +10,12 @@
   background: #E9E5E0;
   transition: background 0.15s, transform 0.15s;
   user-select: none; }
+  .card.money {
+    background: #dacd9c; }
+  .card.reaction {
+    background: #b1dae0; }
+  .card.victory {
+    background: #afe0b1; }
   .card .image {
     height: 75px;
     background-position: center center;

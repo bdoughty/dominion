@@ -18,7 +18,7 @@
             <div class="players">{{ pending.users.length }} / {{ pending.maxusers }}</div>
             <div class="cards">
               <div class="card" *ngFor="let card of pending.actioncardids">
-                <img src="../../assets/card{{ card }}.jpg">
+                <img src="../../assets/card/card{{ card }}.jpg">
               </div>
             </div>
           </li>
@@ -130,7 +130,7 @@
           </div>
           <div class="cards">
             <div class="card" *ngFor="let card of selectedGame.actioncardids">
-              <img src="../../assets/card{{ card }}.jpg">
+              <img src="../../assets/card/card{{ card }}.jpg">
             </div>
           </div>
         </div>

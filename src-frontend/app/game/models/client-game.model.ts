@@ -22,11 +22,11 @@ export class ClientGame {
               public actionCards: Card[]) {
   }
 
-  public addToCart(id: number) {
+  public addToCart(id: number): void {
     this.cart.push(new Card(id));
   }
 
-  public setTurn(id: number) {
+  public setTurn(id: number): void {
     for (let i = 0; i < this.players.length; i++) {
       if (id == this.players[i].id) {
         this.turn = i;
@@ -34,7 +34,11 @@ export class ClientGame {
     }
   }
 
-  getOwnPlayer() {
+  public isOwnTurn(): boolean {
+    return this.players[this.turn].id === this.ownPlayerId;
+  }
+
+  public getOwnPlayer(): Player {
     for (let i = 0; i<this.players.length; i++) {
       if (this.players[i].id == this.ownPlayerId) {
         return this.players[i];
@@ -42,7 +46,7 @@ export class ClientGame {
     }
   }
 
-  removeCardInHand(card: Card) {
+  public removeCardInHand(card: Card): void {
     this.hand.splice(this.hand.indexOf(card), 1);
   }
 

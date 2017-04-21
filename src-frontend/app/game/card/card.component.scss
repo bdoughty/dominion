@@ -13,6 +13,19 @@
   transition: background 0.15s, transform 0.15s;
   user-select: none;
 
+  &.money {
+    background: rgb(218, 205, 156);
+  }
+
+  &.reaction {
+    background: #b1dae0;
+  }
+
+  &.victory {
+    background: #afe0b1;
+  }
+
+
   .image {
     height: 75px;
     background-position: center center;

@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
   private selected = new Set();
 
   entered(cardId) {
-    document.getElementById("blowUp").innerHTML = "<img id='blowUpImg' src='../../assets/" + cardId + ".jpg' " +
+    document.getElementById("blowUp").innerHTML = "<img id='blowUpImg' src='../../assets/card/" + cardId + ".jpg' " +
       "style='visibility: visible; width: auto; height: 100%;' />";
   }
 
