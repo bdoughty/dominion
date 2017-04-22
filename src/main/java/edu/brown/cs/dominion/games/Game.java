@@ -110,6 +110,7 @@ public class Game extends GameStub implements GameEventListener {
     assert (current.equals(u));
     Player p = userPlayers.get(u);
     p.setActions(0);
+    p.burnMoney();
 
     ClientUpdateMap cm = new ClientUpdateMap(this);
     playerUpdateMap(cm, p);

@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.brown.cs.dominion.Card;
+import edu.brown.cs.dominion.money.AbstractMoney;
 import edu.brown.cs.dominion.money.Copper;
 import edu.brown.cs.dominion.victory.Estate;
 
@@ -108,11 +109,11 @@ public class Player {
     for (Card c : this.hand) {
       this.baseMoney += c.getMonetaryValue();
     }
-
   }
 
   public boolean hasMoat() {
     for (Card c : this.hand) {
+      // TODO, this might be like slightly bad form.
       if (c.getId() == 11) {
         return true;
       }
@@ -157,6 +158,15 @@ public class Player {
     }
 
     return points;
+  }
+
+  public void burnMoney(){
+    for(int i = 0;i < hand.size();i++){
+      if (hand.get(i) instanceof AbstractMoney) {
+        additionalMoney += hand.get(i).getMonetaryValue();
+        hand.remove(i--);
+      }
+    }
   }
 
   public int getActions() {
