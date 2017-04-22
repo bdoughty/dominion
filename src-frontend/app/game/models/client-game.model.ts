@@ -61,7 +61,7 @@ export class ClientGame {
   }
 
   public canBuy(card: Card) {
-    return (this.phase !== 'buy') || card.cost <= this.gold && this.buys > 0;
+    return (this.phase === 'buy') && card.cost <= this.gold && this.buys > 0;
   }
 
   get buys() {
