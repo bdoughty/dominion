@@ -78,7 +78,7 @@
       <div class="hand">
         <dmn-card *ngFor="let card of game.hand"
                   (click)="play(card)"
-                  [disabled]="game.phase !== 'action' || card.id <= 6"
+                  [disabled]="game.phase !== 'action' || (card.type !== 'action' && card.type !== 'reaction')"
                   [card]="card"
                   [@cardState]="'inhand'"></dmn-card>
       </div>
