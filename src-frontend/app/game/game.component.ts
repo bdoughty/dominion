@@ -6,7 +6,7 @@ import {ClientGame} from "./models/client-game.model";
 import {GameService} from "./game.service";
 import {GameSocketService} from "../shared/gamesocket.service";
 import {Card} from "./card/card.model";
-import {trigger, state, style, animate, transition} from "@angular/animations";
+import {trigger, state, style, animate, transition, keyframes} from "@angular/animations";
 
 @Component({
   selector: 'dmn-game',
@@ -14,16 +14,15 @@ import {trigger, state, style, animate, transition} from "@angular/animations";
   styleUrls: ['./game.component.css'],
   animations: [
     trigger('cardState', [
-      state('inhand', style({
-        position: 'relative',
-        top: '0'
+      state('played', style({
+        display: 'none'
       })),
-      transition('* => void', [
-        animate('1000ms ease', style({
-          top: '-500px',
-          opacity: '0',
-          'max-width': '0'
-        }))
+      transition('inhand => played', [
+        animate('1000ms ease', keyframes([
+          style({position: 'relative', top: '0', offset: 0}),
+          style({top: '-500px', position: 'relative', opacity: '0', offset: 0.5}),
+          style({width: '0', offset: 1})
+        ]))
       ])
     ])
   ]
@@ -63,12 +62,15 @@ export class GameComponent implements OnInit {
   }
 
   play(card: Card) {
-    if (this.game.isOwnTurn() && this.game.phase === "action" && card.id > 6) {
+    if (this.game.isOwnTurn() && this.game.phase === "action"
+        && (card.type == 'action' || card.type == 'reaction')) {
+
       this._gameSocketService.send('doaction',
         JSON.stringify({handloc: card.handPosition}));
       console.log("SENDING 'doaction'");
       console.log(JSON.stringify({handid: card.handPosition}));
-      this.game.removeCardInHand(card);
+      card.state = 'played';
+      // this.game.removeCardInHand(card);
     }
   }
 
@@ -92,6 +94,10 @@ export class GameComponent implements OnInit {
     if (this.game.phase === 'buy') {
       this.game.addToCart(card.id);
     }
+  }
+
+  shouldDisplayCart() {
+    return this.game.phase === 'buy' && this.game.cart.length !== 0;
   }
 
   gameFromState(state) {
@@ -160,6 +166,8 @@ export class GameComponent implements OnInit {
         this.game.holding = update.holding;
       }
     }
+    console.log("Updated game: ");
+    console.log(this.game);
   }
 
   chat(msg) {

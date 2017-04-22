@@ -12,7 +12,7 @@
           <span class="stat-label">Gold:</span> {{ game.gold }}
         </div>
       </div>
-      <div id="cart">
+      <div id="cart" [ngClass]="{hidden: !shouldDisplayCart()}">
         <div class="cart-inner">
           <dmn-card *ngFor="let card of game.cart"
                     [card]="card"
@@ -28,6 +28,7 @@
       <div class="pile-row">
         <dmn-card [card]="card"
                   [disabled]="!game.canBuy(card)"
+                  [selectable]="game.toSelectBoard.indexOf(card.id) > 0"
                   *ngFor="let card of game.nonactionCards"
                   (click)="addToCart(card)"
         >
@@ -36,6 +37,7 @@
       <div class="pile-row">
         <dmn-card [card]="card"
                   [disabled]="!game.canBuy(card)"
+                  [selectable]="game.toSelectBoard.indexOf(card.id) > 0"
                   *ngFor="let card of game.actionCards.slice(0, 6)"
                   (click)="addToCart(card)"
         >
@@ -44,6 +46,7 @@
       <div class="pile-row">
         <dmn-card [card]="card"
                   [disabled]="!game.canBuy(card)"
+                  [selectable]="game.toSelectBoard.indexOf(card.id) > 0"
                   *ngFor="let card of game.actionCards.slice(6, 12)"
                   (click)="addToCart(card)"
         >
@@ -78,9 +81,10 @@
       <div class="hand">
         <dmn-card *ngFor="let card of game.hand"
                   (click)="play(card)"
-                  [disabled]="game.phase !== 'action' || card.id <= 6"
+                  [disabled]="game.phase !== 'action' || (card.type !== 'action' && card.type !== 'reaction')"
+                  [selectable]="game.toSelectHand.indexOf(card.id) > 0"
                   [card]="card"
-                  [@cardState]="'inhand'"></dmn-card>
+                  [@cardState]="card.state"></dmn-card>
       </div>
     </div>
     <div class="deck">
