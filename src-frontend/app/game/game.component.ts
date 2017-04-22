@@ -95,6 +95,10 @@ export class GameComponent implements OnInit {
     }
   }
 
+  shouldDisplayCart() {
+    return this.game.phase === 'buy' && this.game.cart.length !== 0;
+  }
+
   gameFromState(state) {
     const players = state.users.map(player => {
       return new Player(player.id, player.color, player.name);

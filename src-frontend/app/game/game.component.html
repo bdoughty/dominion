@@ -12,7 +12,7 @@
           <span class="stat-label">Gold:</span> {{ game.gold }}
         </div>
       </div>
-      <div id="cart">
+      <div id="cart" [ngClass]="{hidden: !shouldDisplayCart()}">
         <div class="cart-inner">
           <dmn-card *ngFor="let card of game.cart"
                     [card]="card"
