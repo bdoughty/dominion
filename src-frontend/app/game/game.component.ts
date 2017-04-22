@@ -65,7 +65,7 @@ export class GameComponent implements OnInit {
   play(card: Card) {
     if (this.game.isOwnTurn()) {
       this._gameSocketService.send('doaction',
-        JSON.stringify({handid: card.handPosition}));
+        JSON.stringify({handloc: card.handPosition}));
       console.log("SENDING 'doaction'");
       console.log(JSON.stringify({handid: card.handPosition}));
       this.game.removeCardInHand(card);
