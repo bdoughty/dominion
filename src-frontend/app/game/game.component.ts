@@ -165,6 +165,8 @@ export class GameComponent implements OnInit {
         this.game.holding = update.holding;
       }
     }
+    console.log("Updated game: ");
+    console.log(this.game);
   }
 
   chat(msg) {
