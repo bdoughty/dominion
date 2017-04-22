@@ -3,6 +3,7 @@ package edu.brown.cs.dominion.games;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.ImmutableList;
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.gameutil.Board;
@@ -29,6 +30,7 @@ public class Game extends GameStub implements GameEventListener {
     this.allUsers = new LinkedList<>(usersTurns);
     this.usersTurns = new LinkedList<>(usersTurns);
     this.current = this.usersTurns.poll();
+    userPlayers.get(current).newTurn();
     this.board = new Board(actionCardIds);
   }
 
@@ -104,7 +106,9 @@ public class Game extends GameStub implements GameEventListener {
     Player p = userPlayers.get(u);
     // TODO error check this to make sure it's an action, valid pos, etc.
     Card c = p.getHand().get(LocInHand);
+    p.discard(new LinkedList<>(ImmutableList.of(LocInHand)));
     c.play(this);
+    p.decrementActions();
 
     ClientUpdateMap cm = new ClientUpdateMap(this);
     playerUpdateMap(cm, p);

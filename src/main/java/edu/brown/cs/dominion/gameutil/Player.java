@@ -162,11 +162,11 @@ public class Player {
   }
 
   public void burnMoney(){
-    for(int i = 0;i < hand.size();i++){
-      if (hand.get(i) instanceof AbstractMoney) {
-        additionalMoney += hand.get(i).getMonetaryValue();
-        hand.remove(i--);
+    while(!hand.isEmpty()) {
+      if (hand.get(0) instanceof AbstractMoney) {
+        additionalMoney += hand.get(0).getMonetaryValue();
       }
+      discardPile.add(hand.remove(0));
     }
   }
 
@@ -195,5 +195,4 @@ public class Player {
     discard.addAll(playedPile);
     return discard;
   }
-
 }

@@ -82,6 +82,7 @@ export class GameComponent implements OnInit {
       this.game.cart.forEach(card => {
         cart.push(card.id);
       });
+      this.game.cart = [];
       return this._gameSocketService.send('endbuy', JSON.stringify(cart));
     }
     throw "Phase is " + this.game.phase + ". Must be 'action' or 'buy'";
