@@ -109,6 +109,7 @@ const cardInfo = {
 
 export class Card {
   public handPosition: number;
+  public state: string = 'inhand';
 
   constructor(public id) {
   }

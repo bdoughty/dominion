@@ -80,7 +80,7 @@
                   (click)="play(card)"
                   [disabled]="game.phase !== 'action' || (card.type !== 'action' && card.type !== 'reaction')"
                   [card]="card"
-                  [@cardState]="'inhand'"></dmn-card>
+                  [@cardState]="card.state"></dmn-card>
       </div>
     </div>
     <div class="deck">
