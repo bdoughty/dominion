@@ -14,6 +14,7 @@ import {trigger, state, style, animate, transition, keyframes} from "@angular/an
   styleUrls: ['./game.component.css'],
   animations: [
     trigger('cardState', [
+      state('inhand', style({})),
       state('played', style({
         display: 'none'
       })),
@@ -62,14 +63,15 @@ export class GameComponent implements OnInit {
   }
 
   play(card: Card) {
-    if (this.game.isOwnTurn() && this.game.phase === "action"
-        && (card.type == 'action' || card.type == 'reaction')) {
-
-      this._gameSocketService.send('doaction',
-        JSON.stringify({handloc: card.handPosition}));
+    if (this.game.canPlay(card)) {
       console.log("SENDING 'doaction'");
       console.log(JSON.stringify({handid: card.handPosition}));
       card.state = 'played';
+      this.game.actions -= 1; // For Instantaneous disabling of cards
+      setTimeout(() => {
+        this._gameSocketService.send('doaction',
+          JSON.stringify({handloc: card.handPosition}));
+      }, 1000);
       // this.game.removeCardInHand(card);
     }
   }
@@ -118,7 +120,7 @@ export class GameComponent implements OnInit {
         this.game.setTurn(update.turn);
       }
       if (update.winner !== "undefined") {
-        alert("")
+        // alert("")
       }
     }
   }

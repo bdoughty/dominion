@@ -60,6 +60,12 @@ export class ClientGame {
     this.hand.splice(this.hand.indexOf(card), 1);
   }
 
+  public canPlay(card: Card) {
+    return this.isOwnTurn()
+      && this.actions > 0
+      && (card.type === 'action' || card.type === 'reaction');
+  }
+
   public canBuy(card: Card) {
     return (this.phase === 'buy') && card.cost <= this.gold && this.buys > 0;
   }
