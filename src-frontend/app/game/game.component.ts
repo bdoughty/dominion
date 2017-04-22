@@ -127,7 +127,10 @@ export class GameComponent implements OnInit {
       if (typeof update.gold !== "undefined") {
         this.game.gold = update.gold;
       }
+      if (typeof update.phase !== "undefined") {
+        this.game.phase = update.phase;
 
+      }
       if (typeof update.select !== "undefined") {
         if (update.select) {
           this.game.toSelect = true;

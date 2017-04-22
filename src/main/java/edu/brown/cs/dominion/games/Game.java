@@ -21,6 +21,8 @@ public class Game extends GameStub implements GameEventListener {
   private Map<User, Player> userPlayers;
   private Board board;
 
+  boolean actionPhase = true;
+
   public Game(List<User> usersTurns, List<Integer> actionCardIds) {
     userPlayers = new HashMap<>();
     usersTurns.forEach(u -> userPlayers.put(u, new Player()));
@@ -49,11 +51,16 @@ public class Game extends GameStub implements GameEventListener {
     cm.deckRemaining(p.getDeck().size());
     cm.discardPileSize(p.getDiscard().size());
     cm.hand(p.getHand());
+    if (p.equals(userPlayers.get(current))) {
+      cm.setPhase(actionPhase);
+    }
   }
 
   @Override
   public ClientUpdateMap endBuyPhase(User u, List<Integer> toBuy) {
     assert (current.equals(u));
+    actionPhase = true;
+
     Player p = userPlayers.get(u);
     int money = p.getMoney();
 
@@ -108,12 +115,16 @@ public class Game extends GameStub implements GameEventListener {
   @Override
   public ClientUpdateMap endActionPhase(User u) {
     assert (current.equals(u));
+    actionPhase = false;
+
     Player p = userPlayers.get(u);
     p.setActions(0);
     p.burnMoney();
 
+
     ClientUpdateMap cm = new ClientUpdateMap(this);
     playerUpdateMap(cm, p);
+    cm.setPhase(false);
 
     return cm;
   }

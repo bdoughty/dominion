@@ -106,9 +106,10 @@ public class Player {
     this.actions = 1;
     this.buys = 1;
 
-    for (Card c : this.hand) {
-      this.baseMoney += c.getMonetaryValue();
-    }
+    // TODO uncomment this
+    //for (Card c : this.hand) {
+    //  this.baseMoney += c.getMonetaryValue();
+    //}
   }
 
   public boolean hasMoat() {
