@@ -63,7 +63,8 @@ export class GameComponent implements OnInit {
 
   play(card: Card) {
     if (this.game.isOwnTurn() && this.game.phase === "action"
-        && (card.type == 'action' || card.type == 'reaction')) {
+        && (card.type == 'action' || card.type == 'reaction') &&
+        this.game.getOwnPlayer().actions > 0) {
 
       this._gameSocketService.send('doaction',
         JSON.stringify({handloc: card.handPosition}));
