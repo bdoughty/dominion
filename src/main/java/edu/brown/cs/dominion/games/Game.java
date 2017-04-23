@@ -113,6 +113,10 @@ public class Game extends GameStub implements GameEventListener {
     ClientUpdateMap cm = new ClientUpdateMap(this);
     playerUpdateMap(cm, p);
 
+    //TODO this is for testing purposes.
+    cm.requireSelect(u, p.getHand(), ImmutableList.of(),
+      (us, ih, id) -> {System.out.println("callback " + id); return null;} );
+
     return cm;
   }
 
@@ -129,6 +133,8 @@ public class Game extends GameStub implements GameEventListener {
     ClientUpdateMap cm = new ClientUpdateMap(this);
     playerUpdateMap(cm, p);
     cm.setPhase(false);
+
+
 
     return cm;
   }
