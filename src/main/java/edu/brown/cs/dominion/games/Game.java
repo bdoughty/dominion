@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.ImmutableList;
+
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.gameutil.Board;
@@ -30,12 +32,15 @@ public class Game extends GameStub implements GameEventListener {
   private Map<User, Player> userPlayers;
   private Board board;
 
+  boolean actionPhase = true;
+
   public Game(List<User> usersTurns, List<Integer> actionCardIds) {
     userPlayers = new HashMap<>();
     usersTurns.forEach(u -> userPlayers.put(u, new Player()));
     this.allUsers = new LinkedList<>(usersTurns);
     this.usersTurns = new LinkedList<>(usersTurns);
     this.current = this.usersTurns.poll();
+    userPlayers.get(current).newTurn();
     this.board = new Board(actionCardIds);
   }
 
@@ -59,18 +64,24 @@ public class Game extends GameStub implements GameEventListener {
     return board;
   }
 
-  public static void playerUpdateMap(ClientUpdateMap cm, Player p) {
+  public void playerUpdateMap(ClientUpdateMap cm, Player p) {
     cm.actionCount(p.getActions());
     cm.buyCount(p.getBuys());
     cm.goldCount(p.getMoney());
     cm.deckRemaining(p.getDeck().size());
     cm.discardPileSize(p.getDiscard().size());
     cm.hand(p.getHand());
+
+    if (p.equals(userPlayers.get(current))) {
+      cm.setPhase(actionPhase);
+    }
   }
 
   @Override
   public ClientUpdateMap endBuyPhase(User u, List<Integer> toBuy) {
     assert (current.equals(u));
+    actionPhase = true;
+
     Player p = userPlayers.get(u);
     int money = p.getMoney();
 
@@ -118,6 +129,12 @@ public class Game extends GameStub implements GameEventListener {
     assert (current.equals(u));
     Player p = userPlayers.get(u);
 
+    // TODO error check this to make sure it's an action, valid pos, etc.
+    // Card c = p.getHand().get(LocInHand);
+    // p.discard(new LinkedList<>(ImmutableList.of(LocInHand)));
+    // c.play(this);
+    // p.decrementActions();
+
     ClientUpdateMap cm = new ClientUpdateMap(this);
 
     try {
@@ -130,17 +147,27 @@ public class Game extends GameStub implements GameEventListener {
       System.out.println(nae.getMessage());
     }
 
+    // TODO this is for testing purposes.
+    cm.requireSelect(u, p.getHand(), ImmutableList.of(), (us, ih, id) -> {
+      System.out.println("callback " + id);
+      return null;
+    });
+
     return cm;
   }
 
   @Override
   public ClientUpdateMap endActionPhase(User u) {
     assert (current.equals(u));
+    actionPhase = false;
+
     Player p = userPlayers.get(u);
     p.setActions(0);
+    p.burnMoney();
 
     ClientUpdateMap cm = new ClientUpdateMap(this);
     playerUpdateMap(cm, p);
+    cm.setPhase(false);
 
     return cm;
   }

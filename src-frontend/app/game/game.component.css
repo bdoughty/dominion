@@ -1,4 +1,5 @@
 #game {
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -14,8 +15,7 @@
     #game #board #left-bar {
       width: 220px;
       display: flex;
-      flex-direction: column;
-      padding-bottom: 20px; }
+      flex-direction: column; }
       #game #board #left-bar #stats {
         padding: 20px 80px 20px 20px;
         font-size: 18px;
@@ -33,16 +33,43 @@
       #game #board #left-bar #cart {
         background: rgba(0, 0, 0, 0.5);
         flex-grow: 1;
-        margin-right: 60px;
+        margin-right: 50px;
         border-top-right-radius: 8px;
-        border-bottom-right-radius: 8px; }
+        border-bottom-right-radius: 8px;
+        height: 40px; }
+        #game #board #left-bar #cart .cart-inner {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          overflow: auto;
+          flex-direction: column;
+          padding-top: 12px;
+          align-items: center;
+          justify-content: flex-start; }
+      #game #board #left-bar button {
+        margin: 12px;
+        min-width: 150px;
+        font-size: 0.9em;
+        font-weight: 100;
+        color: white;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid #DDD;
+        height: 50px;
+        line-height: 50px;
+        padding: 0;
+        font-family: 'Roboto', Helvetica, Arial, sans-serif;
+        transition: background 0.15s; }
+        #game #board #left-bar button:hover {
+          background: rgba(0, 0, 0, 0.4); }
     #game #board #piles {
       flex-grow: 1;
-      padding: 30px; }
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around; }
       #game #board #piles .pile-row {
         display: flex;
-        justify-content: space-around;
-        margin-bottom: 28px; }
+        justify-content: space-around; }
         #game #board #piles .pile-row .card {
           width: 120px;
           font-size: 0; }
@@ -50,17 +77,17 @@
       width: 320px;
       padding: 12px; }
       #game #board #right-bar-container #right-bar {
-        background: white;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.24); }
         #game #board #right-bar-container #right-bar .turns {
           display: flex;
           flex-direction: column; }
           #game #board #right-bar-container #right-bar .turns .turn {
             padding: 18px 14px;
-            border-bottom: 1px solid #DDD; }
+            border-bottom: 1px solid #DDD;
+            background: white; }
             #game #board #right-bar-container #right-bar .turns .turn .current-turn-message {
               display: none; }
-            #game #board #right-bar-container #right-bar .turns .turn.current-turn {
+            #game #board #right-bar-container #right-bar .turns .turn.currentTurn {
               display: flex;
               flex-direction: column;
               justify-content: space-between;
@@ -68,60 +95,50 @@
               height: 100px;
               background: #555ec6;
               order: -1; }
-              #game #board #right-bar-container #right-bar .turns .turn.current-turn .current-turn-message {
+              #game #board #right-bar-container #right-bar .turns .turn.currentTurn .current-turn-message {
                 display: block;
                 text-transform: uppercase;
                 font-size: 0.9em;
                 margin-bottom: 12px; }
-            #game #board #right-bar-container #right-bar .turns .turn.current-turn .turn-info {
+            #game #board #right-bar-container #right-bar .turns .turn.currentTurn .turn-info {
               font-weight: 300; }
             #game #board #right-bar-container #right-bar .turns .turn .turn-info {
               display: flex;
               justify-content: space-between; }
-  #game #end-phase-row button {
-    margin-left: 10px;
-    margin-bottom: 20px;
-    border: none;
-    min-width: 200px;
-    font-size: 1.2em;
-    font-weight: 100;
-    color: white;
-    background: rgba(70, 78, 164, 0.9);
-    height: 50px;
-    line-height: 50px;
-    padding: 0; }
+        #game #board #right-bar-container #right-bar .chat-container {
+          padding-top: 14px;
+          background: rgba(0, 0, 0, 0.5);
+          font-size: 0.8em;
+          color: white;
+          height: 220px; }
   #game #hud {
     height: 200px;
     display: flex;
     align-items: stretch;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.24);
-    background: rgba(255, 255, 255, 0.3); }
+    background: rgba(255, 255, 255, 0.3);
+    border-top: 1px solid #DDD; }
     #game #hud .card {
       font-size: 0; }
       #game #hud .card .counter {
-        font-size: 24px; }
-    #game #hud .left {
-      display: flex;
-      align-items: center;
-      flex-grow: 1; }
+        font-size: 24px !important; }
     #game #hud .hand-container {
-      flex-grow: 7;
+      flex-grow: 1;
       display: flex;
       justify-content: center;
       align-items: center; }
       #game #hud .hand-container .hand {
         display: inline-block; }
         #game #hud .hand-container .hand .card {
-          margin: 0 12px; }
-    #game #hud .deck {
-      flex-grow: 1;
+          padding: 0 4px; }
+    #game #hud .left, #game #hud .deck {
+      padding: 0 18px;
       display: flex;
       justify-content: center;
       align-items: center; }
 
-.card {
-  width: img;
-    width-width: 100%;
-    width-height: auto; }
+dmn-card {
+  display: inline-block;
+  margin: 0 4px; }
 
 /*# sourceMappingURL=game.component.css.map */

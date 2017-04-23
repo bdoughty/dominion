@@ -25,6 +25,18 @@ public class Pile {
     }
   }
 
+  /**
+   * Produce is for producing a card object that won't ever actually be played
+   * in the game. This is for examining properties of the card (id, cost, etc.)
+   * without putting it into anyone's hand, so we don't want to decrement the
+   * pile size.
+   *
+   * @return card of interest
+   */
+  public Card produce() {
+    return card.get();
+  }
+
   public boolean isEmpty() {
     return (size == 0);
   }

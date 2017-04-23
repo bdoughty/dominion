@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.brown.cs.dominion.Card;
+import edu.brown.cs.dominion.money.AbstractMoney;
 import edu.brown.cs.dominion.money.Copper;
 import edu.brown.cs.dominion.victory.Estate;
 
@@ -78,6 +79,7 @@ public class Player {
       assert (posInHand >= 0 && posInHand < hand.size());
       Card c = hand.remove(posInHand);
       playedPile.add(c);
+      actions--;
       return c;
     } else {
       throw new NoActionsException("No remaining actions");
@@ -191,6 +193,15 @@ public class Player {
     return points;
   }
 
+  public void burnMoney() {
+    while (!hand.isEmpty()) {
+      if (hand.get(0) instanceof AbstractMoney) {
+        additionalMoney += hand.get(0).getMonetaryValue();
+      }
+      discardPile.add(hand.remove(0));
+    }
+  }
+
   public int getActions() {
     return actions;
   }
@@ -216,5 +227,4 @@ public class Player {
     discard.addAll(playedPile);
     return discard;
   }
-
 }

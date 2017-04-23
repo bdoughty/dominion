@@ -31,6 +31,11 @@ public class ClientUpdateMap {
 
   }
 
+  public ClientUpdateMap setPhase(boolean action){
+    data.put("phase", action ? "action" : "buy");
+    return this;
+  }
+
   public ClientUpdateMap actionCount(int actions) {
     data.put("actions", actions);
     return this;

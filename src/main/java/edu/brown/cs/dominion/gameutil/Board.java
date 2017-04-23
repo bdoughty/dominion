@@ -122,8 +122,27 @@ public class Board {
   }
 
   public List<Card> getMoneyUnderValue(int cost) {
-    // TODO Auto-generated method stub
-    return null;
+    List<Card> cards = new LinkedList<>();
+
+    for (Pile p : piles.values()) {
+      if (p.getCost() <= cost && p.produce().getMonetaryValue() != 0) {
+        cards.add(p.produce());
+      }
+    }
+
+    return cards;
+  }
+
+  public List<Card> getCardUnderValue(int cost) {
+    List<Card> cards = new LinkedList<>();
+
+    for (Pile p : piles.values()) {
+      if (p.getCost() <= cost) {
+        cards.add(p.produce());
+      }
+    }
+
+    return cards;
   }
 
 }

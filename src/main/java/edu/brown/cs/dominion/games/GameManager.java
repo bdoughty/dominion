@@ -105,29 +105,7 @@ public class GameManager implements SocketServer {
 
   @Override
   public void newUser(Websocket ws, User user) {
-    ws.registerUserCommand(user, DO_ACTION, (w, u, m) -> {
-      JsonObject data = PARSE.parse(m).getAsJsonObject();
-      sendClientUpdateMap(ws, u, action(user, data.get("handloc").getAsInt()));
-    });
-
-    ws.registerUserCommand(user, SELECTION, (w, u, m) -> {
-      JsonObject data = PARSE.parse(m).getAsJsonObject();
-      boolean inHand = data.get("inhand").getAsBoolean();
-      int location = data.get("loc").getAsInt();
-      sendClientUpdateMap(ws, u, selection(u, inHand, location));
-    });
-
-    ws.registerUserCommand(user, END_ACTION,
-        (w, u, m) -> sendClientUpdateMap(ws, u, endActionPhase(u)));
-
-    ws.registerUserCommand(user, END_BUY, (w, u, m) -> {
-      JsonArray data = PARSE.parse(m).getAsJsonArray();
-      List<Integer> buys = new LinkedList<>();
-      for (JsonElement e : data) {
-        buys.add(e.getAsInt());
-      }
-      sendClientUpdateMap(ws, u, buys(u, buys));
-    });
+    //redirect??
   }
 
   @Override
@@ -146,6 +124,34 @@ public class GameManager implements SocketServer {
     } else {
       System.out.println("User is not in a game");
     }
+  }
+
+  @Override
+  public void registerGlobalCommands(Websocket ws) {
+    ws.putCommand(DO_ACTION, (w, u, m) -> {
+      System.out.println(w + " - " + u + " - " + m);
+      JsonObject data = PARSE.parse(m).getAsJsonObject();
+      sendClientUpdateMap(ws, u, action(u, data.get("handloc").getAsInt()));
+    });
+
+    ws.putCommand(SELECTION, (w, u, m) -> {
+      JsonObject data = PARSE.parse(m).getAsJsonObject();
+      boolean inHand = data.get("inhand").getAsBoolean();
+      int location = data.get("loc").getAsInt();
+      sendClientUpdateMap(ws, u, selection(u, inHand, location));
+    });
+
+    ws.putCommand(END_ACTION,
+      (w, u, m) -> sendClientUpdateMap(ws, u, endActionPhase(u)));
+
+    ws.putCommand(END_BUY, (w, u, m) -> {
+      JsonArray data = PARSE.parse(m).getAsJsonArray();
+      List<Integer> buys = new LinkedList<>();
+      for (JsonElement e : data) {
+        buys.add(e.getAsInt());
+      }
+      sendClientUpdateMap(ws, u, buys(u, buys));
+    });
   }
 
   public List<PendingGame> getPendingGames() {

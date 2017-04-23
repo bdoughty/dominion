@@ -24,6 +24,7 @@ public class Websocket {
   private Map<Session, User> usersBySession;
   private Multimap<User, Session> userSessions;
   private Map<String, MessageListener> commands;
+  private Map<String, UserMessageListener> allUserCommands;
   private Map<User, Map<String, UserMessageListener>> userCommands;
   private SocketServer serve;
 
@@ -33,9 +34,15 @@ public class Websocket {
     usersBySession = new HashMap<>();
     userCommands = new HashMap<>();
     userSessions = HashMultimap.create();
+    allUserCommands = new HashMap<>();
     commands = new HashMap<>();
     commands.put("newid", this::registerNewUser);
     commands.put("oldid", this::tryToRegisterOldUser);
+    serve.registerGlobalCommands(this);
+  }
+
+  public void putCommand(MessageType type, UserMessageListener ml) {
+    allUserCommands.put(type.toString(), ml);
   }
 
   public void send(User u, MessageType type, Object message) {
@@ -136,7 +143,10 @@ public class Websocket {
       commands.get(type).handleMessage(this, sess, data);
     } else if (usersBySession.containsKey(sess)) {
       User u = usersBySession.get(sess);
-      if(userCommands.get(u).containsKey(type)){
+      if (allUserCommands.containsKey(type)){
+        UserMessageListener uml = allUserCommands.get(type);
+        uml.handleMessage(this, u, data);
+      } else if(userCommands.get(u).containsKey(type)){
         UserMessageListener uml = userCommands.get(u).get(type);
         uml.handleMessage(this, u, data);
       } else {

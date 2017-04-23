@@ -12,55 +12,52 @@
           <span class="stat-label">Gold:</span> {{ game.gold }}
         </div>
       </div>
-      <div id="cart">
+      <div id="cart" [ngClass]="{hidden: !shouldDisplayCart()}">
+        <div class="cart-inner">
+          <dmn-card *ngFor="let card of game.cart"
+                    [card]="card"
+                    (click)="game.removeFromCart(card)">
+
+          </dmn-card>
+        </div>
       </div>
+      <button (click)="endPhase()">End {{ game.phase }} Phase</button>
     </div>
     <div id="piles">
 
       <div class="pile-row">
-        <div class="card" *ngFor="let card of game.nonactionCards">
-          <dmn-card [card]="card"></dmn-card>
-        </div>
+        <dmn-card [card]="card"
+                  [disabled]="!game.canBuy(card)"
+                  *ngFor="let card of game.nonactionCards"
+                  (click)="cardClickedPile(card)"
+        >
+        </dmn-card>
       </div>
       <div class="pile-row">
-        <div class="card" *ngFor="let card of game.actionCards.slice(0, 6)">
-          <dmn-card [card]="card"></dmn-card>
-        </div>
+        <dmn-card [card]="card"
+                  [disabled]="!game.canBuy(card)"
+                  *ngFor="let card of game.actionCards.slice(0, 6)"
+                  (click)="cardClickedPile(card)"
+        >
+        </dmn-card>
       </div>
       <div class="pile-row">
-        <div class="card" *ngFor="let card of game.actionCards.slice(6, 12)">
-          <dmn-card [card]="card"></dmn-card>
-        </div>
+        <dmn-card [card]="card"
+                  [disabled]="!game.canBuy(card)"
+                  *ngFor="let card of game.actionCards.slice(6, 12)"
+                  (click)="cardClickedPile(card)"
+        >
+        </dmn-card>
       </div>
     </div>
     <div id="right-bar-container">
       <div id="right-bar">
         <div class="turns">
-          <div class="turn">
+          <div *ngFor="let player of game.players; let i = index;"
+               class="turn" [ngClass]="{currentTurn: i === 0}">
             <div class="current-turn-message">Current Turn</div>
             <div class="turn-info">
-              <div class="name">Ben</div>
-              <div class="num-cards">3 Cards</div>
-            </div>
-          </div>
-          <div class="turn">
-            <div class="current-turn-message">Current Turn</div>
-            <div class="turn-info">
-              <div class="name">Ben</div>
-              <div class="num-cards">3 Cards</div>
-            </div>
-          </div>
-          <div class="turn current-turn">
-            <div class="current-turn-message">Current Turn</div>
-            <div class="turn-info">
-              <div class="name">Ben</div>
-              <div class="num-cards">3 Cards</div>
-            </div>
-          </div>
-          <div class="turn">
-            <div class="current-turn-message">Current Turn</div>
-            <div class="turn-info">
-              <div class="name">Ben</div>
+              <div class="name">{{player.name}}</div>
               <div class="num-cards">3 Cards</div>
             </div>
           </div>
@@ -71,27 +68,23 @@
       </div>
     </div>
   </div>
-  <div id="end-phase-row" *ngIf="game">
-    <button>End Phase</button>
-  </div>
   <div id="hud" *ngIf="game">
     <div class="left">
       <div class="discard">
-        <dmn-card [count]="33"></dmn-card>
+        <dmn-card [count]="game.discardsize"></dmn-card>
       </div>
     </div>
     <div class="hand-container">
       <div class="hand">
-        <dmn-card card="dummyCard"></dmn-card>
-        <dmn-card card="dummyCard"></dmn-card>
-        <dmn-card card="dummyCard"></dmn-card>
-        <dmn-card card="dummyCard"></dmn-card>
-        <dmn-card card="dummyCard"></dmn-card>
-        <dmn-card card="dummyCard"></dmn-card>
+        <dmn-card *ngFor="let card of game.hand"
+                  (click)="cardClickedHand(card)"
+                  [disabled]="!(game.toSelectHand.indexOf(card.id) !== -1 || game.canPlay(card))"
+                  [card]="card"
+                  [@cardState]="card.state"></dmn-card>
       </div>
     </div>
     <div class="deck">
-      <dmn-card [count]="33"></dmn-card>
+      <dmn-card [count]="game.decksize"></dmn-card>
     </div>
   </div>
 </div>

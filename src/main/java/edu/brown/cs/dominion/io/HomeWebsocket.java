@@ -27,10 +27,20 @@ public class HomeWebsocket implements SocketServer, UserMessageListener {
 
   @Override
   public void newUser(Websocket ws, User user) {
-    ws.registerUserCommand(user, CHAT, this);
-    ws.registerUserCommand(user, JOIN_GAME,
+    //NOTHING
+  }
+
+  @Override
+  public void newSession(Websocket ws, User u, Session s) {
+    ws.send(s, PENDING_GAMES, GSON.toJson(gm.getPendingGames()));
+  }
+
+  @Override
+  public void registerGlobalCommands(Websocket ws) {
+    ws.putCommand(CHAT, this);
+    ws.putCommand(JOIN_GAME,
       (w, u, m) -> {
-      System.out.println(m);
+        System.out.println(m);
         JsonObject o = PARSE.parse(m).getAsJsonObject();
         int gameid = o.get("gameid").getAsInt();
         boolean joined = gm.joinGame(ws, u, gameid);
@@ -40,17 +50,12 @@ public class HomeWebsocket implements SocketServer, UserMessageListener {
         w.send(u, JOIN_RESPONSE, GSON.toJson(message));
         sendAllUpdateGames(w);
       });
-    ws.registerUserCommand(user, LEAVE,
+    ws.putCommand(LEAVE,
       (w, u, m) -> {
         gm.leave(u);
         w.send(u, LEAVE_RESPONSE, "");
         sendAllUpdateGames(w);
       });
-  }
-
-  @Override
-  public void newSession(Websocket ws, User u, Session s) {
-    ws.send(s, PENDING_GAMES, GSON.toJson(gm.getPendingGames()));
   }
 
   @Override

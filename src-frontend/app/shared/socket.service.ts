@@ -19,7 +19,7 @@ export class AbstractSocketService {
       if (this.getCookie("id") != null) {
         let userId = this.getCookie("id");
         this.sock.send("oldid:" + userId);
-        this._userIdService.id = userId;
+        this._userIdService.id = parseInt(userId);
       } else {
         this.sock.send("newid:");
       }

@@ -5,18 +5,33 @@ import {Player} from "./models/player.model";
 import {ClientGame} from "./models/client-game.model";
 import {GameService} from "./game.service";
 import {GameSocketService} from "../shared/gamesocket.service";
-import {Card} from "./models/card.model";
+import {Card} from "./card/card.model";
+import {trigger, state, style, animate, transition, keyframes} from "@angular/animations";
 
 @Component({
   selector: 'dmn-game',
   templateUrl: './game.component.html',
-  styleUrls: ['./game.component.css']
+  styleUrls: ['./game.component.css'],
+  animations: [
+    trigger('cardState', [
+      state('inhand', style({})),
+      state('played', style({
+        display: 'none'
+      })),
+      transition('inhand => played', [
+        animate('1000ms ease', keyframes([
+          style({position: 'relative', top: '0', offset: 0}),
+          style({top: '-500px', position: 'relative', opacity: '0', offset: 0.5}),
+          style({width: '0', offset: 0.8})
+        ]))
+      ])
+    ])
+  ]
 })
 export class GameComponent implements OnInit {
   public title = 'Dominion';
   public game;
   public gameChat = new Chat();
-  public dummyCard;
 
   constructor(
     private _userIdService: UserIdService,
@@ -25,30 +40,99 @@ export class GameComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.dummyCard = new Card(0);
-    console.log(this.dummyCard);
-
     this._gameSocketService.addListener("init", (message) => {
       if (message === undefined) return;
-
       let gameState = JSON.parse(message);
-      let game = this.gameFromState(gameState);
-      this.game = game;
 
+      console.log("\n--------------");
+      console.log("\nRECIEVING: init");
+      console.log(gameState);
 
-      // this.initGameFromState(initObj);
-      // { gameid:int, users:[{id:int, name:string, color:String}], cardids:[int], }
+      this.game = this.gameFromState(gameState);
     });
 
     this._gameSocketService.addListener("updatemap", (message) => {
-      console.log(message);
+      console.log("\n--------------");
+      console.log("\nRECIEVING: update map:");
+      console.log(JSON.parse(message));
       this.updateMap(JSON.parse(message));
     });
 
     this._gameSocketService.addListener("globalmap", (message) => {
-      console.log("global update:" + message);
+      console.log("\n--------------");
+      console.log("\nRECIEVING: globalmap");
+      console.log(JSON.parse(message));
       this.globalMap(JSON.parse(message));
     })
+  }
+
+  cardClickedPile(card: Card) {
+    if (this.game.isSelecting()) {
+      this._gameSocketService.send('select', {inhand: false, loc: card.id});
+      console.log("\n--------------");
+      console.log("\nSENDING select:");
+      console.log({inhand: false, loc: card.id});
+      this.game.setNotSelecting();
+    } else {
+      this.addToCart(card);
+    }
+  }
+
+  cardClickedHand(card: Card) {
+    if (this.game.isSelecting()) {
+      this._gameSocketService.send('select',
+        {inhand: true, loc: card.handPosition});
+
+      console.log("\n--------------");
+      console.log("\nSENDING select:");
+      console.log({inhand: true, loc: card.handPosition});
+      this.game.setNotSelecting();
+    } else {
+      this.play(card);
+    }
+  }
+
+  play(card: Card) {
+    if (this.game.canPlay(card)) {
+      console.log("\n--------------");
+      console.log("\nSENDING 'doaction'");
+      console.log({handid: card.handPosition});
+      card.state = 'played';
+      this.game.actions -= 1; // For Instantaneous disabling of cards
+      setTimeout(() => {
+        this._gameSocketService.send('doaction',
+          JSON.stringify({handloc: card.handPosition}));
+      }, 1000);
+      // this.game.removeCardInHand(card);
+    }
+  }
+
+  addToCart(card: Card) {
+    if (this.game.phase === 'buy') {
+      this.game.addToCart(card.id);
+    }
+  }
+
+  endPhase() {
+    if (this.game.phase === 'action') {
+      console.log("\n--------------");
+      console.log("\nSENDING 'endaction'");
+      return this._gameSocketService.send('endaction', '');
+    } else if (this.game.phase === 'buy') {
+      console.log("\nSENDING 'endbuy'");
+      let cart: number[] = [];
+      this.game.cart.forEach(card => {
+        cart.push(card.id);
+      });
+      this.game.cart = [];
+      return this._gameSocketService.send('endbuy', JSON.stringify(cart));
+    }
+    throw "Phase is " + this.game.phase + ". Must be 'action' or 'buy'";
+  }
+
+
+  shouldDisplayCart() {
+    return this.game.phase === 'buy' && this.game.cart.length !== 0;
   }
 
   gameFromState(state) {
@@ -57,7 +141,7 @@ export class GameComponent implements OnInit {
     });
 
     const cards = state.cardids.map(cardid => {
-      new Card(cardid);
+      return new Card(cardid);
     });
 
     return new ClientGame(players, this._userIdService.id, cards);
@@ -66,27 +150,30 @@ export class GameComponent implements OnInit {
   globalMap(update) {
     if (this.game != null) {
       if (update.turn !== "undefined") {
-        this.game.setTurn();
+        this.game.setTurn(update.turn);
       }
       if (update.winner !== "undefined") {
-        alert("")
+        // alert("")
       }
     }
   }
 
   updateMap(update) {
     if (this.game != null) {
-      if (update.actions === "undefined") {
+      if (typeof update.actions !== 'undefined') {
         this.game.actions = update.actions;
       }
-      if (update.buys === "undefined") {
+      if (typeof update.buys !== "undefined") {
         this.game.buys = update.buys;
       }
-      if (update.gold === "undefined") {
+      if (typeof update.gold !== "undefined") {
         this.game.gold = update.gold;
       }
+      if (typeof update.phase !== "undefined") {
+        this.game.phase = update.phase;
 
-      if (update.select === "undefined") {
+      }
+      if (typeof update.select !== "undefined") {
         if (update.select) {
           this.game.toSelect = true;
           this.game.toSelectHand = update.handSelect;
@@ -95,23 +182,29 @@ export class GameComponent implements OnInit {
           this.game.toSelect = false;
         }
       }
-      if (update.hand === "undefined") {
-        this.game.hand = update.hand;
+      if (typeof update.hand !== "undefined") {
+
+        let i = 0;
+        this.game.hand = update.hand.map(cardid => {
+          let card = new Card(cardid);
+          card.handPosition = i++;
+          return card;
+        });
       }
-      if (update.decksize === "undefined") {
-        this.game.deck = update.decksize;
+      if (typeof update.decksize !== "undefined") {
+        this.game.decksize = update.decksize;
       }
-      if (update.discardsize === "undefined") {
-        this.game.discardPile = update.discardsize;
+      if (typeof update.discardsize !== "undefined") {
+        this.game.discardsize = update.discardsize;
       }
-      if (update.holding === "undefined") {
+      if (typeof update.holding !== "undefined") {
         this.game.holding = update.holding;
       }
     }
-  }
-
-  stophold(msg) {
-    this.game.holding = false;
+    console.log("\n--------------");
+    console.log("\nUPDATED GAME:");
+    console.log(this.game);
+    console.log(this.game.isSelecting());
   }
 
   chat(msg) {

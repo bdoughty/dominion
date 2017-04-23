@@ -1,10 +1,53 @@
 .card {
-  width: 100px;
+  width: 112px;
   display: inline-block;
   border-radius: 3px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.24);
   overflow: hidden;
-  position: relative; }
+  position: relative;
+  font-size: 0;
+  background: rgba(255, 255, 255, 0.75);
+  background: #E9E5E0;
+  transition: background 0.15s, transform 0.15s;
+  user-select: none; }
+  .card.money {
+    background: #dacd9c; }
+  .card.reaction {
+    background: #b1dae0; }
+  .card.victory {
+    background: #afe0b1; }
+  .card .image {
+    height: 75px;
+    background-position: center center;
+    background-size: cover; }
+  .card::after, .card::before, .card .disable-filter {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 12;
+    opacity: 0;
+    transition: opacity 0.2s; }
+  .card .disable-filter {
+    background: rgba(197, 197, 197, 0.74); }
+  .card.disabled .disable-filter {
+    opacity: 1; }
+  .card.selected {
+    z-index: 20; }
+    .card.selected::after {
+      background: rgba(255, 255, 255, 0.1); }
+    .card.selected::before {
+      background: rgba(127, 216, 255, 0.4);
+      opacity: 1 !important; }
+  .card.isCard:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+    z-index: 21; }
+    .card.isCard:hover::after {
+      opacity: 1; }
   .card .counter-container {
     position: absolute;
     top: 0;
@@ -26,38 +69,42 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 1.5em; }
+      font-size: 24px; }
   .card .card-label {
-    font-size: 14px;
+    font-size: 11px;
     font-weight: 300;
-    padding: 8px;
+    padding: 8px 8px 0;
     color: #222;
-    background: rgba(255, 255, 255, 0.75); }
+    height: 60px; }
     .card .card-label .name {
-      margin-bottom: 8px;
-      text-transform: uppercase; }
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      font-weight: bold;
+      font-size: 0.9em; }
     .card .card-label .description {
-      font-size: 0.85em; }
+      font-size: 0.8em; }
   .card .card-footer {
-    background: rgba(255, 255, 255, 0.75);
-    height: 30px;
+    padding-bottom: 4px;
     display: flex;
     justify-content: flex-end;
     align-items: center; }
     .card .card-footer .gold {
-      height: 22px;
-      width: 22px;
+      height: 18px;
+      width: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
       margin: 0 8px;
-      border-radius: 10px;
+      border-radius: 9px;
       border: 1px solid #997733;
-      font-size: 12px;
-      font-weight: 100; }
+      font-size: 10px;
+      position: relative; }
   .card img {
     width: 100% !important;
     position: relative;
     z-index: 10; }
+
+dmn-card {
+  position: relative; }
 
 /*# sourceMappingURL=card.component.css.map */

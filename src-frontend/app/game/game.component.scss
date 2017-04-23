@@ -1,24 +1,11 @@
 #game {
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   height: 100%;
   //background: url('../../assets/parchment-002.jpg') center center;
   background: url('../../assets/bg_blur.png') center center;
-
   background-size: cover;
-
-  //&::after {
-  //  content: '';
-  //  display: block;
-  //  position: absolute;
-  //  top: 0;
-  //  left: 0;
-  //  right: 0;
-  //  bottom: 0;
-  //  pointer-events: none;
-  //  background: rgba(0, 0, 0, 0.3);
-  //  z-index: 1;
-  //}
 
   #board {
     flex-grow: 1;
@@ -29,7 +16,6 @@
       width: 220px;
       display: flex;
       flex-direction: column;
-      padding-bottom: 20px;
 
       #stats {
         padding: 20px 80px 20px 20px;
@@ -54,9 +40,40 @@
       #cart {
         background: rgba(black, 0.5);
         flex-grow: 1;
-        margin-right: 60px;
+        margin-right: 50px;
         border-top-right-radius: 8px;
         border-bottom-right-radius: 8px;
+        height: 40px;
+
+        .cart-inner {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          overflow: auto;
+          flex-direction: column;
+          padding-top: 12px;
+          align-items: center;
+          justify-content: flex-start;
+        }
+      }
+
+      button {
+        margin: 12px;
+        min-width: 150px;
+        font-size: 0.9em;
+        font-weight: 100;
+        color: white;
+        background: rgba(black, 0.2);
+        border: 1px solid #DDD;
+        height: 50px;
+        line-height: 50px;
+        padding: 0;
+        font-family: 'Roboto', Helvetica, Arial, sans-serif;
+        transition: background 0.15s;
+
+        &:hover {
+          background: rgba(black, 0.4);
+        }
       }
     }
 
@@ -64,11 +81,13 @@
     #piles {
       flex-grow: 1;
       padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
 
       .pile-row {
         display: flex;
         justify-content: space-around;
-        margin-bottom: 28px;
 
         .card {
           width: 120px;
@@ -97,7 +116,6 @@
       padding: 12px;
 
       #right-bar {
-        background: white;
         box-shadow: 0 1px 2px rgba(black, 0.12), 0 1px 3px rgba(black, 0.24);
 
         .turns {
@@ -107,12 +125,13 @@
           .turn {
             padding: 18px 14px;
             border-bottom: 1px solid #DDD;
+            background: white;
 
             .current-turn-message {
               display: none;
             }
 
-            &.current-turn {
+            &.currentTurn {
               display: flex;
               flex-direction: column;
               justify-content: space-between;
@@ -131,7 +150,7 @@
             }
 
 
-            &.current-turn {
+            &.currentTurn {
               .turn-info {
                 font-weight: 300;
               }
@@ -145,25 +164,13 @@
         }
 
         .chat-container {
+          padding-top: 14px;
+          background: rgba(black, 0.5);
+          font-size: 0.8em;
+          color: white;
+          height: 220px;
         }
       }
-    }
-  }
-
-  #end-phase-row {
-
-    button {
-      margin-left: 10px;
-      margin-bottom: 20px;
-      border: none;
-      min-width: 200px;
-      font-size: 1.2em;
-      font-weight: 100;
-      color: white;
-      background: rgba(#464ea4, 0.9);
-      height: 50px;
-      line-height: 50px;
-      padding: 0;
     }
   }
 
@@ -174,23 +181,18 @@
     align-items: stretch;
     box-shadow: 0 1px 2px rgba(black, 0.12), 0 1px 3px rgba(black, 0.24);
     background: rgba(white, 0.3);
+    border-top: 1px solid #DDD;
 
     .card {
       font-size: 0;
 
       .counter {
-        font-size: 24px;
+        font-size: 24px !important;
       }
     }
 
-    .left {
-      display: flex;
-      align-items: center;
-      flex-grow: 1;
-    }
-
     .hand-container {
-      flex-grow: 7;
+      flex-grow: 1;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -199,28 +201,25 @@
         display: inline-block;
 
         .card {
-          margin: 0 12px;
+          padding: 0 4px;
         }
       }
     }
-
-    .deck {
-      flex-grow: 1;
+    .left, .deck {
+      padding: 0 18px;
       display: flex;
       justify-content: center;
       align-items: center;
-
-      .card {
-      }
     }
   }
 }
 
-.card {
-  width: 100px;
+dmn-card {
+  display: inline-block;
+  margin: 0 4px;
+}
 
-  img {
-    width: 100%;
-    height: auto;
-  }
+
+.hidden{
+
 }

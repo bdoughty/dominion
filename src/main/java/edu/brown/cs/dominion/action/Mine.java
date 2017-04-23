@@ -42,7 +42,7 @@ public class Mine extends AbstractAction {
         g.trash(toTrash);
 
         ClientUpdateMap cm1 = new ClientUpdateMap(g);
-        Game.playerUpdateMap(cm1, nestedCurrP);
+        g.playerUpdateMap(cm1, nestedCurrP);
 
         List<Card> boardIds = g.getBoard().getMoneyUnderValue(cost);
 
@@ -64,7 +64,7 @@ public class Mine extends AbstractAction {
               System.out.println(npe.getMessage());
             }
 
-            Game.playerUpdateMap(cm2, nestedCurrP2);
+            g.playerUpdateMap(cm2, nestedCurrP2);
             cm2.finishSelect();
 
             return cm2;
