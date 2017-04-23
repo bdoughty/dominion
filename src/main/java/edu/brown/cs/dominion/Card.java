@@ -1,6 +1,8 @@
 package edu.brown.cs.dominion;
 
 import edu.brown.cs.dominion.games.Game;
+import edu.brown.cs.dominion.gameutil.NotActionException;
+import edu.brown.cs.dominion.io.send.ClientUpdateMap;
 
 /**
  * Created by henry on 3/22/2017.
@@ -44,7 +46,7 @@ public abstract class Card {
     return null;
   }
 
-  public void play(Game g) {
+  public void play(Game g, ClientUpdateMap cm) throws NotActionException {
 
   }
 }

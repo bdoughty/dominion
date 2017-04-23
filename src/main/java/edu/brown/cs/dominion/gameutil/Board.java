@@ -33,7 +33,7 @@ public class Board {
     boardSetUp(actionCardIds);
   }
 
-  public List<Integer> getActionCardIds(){
+  public List<Integer> getActionCardIds() {
     return actionCardIds;
   }
 
@@ -68,8 +68,12 @@ public class Board {
    * @param id
    *          id of the card to be purchased
    * @return the purchased card
+   * @throws TooExpensiveException
+   * @throws EmptyPileException
+   * @throws NoPileException
    */
-  public Card buyCard(int id, int currMoney) {
+  public Card buyCard(int id, int currMoney)
+      throws TooExpensiveException, EmptyPileException, NoPileException {
     if (piles.containsKey(id)) {
       if (piles.get(id).getCost() <= currMoney) {
         return piles.get(id).draw();
@@ -77,7 +81,15 @@ public class Board {
         throw new TooExpensiveException("Can't afford card " + id);
       }
     } else {
-      throw new IllegalArgumentException("No card with id: " + id);
+      throw new NoPileException("No card with id: " + id);
+    }
+  }
+
+  public Card gainCard(int id) throws EmptyPileException, NoPileException {
+    if (piles.containsKey(id)) {
+      return piles.get(id).draw();
+    } else {
+      throw new NoPileException("No card with id: " + id);
     }
   }
 
@@ -107,6 +119,11 @@ public class Board {
     }
 
     return piles.get(5).isEmpty() || emptyPiles >= 3;
+  }
+
+  public List<Card> getMoneyUnderValue(int cost) {
+    // TODO Auto-generated method stub
+    return null;
   }
 
 }

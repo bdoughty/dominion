@@ -2,6 +2,8 @@ package edu.brown.cs.dominion.money;
 
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.games.Game;
+import edu.brown.cs.dominion.gameutil.NotActionException;
+import edu.brown.cs.dominion.io.send.ClientUpdateMap;
 
 public abstract class AbstractMoney extends Card {
 
@@ -10,8 +12,8 @@ public abstract class AbstractMoney extends Card {
   }
 
   @Override
-  public void play(Game g) {
-    throw new UnsupportedOperationException("can't play money");
+  public void play(Game g, ClientUpdateMap cm) throws NotActionException {
+    throw new NotActionException("can't play money");
   }
 
 }

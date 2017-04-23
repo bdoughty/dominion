@@ -45,18 +45,18 @@ public class Player {
   }
 
   private void draw() {
-    if (this.deck.isEmpty()) {
-      if (this.discardPile.isEmpty()) {
+    if (deck.isEmpty()) {
+      if (discardPile.isEmpty()) {
         throw new UnsupportedOperationException("no cards left to draw");
       } else {
-        this.deck.addAll(this.discardPile);
-        Collections.shuffle(this.deck);
-        this.discardPile.clear();
+        deck.addAll(discardPile);
+        Collections.shuffle(deck);
+        discardPile.clear();
       }
     }
 
-    Card c = this.deck.remove(0);
-    this.hand.add(c);
+    Card c = deck.remove(0);
+    hand.add(c);
   }
 
   public void draw(int numCards) {
@@ -66,53 +66,85 @@ public class Player {
   }
 
   public void buyCard(Card boughtCard) {
-    this.discardPile.add(boughtCard);
+    discardPile.add(boughtCard);
   }
 
   public int getMoney() {
     return (baseMoney + additionalMoney);
   }
 
+  public Card play(int posInHand) throws NoActionsException {
+    if (actions > 0) {
+      assert (posInHand >= 0 && posInHand < hand.size());
+      Card c = hand.remove(posInHand);
+      playedPile.add(c);
+      return c;
+    } else {
+      throw new NoActionsException("No remaining actions");
+    }
+  }
+
+  public Card trash(int posInHand) {
+    assert (posInHand >= 0 && posInHand < hand.size());
+    Card c = hand.remove(posInHand);
+    return c;
+  }
+
+  public void gain(Card c, boolean toHand) {
+    if (toHand) {
+      hand.add(c);
+    } else {
+      // TODO should this be playedPile? I don't know about this edge case...
+      discardPile.add(c);
+    }
+  }
+
+  public void discard(int toDiscard) {
+    assert (toDiscard >= 0 && toDiscard < hand.size());
+    Card c = hand.remove(toDiscard);
+    discardPile.add(c);
+  }
+
   public void discard(List<Integer> toDiscard) {
-    assert (Collections.max(toDiscard) < this.hand.size()
+    assert (Collections.max(toDiscard) < hand.size()
         && Collections.min(toDiscard) >= 0);
 
     Collections.sort(toDiscard, Collections.reverseOrder());
 
     for (int i : toDiscard) {
       Card c = this.hand.remove(i);
-      this.discardPile.add(c);
+      discardPile.add(c);
     }
   }
 
   public void endTurn() {
-    this.discardPile.addAll(this.hand);
-    this.discardPile.addAll(this.playedPile);
-    this.hand.clear();
-    this.playedPile.clear();
+    discardPile.addAll(hand);
+    discardPile.addAll(playedPile);
+    hand.clear();
+    playedPile.clear();
     resetTurnValues();
     draw(5);
   }
 
   public void resetTurnValues() {
-    this.actions = 0;
-    this.buys = 0;
-    this.baseMoney = 0;
-    this.additionalMoney = 0;
+    actions = 0;
+    buys = 0;
+    baseMoney = 0;
+    additionalMoney = 0;
   }
 
   public void newTurn() {
-    this.actions = 1;
-    this.buys = 1;
+    actions = 1;
+    buys = 1;
 
     for (Card c : this.hand) {
-      this.baseMoney += c.getMonetaryValue();
+      baseMoney += c.getMonetaryValue();
     }
 
   }
 
   public boolean hasMoat() {
-    for (Card c : this.hand) {
+    for (Card c : hand) {
       if (c.getId() == 11) {
         return true;
       }
@@ -122,37 +154,37 @@ public class Player {
   }
 
   public void incrementActions() {
-    this.actions++;
+    actions++;
   }
 
   public void incrementBuys() {
-    this.buys++;
+    buys++;
   }
 
   public void decrementActions() {
-    this.actions--;
+    actions--;
   }
 
   public void decrementBuys() {
-    this.buys--;
+    buys--;
   }
 
   public void incrementAdditionalMoney(int adnlMoney) {
-    this.additionalMoney += adnlMoney;
+    additionalMoney += adnlMoney;
   }
 
   public void decrementAdditionalMoney(int adnlMoney) {
-    this.additionalMoney -= adnlMoney;
+    additionalMoney -= adnlMoney;
   }
 
   public int scoreDeck() {
     int points = 0;
 
-    for (Card c : this.deck) {
+    for (Card c : deck) {
       points += c.getVictoryPoints();
     }
 
-    for (Card c : this.hand) {
+    for (Card c : hand) {
       points += c.getVictoryPoints();
     }
 

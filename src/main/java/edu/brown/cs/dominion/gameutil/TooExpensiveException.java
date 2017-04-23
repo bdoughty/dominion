@@ -1,7 +1,7 @@
 package edu.brown.cs.dominion.gameutil;
 
 @SuppressWarnings("serial")
-public class TooExpensiveException extends RuntimeException {
+public class TooExpensiveException extends Exception {
 
   public TooExpensiveException() {
     super();

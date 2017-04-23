@@ -1,11 +1,20 @@
 package edu.brown.cs.dominion.games;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 import java.util.stream.Collectors;
 
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.gameutil.Board;
+import edu.brown.cs.dominion.gameutil.EmptyPileException;
+import edu.brown.cs.dominion.gameutil.NoActionsException;
+import edu.brown.cs.dominion.gameutil.NoPileException;
+import edu.brown.cs.dominion.gameutil.NotActionException;
 import edu.brown.cs.dominion.gameutil.Player;
 import edu.brown.cs.dominion.gameutil.TooExpensiveException;
 import edu.brown.cs.dominion.io.GameEventListener;
@@ -34,6 +43,14 @@ public class Game extends GameStub implements GameEventListener {
     return current;
   }
 
+  public Player getCurrentPlayer() {
+    return userPlayers.get(current);
+  }
+
+  public Player getPlayerFromUser(User u) {
+    return userPlayers.get(u);
+  }
+
   public List<User> getAllUsers() {
     return allUsers;
   }
@@ -42,7 +59,7 @@ public class Game extends GameStub implements GameEventListener {
     return board;
   }
 
-  private void playerUpdateMap(ClientUpdateMap cm, Player p) {
+  public static void playerUpdateMap(ClientUpdateMap cm, Player p) {
     cm.actionCount(p.getActions());
     cm.buyCount(p.getBuys());
     cm.goldCount(p.getMoney());
@@ -63,6 +80,11 @@ public class Game extends GameStub implements GameEventListener {
         p.buyCard(c);
         money -= c.getCost();
       } catch (TooExpensiveException tee) {
+        System.out.println(tee.getMessage());
+      } catch (EmptyPileException epe) {
+        System.out.println(epe.getMessage());
+      } catch (NoPileException npe) {
+        System.out.println(npe.getMessage());
       }
     }
 
@@ -95,12 +117,18 @@ public class Game extends GameStub implements GameEventListener {
   public ClientUpdateMap doAction(User u, int LocInHand) {
     assert (current.equals(u));
     Player p = userPlayers.get(u);
-    // TODO error check this to make sure it's an action, valid pos, etc.
-    Card c = p.getHand().get(LocInHand);
-    c.play(this);
 
     ClientUpdateMap cm = new ClientUpdateMap(this);
-    playerUpdateMap(cm, p);
+
+    try {
+      Card c = p.play(LocInHand);
+      c.play(this, cm);
+      playerUpdateMap(cm, p);
+    } catch (NotActionException nae) {
+      System.out.println(nae.getMessage());
+    } catch (NoActionsException nae) {
+      System.out.println(nae.getMessage());
+    }
 
     return cm;
   }
@@ -142,6 +170,14 @@ public class Game extends GameStub implements GameEventListener {
   public void currentDraw(int numCards) {
     Player p = userPlayers.get(current);
     p.draw(numCards);
+  }
+
+  public void trash(Card c) {
+    board.trashCard(c);
+  }
+
+  public Card gain(int id) throws EmptyPileException, NoPileException {
+    return board.gainCard(id);
   }
 
 }

@@ -16,12 +16,12 @@ public class Pile {
     this.cost = this.card.get().getCost();
   }
 
-  public Card draw() {
+  public Card draw() throws EmptyPileException {
     if (!isEmpty()) {
       size--;
       return (card.get());
     } else {
-      throw new UnsupportedOperationException("empty pile");
+      throw new EmptyPileException("empty pile: " + card.toString());
     }
   }
 
