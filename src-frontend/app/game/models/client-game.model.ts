@@ -21,6 +21,17 @@ export class ClientGame {
               public actionCards: Card[]) {
   }
 
+  public isSelecting() {
+    return this.toSelectHand.length > 0 || this.toSelectBoard.length > 0;
+  }
+
+  // Used to make selecting instant so multiple selections cannot be registered.
+  public setNotSelecting() {
+    this.toSelectHand = [];
+    this.toSelectBoard = [];
+  }
+
+
   public addToCart(id: number): void {
     let card = new Card(id);
     if (this.canBuy(card)) {
@@ -62,6 +73,7 @@ export class ClientGame {
 
   public canPlay(card: Card) {
     return this.isOwnTurn()
+      && !this.isSelecting()
       && this.actions > 0
       && (card.type === 'action' || card.type === 'reaction');
   }

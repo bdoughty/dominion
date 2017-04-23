@@ -22,7 +22,7 @@ import {trigger, state, style, animate, transition, keyframes} from "@angular/an
         animate('1000ms ease', keyframes([
           style({position: 'relative', top: '0', offset: 0}),
           style({top: '-500px', position: 'relative', opacity: '0', offset: 0.5}),
-          style({width: '0', offset: 1})
+          style({width: '0', offset: 0.8})
         ]))
       ])
     ])
@@ -44,28 +44,59 @@ export class GameComponent implements OnInit {
       if (message === undefined) return;
       let gameState = JSON.parse(message);
 
-      console.log("init map:");
+      console.log("\n--------------");
+      console.log("\nRECIEVING: init");
       console.log(gameState);
 
       this.game = this.gameFromState(gameState);
     });
 
     this._gameSocketService.addListener("updatemap", (message) => {
-      console.log("update map:");
-      console.log(message);
+      console.log("\n--------------");
+      console.log("\nRECIEVING: update map:");
+      console.log(JSON.parse(message));
       this.updateMap(JSON.parse(message));
     });
 
     this._gameSocketService.addListener("globalmap", (message) => {
-      console.log("global update:" + message);
+      console.log("\n--------------");
+      console.log("\nRECIEVING: globalmap");
+      console.log(JSON.parse(message));
       this.globalMap(JSON.parse(message));
     })
   }
 
+  cardClickedPile(card: Card) {
+    if (this.game.isSelecting()) {
+      this._gameSocketService.send('select', {inhand: false, loc: card.id});
+      console.log("\n--------------");
+      console.log("\nSENDING select:");
+      console.log({inhand: false, loc: card.id});
+      this.game.setNotSelecting();
+    } else {
+      this.addToCart(card);
+    }
+  }
+
+  cardClickedHand(card: Card) {
+    if (this.game.isSelecting()) {
+      this._gameSocketService.send('select',
+        {inhand: true, loc: card.handPosition});
+
+      console.log("\n--------------");
+      console.log("\nSENDING select:");
+      console.log({inhand: true, loc: card.handPosition});
+      this.game.setNotSelecting();
+    } else {
+      this.play(card);
+    }
+  }
+
   play(card: Card) {
     if (this.game.canPlay(card)) {
-      console.log("SENDING 'doaction'");
-      console.log(JSON.stringify({handid: card.handPosition}));
+      console.log("\n--------------");
+      console.log("\nSENDING 'doaction'");
+      console.log({handid: card.handPosition});
       card.state = 'played';
       this.game.actions -= 1; // For Instantaneous disabling of cards
       setTimeout(() => {
@@ -76,12 +107,19 @@ export class GameComponent implements OnInit {
     }
   }
 
+  addToCart(card: Card) {
+    if (this.game.phase === 'buy') {
+      this.game.addToCart(card.id);
+    }
+  }
+
   endPhase() {
     if (this.game.phase === 'action') {
-      console.log("SENDING 'endaction'");
+      console.log("\n--------------");
+      console.log("\nSENDING 'endaction'");
       return this._gameSocketService.send('endaction', '');
     } else if (this.game.phase === 'buy') {
-      console.log("SENDING 'endbuy'");
+      console.log("\nSENDING 'endbuy'");
       let cart: number[] = [];
       this.game.cart.forEach(card => {
         cart.push(card.id);
@@ -92,11 +130,6 @@ export class GameComponent implements OnInit {
     throw "Phase is " + this.game.phase + ". Must be 'action' or 'buy'";
   }
 
-  addToCart(card: Card) {
-    if (this.game.phase === 'buy') {
-      this.game.addToCart(card.id);
-    }
-  }
 
   shouldDisplayCart() {
     return this.game.phase === 'buy' && this.game.cart.length !== 0;
@@ -168,8 +201,10 @@ export class GameComponent implements OnInit {
         this.game.holding = update.holding;
       }
     }
-    console.log("Updated game: ");
+    console.log("\n--------------");
+    console.log("\nUPDATED GAME:");
     console.log(this.game);
+    console.log(this.game.isSelecting());
   }
 
   chat(msg) {

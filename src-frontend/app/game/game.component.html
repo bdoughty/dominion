@@ -28,27 +28,24 @@
       <div class="pile-row">
         <dmn-card [card]="card"
                   [disabled]="!game.canBuy(card)"
-                  [selectable]="game.toSelectBoard.indexOf(card.id) > 0"
                   *ngFor="let card of game.nonactionCards"
-                  (click)="addToCart(card)"
+                  (click)="cardClickedPile(card)"
         >
         </dmn-card>
       </div>
       <div class="pile-row">
         <dmn-card [card]="card"
                   [disabled]="!game.canBuy(card)"
-                  [selectable]="game.toSelectBoard.indexOf(card.id) > 0"
                   *ngFor="let card of game.actionCards.slice(0, 6)"
-                  (click)="addToCart(card)"
+                  (click)="cardClickedPile(card)"
         >
         </dmn-card>
       </div>
       <div class="pile-row">
         <dmn-card [card]="card"
                   [disabled]="!game.canBuy(card)"
-                  [selectable]="game.toSelectBoard.indexOf(card.id) > 0"
                   *ngFor="let card of game.actionCards.slice(6, 12)"
-                  (click)="addToCart(card)"
+                  (click)="cardClickedPile(card)"
         >
         </dmn-card>
       </div>
@@ -80,9 +77,8 @@
     <div class="hand-container">
       <div class="hand">
         <dmn-card *ngFor="let card of game.hand"
-                  (click)="play(card)"
-                  [disabled]="!game.canPlay(card)"
-                  [selectable]="game.toSelectHand.indexOf(card.id) > 0"
+                  (click)="cardClickedHand(card)"
+                  [disabled]="!(game.toSelectHand.indexOf(card.id) !== -1 || game.canPlay(card))"
                   [card]="card"
                   [@cardState]="card.state"></dmn-card>
       </div>
