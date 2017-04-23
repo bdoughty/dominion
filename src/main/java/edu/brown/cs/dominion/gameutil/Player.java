@@ -45,10 +45,10 @@ public class Player {
     return deck;
   }
 
-  private void draw() {
+  private void draw() throws EmptyDeckException {
     if (deck.isEmpty()) {
       if (discardPile.isEmpty()) {
-        throw new UnsupportedOperationException("no cards left to draw");
+        throw new EmptyDeckException("no cards left to draw");
       } else {
         deck.addAll(discardPile);
         Collections.shuffle(deck);
@@ -62,7 +62,11 @@ public class Player {
 
   public void draw(int numCards) {
     for (int i = 0; i < numCards; i++) {
-      draw();
+      try {
+        draw();
+      } catch (EmptyDeckException ede) {
+        System.out.println(ede.getMessage());
+      }
     }
   }
 
