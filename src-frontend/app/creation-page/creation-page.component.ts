@@ -9,6 +9,9 @@ import {ChatSocketService} from "../shared/chatsocket.service";
   private selected = new Set();
 
   constructor(private _chatSocketService: ChatSocketService) {
+    this._chatSocketService.addListener('redirect', (messageString) => {
+      window.location.replace(messageString);
+    });
   }
 
   entered(cardId) {
