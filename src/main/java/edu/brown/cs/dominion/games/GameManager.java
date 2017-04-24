@@ -97,7 +97,7 @@ public class GameManager implements SocketServer {
   }
 
   private ClientUpdateMap chk(ClientUpdateMap c) {
-    if (c.hasCallback()) {
+    if (c != null && c.hasCallback()) {
       callbacks.put(c.getCallbackUser(), c.getCallback());
     }
     return c;
@@ -191,14 +191,20 @@ public class GameManager implements SocketServer {
   }
 
   public void sendClientUpdateMap(Websocket ws, User u, ClientUpdateMap c) {
-    c = chk(c);
-    if (c.hasUser()) {
-      ws.send(u, UPDATE_MAP, c.prepareUser());
-    }
-    if (c.hasGlobal()) {
-      for (User user : c.getUsers()) {
-        ws.send(user, GLOBAL_UPDATE_MAP, c.prepareGlobal());
+    if (c != null) {
+      c = chk(c);
+      if (c.hasUser()) {
+        ws.send(u, UPDATE_MAP, c.prepareUser());
+      }
+      if (c.hasGlobal()) {
+        for (User user : c.getUsers()) {
+          ws.send(user, GLOBAL_UPDATE_MAP, c.prepareGlobal());
+        }
       }
     }
+  }
+
+  public void addPendingGame(PendingGame p){
+    pendingGames.put(p.getId(), p);
   }
 }

@@ -68,7 +68,7 @@ export class GameComponent implements OnInit {
 
   cardClickedPile(card: Card) {
     if (this.game.isSelecting()) {
-      this._gameSocketService.send('select', {inhand: false, loc: card.id});
+      this._gameSocketService.send('select', JSON.stringify({inhand: false, loc: card.id}));
       console.log("\n--------------");
       console.log("\nSENDING select:");
       console.log({inhand: false, loc: card.id});
@@ -81,7 +81,7 @@ export class GameComponent implements OnInit {
   cardClickedHand(card: Card) {
     if (this.game.isSelecting()) {
       this._gameSocketService.send('select',
-        {inhand: true, loc: card.handPosition});
+        JSON.stringify({inhand: true, loc: card.handPosition}));
 
       console.log("\n--------------");
       console.log("\nSENDING select:");

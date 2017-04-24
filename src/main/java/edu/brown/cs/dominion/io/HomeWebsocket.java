@@ -1,6 +1,7 @@
 package edu.brown.cs.dominion.io;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import edu.brown.cs.dominion.Chat;
@@ -8,6 +9,7 @@ import edu.brown.cs.dominion.User;
 import static edu.brown.cs.dominion.io.send.MessageType.*;
 
 import edu.brown.cs.dominion.games.GameManager;
+import edu.brown.cs.dominion.games.PendingGame;
 import org.eclipse.jetty.websocket.api.Session;
 
 /**
@@ -56,6 +58,21 @@ public class HomeWebsocket implements SocketServer, UserMessageListener {
         w.send(u, LEAVE_RESPONSE, "");
         sendAllUpdateGames(w);
       });
+    ws.putCommand(NEW_GAME,
+      (w, u, m) -> {
+        JsonObject data = PARSE.parse(m).getAsJsonObject();
+        String name = data.get("name").getAsString();
+        JsonObject cards = data.get("cards").getAsJsonObject();
+        int numPlayers = data.get("numPlayers").getAsInt();
+        int[] crds = new int[10];
+        for (int i = 0; i < 10; i++) {
+          crds[i] = cards.get(i + "").getAsInt();
+        }
+        PendingGame p = new PendingGame(name, numPlayers, crds);
+        w.send(u, REDIRECT, "lobby");
+        gm.addPendingGame(p);
+      }
+    );
   }
 
   @Override

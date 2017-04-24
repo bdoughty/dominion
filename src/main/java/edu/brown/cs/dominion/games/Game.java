@@ -147,12 +147,6 @@ public class Game extends GameStub implements GameEventListener {
       System.out.println(nae.getMessage());
     }
 
-    // TODO this is for testing purposes.
-    cm.requireSelect(u, p.getHand(), ImmutableList.of(), (us, ih, id) -> {
-      System.out.println("callback " + id);
-      return null;
-    });
-
     return cm;
   }
 
@@ -163,7 +157,7 @@ public class Game extends GameStub implements GameEventListener {
 
     Player p = userPlayers.get(u);
     p.setActions(0);
-    p.burnMoney();
+    p.burnHand();
 
     ClientUpdateMap cm = new ClientUpdateMap(this);
     playerUpdateMap(cm, p);

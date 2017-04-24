@@ -75,6 +75,7 @@ public class Player {
   }
 
   public int getMoney() {
+
     return (baseMoney + additionalMoney);
   }
 
@@ -197,11 +198,8 @@ public class Player {
     return points;
   }
 
-  public void burnMoney() {
+  public void burnHand() {
     while (!hand.isEmpty()) {
-      if (hand.get(0) instanceof AbstractMoney) {
-        additionalMoney += hand.get(0).getMonetaryValue();
-      }
       discardPile.add(hand.remove(0));
     }
   }
