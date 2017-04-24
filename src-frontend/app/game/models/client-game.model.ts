@@ -12,6 +12,7 @@ export class ClientGame {
   public toSelectHand = [];
   public toSelectBoard = [];
   public phase: string = "action";
+  public orderedPlayers: Player[];
 
   public nonactionCards: Card[] =
     [new Card(0), new Card(1), new Card(2), new Card(3), new Card(4), new Card(5)];
@@ -19,6 +20,10 @@ export class ClientGame {
   constructor(public players: Player[],
               public ownPlayerId: number,
               public actionCards: Card[]) {
+    this.orderedPlayers = [];
+    this.players.forEach(player => {
+      this.orderedPlayers.push(player);
+    });
   }
 
   public isSelecting() {
@@ -56,10 +61,22 @@ export class ClientGame {
   }
 
   public setTurn(id: number): void {
+    let found = false;
     for (let i = 0; i < this.players.length; i++) {
       if (id == this.players[i].id) {
         this.turn = i;
+        found = true;
       }
+    }
+    if (!found) {
+      throw "Could not find player id in turns";
+    }
+
+    // Cycle ordered players list for the display
+    this.orderedPlayers = [];
+    for (let i = this.turn; i < this.players.length + this.turn; i++) {
+      let index = i % this.players.length;
+      this.orderedPlayers.push(this.players[index]);
     }
   }
 
@@ -73,7 +90,9 @@ export class ClientGame {
         return this.players[i];
       }
     }
+    throw "Could not find own player";
   }
+
 
   public removeCardInHand(card: Card): void {
     this.hand.splice(this.hand.indexOf(card), 1);
