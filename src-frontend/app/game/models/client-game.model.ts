@@ -63,7 +63,7 @@ export class ClientGame {
   public setTurn(id: number): void {
     let found = false;
     for (let i = 0; i < this.players.length; i++) {
-      if (id == this.players[i].id) {
+      if (id === this.players[i].id) {
         this.turn = i;
         found = true;
       }
@@ -78,15 +78,19 @@ export class ClientGame {
       let index = i % this.players.length;
       this.orderedPlayers.push(this.players[index]);
     }
+    console.log("\norderedPlayers");
+    console.log(this.orderedPlayers);
   }
 
   public isOwnTurn(): boolean {
+    console.log("\nPlayer id: " + this.ownPlayerId);
+    console.log("\nturn index: " + this.turn);
     return this.players[this.turn].id === this.ownPlayerId;
   }
 
   public getOwnPlayer(): Player {
     for (let i = 0; i<this.players.length; i++) {
-      if (this.players[i].id == this.ownPlayerId) {
+      if (this.players[i].id === this.ownPlayerId) {
         return this.players[i];
       }
     }
