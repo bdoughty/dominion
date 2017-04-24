@@ -44,7 +44,7 @@ public class Mine extends AbstractAction {
         ClientUpdateMap cm1 = new ClientUpdateMap(g);
         g.playerUpdateMap(cm1, nestedCurrP);
 
-        List<Card> boardIds = g.getBoard().getMoneyUnderValue(cost);
+        List<Card> boardIds = g.getBoard().getMoneyUnderValue(cost + 3);
 
         SelectCallback gain = new SelectCallback() {
           @Override
