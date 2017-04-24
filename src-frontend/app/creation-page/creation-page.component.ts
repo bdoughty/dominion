@@ -1,11 +1,15 @@
-import { Component } from '@angular/core';
+import { Component} from '@angular/core';
+import {ChatSocketService} from "../shared/chatsocket.service";
 
 @Component({
   selector: 'dmn-creation',
   templateUrl: './creation-page.component.html',
   styleUrls: ['./creation-page.component.css']
-}) export class CreationComponent {
+}) export class CreationComponent{
   private selected = new Set();
+
+  constructor(private _chatSocketService: ChatSocketService) {
+  }
 
   entered(cardId) {
     document.getElementById("blowUp").innerHTML = "<img id='blowUpImg' src='../../assets/card/" + cardId + ".jpg' " +
@@ -29,7 +33,9 @@ import { Component } from '@angular/core';
   validate() {
     if(this.selected.size == 10) {
       if((<HTMLInputElement>document.getElementById("gameName")).value != "") {
-        console.log("I would have submitted");
+        this._chatSocketService.send("create", JSON.stringify({
+            name: (<HTMLInputElement>document.getElementById("gameName")).value,
+            numPlayers: (<HTMLInputElement>document.getElementById("numPlayers")).value, cards: this.selected}));
       } else {
         alert("You must supply a game name to begin a game!");
       }

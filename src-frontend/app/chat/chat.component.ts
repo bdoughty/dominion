@@ -9,7 +9,7 @@ import {ChatSocketService} from "../shared/chatsocket.service";
 })
 export class ChatComponent implements OnInit {
   private chatModel = new Chat();
-  private needToUpdate = false;
+  private needToScroll = false;
   public currentMessage: string;
 
   constructor(
@@ -21,7 +21,7 @@ export class ChatComponent implements OnInit {
       let message = JSON.parse(messageString);
       this.chatModel.addMessage(message);
 
-      this.needToUpdate = true;
+      this.needToScroll = true;
     });
   }
 
@@ -31,10 +31,10 @@ export class ChatComponent implements OnInit {
   }
 
   updateScroll() {
-    if (this.needToUpdate) {
+    if (this.needToScroll) {
       document.getElementById("message" +
         (this.chatModel.messages.length - 1)).scrollIntoView(true);
     }
-    this.needToUpdate = false;
+    this.needToScroll = false;
   }
 }
