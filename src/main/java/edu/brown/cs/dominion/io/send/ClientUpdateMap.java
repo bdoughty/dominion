@@ -12,6 +12,8 @@ import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.games.Game;
 
+import javax.jws.soap.SOAPBinding;
+
 /**
  * Created by henry on 3/22/2017.
  */
@@ -19,16 +21,16 @@ public class ClientUpdateMap {
   private transient static final Gson GSON = new Gson();
   private Map<String, Object> data;
   private Map<String, Object> dataGlobal;
-  private transient SelectCallback callback;
-  private transient User callbackUser;
-
+  private transient Map<User, Callback> callbacks;
+  private transient User mainUser;
   private transient List<User> users;
 
-  public ClientUpdateMap(Game g) {
+  public ClientUpdateMap(Game g, User u) {
     data = new HashMap<>();
     dataGlobal = new HashMap<>();
     this.users = g.getAllUsers();
 
+    mainUser = u;
   }
 
   public ClientUpdateMap setPhase(boolean action){
@@ -51,13 +53,9 @@ public class ClientUpdateMap {
     return this;
   }
 
-  public ClientUpdateMap requireSelect(User u, List<Card> handIds,
-      List<Card> boardIds, SelectCallback response) {
-    callback = response;
-    callbackUser = u;
-    data.put("select", true);
-    data.put("handSelect", map(handIds, Card::getId));
-    data.put("boardSelect", map(boardIds, Card::getId));
+  public ClientUpdateMap requireSelect(User u, List<Integer> handIds,
+      List<Integer> boardIds, SelectCallback response) {
+    callbacks.put(u, new Callback(boardIds, handIds, response));
     return this;
   }
 
@@ -96,20 +94,19 @@ public class ClientUpdateMap {
     return this;
   }
 
-  public boolean hasUser() {
-    return data.size() > 0;
-  }
-
-  public boolean hasGlobal() {
-    return dataGlobal.size() > 0;
+  public boolean hasUser(User u) {
+    if (callbacks.containsKey(u)) {
+      return true;
+    } if (mainUser == u && data.size() > 0) {
+      return true;
+    } if (dataGlobal.size() > 0) {
+      return true;
+    }
+    return false;
   }
 
   public String prepareUser() {
     return GSON.toJson(data);
-  }
-
-  public String prepareGlobal() {
-    return GSON.toJson(dataGlobal);
   }
 
   public boolean hasCallback() {

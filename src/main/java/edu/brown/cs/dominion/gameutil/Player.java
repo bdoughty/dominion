@@ -55,9 +55,9 @@ public class Player {
         discardPile.clear();
       }
     }
-
     Card c = deck.remove(0);
     hand.add(c);
+    baseMoney += c.getMonetaryValue();
   }
 
   public void draw(int numCards) {
@@ -94,12 +94,14 @@ public class Player {
   public Card trash(int posInHand) {
     assert (posInHand >= 0 && posInHand < hand.size());
     Card c = hand.remove(posInHand);
+    baseMoney -= c.getMonetaryValue();
     return c;
   }
 
   public void gain(Card c, boolean toHand) {
     if (toHand) {
       hand.add(c);
+      baseMoney += c.getMonetaryValue();
     } else {
       // TODO should this be playedPile? I don't know about this edge case...
       discardPile.add(c);
@@ -143,11 +145,6 @@ public class Player {
   public void newTurn() {
     actions = 1;
     buys = 1;
-
-    for (Card c : this.hand) {
-      baseMoney += c.getMonetaryValue();
-    }
-
   }
 
   public boolean hasMoat() {

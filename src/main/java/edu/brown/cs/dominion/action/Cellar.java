@@ -11,8 +11,6 @@ public class Cellar extends AbstractAction {
 
   @Override
   public void play(Game g, ClientUpdateMap cm) {
-    // TODO Auto-generated method stub
 
   }
-
 }

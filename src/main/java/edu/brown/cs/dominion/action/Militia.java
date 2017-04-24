@@ -12,7 +12,8 @@ public class Militia extends AbstractAction {
   @Override
   public void play(Game g, ClientUpdateMap cm) {
     g.incrementAdditionalMoney(2);
-    // ac.militia();
+
+
   }
 
 }
