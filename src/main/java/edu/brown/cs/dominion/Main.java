@@ -6,8 +6,12 @@ import static spark.Spark.get;
 import static spark.Spark.port;
 import static spark.Spark.webSocket;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import edu.brown.cs.dominion.games.GameManager;
 import edu.brown.cs.dominion.io.HomeWebsocket;
@@ -50,15 +54,18 @@ public class Main {
 
   private void runSparkServer(int portNum) {
     port(portNum);
-    externalStaticFileLocation("resources");
+    externalStaticFileLocation("dist");
     exception(Exception.class, new ExceptionPrinter());
 
     webSocket("/home", new Websocket(users, home));
-    webSocket("/game", new Websocket(users, gm));
+    webSocket("/gamesocket", new Websocket(users, gm));
 
     // TODO get rid of this, for some reason it is necessary for the server to
     // start right now.
     get("/hello", (req, res) -> "Hello World");
+    get("/game", (req, res) -> new String(Files.readAllBytes(Paths.get("dist/index.html"))));
+    get("/lobby", (req, res) -> new String(Files.readAllBytes(Paths.get("dist/index.html"))));
+    get("/create", (req, res) -> new String(Files.readAllBytes(Paths.get("dist/index.html"))));
   }
 
   /**

@@ -78,8 +78,6 @@ export class ClientGame {
       let index = i % this.players.length;
       this.orderedPlayers.push(this.players[index]);
     }
-    console.log("\norderedPlayers");
-    console.log(this.orderedPlayers);
   }
 
   public isOwnTurn(): boolean {
