@@ -21,13 +21,14 @@
           </dmn-card>
         </div>
       </div>
-      <button (click)="endPhase()">End {{ game.phase }} Phase</button>
+      <button [ngClass]="{hidden: game.isSelecting()}" (click)="endPhase()">End {{ game.phase }} Phase</button>
     </div>
     <div id="piles">
 
       <div class="pile-row">
         <dmn-card [card]="card"
-                  [disabled]="!game.canBuy(card)"
+                  [disabled]="!game.canBuy(card) && !game.isSelectable(card, false)"
+                  [selectable]="game.isSelectable(card, false)"
                   *ngFor="let card of game.nonactionCards"
                   (click)="cardClickedPile(card)"
         >
@@ -35,7 +36,8 @@
       </div>
       <div class="pile-row">
         <dmn-card [card]="card"
-                  [disabled]="!game.canBuy(card)"
+                  [disabled]="!game.canBuy(card) && !game.isSelectable(card, false)"
+                  [selectable]="game.isSelectable(card, false)"
                   *ngFor="let card of game.actionCards.slice(0, 6)"
                   (click)="cardClickedPile(card)"
         >
@@ -43,7 +45,8 @@
       </div>
       <div class="pile-row">
         <dmn-card [card]="card"
-                  [disabled]="!game.canBuy(card)"
+                  [disabled]="!game.canBuy(card) && !game.isSelectable(card, false)"
+                  [selectable]="game.isSelectable(card, false)"
                   *ngFor="let card of game.actionCards.slice(6, 12)"
                   (click)="cardClickedPile(card)"
         >
