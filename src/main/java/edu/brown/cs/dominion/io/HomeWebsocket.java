@@ -62,11 +62,11 @@ public class HomeWebsocket implements SocketServer, UserMessageListener {
       (w, u, m) -> {
         JsonObject data = PARSE.parse(m).getAsJsonObject();
         String name = data.get("name").getAsString();
-        JsonObject cards = data.get("cards").getAsJsonObject();
+        JsonArray cards = data.get("cards").getAsJsonArray();
         int numPlayers = data.get("numPlayers").getAsInt();
         int[] crds = new int[10];
         for (int i = 0; i < 10; i++) {
-          crds[i] = cards.get(i + "").getAsInt();
+          crds[i] = cards.get(i).getAsInt();
         }
         PendingGame p = new PendingGame(name, numPlayers, crds);
         w.send(u, REDIRECT, "lobby");
