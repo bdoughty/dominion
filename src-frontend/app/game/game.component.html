@@ -79,6 +79,7 @@
         <dmn-card *ngFor="let card of game.hand"
                   (click)="cardClickedHand(card)"
                   [disabled]="!(game.toSelectHand.indexOf(card.id) !== -1 || game.canPlay(card))"
+                  [selectable]="game.isSelectable(card, true)"
                   [card]="card"
                   [@cardState]="card.state"></dmn-card>
       </div>

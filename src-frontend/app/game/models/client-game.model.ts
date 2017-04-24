@@ -25,6 +25,14 @@ export class ClientGame {
     return this.toSelectHand.length > 0 || this.toSelectBoard.length > 0;
   }
 
+  public isSelectable(card: Card, inhand: boolean) {
+    if (inhand) {
+      return this.toSelectHand.indexOf(card.id) !== -1;
+    } else {
+      return this.toSelectBoard.indexOf(card.id) !== -1;
+    }
+  }
+
   // Used to make selecting instant so multiple selections cannot be registered.
   public setNotSelecting() {
     this.toSelectHand = [];

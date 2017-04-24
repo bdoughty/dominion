@@ -11,7 +11,7 @@ export class CardComponent {
   @Input() public count: number;
   @Input() public disabled: boolean = false;
   @Input() public selectable: boolean = false;
-  public selected: boolean;
+  // public selected: boolean;
 
   constructor() {}
 
@@ -36,7 +36,8 @@ export class CardComponent {
     }
   }
 
-  select() {
-    this.selected = !this.selected;
-  }
+  //
+  // select() {
+  //   this.selected = !this.selected;
+  // }
 }

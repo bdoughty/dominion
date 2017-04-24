@@ -1,6 +1,5 @@
 <div class="card {{ type() }}"
-     (click)="select()"
-     [ngClass]="{selected: selectable && selected,
+     [ngClass]="{selectable: selectable,
                  isCard: !!card, disabled: disabled}"
 >
   <div class="disable-filter"></div>
