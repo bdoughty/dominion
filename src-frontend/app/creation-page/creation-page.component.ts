@@ -10,6 +10,7 @@ import {ChatSocketService} from "../shared/chatsocket.service";
 
   constructor(private _chatSocketService: ChatSocketService) {
     this._chatSocketService.addListener('redirect', (messageString) => {
+      console.log(messageString);
       window.location.replace(messageString);
     });
   }
