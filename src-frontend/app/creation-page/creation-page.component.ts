@@ -33,9 +33,14 @@ import {ChatSocketService} from "../shared/chatsocket.service";
   validate() {
     if(this.selected.size == 10) {
       if((<HTMLInputElement>document.getElementById("gameName")).value != "") {
-        this._chatSocketService.send("create", JSON.stringify({
-            name: (<HTMLInputElement>document.getElementById("gameName")).value,
-            numPlayers: (<HTMLInputElement>document.getElementById("numPlayers")).value, cards: this.selected}));
+        let out = [];
+        this.selected.forEach((car) => {out.push(car)});
+        console.log(out);
+        const toSend = JSON.stringify({
+          name: (<HTMLInputElement>document.getElementById("gameName")).value,
+          numPlayers: (<HTMLInputElement>document.getElementById("numPlayers")).value, cards: out});
+        console.log(toSend);
+        this._chatSocketService.send("create", toSend);
       } else {
         alert("You must supply a game name to begin a game!");
       }
