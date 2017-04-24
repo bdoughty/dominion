@@ -12,7 +12,7 @@ import {ChatSocketService} from "../shared/chatsocket.service";
   }
 
   entered(cardId) {
-    document.getElementById("blowUp").innerHTML = "<img id='blowUpImg' src='../../assets/card/" + cardId + ".jpg' " +
+    document.getElementById("blowUp").innerHTML = "<img id='blowUpImg' src='../../assets/card/card" + cardId + ".jpg' " +
       "style='visibility: visible; width: auto; height: 100%;' />";
   }
 
@@ -23,10 +23,10 @@ import {ChatSocketService} from "../shared/chatsocket.service";
   clicked(cardId) {
     if(this.selected.has(cardId)) {
       this.selected.delete(cardId);
-      document.getElementById(cardId).style.border = "0";
+      document.getElementById("card" + cardId).style.border = "0";
     } else {
       this.selected.add(cardId);
-      document.getElementById(cardId).style.border = "3px solid yellow";
+      document.getElementById("card" + cardId).style.border = "3px solid yellow";
     }
   }
 
