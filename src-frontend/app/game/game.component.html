@@ -21,13 +21,15 @@
           </dmn-card>
         </div>
       </div>
-      <button (click)="endPhase()">End {{ game.phase }} Phase</button>
+      <button [ngClass]="{hidden: game.isSelecting() || game.isOwnTurn()}"
+              (click)="endPhase()">End {{ game.phase }} Phase</button>
     </div>
     <div id="piles">
 
       <div class="pile-row">
         <dmn-card [card]="card"
-                  [disabled]="!game.canBuy(card)"
+                  [disabled]="!game.canBuy(card) && !game.isSelectable(card, false)"
+                  [selectable]="game.isSelectable(card, false)"
                   *ngFor="let card of game.nonactionCards"
                   (click)="cardClickedPile(card)"
         >
@@ -35,7 +37,8 @@
       </div>
       <div class="pile-row">
         <dmn-card [card]="card"
-                  [disabled]="!game.canBuy(card)"
+                  [disabled]="!game.canBuy(card) && !game.isSelectable(card, false)"
+                  [selectable]="game.isSelectable(card, false)"
                   *ngFor="let card of game.actionCards.slice(0, 6)"
                   (click)="cardClickedPile(card)"
         >
@@ -43,7 +46,8 @@
       </div>
       <div class="pile-row">
         <dmn-card [card]="card"
-                  [disabled]="!game.canBuy(card)"
+                  [disabled]="!game.canBuy(card) && !game.isSelectable(card, false)"
+                  [selectable]="game.isSelectable(card, false)"
                   *ngFor="let card of game.actionCards.slice(6, 12)"
                   (click)="cardClickedPile(card)"
         >
@@ -53,7 +57,7 @@
     <div id="right-bar-container">
       <div id="right-bar">
         <div class="turns">
-          <div *ngFor="let player of game.players; let i = index;"
+          <div *ngFor="let player of game.orderedPlayers; let i = index;"
                class="turn" [ngClass]="{currentTurn: i === 0}">
             <div class="current-turn-message">Current Turn</div>
             <div class="turn-info">
