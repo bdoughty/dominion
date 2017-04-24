@@ -13,4 +13,5 @@ public interface GameEventListener {
   ClientUpdateMap doAction(User u, int locInHand);
   ClientUpdateMap endActionPhase(User u);
   ClientUpdateMap fullUpdate(User u);
+  ClientUpdateMap startTurn(User u);
 }

@@ -70,11 +70,6 @@ public class GameManager implements SocketServer {
 
   private Map<User, SelectCallback> callbacks;
 
-  private ClientUpdateMap buys(User user, List<Integer> buys) {
-    Game g = gamesByUser.get(user);
-    return g.endBuyPhase(user, buys);
-  }
-
   private ClientUpdateMap action(User user, int cardLocation) {
     Game g = gamesByUser.get(user);
     return g.doAction(user, cardLocation);
@@ -107,6 +102,7 @@ public class GameManager implements SocketServer {
   public void newUser(Websocket ws, User user) {
     //redirect??
   }
+
 
   @Override
   public void newSession(Websocket ws, User user, Session s) {
@@ -150,7 +146,12 @@ public class GameManager implements SocketServer {
       for (JsonElement e : data) {
         buys.add(e.getAsInt());
       }
-      sendClientUpdateMap(ws, u, buys(u, buys));
+      Game g = gamesByUser.get(u);
+      ClientUpdateMap cm = g.endBuyPhase(u, buys);
+      sendClientUpdateMap(ws, u, cm);
+      if (cm != null) {
+        sendClientUpdateMap(ws, g.getCurrent(), g.startTurn(g.getCurrent()));
+      }
     });
   }
 

@@ -79,7 +79,10 @@ public class Game extends GameStub implements GameEventListener {
 
   @Override
   public ClientUpdateMap endBuyPhase(User u, List<Integer> toBuy) {
-    assert (current.equals(u));
+    if (current.getId() != u.getId()) {
+      return null;
+    }
+
     actionPhase = true;
 
     Player p = userPlayers.get(u);
@@ -98,11 +101,10 @@ public class Game extends GameStub implements GameEventListener {
         System.out.println(npe.getMessage());
       }
     }
-
     p.endTurn();
-    usersTurns.add(u);
+    usersTurns.add(current);
     current = usersTurns.poll();
-    userPlayers.get(current).newTurn();
+
 
     ClientUpdateMap cm = new ClientUpdateMap(this);
     playerUpdateMap(cm, p);
@@ -125,7 +127,19 @@ public class Game extends GameStub implements GameEventListener {
   }
 
   @Override
+  public ClientUpdateMap startTurn(User u){
+    userPlayers.get(current).newTurn();
+    ClientUpdateMap cm = new ClientUpdateMap(this);
+    playerUpdateMap(cm, getCurrentPlayer());
+    return cm;
+  }
+
+  @Override
   public ClientUpdateMap doAction(User u, int LocInHand) {
+    if (current.getId() != u.getId()) {
+      return null;
+    }
+
     assert (current.equals(u));
     Player p = userPlayers.get(u);
 
@@ -152,7 +166,10 @@ public class Game extends GameStub implements GameEventListener {
 
   @Override
   public ClientUpdateMap endActionPhase(User u) {
-    assert (current.equals(u));
+    if (current.getId() != u.getId()) {
+      return null;
+    }
+
     actionPhase = false;
 
     Player p = userPlayers.get(u);
