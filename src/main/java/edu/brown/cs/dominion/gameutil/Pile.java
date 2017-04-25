@@ -5,15 +5,14 @@ import java.util.function.Supplier;
 import edu.brown.cs.dominion.Card;
 
 public class Pile {
-
   private int size;
-  private Supplier<Card> card;
-  private int cost;
+  private transient Supplier<Card> card;
+  private transient Card c;
 
   public Pile(Supplier<Card> card, int size) {
     this.size = size;
     this.card = card;
-    this.cost = this.card.get().getCost();
+    this.c = card.get();
   }
 
   public Card draw() throws EmptyPileException {
@@ -37,16 +36,20 @@ public class Pile {
     return card.get();
   }
 
+  public Card getCard() {
+    return c;
+  }
+
   public boolean isEmpty() {
     return (size == 0);
   }
 
   public int getCost() {
-    return cost;
+    return c.getCost();
   }
 
-  public int getSize() {
-    return size;
+  public int getId() {
+    return c.getId();
   }
 
 }
