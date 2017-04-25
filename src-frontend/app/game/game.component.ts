@@ -160,6 +160,7 @@ export class GameComponent implements OnInit {
           this.game.toSelect = true;
           this.game.toSelectHand = update.handSelect;
           this.game.toSelectBoard = update.boardSelect;
+          this.game.toSelectStoppable = update.stoppable;
         } else {
           this.game.toSelect = false;
         }

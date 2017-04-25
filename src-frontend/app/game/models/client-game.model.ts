@@ -11,6 +11,7 @@ export class ClientGame {
   public toSelect: boolean = false;
   public toSelectHand = [];
   public toSelectBoard = [];
+  public toSelectStoppable = false;
   public phase: string = "action";
   public orderedPlayers: Player[];
 

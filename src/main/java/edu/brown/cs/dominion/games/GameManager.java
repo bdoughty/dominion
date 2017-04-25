@@ -1,13 +1,5 @@
 package edu.brown.cs.dominion.games;
 
-import static edu.brown.cs.dominion.io.send.MessageType.DO_ACTION;
-import static edu.brown.cs.dominion.io.send.MessageType.END_ACTION;
-import static edu.brown.cs.dominion.io.send.MessageType.END_BUY;
-import static edu.brown.cs.dominion.io.send.MessageType.GLOBAL_UPDATE_MAP;
-import static edu.brown.cs.dominion.io.send.MessageType.INIT_GAME;
-import static edu.brown.cs.dominion.io.send.MessageType.SELECTION;
-import static edu.brown.cs.dominion.io.send.MessageType.UPDATE_MAP;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -31,6 +23,8 @@ import edu.brown.cs.dominion.io.UserRegistry;
 import edu.brown.cs.dominion.io.Websocket;
 import edu.brown.cs.dominion.io.send.ClientUpdateMap;
 import edu.brown.cs.dominion.io.send.SelectCallback;
+
+import static edu.brown.cs.dominion.io.send.MessageType.*;
 
 /**
  * A wrapper that adds various ajax functionality to the server and then cleans
@@ -87,6 +81,13 @@ public class GameManager implements SocketServer {
     return callbacks.get(u).getCallback().call(u, inHand, location);
   }
 
+  private ClientUpdateMap cancleSelect(User u) {
+    assert callbacks.containsKey(u);
+    Callback c = callbacks.get(u);
+    assert c.isStoppable();
+    return c.getCancelHandler().cancel();
+  }
+
   private <T, K> List<K> map(List<T> list, Function<T, K> convert) {
     List<K> output = new LinkedList<>();
     list.forEach(s -> output.add(convert.apply(s)));
@@ -137,6 +138,10 @@ public class GameManager implements SocketServer {
       boolean inHand = data.get("inhand").getAsBoolean();
       int location = data.get("loc").getAsInt();
       sendClientUpdateMap(ws, u, selection(u, inHand, location));
+    });
+
+    ws.putCommand(CANCEL_SELECT, (w, u, m) -> {
+      sendClientUpdateMap(ws, u, cancleSelect(u));
     });
 
     ws.putCommand(END_ACTION,

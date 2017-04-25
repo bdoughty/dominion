@@ -1,6 +1,7 @@
 package edu.brown.cs.dominion;
 
 import edu.brown.cs.dominion.io.Websocket;
+import edu.brown.cs.dominion.io.send.MessageType;
 
 import java.util.Collection;
 
@@ -22,5 +23,11 @@ public class GameChat extends Chat{
 
   public void serverSend(String s){
     String message = getMessage("Server", "#000", s);
+  }
+
+  private void sendAll(String message){
+    for (User u : users) {
+      ws.send(u, MessageType.CHAT, message);
+    }
   }
 }

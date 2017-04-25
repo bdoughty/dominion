@@ -56,8 +56,14 @@ public class ClientUpdateMap {
   }
 
   public ClientUpdateMap requireSelect(User u, List<Integer> handIds,
-      List<Integer> boardIds, SelectCallback response) {
+                                       List<Integer> boardIds, SelectCallback response) {
     callbacks.put(u, new Callback(boardIds, handIds, response));
+    return this;
+  }
+  public ClientUpdateMap requireSelectCanStop(User u, List<Integer> handIds,
+                                       List<Integer> boardIds, SelectCallback
+                                                response, CancelHandler ch) {
+    callbacks.put(u, new Callback(boardIds, handIds, response, ch));
     return this;
   }
 
@@ -119,6 +125,7 @@ public class ClientUpdateMap {
       toSend.put("select", true);
       toSend.put("handSelect", c.getHandIds());
       toSend.put("boardSelect", c.getBoardIds());
+      toSend.put("stoppable", c.isStoppable());
     }
     return GSON.toJson(toSend);
   }

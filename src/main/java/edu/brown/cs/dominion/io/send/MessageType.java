@@ -20,7 +20,8 @@ public enum MessageType {
   LEAVE_RESPONSE ("leaveresponse"),
   REDIRECT ("redirect"),
   INIT_GAME ("init"),
-  NEW_GAME ("create");
+  NEW_GAME ("create"),
+  CANCEL_SELECT("cancel");
 
 
   private final String name;
