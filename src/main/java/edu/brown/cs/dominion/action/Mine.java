@@ -66,7 +66,6 @@ public class Mine extends AbstractAction {
             }
 
             g.playerUpdateMap(cm2, nestedCurrP2);
-            cm2.finishSelect();
 
             return cm2;
           }
