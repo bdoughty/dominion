@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.games.Game;
+import jdk.nashorn.internal.codegen.CompilerConstants;
 
 import javax.jws.soap.SOAPBinding;
 
@@ -29,7 +30,7 @@ public class ClientUpdateMap {
     data = new HashMap<>();
     dataGlobal = new HashMap<>();
     this.users = g.getAllUsers();
-
+    callbacks = new HashMap<>();
     mainUser = u;
   }
 
@@ -105,16 +106,18 @@ public class ClientUpdateMap {
     return false;
   }
 
-  public String prepareUser() {
-    return GSON.toJson(data);
-  }
+  public String prepareUser(User u) {
+    Map<String, Object> toSend = new HashMap<>(dataGlobal);
+    if (mainUser == u) {
+      toSend.putAll(data);
+    } if (callbacks.containsKey(u)) {
+      Callback c = callbacks.get(u);
 
-  public boolean hasCallback() {
-    return callback != null;
-  }
-
-  public SelectCallback getCallback() {
-    return callback;
+      toSend.put("select", true);
+      toSend.put("handSelect", c.getHandIds());
+      toSend.put("boardSelect", c.getBoardIds());
+    }
+    return GSON.toJson(toSend);
   }
 
   private <T, K> List<K> map(List<T> list, Function<T, K> convert) {
@@ -127,11 +130,15 @@ public class ClientUpdateMap {
     return data.isEmpty();
   }
 
-  public User getCallbackUser() {
-    return callbackUser;
+  public User getMainUser() {
+    return mainUser;
   }
 
   public List<User> getUsers() {
     return users;
+  }
+
+  public Map<User, Callback> getCallbacks(){
+    return callbacks;
   }
 }

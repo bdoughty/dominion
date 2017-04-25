@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import edu.brown.cs.dominion.io.send.Callback;
+import jdk.nashorn.internal.codegen.CompilerConstants;
 import org.eclipse.jetty.websocket.api.Session;
 
 import com.google.gson.Gson;
@@ -68,7 +70,7 @@ public class GameManager implements SocketServer {
     pendingByUser = new HashMap<>();
   }
 
-  private Map<User, SelectCallback> callbacks;
+  private Map<User, Callback> callbacks;
 
   private ClientUpdateMap action(User user, int cardLocation) {
     Game g = gamesByUser.get(user);
@@ -82,7 +84,7 @@ public class GameManager implements SocketServer {
 
   private ClientUpdateMap selection(User u, boolean inHand, int location) {
     assert callbacks.containsKey(u);
-    return callbacks.get(u).call(u, inHand, location);
+    return callbacks.get(u).getCallback().call(u, inHand, location);
   }
 
   private <T, K> List<K> map(List<T> list, Function<T, K> convert) {
@@ -92,8 +94,8 @@ public class GameManager implements SocketServer {
   }
 
   private ClientUpdateMap chk(ClientUpdateMap c) {
-    if (c != null && c.hasCallback()) {
-      callbacks.put(c.getCallbackUser(), c.getCallback());
+    if (c != null) {
+      callbacks.putAll(c.getCallbacks());
     }
     return c;
   }
@@ -116,7 +118,7 @@ public class GameManager implements SocketServer {
       container.add("users", GSON.toJsonTree(g.getAllUsers()));
 
       ws.send(s, INIT_GAME, GSON.toJson(container));
-      ws.send(s, UPDATE_MAP, g.fullUpdate(user).prepareUser());
+      ws.send(s, UPDATE_MAP, g.fullUpdate(user).prepareUser(user));
     } else {
       System.out.println("User is not in a game");
     }
@@ -194,12 +196,9 @@ public class GameManager implements SocketServer {
   public void sendClientUpdateMap(Websocket ws, User u, ClientUpdateMap c) {
     if (c != null) {
       c = chk(c);
-      if (c.hasUser()) {
-        ws.send(u, UPDATE_MAP, c.prepareUser());
-      }
-      if (c.hasGlobal()) {
-        for (User user : c.getUsers()) {
-          ws.send(user, GLOBAL_UPDATE_MAP, c.prepareGlobal());
+      for (User user : c.getUsers()) {
+        if(c.hasUser(user)){
+          ws.send(user, UPDATE_MAP, c.prepareUser(user));
         }
       }
     }

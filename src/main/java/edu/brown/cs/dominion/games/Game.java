@@ -106,7 +106,7 @@ public class Game extends GameStub implements GameEventListener {
     current = usersTurns.poll();
 
 
-    ClientUpdateMap cm = new ClientUpdateMap(this);
+    ClientUpdateMap cm = new ClientUpdateMap(this, u);
     playerUpdateMap(cm, p);
     cm.turn(current.getId());
 
@@ -129,7 +129,7 @@ public class Game extends GameStub implements GameEventListener {
   @Override
   public ClientUpdateMap startTurn(User u){
     userPlayers.get(current).newTurn();
-    ClientUpdateMap cm = new ClientUpdateMap(this);
+    ClientUpdateMap cm = new ClientUpdateMap(this, u);
     playerUpdateMap(cm, getCurrentPlayer());
     return cm;
   }
@@ -149,7 +149,7 @@ public class Game extends GameStub implements GameEventListener {
     // c.play(this);
     // p.decrementActions();
 
-    ClientUpdateMap cm = new ClientUpdateMap(this);
+    ClientUpdateMap cm = new ClientUpdateMap(this, u);
 
     try {
       Card c = p.play(LocInHand);
@@ -176,7 +176,7 @@ public class Game extends GameStub implements GameEventListener {
     p.setActions(0);
     p.burnHand();
 
-    ClientUpdateMap cm = new ClientUpdateMap(this);
+    ClientUpdateMap cm = new ClientUpdateMap(this, u);
     playerUpdateMap(cm, p);
     cm.setPhase(false);
 
@@ -185,7 +185,7 @@ public class Game extends GameStub implements GameEventListener {
 
   @Override
   public ClientUpdateMap fullUpdate(User u) {
-    ClientUpdateMap cm = new ClientUpdateMap(this);
+    ClientUpdateMap cm = new ClientUpdateMap(this, u);
     playerUpdateMap(cm, userPlayers.get(u));
     return cm;
   }

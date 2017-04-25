@@ -57,13 +57,6 @@ export class GameComponent implements OnInit {
       console.log(JSON.parse(message));
       this.updateMap(JSON.parse(message));
     });
-
-    this._gameSocketService.addListener("globalmap", (message) => {
-      console.log("\n--------------");
-      console.log("\nRECIEVING: globalmap");
-      console.log(JSON.parse(message));
-      this.globalMap(JSON.parse(message));
-    })
   }
 
   cardClickedPile(card: Card) {
@@ -147,17 +140,6 @@ export class GameComponent implements OnInit {
     return new ClientGame(players, this._userIdService.id, cards);
   }
 
-  globalMap(update) {
-    if (this.game != null) {
-      if (update.turn !== "undefined") {
-        this.game.setTurn(update.turn);
-      }
-      if (update.winner !== "undefined") {
-        // alert("")
-      }
-    }
-  }
-
   updateMap(update) {
     if (this.game != null) {
       if (typeof update.actions !== 'undefined') {
@@ -199,6 +181,12 @@ export class GameComponent implements OnInit {
       }
       if (typeof update.holding !== "undefined") {
         this.game.holding = update.holding;
+      }
+      if (update.turn !== "undefined") {
+        this.game.setTurn(update.turn);
+      }
+      if (update.winner !== "undefined") {
+        // alert("")
       }
     }
     console.log("\n--------------");

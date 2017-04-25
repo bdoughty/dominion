@@ -25,8 +25,9 @@ public class Mine extends AbstractAction {
     User currU = g.getCurrent();
     Player currP = g.getCurrentPlayer();
 
-    List<Card> handIds = currP.getHand().stream()
-        .filter(c -> c.getMonetaryValue() != 0).collect(Collectors.toList());
+    List<Integer> handIds = currP.getHand().stream()
+        .filter(c -> c.getMonetaryValue() != 0).map(Card::getId)
+        .collect(Collectors.toList());
 
     SelectCallback trash = new SelectCallback() {
       @Override
@@ -41,10 +42,10 @@ public class Mine extends AbstractAction {
         int cost = toTrash.getCost();
         g.trash(toTrash);
 
-        ClientUpdateMap cm1 = new ClientUpdateMap(g);
+        ClientUpdateMap cm1 = new ClientUpdateMap(g, u);
         g.playerUpdateMap(cm1, nestedCurrP);
 
-        List<Card> boardIds = g.getBoard().getMoneyUnderValue(cost + 3);
+        List<Integer> boardIds = g.getBoard().getMoneyUnderValue(cost + 3);
 
         SelectCallback gain = new SelectCallback() {
           @Override
@@ -54,7 +55,7 @@ public class Mine extends AbstractAction {
             // how to assert this?
             assert (nestedCurrP2.equals(currP));
 
-            ClientUpdateMap cm2 = new ClientUpdateMap(g);
+            ClientUpdateMap cm2 = new ClientUpdateMap(g, u);
 
             try {
               nestedCurrP2.gain(g.gain(loc), true);

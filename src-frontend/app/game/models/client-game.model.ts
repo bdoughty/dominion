@@ -83,8 +83,6 @@ export class ClientGame {
   }
 
   public isOwnTurn(): boolean {
-    console.log("\nPlayer id: " + this.ownPlayerId);
-    console.log("\nturn index: " + this.turn);
     return this.players[this.turn].id === this.ownPlayerId;
   }
 

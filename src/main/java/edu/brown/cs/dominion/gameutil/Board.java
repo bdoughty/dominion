@@ -121,12 +121,12 @@ public class Board {
     return piles.get(5).isEmpty() || emptyPiles >= 3;
   }
 
-  public List<Card> getMoneyUnderValue(int cost) {
-    List<Card> cards = new LinkedList<>();
+  public List<Integer> getMoneyUnderValue(int cost) {
+    List<Integer> cards = new LinkedList<>();
 
     for (Pile p : piles.values()) {
       if (p.getCost() <= cost && p.produce().getMonetaryValue() != 0) {
-        cards.add(p.produce());
+        cards.add(p.produce().getId());
       }
     }
 
