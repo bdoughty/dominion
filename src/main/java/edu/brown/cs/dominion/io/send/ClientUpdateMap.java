@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.games.Game;
+import edu.brown.cs.dominion.gameutil.Board;
 import edu.brown.cs.dominion.gameutil.Player;
 import jdk.nashorn.internal.codegen.CompilerConstants;
 
@@ -81,6 +82,11 @@ public class ClientUpdateMap {
 
   public ClientUpdateMap discardPileSize(int numCards) {
     data.put("discardsize", numCards);
+    return this;
+  }
+
+  public ClientUpdateMap piles(Board b) {
+    dataGlobal.put("board", b);
     return this;
   }
 

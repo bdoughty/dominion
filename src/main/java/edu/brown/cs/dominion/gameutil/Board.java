@@ -16,10 +16,9 @@ import edu.brown.cs.dominion.victory.Estate;
 import edu.brown.cs.dominion.victory.Province;
 
 public class Board {
-
   private Map<Integer, Pile> piles;
-  private List<Integer> actionCardIds;
-  private List<Card> trash;
+  private transient List<Integer> actionCardIds;
+  private transient List<Card> trash;
 
   /**
    * Constructor for a board. Takes in a list of ids for which action cards

@@ -7,7 +7,7 @@ import edu.brown.cs.dominion.Card;
 public class Pile {
   private int size;
   private transient Supplier<Card> card;
-  private Card c;
+  private transient Card c;
 
   public Pile(Supplier<Card> card, int size) {
     this.size = size;
