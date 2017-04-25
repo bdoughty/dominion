@@ -6,7 +6,7 @@
         <div class="header">
           <input type="text"/>
           <div class="button-container">
-            <button>Create Game</button>
+            <a routerLink="/create"><button>Create Game</button></a>
           </div>
         </div>
         <ul class="games">
@@ -23,64 +23,6 @@
             </div>
           </li>
         </ul>
-        <!--
-        <ul class="games">
-          <li class="game">
-            <div class="game-name">Awesome_Gam32</div>
-            <div class="players">3/4 Players</div>
-            <div class="cards">
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-            </div>
-          </li>
-          <li class="game">
-            <div class="game-name">Awesome_Gam32</div>
-            <div class="players">3/4 Players</div>
-            <div class="cards">
-            </div>
-          </li>
-          <li class="game">
-            <div class="game-name">Awesome_Gam32</div>
-            <div class="players">3/4 Players</div>
-            <div class="cards">
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-            </div>
-          </li>
-          <li class="game">
-            <div class="game-name">Awesome_Gam32</div>
-            <div class="players">3/4 Players</div>
-            <div class="cards">
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-              <div class="card"></div>
-            </div>
-          </li>
-        </ul>
-        -->
       </div>
     </div>
   </div>
@@ -110,18 +52,6 @@
               <div class="player" *ngFor="let player of selectedGame.users">
                 {{ player.name }}
               </div>
-              <!--<div class="player">-->
-              <!--xXxB3n_tha_GodxXx-->
-              <!--</div>-->
-              <!--<div class="player">-->
-              <!--x.X.D.a.|.G.3.n.3.n.3.r.4.a.l.X.x-->
-              <!--</div>-->
-              <!--<div class="player">-->
-              <!--x.X.D.a.|.G.3.n.3.n.3.r.4.a.l.X.x-->
-              <!--</div>-->
-              <!--<div class="player">-->
-              <!--&quot;); DROP TABLE users; &#45;&#45;-->
-              <!--</div>-->
             </div>
           </div>
           <div class="join-game">
