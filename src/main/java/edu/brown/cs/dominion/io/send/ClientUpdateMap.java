@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.games.Game;
+import edu.brown.cs.dominion.gameutil.Player;
 import jdk.nashorn.internal.codegen.CompilerConstants;
 
 import javax.jws.soap.SOAPBinding;
@@ -62,6 +63,8 @@ public class ClientUpdateMap {
 
   public ClientUpdateMap hand(List<Card> cards) {
     data.put("hand", map(cards, Card::getId));
+    dataGlobal.put("handcardnum", new PlayerCards(mainUser.getId(), cards
+      .size()));
     return this;
   }
 
@@ -140,5 +143,14 @@ public class ClientUpdateMap {
 
   public Map<User, Callback> getCallbacks(){
     return callbacks;
+  }
+}
+
+class PlayerCards{
+  int id;
+  int cards;
+  public PlayerCards(int id, int cards){
+    this.cards = cards;
+    this.id = id;
   }
 }
