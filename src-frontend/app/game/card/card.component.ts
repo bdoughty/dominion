@@ -19,6 +19,10 @@ export class CardComponent {
     return typeof this.count !== 'undefined';
   }
 
+  isPile() {
+    return true;
+  }
+
   imageSource() {
     if (this.card) {
       // return "../../../assets/cardimage" + this.card.id + ".jpg";

@@ -3,7 +3,7 @@
   display: inline-block;
   border-radius: 3px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.24);
-  overflow: hidden;
+  overflow: visible;
   position: relative;
   font-size: 0;
   background: rgba(255, 255, 255, 0.75);
@@ -108,5 +108,16 @@
 
 dmn-card {
   position: relative; }
+
+.badge {
+  z-index: 333;
+  background-color: green;
+  display: block;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  right: -15px;
+  top: -15px; }
 
 /*# sourceMappingURL=card.component.css.map */
