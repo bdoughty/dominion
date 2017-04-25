@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.brown.cs.dominion.Card;
+import edu.brown.cs.dominion.money.AbstractMoney;
 import edu.brown.cs.dominion.money.Copper;
 import edu.brown.cs.dominion.money.Gold;
 import edu.brown.cs.dominion.money.Silver;
@@ -125,20 +126,20 @@ public class Board {
     List<Integer> cards = new LinkedList<>();
 
     for (Pile p : piles.values()) {
-      if (p.getCost() <= cost && p.produce().getMonetaryValue() != 0) {
-        cards.add(p.produce().getId());
+      if (p.getCost() <= cost && p.getCard() instanceof AbstractMoney) {
+        cards.add(p.getId());
       }
     }
 
     return cards;
   }
 
-  public List<Card> getCardUnderValue(int cost) {
-    List<Card> cards = new LinkedList<>();
+  public List<Integer> getCardUnderValue(int cost) {
+    List<Integer> cards = new LinkedList<>();
 
     for (Pile p : piles.values()) {
       if (p.getCost() <= cost) {
-        cards.add(p.produce());
+        cards.add(p.getId());
       }
     }
 

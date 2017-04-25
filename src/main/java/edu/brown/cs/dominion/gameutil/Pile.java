@@ -36,6 +36,10 @@ public class Pile {
     return card.get();
   }
 
+  public Card getCard() {
+    return c;
+  }
+
   public boolean isEmpty() {
     return (size == 0);
   }

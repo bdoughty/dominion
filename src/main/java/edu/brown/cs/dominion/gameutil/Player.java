@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.brown.cs.dominion.Card;
-import edu.brown.cs.dominion.money.AbstractMoney;
+import edu.brown.cs.dominion.action.Moat;
 import edu.brown.cs.dominion.money.Copper;
 import edu.brown.cs.dominion.victory.Estate;
 
@@ -149,7 +149,7 @@ public class Player {
 
   public boolean hasMoat() {
     for (Card c : hand) {
-      if (c.getId() == 11) {
+      if (c instanceof Moat) {
         return true;
       }
     }
