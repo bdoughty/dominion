@@ -44,6 +44,14 @@ export class ClientGame {
     this.toSelectBoard = [];
   }
 
+  public getPlayerById(id: number) {
+    for (let i = 0; i < this.players.length; i++) {
+      if (this.players[i].id == id) {
+        return this.players[i];
+      }
+    }
+    throw "Could not find player with id " + id;
+  }
 
   public addToCart(id: number): void {
     let card = new Card(id);
