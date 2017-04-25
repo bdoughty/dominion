@@ -45,8 +45,4 @@ public class Pile {
     return cost;
   }
 
-  public int getSize() {
-    return size;
-  }
-
 }
