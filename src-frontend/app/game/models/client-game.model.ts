@@ -27,6 +27,14 @@ export class ClientGame {
     });
   }
 
+  public updatePiles(piles: any) {
+    this.nonactionCards.forEach(card => {
+      if (piles[card.id]) {
+        card.pileCount = piles[card.id];
+      }
+    });
+  }
+
   public isSelecting() {
     return this.toSelectHand.length > 0 || this.toSelectBoard.length > 0;
   }
