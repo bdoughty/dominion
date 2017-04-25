@@ -43,8 +43,9 @@ public class Pile {
   public int getCost() {
     return c.getCost();
   }
-
+  
   public int getId() {
     return c.getId();
   }
+
 }
