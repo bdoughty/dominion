@@ -14,21 +14,13 @@ export class ChatComponent implements OnInit {
   private chatModel = new Chat();
   private needToScroll = false;
   public currentMessage: string;
-  private _socketService: AbstractSocketService;
+  @Input() public socket: AbstractSocketService;
 
-  constructor(
-    private _chatSocketService: ChatSocketService,
-    private _gameSocketService: GameSocketService
-  ) {}
+
+  constructor() {}
 
   ngOnInit() {
-    if (this.endpoint === 'game') {
-      console.log("CHAT IS GAME");
-      this._socketService = this._gameSocketService;
-    } else {
-      this._socketService = this._chatSocketService;
-    }
-    this._socketService.addListener('chat', (messageString) => {
+    this.socket.addListener('chat', (messageString) => {
       let message = JSON.parse(messageString);
       this.chatModel.addMessage(message);
 
@@ -37,7 +29,7 @@ export class ChatComponent implements OnInit {
   }
 
   onEnter(value) {
-    this._socketService.send('chat', value);
+    this.socket.send('chat', value);
     this.currentMessage = "";
   }
 
