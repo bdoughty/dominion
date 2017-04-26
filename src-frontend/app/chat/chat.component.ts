@@ -19,16 +19,16 @@ export class ChatComponent implements OnInit {
   constructor(
     private _chatSocketService: ChatSocketService,
     private _gameSocketService: GameSocketService
-  ) {
-    if (this.endpoint === 'game') {
-      this._socketService = _gameSocketService;
-    } else {
-      this._socketService = _chatSocketService;
-    }
-  }
+  ) {}
 
   ngOnInit() {
-    this._chatSocketService.addListener('chat', (messageString) => {
+    if (this.endpoint === 'game') {
+      console.log("CHAT IS GAME");
+      this._socketService = this._gameSocketService;
+    } else {
+      this._socketService = this._chatSocketService;
+    }
+    this._socketService.addListener('chat', (messageString) => {
       let message = JSON.parse(messageString);
       this.chatModel.addMessage(message);
 

@@ -50,6 +50,7 @@ export class AbstractSocketService {
   }
 
   public send(type, message) {
+    console.log("SENDING " + message + "from " + this.endpoint);
     this.sock.send(type + ":" + message);
   }
 
