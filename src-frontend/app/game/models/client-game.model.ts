@@ -28,7 +28,8 @@ export class ClientGame {
   }
 
   public updatePiles(piles: any) {
-    this.nonactionCards.forEach(card => {
+    const allCards = this.nonactionCards.concat(this.actionCards);
+    allCards.forEach(card => {
       if (piles[card.id]) {
         card.pileCount = piles[card.id];
       }
