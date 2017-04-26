@@ -110,7 +110,9 @@
           background: rgba(0, 0, 0, 0.5);
           font-size: 0.8em;
           color: white;
-          height: 220px; }
+          height: 330px; }
+          #game #board #right-bar-container #right-bar .chat-container .message {
+            padding: 0 !important; }
   #game #hud {
     height: 200px;
     display: flex;

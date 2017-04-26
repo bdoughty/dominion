@@ -168,7 +168,11 @@
           background: rgba(black, 0.5);
           font-size: 0.8em;
           color: white;
-          height: 220px;
+          height: 330px;
+
+          .message {
+            padding: 0 !important;
+          }
         }
       }
     }

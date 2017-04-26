@@ -21,9 +21,10 @@
           </dmn-card>
         </div>
       </div>
-      <button [ngClass]="{hidden: !game.isSelecting || !game.toSelectStoppable}"
+      <button *ngIf="game.isSelecting && game.toSelectStoppable"
               (click)="endSelecting()">End Select</button>
-      <button [ngClass]="{hidden: game.isSelecting || !game.isOwnTurn()}"
+      <button *ngIf="!(game.isSelecting && game.toSelectStoppable)"
+              [ngClass]="{hidden: game.isSelecting || !game.isOwnTurn()}"
               (click)="endPhase()">End {{ game.phase }} Phase</button>
     </div>
     <div id="piles">
