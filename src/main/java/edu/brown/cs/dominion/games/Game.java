@@ -186,6 +186,7 @@ public class Game extends GameStub implements GameEventListener {
   @Override
   public ClientUpdateMap fullUpdate(User u) {
     ClientUpdateMap cm = new ClientUpdateMap(this, u);
+    cm.piles(board);
     playerUpdateMap(cm, userPlayers.get(u));
     return cm;
   }

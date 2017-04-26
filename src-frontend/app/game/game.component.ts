@@ -191,13 +191,13 @@ export class GameComponent implements OnInit {
         const player = this.game.getPlayerById(update.handcardnum.id);
         player.numCards = update.handcardnum.cards;
       }
-      if (update.turn !== "undefined") {
+      if (typeof update.turn !== "undefined") {
         this.game.setTurn(update.turn);
       }
-      if (update.board !== 'undefined') {
+      if (typeof update.board !== 'undefined') {
         this.game.updatePiles(update.board.piles);
       }
-      if (update.winner !== "undefined") {
+      if (typeof update.winner !== "undefined") {
         // alert("")
       }
     }
