@@ -41,7 +41,7 @@ public class GameManager implements SocketServer {
   private Map<Integer, PendingGame> pendingGames;
   private Map<User, PendingGame> pendingByUser;
 
-  public GameManager(UserRegistry users, Websocket web) {
+  public GameManager(UserRegistry users) {
     this.web = web;
     this.users = users;
     gamesByUser = new HashMap<>();
@@ -62,6 +62,10 @@ public class GameManager implements SocketServer {
         new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
     pendingGames.put(p3.getId(), p3);
     pendingByUser = new HashMap<>();
+  }
+
+  public void setWeb(Websocket web){
+    this.web = web;
   }
 
   private Map<User, Callback> callbacks;

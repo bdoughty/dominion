@@ -58,7 +58,9 @@ public class Main {
     exception(Exception.class, new ExceptionPrinter());
 
     webSocket("/home", new Websocket(users, home));
-    webSocket("/gamesocket", new Websocket(users, gm));
+    Websocket gameWs = new Websocket(users, gm);
+    gm.setWeb(gameWs);
+    webSocket("/gamesocket", gameWs);
 
     // TODO get rid of this, for some reason it is necessary for the server to
     // start right now.
