@@ -22,7 +22,7 @@ public class GameInit {
       cards[2][i] = new Pile(cds.get(i + 5), 10);
     }
     cards[0][0] = new Pile("Province", 12);
-    cards[0][1] = new Pile("Dutchy", 12);
+    cards[0][1] = new Pile("Duchy", 12);
     cards[0][2] = new Pile("Estate", 12);
     cards[0][4] = new Pile("Curse", (players.size() - 1) * 10);
     cards[3][2] = new Pile("Copper", 70 - players.size() * 7);
