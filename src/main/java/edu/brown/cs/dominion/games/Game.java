@@ -92,7 +92,7 @@ public class Game extends GameStub implements GameEventListener {
       return null;
     }
 
-    sendServerMessage("Hey " + u.getName() + ", " + getRandomSpamMessage());
+    gc.spambotSend(getRandomSpamMessage());
 
     actionPhase = true;
 
