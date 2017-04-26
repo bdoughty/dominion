@@ -31,7 +31,7 @@ export class ClientGame {
     const allCards = this.nonactionCards.concat(this.actionCards);
     allCards.forEach(card => {
       if (piles[card.id]) {
-        card.pileCount = piles[card.id];
+        card.pileCount = piles[card.id]['size'];
       }
     });
   }
@@ -59,10 +59,10 @@ export class ClientGame {
     throw "Could not find player with id " + id;
   }
 
-  public addToCart(id: number): void {
-    let card = new Card(id);
+  public addToCart(card: Card): void {
+    const cardToAdd = new Card(card.id);
     if (this.canBuy(card)) {
-      this.cart.push(card);
+      this.cart.push(cardToAdd);
       this.gold -= card.cost;
       this.buys -= 1;
     }
@@ -120,7 +120,7 @@ export class ClientGame {
   }
 
   public canBuy(card: Card) {
-    return (this.phase === 'buy') && card.cost <= this.gold && this.buys > 0;
+    return card.pileCount > 0 && (this.phase === 'buy') && card.cost <= this.gold && this.buys > 0;
   }
 
   get buys() {

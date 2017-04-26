@@ -8,7 +8,7 @@
     <div class="counter">{{count}}</div>
   </div>
 
-  <div class="badge" *ngIf="isPile()">{{ card.pileCount.size }}</div>
+  <div class="badge" *ngIf="isPile()">{{ card.pileCount }}</div>
 
   <div class="image" *ngIf="card" [style.background-image]="imageSource()"></div>
   <div class="card-label" *ngIf="card">

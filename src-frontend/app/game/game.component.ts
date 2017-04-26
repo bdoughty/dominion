@@ -107,7 +107,7 @@ export class GameComponent implements OnInit {
 
   addToCart(card: Card) {
     if (this.game.phase === 'buy') {
-      this.game.addToCart(card.id);
+      this.game.addToCart(card);
     }
   }
 

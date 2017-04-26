@@ -3,7 +3,7 @@ import { cardInfo } from "./card.data";
 export class Card {
   public handPosition: number;
   public state: string = 'inhand';
-  public pileCount: number = 0;
+  public pileCount: number;
 
   constructor(public id) {
   }

@@ -20,7 +20,7 @@ export class CardComponent {
   }
 
   isPile() {
-    return this.card && this.card.pileCount != 0;
+    return this.card && typeof this.card.pileCount !== 'undefined';
   }
 
   imageSource() {
