@@ -20,6 +20,7 @@ public class Cellar extends AbstractAction {
 
   @Override
   public void play(Game g, ClientUpdateMap cm) {
+    g.getCurrentPlayer().incrementActions();
     cm.requireSelectCanStop(g.getCurrent(),
         g.getCurrentPlayer().getHand().stream().map(Card::getId)
             .collect(Collectors.toList()),
@@ -79,5 +80,4 @@ class CellarDraw implements CancelHandler {
 
     return cm;
   }
-
 }

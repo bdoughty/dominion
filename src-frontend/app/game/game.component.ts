@@ -59,6 +59,10 @@ export class GameComponent implements OnInit {
 
   endSelecting() {
     this._gameSocketService.send('cancel', '');
+    this.game.toSelect = false;
+    this.game.toSelectStoppable = false;
+    this.game.toSelectHand = [];
+    this.game.toSelectBoard = [];
   }
 
   cardClickedPile(card: Card) {

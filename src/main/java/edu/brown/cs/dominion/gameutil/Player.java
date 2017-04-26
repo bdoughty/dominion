@@ -111,6 +111,7 @@ public class Player {
   public void discard(int toDiscard) {
     assert (toDiscard >= 0 && toDiscard < hand.size());
     Card c = hand.remove(toDiscard);
+    baseMoney -= c.getMonetaryValue();
     discardPile.add(c);
   }
 
