@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.ImmutableList;
-
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.gameutil.Board;
@@ -101,14 +99,15 @@ public class Game extends GameStub implements GameEventListener {
         System.out.println(npe.getMessage());
       }
     }
+
     p.endTurn();
     usersTurns.add(current);
     current = usersTurns.poll();
 
-
     ClientUpdateMap cm = new ClientUpdateMap(this, u);
     playerUpdateMap(cm, p);
     cm.turn(current.getId());
+    cm.piles(board);
 
     if (board.gameHasEnded()) {
       int highScore = userPlayers
@@ -127,7 +126,7 @@ public class Game extends GameStub implements GameEventListener {
   }
 
   @Override
-  public ClientUpdateMap startTurn(User u){
+  public ClientUpdateMap startTurn(User u) {
     userPlayers.get(current).newTurn();
     ClientUpdateMap cm = new ClientUpdateMap(this, u);
     playerUpdateMap(cm, getCurrentPlayer());
@@ -142,12 +141,6 @@ public class Game extends GameStub implements GameEventListener {
 
     assert (current.equals(u));
     Player p = userPlayers.get(u);
-
-    // TODO error check this to make sure it's an action, valid pos, etc.
-    // Card c = p.getHand().get(LocInHand);
-    // p.discard(new LinkedList<>(ImmutableList.of(LocInHand)));
-    // c.play(this);
-    // p.decrementActions();
 
     ClientUpdateMap cm = new ClientUpdateMap(this, u);
 
