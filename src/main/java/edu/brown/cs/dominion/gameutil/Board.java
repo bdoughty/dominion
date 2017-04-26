@@ -43,12 +43,12 @@ public class Board {
 
     // building board
     // money
-    piles.put(0, new Pile(Copper::new, 60));
+    piles.put(0, new Pile(Copper::new, 32));
     piles.put(1, new Pile(Silver::new, 40));
     piles.put(2, new Pile(Gold::new, 30));
 
     // victory points
-    piles.put(3, new Pile(Estate::new, 24));
+    piles.put(3, new Pile(Estate::new, 12));
     piles.put(4, new Pile(Duchy::new, 12));
     piles.put(5, new Pile(Province::new, 12));
     piles.put(6, new Pile(Curse::new, 30));
