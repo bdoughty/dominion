@@ -20,7 +20,7 @@ export class CardComponent {
   }
 
   isPile() {
-    return true;
+    return this.card && this.card.pileCount != 0;
   }
 
   imageSource() {
