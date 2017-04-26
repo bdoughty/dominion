@@ -1,5 +1,8 @@
 package edu.brown.cs.dominion.games;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -31,13 +34,14 @@ public class Game extends GameStub implements GameEventListener {
   private User current;
   private Map<User, Player> userPlayers;
   private Board board;
+  private static File spambot = new File("src/main/resources/trash_talk.txt");
 
   private GameChat gc;
 
   private boolean actionPhase = true;
 
-  public Game(List<User> usersTurns, List<Integer> actionCardIds, Websocket
-    ws) {
+  public Game(List<User> usersTurns, List<Integer> actionCardIds,
+      Websocket ws) {
     userPlayers = new HashMap<>();
     usersTurns.forEach(u -> userPlayers.put(u, new Player()));
     this.allUsers = new LinkedList<>(usersTurns);
@@ -88,7 +92,7 @@ public class Game extends GameStub implements GameEventListener {
       return null;
     }
 
-    sendServerMessage("Player " + u.getName() + " hates you ... get wrekt!!!");
+    sendServerMessage("Hey " + u.getName() + ", " + getRandomSpamMessage());
 
     actionPhase = true;
 
@@ -119,8 +123,8 @@ public class Game extends GameStub implements GameEventListener {
     cm.piles(board);
 
     if (board.gameHasEnded()) {
-      int highScore = userPlayers
-          .get(Collections.max(allUsers, (User one, User two) -> {
+      int highScore =
+          userPlayers.get(Collections.max(allUsers, (User one, User two) -> {
             return Integer.compare(userPlayers.get(one).scoreDeck(),
                 userPlayers.get(two).scoreDeck());
           })).scoreDeck();
@@ -225,7 +229,32 @@ public class Game extends GameStub implements GameEventListener {
     gc.send(u, s);
   }
 
-  public void sendServerMessage(String s){
+  public void sendServerMessage(String s) {
     gc.serverSend(s);
+  }
+
+  private static String getRandomSpamMessage() {
+    try (BufferedReader br = new BufferedReader(new FileReader(spambot))) {
+      String out = "go rek urself!!!";
+      if (br.ready()) {
+        String line = br.readLine();
+        int i = 1;
+        while (line != null) {
+          if (line.equals("")) {
+            line = br.readLine();
+            continue;
+          }
+          if (Math.random() * i < 1) {
+            out = line;
+          }
+          line = br.readLine();
+          i++;
+        }
+      }
+      return out;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return "you literally broke the spambot you're so bad!";
+    }
   }
 }
