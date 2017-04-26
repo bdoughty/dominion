@@ -46,6 +46,7 @@ class DiscardOne implements SelectCallback {
     ClientUpdateMap cm = new ClientUpdateMap(g, u);
     cm.hand(g.getPlayerFromUser(u).getHand());
     cm.discardPileSize(g.getPlayerFromUser(u).getDiscard().size());
+    cm.piles(g.getBoard());
 
     cm.requireSelectCanStop(u,
         g.getPlayerFromUser(u).getHand().stream().map(Card::getId)

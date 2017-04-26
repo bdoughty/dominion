@@ -33,6 +33,7 @@ public class Workshop extends AbstractAction {
 
             ClientUpdateMap cm = new ClientUpdateMap(g, g.getCurrent());
             g.playerUpdateMap(cm, g.getCurrentPlayer());
+            cm.piles(g.getBoard());
 
             return cm;
           }
