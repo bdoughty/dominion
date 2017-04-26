@@ -9,6 +9,7 @@ import java.util.Queue;
 import java.util.stream.Collectors;
 
 import edu.brown.cs.dominion.Card;
+import edu.brown.cs.dominion.GameChat;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.gameutil.Board;
 import edu.brown.cs.dominion.gameutil.EmptyPileException;
@@ -18,6 +19,7 @@ import edu.brown.cs.dominion.gameutil.NotActionException;
 import edu.brown.cs.dominion.gameutil.Player;
 import edu.brown.cs.dominion.gameutil.TooExpensiveException;
 import edu.brown.cs.dominion.io.GameEventListener;
+import edu.brown.cs.dominion.io.Websocket;
 import edu.brown.cs.dominion.io.send.ClientUpdateMap;
 
 /**
@@ -30,9 +32,12 @@ public class Game extends GameStub implements GameEventListener {
   private Map<User, Player> userPlayers;
   private Board board;
 
-  boolean actionPhase = true;
+  private GameChat gc;
 
-  public Game(List<User> usersTurns, List<Integer> actionCardIds) {
+  private boolean actionPhase = true;
+
+  public Game(List<User> usersTurns, List<Integer> actionCardIds, Websocket
+    ws) {
     userPlayers = new HashMap<>();
     usersTurns.forEach(u -> userPlayers.put(u, new Player()));
     this.allUsers = new LinkedList<>(usersTurns);
@@ -40,6 +45,8 @@ public class Game extends GameStub implements GameEventListener {
     this.current = this.usersTurns.poll();
     userPlayers.get(current).newTurn();
     this.board = new Board(actionCardIds);
+
+    gc = new GameChat(ws, usersTurns);
   }
 
   public User getCurrent() {
@@ -80,6 +87,8 @@ public class Game extends GameStub implements GameEventListener {
     if (current.getId() != u.getId()) {
       return null;
     }
+
+    sendServerMessage("Player " + u.getName() + " hates you ... get wrekt!!!");
 
     actionPhase = true;
 
@@ -212,4 +221,11 @@ public class Game extends GameStub implements GameEventListener {
     return board.gainCard(id);
   }
 
+  public void sendMessage(User u, String s) {
+    gc.send(u, s);
+  }
+
+  public void sendServerMessage(String s){
+    gc.serverSend(s);
+  }
 }

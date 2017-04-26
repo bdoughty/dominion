@@ -43,12 +43,12 @@ public class PendingGame extends GameStub{
   }
 
   //TODO
-  public Game convertAndRedirect(Websocket ws){
+  public Game convertAndRedirect(Websocket ws, Websocket gameManager){
     List<Integer> cards = new LinkedList<>();
     for(int i : actioncardids){
       cards.add(i);
     }
-    Game g = new Game(users, cards);
+    Game g = new Game(users, cards, gameManager);
     users.forEach(u -> ws.send(u, MessageType.REDIRECT, "game"));
     return g;
   }

@@ -19,10 +19,12 @@ public class GameChat extends Chat{
 
   public void send(User u, String s){
     String message = getMessage(u.getName(), u.getColor(), s);
+    sendAll(message);
   }
 
   public void serverSend(String s){
     String message = getMessage("Server", "#000", s);
+    sendAll(message);
   }
 
   private void sendAll(String message){

@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.function.Function;
 
 import edu.brown.cs.dominion.io.send.Callback;
-import jdk.nashorn.internal.codegen.CompilerConstants;
 import org.eclipse.jetty.websocket.api.Session;
 
 import com.google.gson.Gson;
@@ -22,7 +21,6 @@ import edu.brown.cs.dominion.io.SocketServer;
 import edu.brown.cs.dominion.io.UserRegistry;
 import edu.brown.cs.dominion.io.Websocket;
 import edu.brown.cs.dominion.io.send.ClientUpdateMap;
-import edu.brown.cs.dominion.io.send.SelectCallback;
 
 import static edu.brown.cs.dominion.io.send.MessageType.*;
 
@@ -33,6 +31,7 @@ import static edu.brown.cs.dominion.io.send.MessageType.*;
  * Created by henry on 3/22/2017.
  */
 public class GameManager implements SocketServer {
+  private Websocket web;
   private static Gson GSON = new Gson();
   private static JsonParser PARSE = new JsonParser();
 
@@ -42,7 +41,8 @@ public class GameManager implements SocketServer {
   private Map<Integer, PendingGame> pendingGames;
   private Map<User, PendingGame> pendingByUser;
 
-  public GameManager(UserRegistry users) {
+  public GameManager(UserRegistry users, Websocket web) {
+    this.web = web;
     this.users = users;
     gamesByUser = new HashMap<>();
     games = new LinkedList<>();
@@ -160,6 +160,13 @@ public class GameManager implements SocketServer {
         sendClientUpdateMap(ws, g.getCurrent(), g.startTurn(g.getCurrent()));
       }
     });
+
+    ws.putCommand(CHAT, (w, u, m) -> {
+      if (gamesByUser.containsKey(u)) {
+        Game g = gamesByUser.get(u);
+        g.sendMessage(u, m);
+      }
+    });
   }
 
   public List<PendingGame> getPendingGames() {
@@ -177,7 +184,7 @@ public class GameManager implements SocketServer {
         pendingByUser.put(u, pg);
         boolean didJoin = pg.addUser(u);
         if (pg.full()) {
-          Game g = pg.convertAndRedirect(ws);
+          Game g = pg.convertAndRedirect(ws, web);
           games.add(g);
           pg.getUsers().forEach(us -> gamesByUser.put(us, g));
           pg.getUsers().forEach(us -> pendingByUser.remove(us));
@@ -198,7 +205,7 @@ public class GameManager implements SocketServer {
     }
   }
 
-  public void sendClientUpdateMap(Websocket ws, User u, ClientUpdateMap c) {
+  private void sendClientUpdateMap(Websocket ws, User u, ClientUpdateMap c) {
     if (c != null) {
       c = chk(c);
       for (User user : c.getUsers()) {
