@@ -1,6 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Chat} from "./chat.model";
 import {ChatSocketService} from "../shared/chatsocket.service";
+import {GameSocketService} from "../shared/gamesocket.service";
+import {AbstractSocketService} from "../shared/socket.service";
 
 @Component({
   selector: 'dmn-chat',
@@ -8,13 +10,22 @@ import {ChatSocketService} from "../shared/chatsocket.service";
   styleUrls: ['./chat.component.css']
 })
 export class ChatComponent implements OnInit {
+  @Input() public endpoint = 'homechat';
   private chatModel = new Chat();
   private needToScroll = false;
   public currentMessage: string;
+  private _socketService: AbstractSocketService;
 
   constructor(
-    private _chatSocketService: ChatSocketService
-  ) {}
+    private _chatSocketService: ChatSocketService,
+    private _gameSocketService: GameSocketService
+  ) {
+    if (this.endpoint === 'game') {
+      this._socketService = _gameSocketService;
+    } else {
+      this._socketService = _chatSocketService;
+    }
+  }
 
   ngOnInit() {
     this._chatSocketService.addListener('chat', (messageString) => {
@@ -26,7 +37,7 @@ export class ChatComponent implements OnInit {
   }
 
   onEnter(value) {
-    this._chatSocketService.send('chat', value);
+    this._socketService.send('chat', value);
     this.currentMessage = "";
   }
 
