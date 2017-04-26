@@ -25,8 +25,7 @@ public class Remodel extends AbstractAction {
     User currU = g.getCurrent();
     Player currP = g.getCurrentPlayer();
 
-    List<Integer> handIds = currP.getHand().stream()
-        .filter(c -> c.getMonetaryValue() != 0).map(Card::getId)
+    List<Integer> handIds = currP.getHand().stream().map(Card::getId)
         .collect(Collectors.toList());
 
     SelectCallback trash = new SelectCallback() {
