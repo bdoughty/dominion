@@ -103,7 +103,6 @@ public class Player {
       hand.add(c);
       baseMoney += c.getMonetaryValue();
     } else {
-      // TODO should this be playedPile? I don't know about this edge case...
       discardPile.add(c);
     }
   }
@@ -113,18 +112,6 @@ public class Player {
     Card c = hand.remove(toDiscard);
     baseMoney -= c.getMonetaryValue();
     discardPile.add(c);
-  }
-
-  public void discard(List<Integer> toDiscard) {
-    assert (Collections.max(toDiscard) < hand.size()
-        && Collections.min(toDiscard) >= 0);
-
-    Collections.sort(toDiscard, Collections.reverseOrder());
-
-    for (int i : toDiscard) {
-      Card c = this.hand.remove(i);
-      discardPile.add(c);
-    }
   }
 
   public void endTurn() {
