@@ -33,7 +33,7 @@ export const cardInfo = {
     name: 'Province',
     text: '6 Victory Points',
     type: 'victory',
-    cost: 8
+    cost: 1
   },
   6: {
     name: 'Curse',

@@ -14,6 +14,7 @@ export class ClientGame {
   public toSelectStoppable = false;
   public phase: string = "action";
   public orderedPlayers: Player[];
+  public isOver: boolean = false;
 
   public nonactionCards: Card[] =
     [new Card(0), new Card(1), new Card(2), new Card(3), new Card(4), new Card(5)];
