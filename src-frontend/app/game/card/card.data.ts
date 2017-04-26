@@ -24,7 +24,7 @@ export const cardInfo = {
     cost: 2
   },
   4: {
-    name: 'Dutchy',
+    name: 'Duchy',
     text: '3 Victory Points',
     type: 'victory',
     cost: 5
