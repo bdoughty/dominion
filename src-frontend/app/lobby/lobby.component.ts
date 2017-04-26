@@ -36,15 +36,9 @@ export class LobbyComponent implements OnInit {
       }
     });
 
-    this._chatSocketService.addListener('joinresponse', (messageString) => {
-
-    });
-
     this._chatSocketService.addListener('redirect', (messageString) => {
       window.location.replace(messageString);
     });
-
-    this._chatSocketService.addListener('leaveresponse', (a) => {});
   }
 
   select(pending) {

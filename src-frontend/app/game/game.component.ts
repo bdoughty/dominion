@@ -3,7 +3,6 @@ import {UserIdService} from "../shared/user-id.service";
 import {Chat} from "../chat/chat.model";
 import {Player} from "./models/player.model";
 import {ClientGame} from "./models/client-game.model";
-import {GameService} from "./game.service";
 import {GameSocketService} from "../shared/gamesocket.service";
 import {Card} from "./card/card.model";
 import {trigger, state, style, animate, transition, keyframes} from "@angular/animations";
@@ -35,7 +34,6 @@ export class GameComponent implements OnInit {
 
   constructor(
     private _userIdService: UserIdService,
-    private _gameService: GameService,
     private _gameSocketService: GameSocketService
   ) {}
 

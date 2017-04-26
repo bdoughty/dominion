@@ -10,6 +10,4 @@ export class Player {
     public color: string,
     public name: string) {
   }
-
-  drawHand() {}
 }

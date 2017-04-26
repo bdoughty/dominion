@@ -5,13 +5,11 @@ import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-
 import { AppComponent } from './app.component';
 import {LobbyComponent} from "./lobby/lobby.component";
 import {CreationComponent} from "./creation-page/creation-page.component";
 import {GameComponent} from "./game/game.component";
 import {UserIdService} from "./shared/user-id.service";
-import {GameService} from "./game/game.service";
 import {appRoutes} from "./routes";
 import {ChatComponent} from "./chat/chat.component";
 import {ChatSocketService} from "./shared/chatsocket.service";
@@ -40,7 +38,6 @@ import {CardComponent} from "./game/card/card.component";
   ],
   providers: [
     UserIdService,
-    GameService,
     ChatSocketService,
     GameSocketService
     // SocketService
