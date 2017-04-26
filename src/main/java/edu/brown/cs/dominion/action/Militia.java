@@ -46,11 +46,12 @@ class DownToThree implements SelectCallback {
   @Override
   public ClientUpdateMap call(User u, boolean inHand, int loc) {
     if (inHand) {
-      g.getPlayerFromUser(u).trash(loc);
+      g.getPlayerFromUser(u).discard(loc);
     }
 
     ClientUpdateMap cm = new ClientUpdateMap(g, u);
     cm.hand(g.getPlayerFromUser(u).getHand());
+    cm.discardPileSize(g.getPlayerFromUser(u).getDiscard().size());
 
     if (g.getPlayerFromUser(u).getHand().size() > 3) {
       cm.requireSelect(u,
