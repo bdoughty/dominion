@@ -59,6 +59,10 @@ export class GameComponent implements OnInit {
     });
   }
 
+  endSelecting() {
+    this._gameSocketService.send('cancel', '');
+  }
+
   cardClickedPile(card: Card) {
     if (this.game.isSelecting() && this.game.isSelectable(card, false)) {
       this._gameSocketService.send('select', JSON.stringify({inhand: false, loc: card.id}));
@@ -187,10 +191,13 @@ export class GameComponent implements OnInit {
         const player = this.game.getPlayerById(update.handcardnum.id);
         player.numCards = update.handcardnum.cards;
       }
-      if (update.turn !== "undefined") {
+      if (typeof update.turn !== "undefined") {
         this.game.setTurn(update.turn);
       }
-      if (update.winner !== "undefined") {
+      if (typeof update.board !== 'undefined') {
+        this.game.updatePiles(update.board.piles);
+      }
+      if (typeof update.winner !== "undefined") {
         // alert("")
       }
     }

@@ -5,7 +5,7 @@
   box-shadow: 0 1px 2px rgba(black, 0.12), 0 1px 3px rgba(black, 0.24);
   //padding: 3px 3px 0px;
   //background: black;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
   font-size: 0;
   background: rgba(white, 0.75);
@@ -161,3 +161,24 @@
 dmn-card {
   position: relative;
 }
+
+.badge {
+  z-index: 20;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  right: -10px;
+  top: -10px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  background: rgba(#444, 0.9);
+  font-weight: 100;
+  border: 1px solid #DDD;
+
+}
+
+

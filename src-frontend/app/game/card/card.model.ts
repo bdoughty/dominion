@@ -110,6 +110,7 @@ const cardInfo = {
 export class Card {
   public handPosition: number;
   public state: string = 'inhand';
+  public pileCount: number = 0;
 
   constructor(public id) {
   }
