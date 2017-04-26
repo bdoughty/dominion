@@ -8,7 +8,7 @@ export class ClientGame {
   public hand: Card[] = [];
   public discardsize: number = 0;
   public decksize: number = 10;
-  public toSelect: boolean = false;
+  public isSelecting: boolean = false;
   public toSelectHand = [];
   public toSelectBoard = [];
   public toSelectStoppable = false;
@@ -34,10 +34,6 @@ export class ClientGame {
         card.pileCount = piles[card.id];
       }
     });
-  }
-
-  public isSelecting() {
-    return this.toSelectHand.length > 0 || this.toSelectBoard.length > 0;
   }
 
   public isSelectable(card: Card, inhand: boolean) {
@@ -118,7 +114,7 @@ export class ClientGame {
 
   public canPlay(card: Card) {
     return this.isOwnTurn()
-      && !this.isSelecting()
+      && !this.isSelecting
       && this.actions > 0
       && (card.type === 'action' || card.type === 'reaction');
   }

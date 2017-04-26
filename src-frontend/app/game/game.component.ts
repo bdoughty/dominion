@@ -29,7 +29,7 @@ import {trigger, state, style, animate, transition, keyframes} from "@angular/an
 })
 export class GameComponent implements OnInit {
   public title = 'Dominion';
-  public game;
+  public game: ClientGame;
   public gameChat = new Chat();
 
   constructor(
@@ -59,14 +59,13 @@ export class GameComponent implements OnInit {
 
   endSelecting() {
     this._gameSocketService.send('cancel', '');
-    this.game.toSelect = false;
+    this.game.isSelecting = false;
     this.game.toSelectStoppable = false;
-    this.game.toSelectHand = [];
-    this.game.toSelectBoard = [];
+    this.game.setNotSelecting();
   }
 
   cardClickedPile(card: Card) {
-    if (this.game.isSelecting() && this.game.isSelectable(card, false)) {
+    if (this.game.isSelecting && this.game.isSelectable(card, false)) {
       this._gameSocketService.send('select', JSON.stringify({inhand: false, loc: card.id}));
       console.log("\n--------------");
       console.log("\nSENDING select:");
@@ -78,7 +77,7 @@ export class GameComponent implements OnInit {
   }
 
   cardClickedHand(card: Card) {
-    if (this.game.isSelecting() && this.game.isSelectable(card, true)) {
+    if (this.game.isSelecting && this.game.isSelectable(card, true)) {
       this._gameSocketService.send('select',
         JSON.stringify({inhand: true, loc: card.handPosition}));
 
@@ -163,12 +162,12 @@ export class GameComponent implements OnInit {
       }
       if (typeof update.select !== "undefined") {
         if (update.select) {
-          this.game.toSelect = true;
+          this.game.isSelecting = true;
           this.game.toSelectHand = update.handSelect;
           this.game.toSelectBoard = update.boardSelect;
           this.game.toSelectStoppable = update.stoppable;
         } else {
-          this.game.toSelect = false;
+          this.game.isSelecting = false;
         }
       }
       if (typeof update.hand !== "undefined") {
@@ -206,7 +205,7 @@ export class GameComponent implements OnInit {
     console.log("\n--------------");
     console.log("\nUPDATED GAME:");
     console.log(this.game);
-    console.log(this.game.isSelecting());
+    console.log(this.game.isSelecting);
   }
 
   chat(msg) {
