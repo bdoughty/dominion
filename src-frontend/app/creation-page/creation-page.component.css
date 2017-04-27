@@ -177,3 +177,7 @@ form {
   height: 100%;
   font-size: 5vmin;
 }
+
+button:focus {
+  border: none;
+}
