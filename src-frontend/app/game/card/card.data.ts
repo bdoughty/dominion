@@ -131,49 +131,51 @@ export const cardInfo = {
   },
   21: {
     name: 'Adventurer',
-    text: '+2 Cards<br/>Each other player gains a Curse.',
+    text: 'Reveal cards from your deck until you see 2 Treasures. ' +
+    'Put them into your hand and discard the rest.',
     type: 'action',
-    cost: 5
+    cost: 6
   },
   22: {
     name: 'Bureaucrat',
-    text: '+2 Cards<br/>Each other player gains a Curse.',
+    text: 'Gain a Silver onto your deck. Each other player reveals a Victory ' +
+    'card from their hand and puts it onto their deck.',
     type: 'action',
-    cost: 5
+    cost: 4
   },
   23: {
     name: 'Chancellor',
-    text: '+2 Cards<br/>Each other player gains a Curse.',
+    text: '+2 Money<br/>You may immediately put your deck into your discard pile.',
     type: 'action',
-    cost: 5
+    cost: 3
   },
   24: {
     name: 'Chapel',
-    text: '+2 Cards<br/>Each other player gains a Curse.',
+    text: 'Trash up to 4 cards from your hand.',
     type: 'action',
-    cost: 5
+    cost: 2
   },
   25: {
     name: 'Feast',
-    text: '+2 Cards<br/>Each other player gains a Curse.',
+    text: 'Trash this card. Gain a card costing up to 5 Money.',
     type: 'action',
-    cost: 5
+    cost: 4
   },
   26: {
     name: 'Moneylender',
-    text: '+2 Cards<br/>Each other player gains a Curse.',
+    text: 'You may trash a Copper from your hand for +3 Money.',
     type: 'action',
-    cost: 5
+    cost: 4
   },
   27: {
     name: 'Throne Room',
-    text: '+2 Cards<br/>Each other player gains a Curse.',
+    text: 'You may play an Action card from your hand twice.',
     type: 'action',
-    cost: 5
+    cost: 4
   },
   28: {
     name: 'Library',
-    text: '+2 Cards<br/>Each other player gains a Curse.',
+    text: 'Draw until you have 7 cards in hand, discarding any action cards you choose to.',
     type: 'action',
     cost: 5
   }
