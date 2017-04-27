@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.brown.cs.dominion.User;
+import edu.brown.cs.dominion.AI.Strategy.DumbStrategy;
 import edu.brown.cs.dominion.AI.Strategy.Strategy;
 import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.gameutil.NoPileException;
@@ -65,5 +66,15 @@ public class AIPlayer extends User implements AI {
   public void doCallback(Game g, Callback c) {
     // TODO Switch on callback string and act accordingly (buying cards, gaining
     // cards, discarding, etc.)
+    // TODO how to avoid race conditions on multi-stage actions??
+    // switch (c.getName()) {
+    // case "Militia":
+    // st.discard(g, this);
+    // st.discard(g, this);
+    // case "Workshop":
+    //
+    //
+    // }
+
   }
 }
