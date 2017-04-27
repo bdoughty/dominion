@@ -12,6 +12,7 @@ public class AIPlayer extends User implements AI {
 
   @Override
   public void play(Game g) {
+    // TODO playAction returns -1 if there are no actions
     // TODO Auto-generated method stub
 
   }
