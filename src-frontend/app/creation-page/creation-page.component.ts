@@ -59,15 +59,15 @@ import {ChatSocketService} from "../shared/chatsocket.service";
 
   highlightPreset(toHighlight) {
     this.selected.clear();
-    for(let i in this.allCards) {
+    this.allCards.forEach((i) => {
+      console.log(i);
       if(i in toHighlight) {
         this.selected.add(i);
         document.getElementById("card" + i).style.border = "3px solid yellow";
       } else {
         document.getElementById("card" + i).style.border = "0";
       }
-    }
-    console.log(this.selected);
+    });
   }
 
   basic() {
