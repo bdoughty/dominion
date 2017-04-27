@@ -33,6 +33,7 @@ public class Militia extends AbstractAction {
             g.getPlayerFromUser(user).getHand().stream().map(Card::getId)
                 .collect(Collectors.toList()),
             ImmutableList.<Integer> of(), new DownToThree(g));
+        g.sendServerMessage(user.getName() + " was forced to discard.");
       }
     }
   }

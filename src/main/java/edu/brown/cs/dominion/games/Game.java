@@ -155,9 +155,9 @@ public class Game extends GameStub implements GameEventListener {
 
     try {
       Card c = p.play(LocInHand);
+      sendServerMessage(u.getName() + " played " + c.toString() + ".");
       c.play(this, cm);
       playerUpdateMap(cm, p);
-      sendServerMessage(u.getName() + " played " + c.toString() + ".");
     } catch (NotActionException nae) {
       System.out.println(nae.getMessage());
     } catch (NoActionsException nae) {
@@ -182,8 +182,6 @@ public class Game extends GameStub implements GameEventListener {
     ClientUpdateMap cm = new ClientUpdateMap(this, u);
     playerUpdateMap(cm, p);
     cm.setPhase(false);
-
-    sendServerMessage(u.getName() + " ended Action Phase.");
 
     return cm;
   }

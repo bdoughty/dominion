@@ -1,5 +1,14 @@
 package edu.brown.cs.dominion.games;
 
+import static edu.brown.cs.dominion.io.send.MessageType.CANCEL_SELECT;
+import static edu.brown.cs.dominion.io.send.MessageType.CHAT;
+import static edu.brown.cs.dominion.io.send.MessageType.DO_ACTION;
+import static edu.brown.cs.dominion.io.send.MessageType.END_ACTION;
+import static edu.brown.cs.dominion.io.send.MessageType.END_BUY;
+import static edu.brown.cs.dominion.io.send.MessageType.INIT_GAME;
+import static edu.brown.cs.dominion.io.send.MessageType.SELECTION;
+import static edu.brown.cs.dominion.io.send.MessageType.UPDATE_MAP;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -7,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import edu.brown.cs.dominion.io.send.Callback;
 import org.eclipse.jetty.websocket.api.Session;
 
 import com.google.gson.Gson;
@@ -20,9 +28,8 @@ import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.io.SocketServer;
 import edu.brown.cs.dominion.io.UserRegistry;
 import edu.brown.cs.dominion.io.Websocket;
+import edu.brown.cs.dominion.io.send.Callback;
 import edu.brown.cs.dominion.io.send.ClientUpdateMap;
-
-import static edu.brown.cs.dominion.io.send.MessageType.*;
 
 /**
  * A wrapper that adds various ajax functionality to the server and then cleans
@@ -54,7 +61,7 @@ public class GameManager implements SocketServer {
         new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
     pendingGames.put(p.getId(), p);
 
-    PendingGame p2 = new PendingGame("GAME2", 1,
+    PendingGame p2 = new PendingGame("GAME2", 2,
         new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
     pendingGames.put(p2.getId(), p2);
 
@@ -64,7 +71,7 @@ public class GameManager implements SocketServer {
     pendingByUser = new HashMap<>();
   }
 
-  public void setWeb(Websocket web){
+  public void setWeb(Websocket web) {
     this.web = web;
   }
 
@@ -107,9 +114,8 @@ public class GameManager implements SocketServer {
 
   @Override
   public void newUser(Websocket ws, User user) {
-    //redirect??
+    // redirect??
   }
-
 
   @Override
   public void newSession(Websocket ws, User user, Session s) {
@@ -149,7 +155,7 @@ public class GameManager implements SocketServer {
     });
 
     ws.putCommand(END_ACTION,
-      (w, u, m) -> sendClientUpdateMap(ws, u, endActionPhase(u)));
+        (w, u, m) -> sendClientUpdateMap(ws, u, endActionPhase(u)));
 
     ws.putCommand(END_BUY, (w, u, m) -> {
       JsonArray data = PARSE.parse(m).getAsJsonArray();
@@ -213,14 +219,14 @@ public class GameManager implements SocketServer {
     if (c != null) {
       c = chk(c);
       for (User user : c.getUsers()) {
-        if(c.hasUser(user)){
+        if (c.hasUser(user)) {
           ws.send(user, UPDATE_MAP, c.prepareUser(user));
         }
       }
     }
   }
 
-  public void addPendingGame(PendingGame p){
+  public void addPendingGame(PendingGame p) {
     pendingGames.put(p.getId(), p);
   }
 }
