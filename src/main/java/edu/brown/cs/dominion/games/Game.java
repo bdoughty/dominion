@@ -231,7 +231,7 @@ public class Game extends GameStub implements GameEventListener {
   public void othersGainCurse() {
     for (User u : usersTurns) {
       try {
-        getPlayerFromUser(u).gain(board.gainCard(6), false);
+        getPlayerFromUser(u).gain(board.gainCard(6), false, false);
       } catch (EmptyPileException | NoPileException e) {
         System.out.println(e.getMessage());
       }

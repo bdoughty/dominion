@@ -98,10 +98,12 @@ public class Player {
     return c;
   }
 
-  public void gain(Card c, boolean toHand) {
+  public void gain(Card c, boolean toHand, boolean toDeck) {
     if (toHand) {
       hand.add(c);
       baseMoney += c.getMonetaryValue();
+    } else if (toDeck) {
+      deck.add(0, c);
     } else {
       discardPile.add(c);
     }
@@ -112,6 +114,13 @@ public class Player {
     Card c = hand.remove(toDiscard);
     baseMoney -= c.getMonetaryValue();
     discardPile.add(c);
+  }
+
+  public Card cardToDeck(int loc) {
+    assert (loc >= 0 && loc < hand.size());
+    Card c = hand.remove(loc);
+    deck.add(0, c);
+    return c;
   }
 
   public void endTurn() {

@@ -56,7 +56,7 @@ public class Remodel extends AbstractAction {
             ClientUpdateMap cm2 = new ClientUpdateMap(g, u);
 
             try {
-              nestedCurrP2.gain(g.gain(loc), false);
+              nestedCurrP2.gain(g.gain(loc), false, false);
             } catch (EmptyPileException epe) {
               System.out.println(epe.getMessage());
             } catch (NoPileException npe) {

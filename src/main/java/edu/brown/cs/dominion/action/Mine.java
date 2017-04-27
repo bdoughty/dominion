@@ -58,7 +58,7 @@ public class Mine extends AbstractAction {
             ClientUpdateMap cm2 = new ClientUpdateMap(g, u);
 
             try {
-              nestedCurrP2.gain(g.gain(loc), true);
+              nestedCurrP2.gain(g.gain(loc), true, false);
             } catch (EmptyPileException epe) {
               System.out.println(epe.getMessage());
             } catch (NoPileException npe) {

@@ -23,7 +23,7 @@ public class Workshop extends AbstractAction {
           public ClientUpdateMap call(User u, boolean inHand, int loc) {
             if (!inHand) {
               try {
-                g.getPlayerFromUser(u).gain(g.gain(loc), false);
+                g.getPlayerFromUser(u).gain(g.gain(loc), false, false);
               } catch (EmptyPileException epe) {
                 System.out.println(epe.getMessage());
               } catch (NoPileException npe) {
