@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.brown.cs.dominion.User;
+import edu.brown.cs.dominion.AI.Strategy.Strategy;
 import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.gameutil.NoPileException;
 import edu.brown.cs.dominion.io.send.Callback;
