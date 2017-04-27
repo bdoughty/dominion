@@ -12,10 +12,6 @@ import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.gameutil.Board;
-import edu.brown.cs.dominion.gameutil.Player;
-import jdk.nashorn.internal.codegen.CompilerConstants;
-
-import javax.jws.soap.SOAPBinding;
 
 /**
  * Created by henry on 3/22/2017.
@@ -58,7 +54,7 @@ public class ClientUpdateMap {
 
   public ClientUpdateMap requireSelect(User u, List<Integer> handIds,
                                        List<Integer> boardIds, SelectCallback response) {
-    callbacks.put(u, new Callback(boardIds, handIds, response));
+    callbacks.put(u, new Callback(boardIds, handIds, response, name));
     return this;
   }
   public ClientUpdateMap requireSelectCanStop(User u, List<Integer> handIds,
