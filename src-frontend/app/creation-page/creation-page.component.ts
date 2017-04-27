@@ -7,10 +7,10 @@ import {ChatSocketService} from "../shared/chatsocket.service";
   styleUrls: ['./creation-page.component.css']
 }) export class CreationComponent{
   private selected = new Set();
-  private allCards = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26];
-  private basicPreset = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
-  private moneyPreset = [];
-  private trashPreset = [];
+  private allCards = new Set([7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]);
+  private basicPreset = new Set([7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+  private moneyPreset = new Set([]);
+  private trashPreset = new Set([]);
 
   constructor(private _chatSocketService: ChatSocketService) {
     _chatSocketService.addListener('redirect', (messageString) => {
@@ -57,17 +57,19 @@ import {ChatSocketService} from "../shared/chatsocket.service";
     }
   }
 
-  highlightPreset(toHighlight) {
+  highlightPreset(toHighlight: Set<number>) {
+    console.log("toHighlight: " + toHighlight);
     this.selected.clear();
     this.allCards.forEach((i) => {
       console.log(i);
-      if(i in toHighlight) {
+      if(toHighlight.has(i)) {
         this.selected.add(i);
         document.getElementById("card" + i).style.border = "3px solid yellow";
       } else {
         document.getElementById("card" + i).style.border = "0";
       }
     });
+    console.log("selected: " + this.selected);
   }
 
   basic() {
@@ -82,8 +84,18 @@ import {ChatSocketService} from "../shared/chatsocket.service";
     this.highlightPreset(this.getRandomTen(this.allCards));
   }
 
-  getRandomTen(selectFrom) {
-    return this.basicPreset;
+  getRandomTen(selectFrom: Set<number>) {
+    let from = [];
+    selectFrom.forEach((f) => {from.push(f);});
+    let gotten = new Set();
+    while(gotten.size < 10) {
+      let toAdd = from[Math.floor(Math.random() * from.length)];
+      while(gotten.has(toAdd)) {
+        toAdd = from[Math.floor(Math.random() * from.length)];
+      }
+      gotten.add(toAdd);
+    }
+    return gotten;
   }
 
   trash() {
