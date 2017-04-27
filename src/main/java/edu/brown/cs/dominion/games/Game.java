@@ -8,8 +8,8 @@ import java.util.Queue;
 
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.GameChat;
-import edu.brown.cs.dominion.TrashTalker;
 import edu.brown.cs.dominion.User;
+import edu.brown.cs.dominion.AI.TrashTalker;
 import edu.brown.cs.dominion.gameutil.Board;
 import edu.brown.cs.dominion.gameutil.EmptyPileException;
 import edu.brown.cs.dominion.gameutil.NoActionsException;

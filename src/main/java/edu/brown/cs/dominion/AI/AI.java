@@ -1,4 +1,4 @@
-package edu.brown.cs.dominion;
+package edu.brown.cs.dominion.AI;
 
 import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.io.send.Callback;
