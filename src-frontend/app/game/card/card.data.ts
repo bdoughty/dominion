@@ -128,5 +128,53 @@ export const cardInfo = {
     text: '+2 Cards<br/>Each other player gains a Curse.',
     type: 'action',
     cost: 5
+  },
+  21: {
+    name: 'Adventurer',
+    text: '+2 Cards<br/>Each other player gains a Curse.',
+    type: 'action',
+    cost: 5
+  },
+  22: {
+    name: 'Bureaucrat',
+    text: '+2 Cards<br/>Each other player gains a Curse.',
+    type: 'action',
+    cost: 5
+  },
+  23: {
+    name: 'Chancellor',
+    text: '+2 Cards<br/>Each other player gains a Curse.',
+    type: 'action',
+    cost: 5
+  },
+  24: {
+    name: 'Chapel',
+    text: '+2 Cards<br/>Each other player gains a Curse.',
+    type: 'action',
+    cost: 5
+  },
+  25: {
+    name: 'Feast',
+    text: '+2 Cards<br/>Each other player gains a Curse.',
+    type: 'action',
+    cost: 5
+  },
+  26: {
+    name: 'Moneylender',
+    text: '+2 Cards<br/>Each other player gains a Curse.',
+    type: 'action',
+    cost: 5
+  },
+  27: {
+    name: 'Throne Room',
+    text: '+2 Cards<br/>Each other player gains a Curse.',
+    type: 'action',
+    cost: 5
+  },
+  28: {
+    name: 'Library',
+    text: '+2 Cards<br/>Each other player gains a Curse.',
+    type: 'action',
+    cost: 5
   }
 };
