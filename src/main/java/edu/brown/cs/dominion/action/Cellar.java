@@ -49,17 +49,11 @@ class DiscardOne implements SelectCallback {
     cm.discardPileSize(g.getPlayerFromUser(u).getDiscard().size());
     cm.piles(g.getBoard());
 
-    if(g.getPlayerFromUser(u).getHand().size() > 0){
-      cm.requireSelectCanStop(u,
+    cm.requireSelectCanStop(u,
         g.getPlayerFromUser(u).getHand().stream().map(Card::getId)
-          .collect(Collectors.toList()),
+            .collect(Collectors.toList()),
         ImmutableList.<Integer> of(), new DiscardOne(g, discarded + 1),
         new CellarDraw(g, discarded + 1));
-    } else {
-      new CellarDraw(g, discarded + 1).cancel();
-    }
-    g.playerUpdateMap(cm, g.getCurrentPlayer());
-
 
     return cm;
   }
