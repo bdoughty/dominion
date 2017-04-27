@@ -105,8 +105,8 @@ public class ClientUpdateMap {
     return this;
   }
 
-  public ClientUpdateMap winner(List<User> u) {
-    dataGlobal.put("winner", u);
+  public ClientUpdateMap winner(Map<Integer, Integer> idToVictoryPoints) {
+    dataGlobal.put("winner", idToVictoryPoints);
     return this;
   }
 

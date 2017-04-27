@@ -54,7 +54,7 @@ public class GameManager implements SocketServer {
         new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
     pendingGames.put(p.getId(), p);
 
-    PendingGame p2 = new PendingGame("GAME2", 2,
+    PendingGame p2 = new PendingGame("GAME2", 1,
         new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
     pendingGames.put(p2.getId(), p2);
 

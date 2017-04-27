@@ -23,7 +23,7 @@ public class GameChat extends Chat{
   }
 
   public void serverSend(String s){
-    String message = getMessage("Server", "#000", s);
+    String message = getMessage("Server", "#fff", s);
     sendAll(message);
   }
 
