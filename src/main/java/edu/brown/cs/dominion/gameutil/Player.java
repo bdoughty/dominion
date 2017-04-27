@@ -7,6 +7,7 @@ import java.util.List;
 
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.action.Moat;
+import edu.brown.cs.dominion.money.AbstractMoney;
 import edu.brown.cs.dominion.money.Copper;
 import edu.brown.cs.dominion.victory.Estate;
 
@@ -68,6 +69,46 @@ public class Player {
         System.out.println(ede.getMessage());
       }
     }
+  }
+
+  public int adventurerDraw(List<Card> toDiscard, int moneyGained)
+      throws EmptyDeckException {
+    if (deck.isEmpty()) {
+      if (discardPile.isEmpty()) {
+        throw new EmptyDeckException("no cards left to draw");
+      } else {
+        deck.addAll(discardPile);
+        Collections.shuffle(deck);
+        discardPile.clear();
+      }
+    }
+
+    Card c = deck.remove(0);
+
+    if (c instanceof AbstractMoney) {
+      hand.add(c);
+      baseMoney += c.getMonetaryValue();
+      return moneyGained + 1;
+    } else {
+      toDiscard.add(c);
+      return moneyGained;
+    }
+  }
+
+  public void adventurer() {
+    List<Card> toDiscard = new LinkedList<>();
+    int moneyGained = 0;
+
+    while (moneyGained < 2) {
+      try {
+        moneyGained = adventurerDraw(toDiscard, moneyGained);
+      } catch (EmptyDeckException ede) {
+        System.out.println(ede.getMessage());
+        break;
+      }
+    }
+
+    discardPile.addAll(toDiscard);
   }
 
   public void buyCard(Card boughtCard) {
