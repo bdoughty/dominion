@@ -101,8 +101,32 @@ export const cardInfo = {
   },
   16: {
     name: 'Workshop',
-    text: 'Gain a card costing up to 4 Money',
+    text: 'Gain a card costing up to 4 Money.',
     type: 'action',
     cost: 3
+  },
+  17: {
+    name: 'Festival',
+    text: '+2 Actions<br/>+1 Buy<br/>+2 Money',
+    type: 'action',
+    cost: 5
+  },
+  18: {
+    name: 'Laboratory',
+    text: '+2 Cards<br/>+1 Action',
+    type: 'action',
+    cost: 5
+  },
+  19: {
+    name: 'Council Room',
+    text: '+4 Cards<br/>+1 Buy<br/>Each other player draws a card.',
+    type: 'action',
+    cost: 5
+  },
+  20: {
+    name: 'Witch',
+    text: '+2 Cards<br/>Each other player gains a Curse.',
+    type: 'action',
+    cost: 5
   }
 };

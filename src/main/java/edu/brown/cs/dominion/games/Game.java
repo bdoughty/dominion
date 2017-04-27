@@ -214,12 +214,28 @@ public class Game extends GameStub implements GameEventListener {
     p.draw(numCards);
   }
 
+  public void othersDraw(int numCards) {
+    for (User u : usersTurns) {
+      getPlayerFromUser(u).draw(numCards);
+    }
+  }
+
   public void trash(Card c) {
     board.trashCard(c);
   }
 
   public Card gain(int id) throws EmptyPileException, NoPileException {
     return board.gainCard(id);
+  }
+
+  public void othersGainCurse() {
+    for (User u : usersTurns) {
+      try {
+        getPlayerFromUser(u).gain(board.gainCard(6), false);
+      } catch (EmptyPileException | NoPileException e) {
+        System.out.println(e.getMessage());
+      }
+    }
   }
 
   public void sendMessage(User u, String s) {
@@ -233,4 +249,5 @@ public class Game extends GameStub implements GameEventListener {
   public void sendSpamMessage(String s) {
     gc.spambotSend(s);
   }
+
 }
