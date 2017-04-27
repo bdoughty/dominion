@@ -1,12 +1,10 @@
 package edu.brown.cs.dominion.games;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import java.util.stream.Collectors;
 
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.GameChat;
@@ -120,14 +118,11 @@ public class Game extends GameStub implements GameEventListener {
     cm.piles(board);
 
     if (board.gameHasEnded()) {
-      int highScore =
-          userPlayers.get(Collections.max(allUsers, (User one, User two) -> {
-            return Integer.compare(userPlayers.get(one).scoreDeck(),
-                userPlayers.get(two).scoreDeck());
-          })).scoreDeck();
-      List<User> winners = allUsers.stream().filter(user -> {
-        return userPlayers.get(user).scoreDeck() == highScore;
-      }).collect(Collectors.toList());
+      Map<Integer, Integer> winners = new HashMap<>();
+
+      for (User usr : allUsers) {
+        winners.put(usr.getId(), getPlayerFromUser(usr).scoreDeck());
+      }
 
       cm.winner(winners);
     }
