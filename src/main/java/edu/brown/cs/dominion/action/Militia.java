@@ -26,7 +26,9 @@ public class Militia extends AbstractAction {
     users.remove(g.getCurrent());
 
     for (User user : users) {
-      if (g.getPlayerFromUser(user).getHand().size() > 3) {
+      if (g.getPlayerFromUser(user).hasMoat()) {
+        g.sendServerMessage(user.getName() + " played Moat.");
+      } else if (g.getPlayerFromUser(user).getHand().size() > 3) {
         cm.requireSelect(user,
             g.getPlayerFromUser(user).getHand().stream().map(Card::getId)
                 .collect(Collectors.toList()),

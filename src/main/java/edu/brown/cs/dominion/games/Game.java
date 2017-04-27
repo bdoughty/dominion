@@ -99,8 +99,7 @@ public class Game extends GameStub implements GameEventListener {
         Card c = board.buyCard(buyId, money);
         p.buyCard(c);
         money -= c.getCost();
-        sendServerMessage(
-            "Player " + u.getName() + " bought " + c.toString() + ".");
+        sendServerMessage(u.getName() + " bought " + c.toString() + ".");
       } catch (TooExpensiveException tee) {
         System.out.println(tee.getMessage());
       } catch (EmptyPileException epe) {
@@ -129,7 +128,7 @@ public class Game extends GameStub implements GameEventListener {
       cm.winner(winners);
     }
 
-    sendServerMessage("Player " + u.getName() + " ended their turn.");
+    sendServerMessage(u.getName() + " ended their turn.");
 
     return cm;
   }
@@ -139,7 +138,7 @@ public class Game extends GameStub implements GameEventListener {
     userPlayers.get(current).newTurn();
     ClientUpdateMap cm = new ClientUpdateMap(this, u);
     playerUpdateMap(cm, getCurrentPlayer());
-    sendServerMessage("Player " + u.getName() + " began their turn.");
+    sendServerMessage(u.getName() + " began their turn.");
     return cm;
   }
 
@@ -158,8 +157,7 @@ public class Game extends GameStub implements GameEventListener {
       Card c = p.play(LocInHand);
       c.play(this, cm);
       playerUpdateMap(cm, p);
-      sendServerMessage(
-          "Player " + u.getName() + " played " + c.toString() + ".");
+      sendServerMessage(u.getName() + " played " + c.toString() + ".");
     } catch (NotActionException nae) {
       System.out.println(nae.getMessage());
     } catch (NoActionsException nae) {
@@ -185,7 +183,7 @@ public class Game extends GameStub implements GameEventListener {
     playerUpdateMap(cm, p);
     cm.setPhase(false);
 
-    sendServerMessage("Player " + u.getName() + " ended Action Phase.");
+    sendServerMessage(u.getName() + " ended Action Phase.");
 
     return cm;
   }
