@@ -7,7 +7,10 @@ import {ChatSocketService} from "../shared/chatsocket.service";
   styleUrls: ['./creation-page.component.css']
 }) export class CreationComponent{
   private selected = new Set();
-  private basicPreset = []
+  private allCards = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26];
+  private basicPreset = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+  private moneyPreset = [];
+  private trashPreset = [];
 
   constructor(private _chatSocketService: ChatSocketService) {
     _chatSocketService.addListener('redirect', (messageString) => {
@@ -54,8 +57,37 @@ import {ChatSocketService} from "../shared/chatsocket.service";
     }
   }
 
-  basic() {
+  highlightPreset(toHighlight) {
+    this.selected.clear();
+    for(let i in this.allCards) {
+      if(i in toHighlight) {
+        this.selected.add(i);
+        document.getElementById("card" + i).style.border = "3px solid yellow";
+      } else {
+        document.getElementById("card" + i).style.border = "0";
+      }
+    }
+    console.log(this.selected);
+  }
 
+  basic() {
+    this.highlightPreset(this.basicPreset);
+  }
+
+  money() {
+    this.highlightPreset(this.moneyPreset);
+  }
+
+  randomSelect() {
+    this.highlightPreset(this.getRandomTen(this.allCards));
+  }
+
+  getRandomTen(selectFrom) {
+    return this.basicPreset;
+  }
+
+  trash() {
+    this.highlightPreset(this.trashPreset);
   }
 }
 
