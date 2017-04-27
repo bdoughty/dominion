@@ -14,4 +14,9 @@ public class Smithy extends AbstractAction {
     g.currentDraw(3);
   }
 
+  @Override
+  public String toString() {
+    return "Smithy";
+  }
+
 }

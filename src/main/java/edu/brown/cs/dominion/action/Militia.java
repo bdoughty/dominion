@@ -26,13 +26,21 @@ public class Militia extends AbstractAction {
     users.remove(g.getCurrent());
 
     for (User user : users) {
-      if (g.getPlayerFromUser(user).getHand().size() > 3) {
+      if (g.getPlayerFromUser(user).hasMoat()) {
+        g.sendServerMessage(user.getName() + " played Moat.");
+      } else if (g.getPlayerFromUser(user).getHand().size() > 3) {
         cm.requireSelect(user,
             g.getPlayerFromUser(user).getHand().stream().map(Card::getId)
                 .collect(Collectors.toList()),
             ImmutableList.<Integer> of(), new DownToThree(g));
+        g.sendServerMessage(user.getName() + " was forced to discard.");
       }
     }
+  }
+
+  @Override
+  public String toString() {
+    return "Militia";
   }
 }
 

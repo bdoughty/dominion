@@ -99,6 +99,7 @@ public class Game extends GameStub implements GameEventListener {
         Card c = board.buyCard(buyId, money);
         p.buyCard(c);
         money -= c.getCost();
+        sendServerMessage(u.getName() + " bought " + c.toString() + ".");
       } catch (TooExpensiveException tee) {
         System.out.println(tee.getMessage());
       } catch (EmptyPileException epe) {
@@ -127,6 +128,8 @@ public class Game extends GameStub implements GameEventListener {
       cm.winner(winners);
     }
 
+    sendServerMessage(u.getName() + " ended their turn.");
+
     return cm;
   }
 
@@ -135,6 +138,7 @@ public class Game extends GameStub implements GameEventListener {
     userPlayers.get(current).newTurn();
     ClientUpdateMap cm = new ClientUpdateMap(this, u);
     playerUpdateMap(cm, getCurrentPlayer());
+    sendServerMessage(u.getName() + " began their turn.");
     return cm;
   }
 
@@ -151,6 +155,7 @@ public class Game extends GameStub implements GameEventListener {
 
     try {
       Card c = p.play(LocInHand);
+      sendServerMessage(u.getName() + " played " + c.toString() + ".");
       c.play(this, cm);
       playerUpdateMap(cm, p);
     } catch (NotActionException nae) {

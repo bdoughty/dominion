@@ -6,4 +6,9 @@ public class Province extends AbstractVictoryPoint {
     super(5, 8, 6);
   }
 
+  @Override
+  public String toString() {
+    return "Province";
+  }
+
 }

@@ -40,4 +40,9 @@ public class Workshop extends AbstractAction {
         });
   }
 
+  @Override
+  public String toString() {
+    return "Workshop";
+  }
+
 }

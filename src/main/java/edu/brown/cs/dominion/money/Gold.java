@@ -6,4 +6,9 @@ public class Gold extends AbstractMoney {
     super(2, 6, 3);
   }
 
+  @Override
+  public String toString() {
+    return "Gold";
+  }
+
 }

@@ -15,4 +15,9 @@ public class Woodcutter extends AbstractAction {
     g.incrementAdditionalMoney(2);
   }
 
+  @Override
+  public String toString() {
+    return "Woodcutter";
+  }
+
 }

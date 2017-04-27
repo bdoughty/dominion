@@ -6,4 +6,9 @@ public class Copper extends AbstractMoney {
     super(0, 0, 1);
   }
 
+  @Override
+  public String toString() {
+    return "Copper";
+  }
+
 }

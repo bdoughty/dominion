@@ -27,6 +27,11 @@ public class Cellar extends AbstractAction {
         ImmutableList.of(), new DiscardOne(g, 0), new CellarDraw(g, 0));
 
   }
+
+  @Override
+  public String toString() {
+    return "Cellar";
+  }
 }
 
 class DiscardOne implements SelectCallback {
