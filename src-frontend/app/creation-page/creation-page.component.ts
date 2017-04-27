@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import { Component } from '@angular/core';
 import {ChatSocketService} from "../shared/chatsocket.service";
 
 @Component({
@@ -7,9 +7,10 @@ import {ChatSocketService} from "../shared/chatsocket.service";
   styleUrls: ['./creation-page.component.css']
 }) export class CreationComponent{
   private selected = new Set();
+  private basicPreset = []
 
   constructor(private _chatSocketService: ChatSocketService) {
-    this._chatSocketService.addListener('redirect', (messageString) => {
+    _chatSocketService.addListener('redirect', (messageString) => {
       console.log(messageString);
       window.location.replace(messageString);
     });
@@ -51,6 +52,10 @@ import {ChatSocketService} from "../shared/chatsocket.service";
     } else {
       alert("You must select exactly 10 cards to begin a game!");
     }
+  }
+
+  basic() {
+
   }
 }
 
