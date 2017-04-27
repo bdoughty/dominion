@@ -70,7 +70,7 @@
         </div>
         <div class="card-row">
           <div *ngFor="let j of [17, 18, 19, 20, 21, 22, 23, 24, 25, 26]" class="card">
-            <img id="card{{ j }}" class="cardImg" src="../../assets/card/card{{ j }}.jpg" (mouseenter)="entered(j)" (mouseleave)="left()" (click)="clicked(j)" />
+            <img id="card{{ j }}" class="cardImg" src="../../assets/card/card{{ j - 10 }}.jpg" (mouseenter)="entered(j)" (mouseleave)="left()" (click)="clicked(j)" />
           </div>
         </div>
         <div class="wide-button-container">
