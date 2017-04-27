@@ -125,7 +125,8 @@ public class Board {
     List<Integer> cards = new LinkedList<>();
 
     for (Pile p : piles.values()) {
-      if (p.getCost() <= cost && p.getCard() instanceof AbstractMoney) {
+      if (p.getCost() <= cost && !p.isEmpty()
+          && p.getCard() instanceof AbstractMoney) {
         cards.add(p.getId());
       }
     }
@@ -137,7 +138,7 @@ public class Board {
     List<Integer> cards = new LinkedList<>();
 
     for (Pile p : piles.values()) {
-      if (p.getCost() <= cost) {
+      if (p.getCost() <= cost && !p.isEmpty()) {
         cards.add(p.getId());
       }
     }
