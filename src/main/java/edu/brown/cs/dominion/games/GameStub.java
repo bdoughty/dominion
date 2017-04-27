@@ -6,11 +6,20 @@ package edu.brown.cs.dominion.games;
 public class GameStub {
   private static int nextId = 0;
   private int id;
-  public GameStub(){
+
+  public GameStub() {
     this.id = nextId++;
   }
 
-  public int getId(){
+  public int getId() {
     return id;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o instanceof GameStub) {
+      return ((GameStub) o).getId() == getId();
+    }
+    return false;
   }
 }

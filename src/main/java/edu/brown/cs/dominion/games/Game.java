@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.GameChat;
+import edu.brown.cs.dominion.TrashTalker;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.gameutil.Board;
 import edu.brown.cs.dominion.gameutil.EmptyPileException;
@@ -31,13 +32,14 @@ public class Game extends GameStub implements GameEventListener {
   private User current;
   private Map<User, Player> userPlayers;
   private Board board;
+  private static TrashTalker spambot = new TrashTalker();
 
   private GameChat gc;
 
   private boolean actionPhase = true;
 
-  public Game(List<User> usersTurns, List<Integer> actionCardIds, Websocket
-    ws) {
+  public Game(List<User> usersTurns, List<Integer> actionCardIds,
+      Websocket ws) {
     userPlayers = new HashMap<>();
     usersTurns.forEach(u -> userPlayers.put(u, new Player()));
     this.allUsers = new LinkedList<>(usersTurns);
@@ -47,6 +49,7 @@ public class Game extends GameStub implements GameEventListener {
     this.board = new Board(actionCardIds);
 
     gc = new GameChat(ws, usersTurns);
+    spambot.addGame(this);
   }
 
   public User getCurrent() {
@@ -88,8 +91,6 @@ public class Game extends GameStub implements GameEventListener {
       return null;
     }
 
-    sendServerMessage("Player " + u.getName() + " hates you ... get wrekt!!!");
-
     actionPhase = true;
 
     Player p = userPlayers.get(u);
@@ -119,8 +120,8 @@ public class Game extends GameStub implements GameEventListener {
     cm.piles(board);
 
     if (board.gameHasEnded()) {
-      int highScore = userPlayers
-          .get(Collections.max(allUsers, (User one, User two) -> {
+      int highScore =
+          userPlayers.get(Collections.max(allUsers, (User one, User two) -> {
             return Integer.compare(userPlayers.get(one).scoreDeck(),
                 userPlayers.get(two).scoreDeck());
           })).scoreDeck();
@@ -225,7 +226,11 @@ public class Game extends GameStub implements GameEventListener {
     gc.send(u, s);
   }
 
-  public void sendServerMessage(String s){
+  public void sendServerMessage(String s) {
     gc.serverSend(s);
+  }
+
+  public void sendSpamMessage(String s) {
+    gc.spambotSend(s);
   }
 }
