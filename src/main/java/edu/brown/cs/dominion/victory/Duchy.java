@@ -6,4 +6,9 @@ public class Duchy extends AbstractVictoryPoint {
     super(4, 5, 3);
   }
 
+  @Override
+  public String toString() {
+    return "Duchy";
+  }
+
 }

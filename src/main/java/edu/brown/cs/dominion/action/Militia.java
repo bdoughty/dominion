@@ -34,6 +34,11 @@ public class Militia extends AbstractAction {
       }
     }
   }
+
+  @Override
+  public String toString() {
+    return "Militia";
+  }
 }
 
 class DownToThree implements SelectCallback {

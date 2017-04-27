@@ -14,4 +14,9 @@ public class Moat extends AbstractAction {
     g.currentDraw(2);
   }
 
+  @Override
+  public String toString() {
+    return "Moat";
+  }
+
 }

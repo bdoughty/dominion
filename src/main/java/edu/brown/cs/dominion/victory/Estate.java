@@ -6,4 +6,9 @@ public class Estate extends AbstractVictoryPoint {
     super(3, 2, 1);
   }
 
+  @Override
+  public String toString() {
+    return "Estate";
+  }
+
 }

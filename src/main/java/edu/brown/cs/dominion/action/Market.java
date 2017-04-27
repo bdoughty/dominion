@@ -17,4 +17,9 @@ public class Market extends AbstractAction {
     g.incrementAdditionalMoney(1);
   }
 
+  @Override
+  public String toString() {
+    return "Market";
+  }
+
 }

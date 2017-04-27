@@ -78,4 +78,9 @@ public class Remodel extends AbstractAction {
     cm.requireSelect(currU, handIds, ImmutableList.of(), trash);
   }
 
+  @Override
+  public String toString() {
+    return "Remodel";
+  }
+
 }

@@ -16,4 +16,9 @@ public class Village extends AbstractAction {
     g.currentDraw(1);
   }
 
+  @Override
+  public String toString() {
+    return "Village";
+  }
+
 }

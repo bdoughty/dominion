@@ -6,4 +6,9 @@ public class Curse extends AbstractVictoryPoint {
     super(6, 0, -1);
   }
 
+  @Override
+  public String toString() {
+    return "Curse";
+  }
+
 }
