@@ -1,4 +1,4 @@
-package edu.brown.cs.dominion.AI;
+package edu.brown.cs.dominion.AI.Strategy;
 
 import java.util.List;
 import java.util.Random;
@@ -18,7 +18,8 @@ public class DumbStrategy implements Strategy {
         .filter((card) -> card instanceof AbstractAction)
         .collect(Collectors.toList());
     if (actions.size() > 0) {
-      return actions.get(r.nextInt(actions.size())).getId();
+      return g.getPlayerFromUser(who).getHand()
+          .indexOf(actions.get(r.nextInt(actions.size())).getId());
     }
 
     return -1;
@@ -28,7 +29,7 @@ public class DumbStrategy implements Strategy {
   public int discard(Game g, User who) {
     List<Card> hand = g.getPlayerFromUser(who).getHand();
     if (hand.size() > 0) {
-      return hand.get(r.nextInt(hand.size())).getId();
+      return r.nextInt(hand.size());
     }
 
     return -1;

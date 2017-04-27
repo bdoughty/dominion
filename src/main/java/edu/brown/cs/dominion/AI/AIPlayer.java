@@ -1,6 +1,7 @@
 package edu.brown.cs.dominion.AI;
 
 import edu.brown.cs.dominion.User;
+import edu.brown.cs.dominion.AI.Strategy.Strategy;
 import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.io.send.Callback;
 
