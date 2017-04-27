@@ -1,8 +1,5 @@
 package edu.brown.cs.dominion.games;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -13,6 +10,7 @@ import java.util.stream.Collectors;
 
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.GameChat;
+import edu.brown.cs.dominion.TrashTalker;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.gameutil.Board;
 import edu.brown.cs.dominion.gameutil.EmptyPileException;
@@ -34,7 +32,7 @@ public class Game extends GameStub implements GameEventListener {
   private User current;
   private Map<User, Player> userPlayers;
   private Board board;
-  private static File spambot = new File("src/main/resources/trash_talk.txt");
+  private static TrashTalker spambot = new TrashTalker();
 
   private GameChat gc;
 
@@ -51,6 +49,7 @@ public class Game extends GameStub implements GameEventListener {
     this.board = new Board(actionCardIds);
 
     gc = new GameChat(ws, usersTurns);
+    spambot.addGame(this);
   }
 
   public User getCurrent() {
@@ -91,8 +90,6 @@ public class Game extends GameStub implements GameEventListener {
     if (current.getId() != u.getId()) {
       return null;
     }
-
-    gc.spambotSend(getRandomSpamMessage());
 
     actionPhase = true;
 
@@ -233,28 +230,7 @@ public class Game extends GameStub implements GameEventListener {
     gc.serverSend(s);
   }
 
-  private static String getRandomSpamMessage() {
-    try (BufferedReader br = new BufferedReader(new FileReader(spambot))) {
-      String out = "go rek urself!!!";
-      if (br.ready()) {
-        String line = br.readLine();
-        int i = 1;
-        while (line != null) {
-          if (line.equals("")) {
-            line = br.readLine();
-            continue;
-          }
-          if (Math.random() * i < 1) {
-            out = line;
-          }
-          line = br.readLine();
-          i++;
-        }
-      }
-      return out;
-    } catch (Exception e) {
-      e.printStackTrace();
-      return "you literally broke the spambot you're so bad!";
-    }
+  public void sendSpamMessage(String s) {
+    gc.spambotSend(s);
   }
 }
