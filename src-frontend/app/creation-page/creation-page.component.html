@@ -64,13 +64,13 @@
     <div id="cards-row">
       <div class="pane" id="card-select-and-submit">
         <div class="card-row">
-          <div *ngFor="let i of [7, 8, 9, 10, 11, 12, 13, 14, 15, 16]" class="card">
+          <div *ngFor="let i of [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]" class="card">
             <img id="card{{ i }}" class="cardImg" src="../../assets/card/card{{ i }}.jpg" (mouseenter)="entered(i)" (mouseleave)="left()" (click)="clicked(i)" />
           </div>
         </div>
         <div class="card-row">
-          <div *ngFor="let j of [17, 18, 19, 20, 21, 22, 23, 24, 25, 26]" class="card">
-            <img id="card{{ j }}" class="cardImg" src="../../assets/card/card{{ j - 10 }}.jpg" (mouseenter)="entered(j)" (mouseleave)="left()" (click)="clicked(j)" />
+          <div *ngFor="let j of [18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28]" class="card">
+            <img id="card{{ j }}" class="cardImg" src="../../assets/card/card{{ j }}.jpg" (mouseenter)="entered(j)" (mouseleave)="left()" (click)="clicked(j)" />
           </div>
         </div>
         <div class="wide-button-container">

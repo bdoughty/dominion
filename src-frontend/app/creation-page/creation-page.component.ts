@@ -7,7 +7,7 @@ import {ChatSocketService} from "../shared/chatsocket.service";
   styleUrls: ['./creation-page.component.css']
 }) export class CreationComponent{
   private selected = new Set();
-  private allCards = new Set([7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]);
+  private allCards = new Set([7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28]);
   private basicPreset = new Set([7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
   private moneyPreset = new Set([21, 22, 23, 24, 25, 18, 8, 10, 26, 27]);
   private trashPreset = new Set([24, 14, 16, 15, 25, 26, 12, 10, 17, 8]);
