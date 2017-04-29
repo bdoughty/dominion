@@ -1,3 +1,50 @@
+#winScreen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.95);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .players {
+    padding-bottom: 12px;
+
+    .player {
+      padding: 12px;
+      display: flex;
+      align-items: center;
+
+      .player-name {
+        width: 100px;
+        font-weight: bold;
+        display: inline-block;
+      }
+
+      .vp-container {
+        display: inline-block;
+        width: 500px;
+        background: #71d1a0;
+        height: 30px;
+
+        .vp-bar {
+          background: #448866;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          padding-left: 8px;
+          color: white;
+        }
+      }
+    }
+  }
+}
+
+
 #game {
   overflow: hidden;
   display: flex;

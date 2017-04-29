@@ -1,3 +1,17 @@
+<div id="winScreen" *ngIf="game && game.isOver">
+  <h2>{{ game.winner().name }} won!</h2>
+  <div class="players">
+    <div class="player" *ngFor="let player of game.players">
+      <span class="player-name">{{ player.name }}</span>
+      <div class="vp-container">
+        <div class="vp-bar" [style.width.percent]="player.victoryPoints / game.winner().victoryPoints">
+          {{ player.victoryPoints }}</div>
+      </div>
+    </div>
+  </div>
+  <button routerLink="/lobby">Return to lobby</button>
+</div>
+
 <div id="game">
   <div id="board" *ngIf="game">
     <div id="left-bar">

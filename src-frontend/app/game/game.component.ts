@@ -206,7 +206,6 @@ export class GameComponent implements OnInit {
         this.game.updatePiles(update.board.piles);
       }
       if (typeof update.winner !== "undefined") {
-        alert(update.winner[0].name + " won!");
         this.game.isOver = true;
       }
     }

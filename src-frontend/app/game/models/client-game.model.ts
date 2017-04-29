@@ -28,6 +28,17 @@ export class ClientGame {
     });
   }
 
+  public winner() {
+    let winner = this.players[0];
+    let max = winner.victoryPoints;
+    this.players.forEach(player => {
+      if (player.victoryPoints > max)  {
+        winner = player;
+      }
+    });
+    return winner;
+  }
+
   public updatePiles(piles: any) {
     const allCards = this.nonactionCards.concat(this.actionCards);
     allCards.forEach(card => {
