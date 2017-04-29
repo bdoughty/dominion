@@ -44,7 +44,6 @@
   }
 }
 
-
 #game {
   overflow: hidden;
   display: flex;
@@ -261,6 +260,15 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      flex-direction: column;
+
+      .label {
+        //color: white;
+        color: black;
+        text-align: center;
+        text-transform: uppercase;
+        font-family: 'Roboto', helvetica, sans-serif;
+      }
     }
   }
 }

@@ -172,7 +172,13 @@
       padding: 0 18px;
       display: flex;
       justify-content: center;
-      align-items: center; }
+      align-items: center;
+      flex-direction: column; }
+      #game #hud .left .label, #game #hud .deck .label {
+        color: black;
+        text-align: center;
+        text-transform: uppercase;
+        font-family: 'Roboto', helvetica, sans-serif; }
 
 dmn-card {
   display: inline-block;
