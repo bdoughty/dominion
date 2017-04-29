@@ -72,6 +72,10 @@
     }
   }
 
+  &:not(.isCard) {
+    width: 90px;
+  }
+
   &.isCard:hover {
     cursor: pointer;
     transform: scale(1.2);

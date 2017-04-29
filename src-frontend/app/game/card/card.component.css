@@ -44,6 +44,8 @@
     .card.selected::before {
       background: rgba(127, 216, 255, 0.4);
       opacity: 1 !important; }
+  .card:not(.isCard) {
+    width: 90px; }
   .card.isCard:hover {
     cursor: pointer;
     transform: scale(1.2);
