@@ -70,12 +70,12 @@ public class Remodel extends AbstractAction {
           }
         };
 
-        cm1.requireSelect(u, ImmutableList.of(), boardIds, gain);
+        cm1.requireSelect(u, ImmutableList.of(), boardIds, gain, "remodelgain");
         return cm1;
       }
     };
 
-    cm.requireSelect(currU, handIds, ImmutableList.of(), trash);
+    cm.requireSelect(currU, handIds, ImmutableList.of(), trash, "remodeltrash");
   }
 
 }

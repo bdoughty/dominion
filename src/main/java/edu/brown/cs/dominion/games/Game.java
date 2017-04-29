@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.ImmutableMap;
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.GameChat;
 import edu.brown.cs.dominion.TrashTalker;
@@ -129,7 +130,7 @@ public class Game extends GameStub implements GameEventListener {
         return userPlayers.get(user).scoreDeck() == highScore;
       }).collect(Collectors.toList());
 
-      cm.winner(winners);
+      cm.winner(ImmutableMap.of(1,3,2,4));
     }
 
     return cm;
@@ -163,6 +164,11 @@ public class Game extends GameStub implements GameEventListener {
     } catch (NoActionsException nae) {
       System.out.println(nae.getMessage());
     }
+
+    cm.putButton(u, "I hate you", () -> {
+      System.out.println("It buttoned");
+      return null;
+    });
 
     return cm;
   }

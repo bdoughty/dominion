@@ -24,7 +24,8 @@ public class Cellar extends AbstractAction {
     cm.requireSelectCanStop(g.getCurrent(),
         g.getCurrentPlayer().getHand().stream().map(Card::getId)
             .collect(Collectors.toList()),
-        ImmutableList.of(), new DiscardOne(g, 0), new CellarDraw(g, 0));
+        ImmutableList.of(), new DiscardOne(g, 0), new CellarDraw(g, 0),
+      "cellardiscard");
 
   }
 }
@@ -53,7 +54,7 @@ class DiscardOne implements SelectCallback {
         g.getPlayerFromUser(u).getHand().stream().map(Card::getId)
             .collect(Collectors.toList()),
         ImmutableList.<Integer> of(), new DiscardOne(g, discarded + 1),
-        new CellarDraw(g, discarded + 1));
+        new CellarDraw(g, discarded + 1), "cellardiscard");
 
     return cm;
   }

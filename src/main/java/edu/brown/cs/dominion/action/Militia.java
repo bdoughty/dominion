@@ -30,7 +30,7 @@ public class Militia extends AbstractAction {
         cm.requireSelect(user,
             g.getPlayerFromUser(user).getHand().stream().map(Card::getId)
                 .collect(Collectors.toList()),
-            ImmutableList.<Integer> of(), new DownToThree(g));
+            ImmutableList.<Integer> of(), new DownToThree(g), "militiadiscard");
       }
     }
   }
@@ -57,7 +57,7 @@ class DownToThree implements SelectCallback {
       cm.requireSelect(u,
           g.getPlayerFromUser(u).getHand().stream().map(Card::getId)
               .collect(Collectors.toList()),
-          ImmutableList.<Integer> of(), new DownToThree(g));
+          ImmutableList.<Integer> of(), new DownToThree(g), "militiadiscard");
     }
 
     return cm;

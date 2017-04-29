@@ -1,12 +1,17 @@
 package edu.brown.cs.dominion.games;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import edu.brown.cs.dominion.io.ButtonCallback;
+import edu.brown.cs.dominion.io.send.ButtonCall;
 import edu.brown.cs.dominion.io.send.Callback;
 import org.eclipse.jetty.websocket.api.Session;
 
@@ -48,6 +53,7 @@ public class GameManager implements SocketServer {
     games = new LinkedList<>();
     callbacks = new HashMap<>();
     pendingGames = new HashMap<>();
+    buttonCallbacks = HashMultimap.create();
 
     // TODO GET RID OF DUMMY
     PendingGame p = new PendingGame("GAME1", 1,
@@ -69,6 +75,7 @@ public class GameManager implements SocketServer {
   }
 
   private Map<User, Callback> callbacks;
+  private Multimap<User, ButtonCall> buttonCallbacks;
 
   private ClientUpdateMap action(User user, int cardLocation) {
     Game g = gamesByUser.get(user);
@@ -102,7 +109,21 @@ public class GameManager implements SocketServer {
     if (c != null) {
       callbacks.putAll(c.getCallbacks());
     }
+    if (c != null){
+      buttonCallbacks.putAll(c.getButtonCallbacks());
+    }
     return c;
+  }
+
+  private ClientUpdateMap button(User u, int id) {
+    Collection<ButtonCall> buttons = buttonCallbacks.get(u);
+    buttonCallbacks.removeAll(u);
+    for (ButtonCall b : buttons) {
+      if(b.getId() == id) {
+        return b.getBc().clicked();
+      }
+    }
+    return null;
   }
 
   @Override
@@ -163,6 +184,11 @@ public class GameManager implements SocketServer {
       if (cm != null) {
         sendClientUpdateMap(ws, g.getCurrent(), g.startTurn(g.getCurrent()));
       }
+    });
+
+    ws.putCommand(BUTTON_RESPONSE, (w, u, m) -> {
+      int id = Integer.parseInt(m);
+      sendClientUpdateMap(ws, u, button(u, id));
     });
 
     ws.putCommand(CHAT, (w, u, m) -> {

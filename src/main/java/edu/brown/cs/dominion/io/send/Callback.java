@@ -20,11 +20,12 @@ public class Callback{
   }
 
   public Callback(List<Integer> boardIds, List<Integer> handIds,
-                  SelectCallback callback, CancelHandler ch){
+                  SelectCallback callback, CancelHandler ch, String name){
     this.boardIds = boardIds;
     this.callback = callback;
     this.handIds = handIds;
     this.stoppable = true;
+    this.name = name;
     this.ch = ch;
   }
 
