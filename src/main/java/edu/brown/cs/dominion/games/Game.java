@@ -6,10 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
+import com.google.common.collect.ImmutableMap;
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.GameChat;
-import edu.brown.cs.dominion.TrashTalker;
 import edu.brown.cs.dominion.User;
+import edu.brown.cs.dominion.AI.TrashTalker;
 import edu.brown.cs.dominion.gameutil.Board;
 import edu.brown.cs.dominion.gameutil.EmptyPileException;
 import edu.brown.cs.dominion.gameutil.NoActionsException;
@@ -124,7 +125,6 @@ public class Game extends GameStub implements GameEventListener {
       for (User usr : allUsers) {
         winners.put(usr.getId(), getPlayerFromUser(usr).scoreDeck());
       }
-
       cm.winner(winners);
     }
 
@@ -163,6 +163,11 @@ public class Game extends GameStub implements GameEventListener {
     } catch (NoActionsException nae) {
       System.out.println(nae.getMessage());
     }
+
+    cm.putButton(u, "I hate you", () -> {
+      System.out.println("It buttoned");
+      return null;
+    });
 
     return cm;
   }

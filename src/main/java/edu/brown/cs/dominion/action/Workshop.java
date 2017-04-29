@@ -37,7 +37,7 @@ public class Workshop extends AbstractAction {
 
             return cm;
           }
-        });
+        }, "workshopdraw");
   }
 
   @Override

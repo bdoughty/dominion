@@ -146,4 +146,12 @@ public class Board {
     return cards;
   }
 
+  public int getCostFromId(int id) throws NoPileException {
+    if (piles.containsKey(id)) {
+      return piles.get(id).getCost();
+    } else {
+      throw new NoPileException("No card with id: " + id);
+    }
+  }
+
 }

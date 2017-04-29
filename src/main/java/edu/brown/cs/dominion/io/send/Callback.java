@@ -8,21 +8,24 @@ public class Callback{
   private SelectCallback callback;
   private boolean stoppable;
   private CancelHandler ch;
+  private String name;
 
   public Callback(List<Integer> boardIds, List<Integer> handIds,
-    SelectCallback callback){
+                  SelectCallback callback, String name){
     this.boardIds = boardIds;
     this.callback = callback;
     this.handIds = handIds;
+    this.name = name;
     stoppable = false;
   }
 
   public Callback(List<Integer> boardIds, List<Integer> handIds,
-                  SelectCallback callback, CancelHandler ch){
+                  SelectCallback callback, CancelHandler ch, String name){
     this.boardIds = boardIds;
     this.callback = callback;
     this.handIds = handIds;
     this.stoppable = true;
+    this.name = name;
     this.ch = ch;
   }
 
@@ -44,5 +47,9 @@ public class Callback{
 
   public CancelHandler getCancelHandler() {
     return ch;
+  }
+
+  public String getName() {
+    return name;
   }
 }

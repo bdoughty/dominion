@@ -93,4 +93,5 @@ Update Map "updatemap": Server -> Client
     ?decksize:int,
     ?holding:boolean
     ?board:{piles:{[id:int->{size:int}]}}
+    ?[{id:string, name:string}]
   }

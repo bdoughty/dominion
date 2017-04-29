@@ -1,29 +1,31 @@
 package edu.brown.cs.dominion.io.send;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
 
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.gameutil.Board;
-import edu.brown.cs.dominion.gameutil.Player;
-import jdk.nashorn.internal.codegen.CompilerConstants;
-
-import javax.jws.soap.SOAPBinding;
+import edu.brown.cs.dominion.io.ButtonCallback;
 
 /**
  * Created by henry on 3/22/2017.
  */
 public class ClientUpdateMap {
+  static int nextButtonId = 1;
   private transient static final Gson GSON = new Gson();
   private Map<String, Object> data;
   private Map<String, Object> dataGlobal;
+  private Multimap<User, ButtonCall> buttonCallbacks;
   private transient Map<User, Callback> callbacks;
   private transient User mainUser;
   private transient List<User> users;
@@ -34,6 +36,7 @@ public class ClientUpdateMap {
     this.users = g.getAllUsers();
     callbacks = new HashMap<>();
     mainUser = u;
+    buttonCallbacks = HashMultimap.create();
   }
 
   public ClientUpdateMap setPhase(boolean action){
@@ -57,14 +60,21 @@ public class ClientUpdateMap {
   }
 
   public ClientUpdateMap requireSelect(User u, List<Integer> handIds,
-                                       List<Integer> boardIds, SelectCallback response) {
-    callbacks.put(u, new Callback(boardIds, handIds, response));
+                                       List<Integer> boardIds, SelectCallback
+                                         response, String name) {
+    callbacks.put(u, new Callback(boardIds, handIds, response, name));
     return this;
   }
   public ClientUpdateMap requireSelectCanStop(User u, List<Integer> handIds,
                                        List<Integer> boardIds, SelectCallback
-                                                response, CancelHandler ch) {
-    callbacks.put(u, new Callback(boardIds, handIds, response, ch));
+                                                response, CancelHandler ch,
+                                              String name) {
+    callbacks.put(u, new Callback(boardIds, handIds, response, ch, name));
+    return this;
+  }
+
+  public ClientUpdateMap putButton(User u, String s, ButtonCallback bc) {
+    buttonCallbacks.put(u, new ButtonCall(s, bc));
     return this;
   }
 
@@ -113,6 +123,8 @@ public class ClientUpdateMap {
   public boolean hasUser(User u) {
     if (callbacks.containsKey(u)) {
       return true;
+    } if (buttonCallbacks.containsKey(u)) {
+      return true;
     } if (mainUser == u && data.size() > 0) {
       return true;
     } if (dataGlobal.size() > 0) {
@@ -123,6 +135,7 @@ public class ClientUpdateMap {
 
   public String prepareUser(User u) {
     Map<String, Object> toSend = new HashMap<>(dataGlobal);
+    toSend.put("buttons", buttonCallbacks.get(u));
     if (mainUser == u) {
       toSend.putAll(data);
     } if (callbacks.containsKey(u)) {
@@ -156,6 +169,10 @@ public class ClientUpdateMap {
 
   public Map<User, Callback> getCallbacks(){
     return callbacks;
+  }
+
+  public Multimap<User, ButtonCall> getButtonCallbacks(){
+    return buttonCallbacks;
   }
 }
 
