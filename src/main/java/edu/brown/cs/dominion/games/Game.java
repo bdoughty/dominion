@@ -246,6 +246,10 @@ public class Game extends GameStub implements GameEventListener {
     gc.serverSend(s);
   }
 
+  public void sendServerMessageToUser(String s, User u) {
+    gc.serverSendToUser(s, u);
+  }
+
   public void sendSpamMessage(String s) {
     gc.spambotSend(s);
   }

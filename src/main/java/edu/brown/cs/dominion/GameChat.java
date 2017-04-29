@@ -37,4 +37,9 @@ public class GameChat extends Chat {
       ws.send(u, MessageType.CHAT, message);
     }
   }
+
+  public void serverSendToUser(String s, User u) {
+    String message = getMessage("Server", "#fff", s);
+    ws.send(u, MessageType.CHAT, message);
+  }
 }
