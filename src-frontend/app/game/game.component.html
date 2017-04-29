@@ -35,6 +35,8 @@
           </dmn-card>
         </div>
       </div>
+      <button *ngFor="let button of buttons"
+              (click)="customButtonClicked(button.id)">{{button.name}}</button>
       <button *ngIf="game.isSelecting && game.toSelectStoppable && !game.isOver"
               (click)="endSelecting()">End Select</button>
       <button *ngIf="!(game.isSelecting && game.toSelectStoppable) && !game.isOver"
