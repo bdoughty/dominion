@@ -14,14 +14,17 @@ import java.util.Map;
 @WebSocket
 public class UserRegistry{
   private Map<Integer, User> users;
-  private int nextId = 0;
+  private int startId;
+  private int nextId;
 
   public UserRegistry(){
     users = new HashMap<>();
+    startId = (int) (Math.random() * 100000000);
+    nextId = startId;
   }
 
   public User registerNewUser(){
-    User u = new User(nextId);
+    User u = new User(nextId, startId);
     users.put(nextId, u);
     nextId++;
     return u;

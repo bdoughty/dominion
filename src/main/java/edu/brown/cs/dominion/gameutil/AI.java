@@ -4,8 +4,7 @@ import edu.brown.cs.dominion.User;
 
 public class AI extends User {
 
-  public AI(int id) {
-    super(id);
+  public AI(int id, int startId) {
+    super(id, startId);
   }
-
 }

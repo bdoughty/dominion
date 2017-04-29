@@ -27,10 +27,10 @@ public class User {
   private String name;
   // private transient Player player;
 
-  public User(int id) {
+  public User(int id, int startId) {
     color = makeColor();
     this.id = id;
-    this.name = makeName(id);
+    this.name = makeName(id - startId);
   }
 
   @Override
