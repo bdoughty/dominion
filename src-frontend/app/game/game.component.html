@@ -18,13 +18,19 @@
     <div id="left-bar">
       <div id="stats">
         <div class="stat">
-          <span class="stat-label">Actions:</span> {{ game.actions }}
+          <span class="stat-label">Actions</span>
+          <i *ngFor="let i of game.actions | fill" class="material-icons">&#xE1AB;</i>
+          <!--<span class="stat-label">Actions:</span> {{ game.actions }}-->
         </div>
         <div class="stat">
-          <span class="stat-label">Buys:</span> {{ game.buys }}
+          <span class="stat-label">Buys</span>
+          <i *ngFor="let i of game.buys | fill" class="material-icons">&#xE8CC;</i>
         </div>
         <div class="stat">
-          <span class="stat-label">Gold:</span> {{ game.gold }}
+          <span class="stat-label">Gold</span>
+          <div class="icons">
+            <i *ngFor="let i of game.gold | fill" class="material-icons">&#xE263;</i>
+          </div>
         </div>
       </div>
       <div id="cart" [ngClass]="{hidden: !shouldDisplayCart()}">

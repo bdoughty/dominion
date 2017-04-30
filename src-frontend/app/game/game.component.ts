@@ -6,6 +6,7 @@ import {ClientGame} from "./models/client-game.model";
 import {GameSocketService} from "../shared/gamesocket.service";
 import {Card} from "./card/card.model";
 import {trigger, state, style, animate, transition, keyframes} from "@angular/animations";
+import {FillPipe} from "../shared/fill.pipe";
 
 @Component({
   selector: 'dmn-game',

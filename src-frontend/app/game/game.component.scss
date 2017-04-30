@@ -64,21 +64,35 @@
       flex-direction: column;
 
       #stats {
-        padding: 20px 80px 20px 20px;
+        padding: 20px 0px 20px 20px;
         font-size: 18px;
-        font-weight: 300;
+
+        font-weight: 100;
         color: white;
 
         .stat {
           display: flex;
-          align-items: center;
-          justify-content: space-between;
           margin-bottom: 12px;
+          justify-content: flex-start;
+          font-weight: 300;
+          min-height: 30px;
+          align-items: flex-start;
 
           .stat-label {
             font-weight: bold;
+            min-width: 70px;
             text-transform: uppercase;
-            font-size: 0.8em;
+            padding-right: 8px;
+            font-size: 0.7em;
+            display: inline-block;
+          }
+
+          .icons {
+            display: inline-block;
+
+            i {
+              font-size: 20px;
+            }
           }
         }
       }
