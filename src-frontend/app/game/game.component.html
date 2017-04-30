@@ -1,3 +1,4 @@
+<dmn-notification [text]="notificationText"></dmn-notification>
 <div id="winScreen" *ngIf="game && game.isOver">
   <h2>{{ game.winner().name }} won!</h2>
   <div class="players">
@@ -74,6 +75,9 @@
       </div>
     </div>
     <div id="right-bar-container">
+      <div class="exit-row" (click)="leaveGame()">
+        <span>Leave Game </span><i class="material-icons">&#xE879;</i>
+      </div>
       <div id="right-bar">
         <div class="turns">
           <div *ngFor="let player of game.orderedPlayers; let i = index;"
@@ -84,9 +88,9 @@
               <div class="num-cards">{{ player.numCards }} Cards, {{ player.victoryPoints }} VP</div>
             </div>
           </div>
-          <div class="chat-container">
-            <dmn-chat [endpoint]="'game'" [socket]="_gameSocketService"></dmn-chat>
-          </div>
+        </div>
+        <div class="chat-container">
+          <dmn-chat [endpoint]="'game'" [socket]="_gameSocketService"></dmn-chat>
         </div>
       </div>
     </div>

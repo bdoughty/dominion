@@ -15,6 +15,7 @@ import {ChatComponent} from "./chat/chat.component";
 import {ChatSocketService} from "./shared/chatsocket.service";
 import {GameSocketService} from "./shared/gamesocket.service";
 import {CardComponent} from "./game/card/card.component";
+import {NotificationComponent} from "./shared/notification/notification.component";
 
 @NgModule({
   declarations: [
@@ -27,7 +28,9 @@ import {CardComponent} from "./game/card/card.component";
     CreationComponent,
 
     ChatComponent,
-    CardComponent
+    CardComponent,
+    NotificationComponent
+
   ],
   imports: [
     BrowserModule,
