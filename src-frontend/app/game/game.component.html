@@ -19,17 +19,23 @@
       <div id="stats">
         <div class="stat">
           <span class="stat-label">Actions</span>
-          <i *ngFor="let i of game.actions | fill" class="material-icons">&#xE1AB;</i>
-          <!--<span class="stat-label">Actions:</span> {{ game.actions }}-->
+          <div class="icons">
+              <i *ngFor="let i of game.actions | fill" class="actions material-icons">&#xE1AB;</i>
+          </div>
         </div>
         <div class="stat">
           <span class="stat-label">Buys</span>
-          <i *ngFor="let i of game.buys | fill" class="material-icons">&#xE8CC;</i>
+          <div class="icons">
+              <i *ngFor="let i of game.buys | fill" class="buys material-icons">&#xE8CC;</i>
+          </div>
         </div>
         <div class="stat">
           <span class="stat-label">Gold</span>
-          <div class="icons">
-            <i *ngFor="let i of game.gold | fill" class="material-icons">&#xE263;</i>
+          <div class="icons" *ngIf="game.gold <= 5">
+            <i *ngFor="let i of game.gold | fill" class="gold material-icons">&#xE263;</i>
+          </div>
+          <div class="count" *ngIf="game.gold > 5">
+            <i class="material-icons gold">&#xE263;</i> x{{game.gold}}
           </div>
         </div>
       </div>

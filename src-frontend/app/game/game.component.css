@@ -64,16 +64,29 @@
           min-height: 30px;
           align-items: flex-start; }
           #game #board #left-bar #stats .stat .stat-label {
+            padding-top: 3px;
             font-weight: bold;
             min-width: 70px;
             text-transform: uppercase;
             padding-right: 8px;
             font-size: 0.7em;
             display: inline-block; }
+          #game #board #left-bar #stats .stat i {
+            font-size: 20px; }
+            #game #board #left-bar #stats .stat i.gold {
+              color: #f5de64 !important; }
+            #game #board #left-bar #stats .stat i.buys {
+              color: #9ad6f5 !important; }
+            #game #board #left-bar #stats .stat i.actions {
+              color: #ff8e8e; }
           #game #board #left-bar #stats .stat .icons {
             display: inline-block; }
-            #game #board #left-bar #stats .stat .icons i {
-              font-size: 20px; }
+          #game #board #left-bar #stats .stat .count {
+            display: flex;
+            align-items: center;
+            font-weight: 100; }
+            #game #board #left-bar #stats .stat .count i {
+              margin-right: 4px; }
       #game #board #left-bar #cart {
         background: rgba(0, 0, 0, 0.5);
         flex-grow: 1;

@@ -204,10 +204,8 @@ export class GameComponent implements OnInit {
         });
       }
     }
-    console.log("\n--------------");
-    console.log("\nUPDATED GAME:");
+    console.log("\n\n\n\nUPDATED GAME:");
     console.log(this.game);
-    console.log(this.game.isSelecting);
   }
 
   leaveGame() {

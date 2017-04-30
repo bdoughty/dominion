@@ -79,6 +79,7 @@
           align-items: flex-start;
 
           .stat-label {
+            padding-top: 3px;
             font-weight: bold;
             min-width: 70px;
             text-transform: uppercase;
@@ -87,12 +88,32 @@
             display: inline-block;
           }
 
+          i {
+            font-size: 20px;
+
+            &.gold {
+              color: #f5de64 !important;
+            }
+
+            &.buys {
+              color: rgb(154, 214, 245) !important;
+            }
+            &.actions {
+              color: #ff8e8e;
+            }
+          }
+
           .icons {
             display: inline-block;
+          }
 
+          .count {
             i {
-              font-size: 20px;
+              margin-right: 4px;
             }
+            display: flex;
+            align-items: center;
+            font-weight: 100;
           }
         }
       }
