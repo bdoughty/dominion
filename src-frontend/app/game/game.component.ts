@@ -202,6 +202,11 @@ export class GameComponent implements OnInit {
           return button1.id > button2.id;
         });
       }
+      if (typeof update.victorypoints !== 'undefined') {
+        this.game.players.forEach(player => {
+          player.victoryPoints = update.victorypoints[player.id];
+        });
+      }
     }
     console.log("\n\n\n\nUPDATED GAME:");
     console.log(this.game);

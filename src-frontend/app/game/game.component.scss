@@ -28,8 +28,9 @@
       .vp-container {
         display: inline-block;
         width: 500px;
-        background: #71d1a0;
+        background: #a1bdaf;
         height: 30px;
+        position: relative;
 
         .vp-bar {
           background: #448866;
@@ -38,6 +39,16 @@
           align-items: center;
           padding-left: 8px;
           color: white;
+        }
+
+        .bar-text {
+          position: absolute;
+          top: 0; bottom: 0;
+          left: 0; right: 0;
+          color: white;
+          display: flex;
+          align-items: center;
+          padding-left: 8px;
         }
       }
     }

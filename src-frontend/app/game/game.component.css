@@ -23,8 +23,9 @@
       #winScreen .players .player .vp-container {
         display: inline-block;
         width: 500px;
-        background: #71d1a0;
-        height: 30px; }
+        background: #a1bdaf;
+        height: 30px;
+        position: relative; }
         #winScreen .players .player .vp-container .vp-bar {
           background: #448866;
           height: 100%;
@@ -32,6 +33,16 @@
           align-items: center;
           padding-left: 8px;
           color: white; }
+        #winScreen .players .player .vp-container .bar-text {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          color: white;
+          display: flex;
+          align-items: center;
+          padding-left: 8px; }
 
 #game {
   overflow: hidden;
