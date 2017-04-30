@@ -230,6 +230,10 @@ public class Player {
       points += c.getVictoryPoints();
     }
 
+    for (Card c : discardPile) {
+      points += c.getVictoryPoints();
+    }
+
     return points;
   }
 

@@ -104,6 +104,11 @@ public class ClientUpdateMap {
     return this;
   }
 
+  public ClientUpdateMap victoryPoints(Map<Integer, Integer> vps){
+    dataGlobal.put("victorypoints", vps);
+    return this;
+  }
+
   public ClientUpdateMap holdUntilInformed() {
     data.put("holding", true);
     return this;

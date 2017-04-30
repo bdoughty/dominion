@@ -23,6 +23,8 @@ import edu.brown.cs.dominion.io.GameEventListener;
 import edu.brown.cs.dominion.io.Websocket;
 import edu.brown.cs.dominion.io.send.ClientUpdateMap;
 
+import javax.jws.soap.SOAPBinding;
+
 /**
  * Created by henry on 4/2/2017.
  */
@@ -124,13 +126,9 @@ public class Game extends GameStub implements GameEventListener {
     cm.piles(board);
 
     if (board.gameHasEnded()) {
-      Map<Integer, Integer> winners = new HashMap<>();
-
-      for (User usr : allUsers) {
-        winners.put(usr.getId(), getPlayerFromUser(usr).scoreDeck());
-      }
-      cm.winner(winners);
+      cm.winner(getVictoryPointMap());
     }
+    cm.victoryPoints(getVictoryPointMap());
 
     sendServerMessage(u.getName() + " ended their turn.");
 
@@ -269,6 +267,12 @@ public class Game extends GameStub implements GameEventListener {
 
   public void sendSpamMessage(String s) {
     gc.spambotSend(s);
+  }
+
+  public Map<Integer, Integer> getVictoryPointMap(){
+    Map<Integer, Integer> vps = new HashMap<>();
+    allUsers.forEach(u -> vps.put(u.getId(), getPlayerFromUser(u).scoreDeck()));
+    return vps;
   }
 
 }
