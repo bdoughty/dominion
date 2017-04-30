@@ -32,6 +32,7 @@ export class GameComponent implements OnInit {
   public game: ClientGame;
   public buttons: any[] = [{id: '34', name: 'testing'}, {id: '53', name: 'another'}];
   public gameChat = new Chat();
+  public notificationText: string = "";
 
   constructor(
     private _userIdService: UserIdService,
@@ -186,6 +187,9 @@ export class GameComponent implements OnInit {
       }
       if (typeof update.turn !== "undefined") {
         this.game.setTurn(update.turn);
+        if (this.game.isOwnTurn()) {
+          this.notificationText = "Your turn has started.";
+        }
       }
       if (typeof update.board !== 'undefined') {
         this.game.updatePiles(update.board.piles);
