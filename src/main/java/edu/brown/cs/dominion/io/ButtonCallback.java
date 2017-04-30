@@ -1,5 +1,6 @@
 package edu.brown.cs.dominion.io;
 
+import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.io.send.ClientUpdateMap;
 
 /**
@@ -7,5 +8,5 @@ import edu.brown.cs.dominion.io.send.ClientUpdateMap;
  */
 @FunctionalInterface
 public interface ButtonCallback {
-  ClientUpdateMap clicked();
+  ClientUpdateMap clicked(User u);
 }

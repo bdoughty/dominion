@@ -284,7 +284,7 @@ public class Game extends GameStub implements GameEventListener {
   }
 
   public void removeUser(User u) {
-    if (u == current) {
+    if (u == current && allUsers.size() > 1) {
       current = usersTurns.poll();
       ClientUpdateMap cm = new ClientUpdateMap(this, u);
       cm.turn(current.getId());
