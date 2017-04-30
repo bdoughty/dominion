@@ -21,7 +21,8 @@ public enum MessageType {
   NEW_GAME ("create"),
   CANCEL_SELECT("cancel"),
   BUTTON_RESPONSE ("button"),
-  EXIT_GAME("exit");
+  EXIT_GAME("exit"),
+  NOTIFY ("notify");
 
 
   private final String name;

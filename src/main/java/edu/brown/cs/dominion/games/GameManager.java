@@ -166,11 +166,11 @@ public class GameManager implements SocketServer {
       JsonObject data = PARSE.parse(m).getAsJsonObject();
       boolean inHand = data.get("inhand").getAsBoolean();
       int location = data.get("loc").getAsInt();
-      sendClientUpdateMap(u, selection(u, inHand, location));
+      sendClientUpdateMap(selection(u, inHand, location));
     });
 
     ws.putCommand(CANCEL_SELECT, (w, u, m) -> {
-      sendClientUpdateMap(u, cancleSelect(u));
+      sendClientUpdateMap(cancleSelect(u));
     });
 
     ws.putCommand(END_ACTION,
@@ -196,6 +196,11 @@ public class GameManager implements SocketServer {
         Game g = gamesByUser.get(u);
         g.sendMessage(u, m);
       }
+    });
+
+    ws.putCommand(EXIT_GAME, (w, u, m) -> {
+      Game g = gamesByUser.get(u);
+      g.removeUser(u);
     });
   }
 
@@ -235,7 +240,7 @@ public class GameManager implements SocketServer {
     }
   }
 
-  public void sendClientUpdateMap(User u, ClientUpdateMap c) {
+  public void sendClientUpdateMap(ClientUpdateMap c) {
     if (c != null) {
       c = chk(c);
       for (User user : c.getUsers()) {

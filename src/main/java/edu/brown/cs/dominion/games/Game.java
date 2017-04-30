@@ -132,7 +132,7 @@ public class Game extends GameStub implements GameEventListener {
 
     sendServerMessage(u.getName() + " ended their turn.");
 
-    gm.sendClientUpdateMap(u, cm);
+    gm.sendClientUpdateMap(cm);
 
 
     //TODO THIS IS SOOOOOOO BADDDDD SOOO BADDDDDA
@@ -153,7 +153,7 @@ public class Game extends GameStub implements GameEventListener {
     if(u instanceof AIPlayer){
       ((AIPlayer) u).play(this);
     }
-    gm.sendClientUpdateMap(u, cm);
+    gm.sendClientUpdateMap(cm);
   }
 
   @Override
@@ -178,7 +178,7 @@ public class Game extends GameStub implements GameEventListener {
       System.out.println(nae.getMessage());
     }
 
-    gm.sendClientUpdateMap(u, cm);
+    gm.sendClientUpdateMap(cm);
   }
 
   @Override
@@ -197,7 +197,7 @@ public class Game extends GameStub implements GameEventListener {
     playerUpdateMap(cm, p);
     cm.setPhase(false);
 
-    gm.sendClientUpdateMap(u, cm);
+    gm.sendClientUpdateMap(cm);
   }
 
   @Override
@@ -275,4 +275,23 @@ public class Game extends GameStub implements GameEventListener {
     return vps;
   }
 
+  public void notifyPlayer() {
+
+  }
+
+  public void notifyGame() {
+
+  }
+
+  public void removeUser(User u) {
+    if (u == current) {
+      allUsers.remove(u);
+      current = usersTurns.poll();
+
+      ClientUpdateMap cm = new ClientUpdateMap(this, u);
+      cm.turn(current.getId());
+      cm.piles(board);
+      gm.sendClientUpdateMap(cm);
+    }
+  }
 }
