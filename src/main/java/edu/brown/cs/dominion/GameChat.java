@@ -42,4 +42,8 @@ public class GameChat extends Chat {
     String message = getMessage("Server", "#fff", s);
     ws.send(u, MessageType.CHAT, message);
   }
+
+  public void removeUser(User u){
+    users.remove(u);
+  }
 }

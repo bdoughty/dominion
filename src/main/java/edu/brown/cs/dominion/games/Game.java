@@ -276,22 +276,25 @@ public class Game extends GameStub implements GameEventListener {
   }
 
   public void notifyPlayer() {
-
+    //TODO
   }
 
   public void notifyGame() {
-
+    //TODO
   }
 
   public void removeUser(User u) {
     if (u == current) {
-      allUsers.remove(u);
       current = usersTurns.poll();
-
       ClientUpdateMap cm = new ClientUpdateMap(this, u);
       cm.turn(current.getId());
       cm.piles(board);
       gm.sendClientUpdateMap(cm);
+    } else {
+      usersTurns.remove(u);
     }
+    userPlayers.remove(u);
+    allUsers.remove(u);
+    gc.removeUser(u);
   }
 }

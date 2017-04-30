@@ -201,6 +201,10 @@ public class GameManager implements SocketServer {
     ws.putCommand(EXIT_GAME, (w, u, m) -> {
       Game g = gamesByUser.get(u);
       g.removeUser(u);
+      gamesByUser.remove(g, u);
+      if (g.getAllUsers().isEmpty()) {
+        games.remove(g);
+      }
     });
   }
 
