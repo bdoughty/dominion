@@ -199,6 +199,7 @@
       flex-direction: column;
 
       .exit-row {
+        flex-shrink: 0;
         display: flex;
         justify-content: flex-end;
         color: white;
@@ -228,10 +229,10 @@
         display: flex;
         flex-direction: column;
 
-
         .turns {
           display: flex;
           flex-direction: column;
+          flex-shrink: 0;
 
           .turn {
             padding: 18px 14px;
@@ -275,14 +276,13 @@
         }
 
         .chat-container {
-          padding-top: 14px;
           background: rgba(black, 0.5);
           font-size: 0.8em;
           color: white;
-          height: 330px;
           flex-grow: 1;
           display: flex;
           justify-content: stretch;
+          overflow-y: auto;
 
           .message {
             padding: 0 !important;
@@ -294,7 +294,7 @@
 
   /* ----------- HUD ------------- */
   #hud {
-    height: 200px;
+    min-height: 200px;
     display: flex;
     align-items: stretch;
     box-shadow: 0 1px 2px rgba(black, 0.12), 0 1px 3px rgba(black, 0.24);

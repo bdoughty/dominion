@@ -136,6 +136,7 @@
       display: flex;
       flex-direction: column; }
       #game #board #right-bar-container .exit-row {
+        flex-shrink: 0;
         display: flex;
         justify-content: flex-end;
         color: white;
@@ -158,7 +159,8 @@
         flex-direction: column; }
         #game #board #right-bar-container #right-bar .turns {
           display: flex;
-          flex-direction: column; }
+          flex-direction: column;
+          flex-shrink: 0; }
           #game #board #right-bar-container #right-bar .turns .turn {
             padding: 18px 14px;
             border-bottom: 1px solid #DDD;
@@ -184,18 +186,17 @@
               display: flex;
               justify-content: space-between; }
         #game #board #right-bar-container #right-bar .chat-container {
-          padding-top: 14px;
           background: rgba(0, 0, 0, 0.5);
           font-size: 0.8em;
           color: white;
-          height: 330px;
           flex-grow: 1;
           display: flex;
-          justify-content: stretch; }
+          justify-content: stretch;
+          overflow-y: auto; }
           #game #board #right-bar-container #right-bar .chat-container .message {
             padding: 0 !important; }
   #game #hud {
-    height: 200px;
+    min-height: 200px;
     display: flex;
     align-items: stretch;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.24);
