@@ -66,7 +66,7 @@ public class GameManager implements SocketServer {
 
     PendingGame p2 = new PendingGame("GAME2", 2,
         new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
-    p2.addUser(users.registerNewAI(new BigMoneyBigVictoryPoints()));
+    //p2.addUser(users.registerNewAI(new BigMoneyBigVictoryPoints()));
     pendingGames.put(p2.getId(), p2);
 
     PendingGame p3 = new PendingGame("GAME3", 3,
@@ -125,7 +125,7 @@ public class GameManager implements SocketServer {
     buttonCallbacks.removeAll(u);
     for (ButtonCall b : buttons) {
       if(b.getId() == id) {
-        return b.getBc().clicked();
+        return b.getBc().clicked(u);
       }
     }
     return null;
@@ -141,12 +141,10 @@ public class GameManager implements SocketServer {
     if (gamesByUser.containsKey(user)) {
       Game g = gamesByUser.get(user);
       List<Integer> actionIds = g.getBoard().getActionCardIds();
-
       JsonObject container = new JsonObject();
       container.addProperty("gameid", g.getId());
       container.add("cardids", GSON.toJsonTree(actionIds));
       container.add("users", GSON.toJsonTree(g.getAllUsers()));
-
       ws.send(s, INIT_GAME, GSON.toJson(container));
       ws.send(s, UPDATE_MAP, g.fullUpdate(user).prepareUser(user));
     } else {
@@ -201,10 +199,11 @@ public class GameManager implements SocketServer {
     ws.putCommand(EXIT_GAME, (w, u, m) -> {
       Game g = gamesByUser.get(u);
       g.removeUser(u);
-      gamesByUser.remove(g, u);
+      gamesByUser.remove(u);
       if (g.getAllUsers().isEmpty()) {
         games.remove(g);
       }
+      web.send(u, REDIRECT, "lobby");
     });
   }
 
