@@ -169,6 +169,11 @@ public class Player {
     discardPile.add(c);
   }
 
+  public void discardDeck() {
+    discardPile.addAll(deck);
+    deck.clear();
+  }
+
   public Card cardToDeck(int loc) {
     assert (loc >= 0 && loc < hand.size());
     Card c = hand.remove(loc);

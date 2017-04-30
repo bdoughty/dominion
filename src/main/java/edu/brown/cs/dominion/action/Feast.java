@@ -44,7 +44,7 @@ public class Feast extends AbstractAction {
 
   @Override
   public String toString() {
-    return ("Feast");
+    return "Feast";
   }
 
 }

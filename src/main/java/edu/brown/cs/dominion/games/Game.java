@@ -6,11 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
-import com.google.common.collect.ImmutableMap;
-import edu.brown.cs.dominion.AI.AIPlayer;
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.GameChat;
 import edu.brown.cs.dominion.User;
+import edu.brown.cs.dominion.AI.AIPlayer;
 import edu.brown.cs.dominion.AI.TrashTalker;
 import edu.brown.cs.dominion.gameutil.Board;
 import edu.brown.cs.dominion.gameutil.EmptyPileException;
@@ -22,8 +21,6 @@ import edu.brown.cs.dominion.gameutil.TooExpensiveException;
 import edu.brown.cs.dominion.io.GameEventListener;
 import edu.brown.cs.dominion.io.Websocket;
 import edu.brown.cs.dominion.io.send.ClientUpdateMap;
-
-import javax.jws.soap.SOAPBinding;
 
 /**
  * Created by henry on 4/2/2017.
@@ -42,8 +39,8 @@ public class Game extends GameStub implements GameEventListener {
 
   private GameManager gm;
 
-  public Game(List<User> usersTurns, List<Integer> actionCardIds,
-      Websocket ws, GameManager gm) {
+  public Game(List<User> usersTurns, List<Integer> actionCardIds, Websocket ws,
+      GameManager gm) {
     userPlayers = new HashMap<>();
     usersTurns.forEach(u -> userPlayers.put(u, new Player()));
     this.allUsers = new LinkedList<>(usersTurns);
@@ -134,13 +131,12 @@ public class Game extends GameStub implements GameEventListener {
 
     gm.sendClientUpdateMap(cm);
 
-
-    //TODO THIS IS SOOOOOOO BADDDDD SOOO BADDDDDA
-    //try {
-     // Thread.sleep(1000);
-    //} catch (InterruptedException e) {
-    //  e.printStackTrace();
-    //}
+    // TODO THIS IS SOOOOOOO BADDDDD SOOO BADDDDDA
+    // try {
+    // Thread.sleep(1000);
+    // } catch (InterruptedException e) {
+    // e.printStackTrace();
+    // }
     startTurn(current);
   }
 
@@ -150,7 +146,7 @@ public class Game extends GameStub implements GameEventListener {
     ClientUpdateMap cm = new ClientUpdateMap(this, u);
     playerUpdateMap(cm, getCurrentPlayer());
     sendServerMessage(u.getName() + " began their turn.");
-    if(u instanceof AIPlayer){
+    if (u instanceof AIPlayer) {
       ((AIPlayer) u).play(this);
     }
     gm.sendClientUpdateMap(cm);
@@ -232,6 +228,7 @@ public class Game extends GameStub implements GameEventListener {
   public void othersDraw(int numCards) {
     for (User u : usersTurns) {
       getPlayerFromUser(u).draw(numCards);
+      // TODO send clientupdatemap to all players alerting them to new hand
     }
   }
 
@@ -269,18 +266,18 @@ public class Game extends GameStub implements GameEventListener {
     gc.spambotSend(s);
   }
 
-  public Map<Integer, Integer> getVictoryPointMap(){
+  public Map<Integer, Integer> getVictoryPointMap() {
     Map<Integer, Integer> vps = new HashMap<>();
     allUsers.forEach(u -> vps.put(u.getId(), getPlayerFromUser(u).scoreDeck()));
     return vps;
   }
 
   public void notifyPlayer() {
-    //TODO
+    // TODO
   }
 
   public void notifyGame() {
-    //TODO
+    // TODO
   }
 
   public void removeUser(User u) {
