@@ -191,9 +191,6 @@ export class GameComponent implements OnInit {
       }
       if (typeof update.turn !== "undefined") {
         this.game.setTurn(update.turn);
-        if (this.game.isOwnTurn()) {
-          this.notificationText = "Your turn has started.";
-        }
       }
       if (typeof update.board !== 'undefined') {
         this.game.updatePiles(update.board.piles);
@@ -206,11 +203,17 @@ export class GameComponent implements OnInit {
           return button1.id > button2.id;
         });
       }
+      if (typeof update.victorypoints !== 'undefined') {
+        this.game.players.forEach(player => {
+          player.victoryPoints = update.victorypoints[player.id];
+        });
+      }
+      if (typeof update.notify !== 'undefined') {
+        this.notify(update.notify);
+      }
     }
-    console.log("\n--------------");
-    console.log("\nUPDATED GAME:");
+    console.log("\n\n\n\nUPDATED GAME:");
     console.log(this.game);
-    console.log(this.game.isSelecting);
   }
 
   leaveGame() {
@@ -220,4 +223,9 @@ export class GameComponent implements OnInit {
   chat(msg) {
     this.gameChat.addMessage(JSON.parse(msg));
   }
+
+  notify(text: string) {
+    this.notificationText = text;
+  }
+
 }

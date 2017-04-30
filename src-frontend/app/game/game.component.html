@@ -5,8 +5,11 @@
     <div class="player" *ngFor="let player of game.players">
       <span class="player-name">{{ player.name }}</span>
       <div class="vp-container">
-        <div class="vp-bar" [style.width.percent]="player.victoryPoints / game.winner().victoryPoints">
-          {{ player.victoryPoints }}</div>
+        <div class="vp-bar" [style.width.%]="player.victoryPoints / game.winner().victoryPoints * 100">
+        </div>
+        <div class="bar-text">
+          {{ player.victoryPoints }} Victory Points
+        </div>
       </div>
     </div>
   </div>
@@ -18,13 +21,25 @@
     <div id="left-bar">
       <div id="stats">
         <div class="stat">
-          <span class="stat-label">Actions:</span> {{ game.actions }}
+          <span class="stat-label">Actions</span>
+          <div class="icons">
+              <i *ngFor="let i of game.actions | fill" class="actions material-icons">&#xE1AB;</i>
+          </div>
         </div>
         <div class="stat">
-          <span class="stat-label">Buys:</span> {{ game.buys }}
+          <span class="stat-label">Buys</span>
+          <div class="icons">
+              <i *ngFor="let i of game.buys | fill" class="buys material-icons">&#xE8CC;</i>
+          </div>
         </div>
         <div class="stat">
-          <span class="stat-label">Gold:</span> {{ game.gold }}
+          <span class="stat-label">Gold</span>
+          <div class="icons" *ngIf="game.gold <= 5">
+            <i *ngFor="let i of game.gold | fill" class="gold material-icons">&#xE263;</i>
+          </div>
+          <div class="count" *ngIf="game.gold > 5">
+            <i class="material-icons gold">&#xE263;</i> x{{game.gold}}
+          </div>
         </div>
       </div>
       <div id="cart" [ngClass]="{hidden: !shouldDisplayCart()}">

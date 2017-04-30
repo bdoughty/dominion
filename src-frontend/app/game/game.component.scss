@@ -28,8 +28,9 @@
       .vp-container {
         display: inline-block;
         width: 500px;
-        background: #71d1a0;
+        background: #a1bdaf;
         height: 30px;
+        position: relative;
 
         .vp-bar {
           background: #448866;
@@ -38,6 +39,16 @@
           align-items: center;
           padding-left: 8px;
           color: white;
+        }
+
+        .bar-text {
+          position: absolute;
+          top: 0; bottom: 0;
+          left: 0; right: 0;
+          color: white;
+          display: flex;
+          align-items: center;
+          padding-left: 8px;
         }
       }
     }
@@ -64,21 +75,56 @@
       flex-direction: column;
 
       #stats {
-        padding: 20px 80px 20px 20px;
+        padding: 20px 0px 20px 20px;
         font-size: 18px;
-        font-weight: 300;
+
+        font-weight: 100;
         color: white;
 
         .stat {
           display: flex;
-          align-items: center;
-          justify-content: space-between;
           margin-bottom: 12px;
+          justify-content: flex-start;
+          font-weight: 300;
+          min-height: 30px;
+          align-items: flex-start;
 
           .stat-label {
+            padding-top: 3px;
             font-weight: bold;
+            min-width: 70px;
             text-transform: uppercase;
-            font-size: 0.8em;
+            padding-right: 8px;
+            font-size: 0.7em;
+            display: inline-block;
+          }
+
+          i {
+            font-size: 20px;
+
+            &.gold {
+              color: #f5de64 !important;
+            }
+
+            &.buys {
+              color: rgb(154, 214, 245) !important;
+            }
+            &.actions {
+              color: #ff8e8e;
+            }
+          }
+
+          .icons {
+            display: inline-block;
+          }
+
+          .count {
+            i {
+              margin-right: 4px;
+            }
+            display: flex;
+            align-items: center;
+            font-weight: 100;
           }
         }
       }
@@ -164,6 +210,7 @@
       flex-direction: column;
 
       .exit-row {
+        flex-shrink: 0;
         display: flex;
         justify-content: flex-end;
         color: white;
@@ -193,10 +240,10 @@
         display: flex;
         flex-direction: column;
 
-
         .turns {
           display: flex;
           flex-direction: column;
+          flex-shrink: 0;
 
           .turn {
             padding: 18px 14px;
@@ -240,14 +287,13 @@
         }
 
         .chat-container {
-          padding-top: 14px;
           background: rgba(black, 0.5);
           font-size: 0.8em;
           color: white;
-          height: 330px;
           flex-grow: 1;
           display: flex;
           justify-content: stretch;
+          overflow-y: auto;
 
           .message {
             padding: 0 !important;
@@ -259,7 +305,7 @@
 
   /* ----------- HUD ------------- */
   #hud {
-    height: 200px;
+    min-height: 200px;
     display: flex;
     align-items: stretch;
     box-shadow: 0 1px 2px rgba(black, 0.12), 0 1px 3px rgba(black, 0.24);

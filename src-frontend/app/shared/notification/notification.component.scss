@@ -1,16 +1,17 @@
 .notification-container {
   position: absolute;
   top: 0; right: 0; left: 0; bottom: 0;
-  background: rgba(#222, 0.7);
+  background: rgba(#111, 0.9);
 
   z-index: 100;
   justify-content: center;
   align-items: center;
-  transition: opacity 0.74s;
   opacity: 0;
+  transition: opacity 1s;
   pointer-events: none;
 
   &.visible {
+    transition: opacity 0.5s;
     display: flex;
     opacity: 1;
     pointer-events: initial;
