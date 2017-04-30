@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.brown.cs.dominion.Card;
+import edu.brown.cs.dominion.action.Feast;
 import edu.brown.cs.dominion.action.Moat;
 import edu.brown.cs.dominion.money.AbstractMoney;
 import edu.brown.cs.dominion.money.Copper;
@@ -130,6 +131,17 @@ public class Player {
     } else {
       throw new NoActionsException("No remaining actions");
     }
+  }
+
+  public Card trashFeast() {
+    for (Card c : playedPile) {
+      if (c instanceof Feast) {
+        playedPile.remove(c);
+        return c;
+      }
+    }
+
+    return null;
   }
 
   public Card trash(int posInHand) {
