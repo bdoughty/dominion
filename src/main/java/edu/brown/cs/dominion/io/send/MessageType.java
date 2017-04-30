@@ -20,7 +20,8 @@ public enum MessageType {
   INIT_GAME ("init"),
   NEW_GAME ("create"),
   CANCEL_SELECT("cancel"),
-  BUTTON_RESPONSE ("button");
+  BUTTON_RESPONSE ("button"),
+  EXIT_GAME("exit");
 
 
   private final String name;

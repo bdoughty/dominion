@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Queue;
 
 import com.google.common.collect.ImmutableMap;
+import edu.brown.cs.dominion.AI.AIPlayer;
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.GameChat;
 import edu.brown.cs.dominion.User;
@@ -37,8 +38,10 @@ public class Game extends GameStub implements GameEventListener {
 
   private boolean actionPhase = true;
 
+  private GameManager gm;
+
   public Game(List<User> usersTurns, List<Integer> actionCardIds,
-      Websocket ws) {
+      Websocket ws, GameManager gm) {
     userPlayers = new HashMap<>();
     usersTurns.forEach(u -> userPlayers.put(u, new Player()));
     this.allUsers = new LinkedList<>(usersTurns);
@@ -46,9 +49,10 @@ public class Game extends GameStub implements GameEventListener {
     this.current = this.usersTurns.poll();
     userPlayers.get(current).newTurn();
     this.board = new Board(actionCardIds);
-
     gc = new GameChat(ws, usersTurns);
     spambot.addGame(this);
+    this.gm = gm;
+    startTurn(current);
   }
 
   public User getCurrent() {
@@ -85,9 +89,9 @@ public class Game extends GameStub implements GameEventListener {
   }
 
   @Override
-  public ClientUpdateMap endBuyPhase(User u, List<Integer> toBuy) {
+  public void endBuyPhase(User u, List<Integer> toBuy) {
     if (current.getId() != u.getId()) {
-      return null;
+      return;
     }
 
     actionPhase = true;
@@ -130,22 +134,34 @@ public class Game extends GameStub implements GameEventListener {
 
     sendServerMessage(u.getName() + " ended their turn.");
 
-    return cm;
+    gm.sendClientUpdateMap(u, cm);
+
+
+    //TODO THIS IS SOOOOOOO BADDDDD SOOO BADDDDDA
+    //try {
+     // Thread.sleep(1000);
+    //} catch (InterruptedException e) {
+    //  e.printStackTrace();
+    //}
+    startTurn(current);
   }
 
   @Override
-  public ClientUpdateMap startTurn(User u) {
+  public void startTurn(User u) {
     userPlayers.get(current).newTurn();
     ClientUpdateMap cm = new ClientUpdateMap(this, u);
     playerUpdateMap(cm, getCurrentPlayer());
     sendServerMessage(u.getName() + " began their turn.");
-    return cm;
+    if(u instanceof AIPlayer){
+      ((AIPlayer) u).play(this);
+    }
+    gm.sendClientUpdateMap(u, cm);
   }
 
   @Override
-  public ClientUpdateMap doAction(User u, int LocInHand) {
+  public void doAction(User u, int LocInHand) {
     if (current.getId() != u.getId()) {
-      return null;
+      return;
     }
 
     assert (current.equals(u));
@@ -164,18 +180,13 @@ public class Game extends GameStub implements GameEventListener {
       System.out.println(nae.getMessage());
     }
 
-    cm.putButton(u, "I hate you", () -> {
-      System.out.println("It buttoned");
-      return null;
-    });
-
-    return cm;
+    gm.sendClientUpdateMap(u, cm);
   }
 
   @Override
-  public ClientUpdateMap endActionPhase(User u) {
+  public void endActionPhase(User u) {
     if (current.getId() != u.getId()) {
-      return null;
+      return;
     }
 
     actionPhase = false;
@@ -188,13 +199,14 @@ public class Game extends GameStub implements GameEventListener {
     playerUpdateMap(cm, p);
     cm.setPhase(false);
 
-    return cm;
+    gm.sendClientUpdateMap(u, cm);
   }
 
   @Override
   public ClientUpdateMap fullUpdate(User u) {
     ClientUpdateMap cm = new ClientUpdateMap(this, u);
     cm.piles(board);
+    cm.turn(current.getId());
     playerUpdateMap(cm, userPlayers.get(u));
     return cm;
   }

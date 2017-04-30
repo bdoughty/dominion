@@ -10,6 +10,9 @@ import java.util.function.Function;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import edu.brown.cs.dominion.AI.AIPlayer;
+import edu.brown.cs.dominion.AI.Strategy.BigMoneyBigVictoryPoints;
+import edu.brown.cs.dominion.AI.Strategy.DumbStrategy;
 import edu.brown.cs.dominion.io.ButtonCallback;
 import edu.brown.cs.dominion.io.send.ButtonCall;
 import edu.brown.cs.dominion.io.send.Callback;
@@ -63,6 +66,7 @@ public class GameManager implements SocketServer {
 
     PendingGame p2 = new PendingGame("GAME2", 2,
         new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
+    p2.addUser(users.registerNewAI(new BigMoneyBigVictoryPoints()));
     pendingGames.put(p2.getId(), p2);
 
     PendingGame p3 = new PendingGame("GAME3", 3,
@@ -78,14 +82,14 @@ public class GameManager implements SocketServer {
   private Map<User, Callback> callbacks;
   private Multimap<User, ButtonCall> buttonCallbacks;
 
-  private ClientUpdateMap action(User user, int cardLocation) {
+  private void action(User user, int cardLocation) {
     Game g = gamesByUser.get(user);
-    return g.doAction(user, cardLocation);
+    g.doAction(user, cardLocation);
   }
 
-  private ClientUpdateMap endActionPhase(User user) {
+  private void endActionPhase(User user) {
     Game g = gamesByUser.get(user);
-    return g.endActionPhase(user);
+    g.endActionPhase(user);
   }
 
   private ClientUpdateMap selection(User u, boolean inHand, int location) {
@@ -155,22 +159,22 @@ public class GameManager implements SocketServer {
     ws.putCommand(DO_ACTION, (w, u, m) -> {
       System.out.println(w + " - " + u + " - " + m);
       JsonObject data = PARSE.parse(m).getAsJsonObject();
-      sendClientUpdateMap(ws, u, action(u, data.get("handloc").getAsInt()));
+      action(u, data.get("handloc").getAsInt());
     });
 
     ws.putCommand(SELECTION, (w, u, m) -> {
       JsonObject data = PARSE.parse(m).getAsJsonObject();
       boolean inHand = data.get("inhand").getAsBoolean();
       int location = data.get("loc").getAsInt();
-      sendClientUpdateMap(ws, u, selection(u, inHand, location));
+      sendClientUpdateMap(u, selection(u, inHand, location));
     });
 
     ws.putCommand(CANCEL_SELECT, (w, u, m) -> {
-      sendClientUpdateMap(ws, u, cancleSelect(u));
+      sendClientUpdateMap(u, cancleSelect(u));
     });
 
     ws.putCommand(END_ACTION,
-        (w, u, m) -> sendClientUpdateMap(ws, u, endActionPhase(u)));
+        (w, u, m) -> endActionPhase(u));
 
     ws.putCommand(END_BUY, (w, u, m) -> {
       JsonArray data = PARSE.parse(m).getAsJsonArray();
@@ -179,16 +183,12 @@ public class GameManager implements SocketServer {
         buys.add(e.getAsInt());
       }
       Game g = gamesByUser.get(u);
-      ClientUpdateMap cm = g.endBuyPhase(u, buys);
-      sendClientUpdateMap(ws, u, cm);
-      if (cm != null) {
-        sendClientUpdateMap(ws, g.getCurrent(), g.startTurn(g.getCurrent()));
-      }
+      g.endBuyPhase(u, buys);
     });
 
     ws.putCommand(BUTTON_RESPONSE, (w, u, m) -> {
       int id = Integer.parseInt(m);
-      sendClientUpdateMap(ws, u, button(u, id));
+      button(u, id);
     });
 
     ws.putCommand(CHAT, (w, u, m) -> {
@@ -214,7 +214,7 @@ public class GameManager implements SocketServer {
         pendingByUser.put(u, pg);
         boolean didJoin = pg.addUser(u);
         if (pg.full()) {
-          Game g = pg.convertAndRedirect(ws, web);
+          Game g = pg.convertAndRedirect(ws, this);
           games.add(g);
           pg.getUsers().forEach(us -> gamesByUser.put(us, g));
           pg.getUsers().forEach(us -> pendingByUser.remove(us));
@@ -235,12 +235,15 @@ public class GameManager implements SocketServer {
     }
   }
 
-  private void sendClientUpdateMap(Websocket ws, User u, ClientUpdateMap c) {
+  public void sendClientUpdateMap(User u, ClientUpdateMap c) {
     if (c != null) {
       c = chk(c);
       for (User user : c.getUsers()) {
         if (c.hasUser(user)) {
-          ws.send(user, UPDATE_MAP, c.prepareUser(user));
+          String s = c.prepareUser(user);
+          if (s != null) {
+            web.send(user, UPDATE_MAP, c.prepareUser(user));
+          }
         }
       }
     }
@@ -248,5 +251,9 @@ public class GameManager implements SocketServer {
 
   public void addPendingGame(PendingGame p) {
     pendingGames.put(p.getId(), p);
+  }
+
+  public Websocket web() {
+    return web;
   }
 }

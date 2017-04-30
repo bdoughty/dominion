@@ -1,5 +1,7 @@
 package edu.brown.cs.dominion.io;
 
+import edu.brown.cs.dominion.AI.AIPlayer;
+import edu.brown.cs.dominion.AI.Strategy.Strategy;
 import edu.brown.cs.dominion.User;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
@@ -25,6 +27,12 @@ public class UserRegistry{
 
   public User registerNewUser(){
     User u = new User(nextId, startId);
+    users.put(nextId, u);
+    nextId++;
+    return u;
+  }
+  public AIPlayer registerNewAI(Strategy s){
+    AIPlayer u = new AIPlayer(nextId, startId, s);
     users.put(nextId, u);
     nextId++;
     return u;

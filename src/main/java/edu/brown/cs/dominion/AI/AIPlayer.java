@@ -3,11 +3,13 @@ package edu.brown.cs.dominion.AI;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.AI.Strategy.DumbStrategy;
 import edu.brown.cs.dominion.AI.Strategy.Strategy;
 import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.gameutil.NoPileException;
+import edu.brown.cs.dominion.io.send.ButtonCall;
 import edu.brown.cs.dominion.io.send.Callback;
 import edu.brown.cs.dominion.io.send.ClientUpdateMap;
 
@@ -21,7 +23,7 @@ public class AIPlayer extends User implements AI {
 
   @Override
   public void play(Game g) {
-    g.startTurn(this);
+    System.out.println("started the game!!!!!");
 
     while (g.getPlayerFromUser(this).getActions() > 0) {
       int actionLoc = st.playAction(g, this);
@@ -29,10 +31,6 @@ public class AIPlayer extends User implements AI {
       if (actionLoc == -1) {
         break;
       }
-
-      ClientUpdateMap cm = g.doAction(this, actionLoc);
-
-      doCallback(g, cm.getCallbacks().get(this));
     }
 
     g.endActionPhase(this);
@@ -62,11 +60,13 @@ public class AIPlayer extends User implements AI {
     g.endBuyPhase(this, toBuy);
   }
 
+  //WARNING, C might = null or buttons might be empty
   @Override
-  public void doCallback(Game g, Callback c) {
+  public void doCallback(Game g, Callback c, List<ButtonCall> buttons) {
     // TODO Switch on callback string and act accordingly (buying cards, gaining
     // cards, discarding, etc.)
-    // TODO how to avoid race conditions on multi-stage actions??
+    // TODO how to avoid race conditions on multi-stage actions?? (i think
+    // its fine)
     // switch (c.getName()) {
     // case "Militia":
     // st.discard(g, this);

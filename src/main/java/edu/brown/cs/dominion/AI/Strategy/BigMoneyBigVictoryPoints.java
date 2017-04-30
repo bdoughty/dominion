@@ -2,6 +2,7 @@ package edu.brown.cs.dominion.AI.Strategy;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,9 +35,13 @@ public class BigMoneyBigVictoryPoints implements Strategy {
   @Override
   public int buy(int money, Game g, User who) {
     List<Integer> buyable = Strategy.buyable(money, g);
+    System.out.println(Arrays.toString(buyable.toArray()));
+    buyable.retainAll(BUY_PREFERENCES);
     if (buyable.size() > 0) {
-      return Collections.min(buyable, (one, two) -> Integer
-          .compare(BUY_PREFERENCES.indexOf(one), BUY_PREFERENCES.indexOf(two)));
+      System.out.println(Arrays.toString(buyable.toArray()));
+      buyable.sort(Comparator.comparingInt(one -> BUY_PREFERENCES.indexOf(one)));
+      System.out.println(Arrays.toString(buyable.toArray()));
+      return buyable.get(0);
     }
 
     return -1;

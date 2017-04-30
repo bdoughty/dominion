@@ -11,11 +11,13 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
 
+import edu.brown.cs.dominion.AI.AIPlayer;
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.gameutil.Board;
 import edu.brown.cs.dominion.io.ButtonCallback;
+import jdk.nashorn.internal.codegen.CompilerConstants;
 
 /**
  * Created by henry on 3/22/2017.
@@ -29,8 +31,10 @@ public class ClientUpdateMap {
   private transient Map<User, Callback> callbacks;
   private transient User mainUser;
   private transient List<User> users;
+  private Game g;
 
   public ClientUpdateMap(Game g, User u) {
+    this.g = g;
     data = new HashMap<>();
     dataGlobal = new HashMap<>();
     this.users = g.getAllUsers();
@@ -134,19 +138,27 @@ public class ClientUpdateMap {
   }
 
   public String prepareUser(User u) {
-    Map<String, Object> toSend = new HashMap<>(dataGlobal);
-    toSend.put("buttons", buttonCallbacks.get(u));
-    if (mainUser == u) {
-      toSend.putAll(data);
-    } if (callbacks.containsKey(u)) {
-      Callback c = callbacks.get(u);
+    if (u instanceof AIPlayer) {
+      AIPlayer ai = (AIPlayer) u;
+      Callback c = callbacks.containsKey(u) ? callbacks.get(u) : null;
+      List<ButtonCall> bc = new LinkedList<>(buttonCallbacks.get(u));
+      ((AIPlayer) u).doCallback(g, c, bc);
+      return null;
+    } else {
+      Map<String, Object> toSend = new HashMap<>(dataGlobal);
+      toSend.put("buttons", buttonCallbacks.get(u));
+      if (mainUser == u) {
+        toSend.putAll(data);
+      } if (callbacks.containsKey(u)) {
+        Callback c = callbacks.get(u);
 
-      toSend.put("select", true);
-      toSend.put("handSelect", c.getHandIds());
-      toSend.put("boardSelect", c.getBoardIds());
-      toSend.put("stoppable", c.isStoppable());
+        toSend.put("select", true);
+        toSend.put("handSelect", c.getHandIds());
+        toSend.put("boardSelect", c.getBoardIds());
+        toSend.put("stoppable", c.isStoppable());
+      }
+      return GSON.toJson(toSend);
     }
-    return GSON.toJson(toSend);
   }
 
   private <T, K> List<K> map(List<T> list, Function<T, K> convert) {
