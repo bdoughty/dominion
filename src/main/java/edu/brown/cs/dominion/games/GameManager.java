@@ -121,7 +121,7 @@ public class GameManager implements SocketServer {
   }
 
   private ClientUpdateMap button(User u, int id) {
-    Collection<ButtonCall> buttons = buttonCallbacks.get(u);
+    List<ButtonCall> buttons = new LinkedList<>(buttonCallbacks.get(u));
     buttonCallbacks.removeAll(u);
     for (ButtonCall b : buttons) {
       if(b.getId() == id) {

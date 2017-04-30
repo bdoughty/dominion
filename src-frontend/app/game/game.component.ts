@@ -194,13 +194,19 @@ export class GameComponent implements OnInit {
         this.game.isOver = true;
       }
       if (typeof update.buttons !== 'undefined') {
-        this.buttons = update.buttons;
+        this.buttons = update.buttons.sort((button1, button2) => {
+          return button1.id > button2.id;
+        });
       }
     }
     console.log("\n--------------");
     console.log("\nUPDATED GAME:");
     console.log(this.game);
     console.log(this.game.isSelecting);
+  }
+
+  leaveGame() {
+    this._gameSocketService.send('exit', '');
   }
 
   chat(msg) {
