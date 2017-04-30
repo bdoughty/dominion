@@ -18,6 +18,9 @@ public class Chancellor extends AbstractAction {
       g.playerUpdateMap(cm1, g.getPlayerFromUser(usr));
       return cm1;
     });
+    cm.putButton(g.getCurrent(), "Don't Discard Deck", (usr) -> {
+      return null;
+    });
   }
 
   @Override
