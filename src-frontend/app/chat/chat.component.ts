@@ -11,7 +11,7 @@ import {AbstractSocketService} from "../shared/socket.service";
 })
 export class ChatComponent implements OnInit {
   @Input() public endpoint = 'homechat';
-  private chatModel = new Chat();
+  public chatModel = new Chat();
   private needToScroll = false;
   public currentMessage: string;
   @Input() public socket: AbstractSocketService;

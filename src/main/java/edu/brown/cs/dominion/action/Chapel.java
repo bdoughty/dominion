@@ -23,7 +23,7 @@ public class Chapel extends AbstractAction {
     cm.requireSelectCanStop(g.getCurrent(),
         g.getCurrentPlayer().getHand().stream().map(Card::getId)
             .collect(Collectors.toList()),
-        ImmutableList.of(), new TrashOne(g, 1), new CancelChapel(g));
+        ImmutableList.of(), new TrashOne(g, 1), new CancelChapel(g), "Chapel");
 
   }
 
@@ -57,7 +57,7 @@ class TrashOne implements SelectCallback {
           g.getPlayerFromUser(u).getHand().stream().map(Card::getId)
               .collect(Collectors.toList()),
           ImmutableList.<Integer> of(), new TrashOne(g, trashed + 1),
-          new CancelChapel(g));
+          new CancelChapel(g), "cancel chaple");
     }
 
     return cm;

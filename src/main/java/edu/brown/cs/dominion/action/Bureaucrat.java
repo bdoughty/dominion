@@ -40,7 +40,7 @@ public class Bureaucrat extends AbstractAction {
             g.getPlayerFromUser(user).getHand().stream()
                 .filter((card) -> card instanceof AbstractVictoryPoint)
                 .map(Card::getId).collect(Collectors.toList()),
-            ImmutableList.<Integer> of(), new RevealOne(g));
+            ImmutableList.<Integer> of(), new RevealOne(g), "bearocrats");
       }
     }
   }

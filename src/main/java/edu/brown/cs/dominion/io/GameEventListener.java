@@ -9,9 +9,9 @@ import edu.brown.cs.dominion.io.send.ClientUpdateMap;
  * Created by henry on 3/22/2017.
  */
 public interface GameEventListener {
-  ClientUpdateMap endBuyPhase(User u, List<Integer> toBuy);
-  ClientUpdateMap doAction(User u, int locInHand);
-  ClientUpdateMap endActionPhase(User u);
+  void endBuyPhase(User u, List<Integer> toBuy);
+  void doAction(User u, int locInHand);
+  void endActionPhase(User u);
   ClientUpdateMap fullUpdate(User u);
-  ClientUpdateMap startTurn(User u);
+  void startTurn(User u);
 }

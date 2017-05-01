@@ -30,30 +30,29 @@ import {trigger, state, style, animate, transition, keyframes} from "@angular/an
 export class GameComponent implements OnInit {
   public title = 'Dominion';
   public game: ClientGame;
+  public buttons: any[] = [{id: '34', name: 'testing'}, {id: '53', name: 'another'}];
   public gameChat = new Chat();
+  public notificationText: string = "";
 
   constructor(
     private _userIdService: UserIdService,
     private _gameSocketService: GameSocketService
   ) {}
 
+
   ngOnInit(): void {
     this._gameSocketService.addListener("init", (message) => {
       if (message === undefined) return;
       let gameState = JSON.parse(message);
-
-      console.log("\n--------------");
-      console.log("\nRECIEVING: init");
-      console.log(gameState);
-
       this.game = this.gameFromState(gameState);
     });
 
     this._gameSocketService.addListener("updatemap", (message) => {
-      console.log("\n--------------");
-      console.log("\nRECIEVING: update map:");
-      console.log(JSON.parse(message));
       this.updateMap(JSON.parse(message));
+    });
+
+    this._gameSocketService.addListener('redirect', (messageString) => {
+      window.location.replace(messageString);
     });
   }
 
@@ -70,10 +69,6 @@ export class GameComponent implements OnInit {
       if (!this.game.toSelectStoppable) {
         this.game.isSelecting = false;
       }
-
-      console.log("\n--------------");
-      console.log("\nSENDING select:");
-      console.log({inhand: false, loc: card.id});
       this.game.setNotSelecting();
     } else {
       this.addToCart(card);
@@ -87,10 +82,6 @@ export class GameComponent implements OnInit {
       }
       this._gameSocketService.send('select',
         JSON.stringify({inhand: true, loc: card.handPosition}));
-
-      console.log("\n--------------");
-      console.log("\nSENDING select:");
-      console.log({inhand: true, loc: card.handPosition});
       this.game.setNotSelecting();
     } else {
       this.play(card);
@@ -99,9 +90,6 @@ export class GameComponent implements OnInit {
 
   play(card: Card) {
     if (this.game.canPlay(card)) {
-      console.log("\n--------------");
-      console.log("\nSENDING 'doaction'");
-      console.log({handid: card.handPosition});
       card.state = 'played';
       this.game.actions -= 1; // For Instantaneous disabling of cards
       setTimeout(() => {
@@ -120,11 +108,8 @@ export class GameComponent implements OnInit {
 
   endPhase() {
     if (this.game.phase === 'action') {
-      console.log("\n--------------");
-      console.log("\nSENDING 'endaction'");
       return this._gameSocketService.send('endaction', '');
     } else if (this.game.phase === 'buy') {
-      console.log("\nSENDING 'endbuy'");
       let cart: number[] = [];
       this.game.cart.forEach(card => {
         cart.push(card.id);
@@ -150,6 +135,11 @@ export class GameComponent implements OnInit {
     });
 
     return new ClientGame(players, this._userIdService.id, cards);
+  }
+
+  customButtonClicked(id: string) {
+    this.buttons = [];
+    this._gameSocketService.send('button', id);
   }
 
   updateMap(update) {
@@ -208,14 +198,34 @@ export class GameComponent implements OnInit {
       if (typeof update.winner !== "undefined") {
         this.game.isOver = true;
       }
+      if (typeof update.buttons !== 'undefined') {
+        this.buttons = update.buttons.sort((button1, button2) => {
+          return button1.id > button2.id;
+        });
+      }
+      if (typeof update.victorypoints !== 'undefined') {
+        this.game.players.forEach(player => {
+          player.victoryPoints = update.victorypoints[player.id];
+        });
+      }
+      if (typeof update.notify !== 'undefined') {
+        this.notify(update.notify);
+      }
     }
-    console.log("\n--------------");
-    console.log("\nUPDATED GAME:");
+    console.log("\n\n\n\nUPDATED GAME:");
     console.log(this.game);
-    console.log(this.game.isSelecting);
+  }
+
+  leaveGame() {
+    this._gameSocketService.send('exit', '');
   }
 
   chat(msg) {
     this.gameChat.addMessage(JSON.parse(msg));
   }
+
+  notify(text: string) {
+    this.notificationText = text;
+  }
+
 }

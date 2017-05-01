@@ -1,21 +1,21 @@
 package edu.brown.cs.dominion.games;
 
-import static edu.brown.cs.dominion.io.send.MessageType.CANCEL_SELECT;
-import static edu.brown.cs.dominion.io.send.MessageType.CHAT;
-import static edu.brown.cs.dominion.io.send.MessageType.DO_ACTION;
-import static edu.brown.cs.dominion.io.send.MessageType.END_ACTION;
-import static edu.brown.cs.dominion.io.send.MessageType.END_BUY;
-import static edu.brown.cs.dominion.io.send.MessageType.INIT_GAME;
-import static edu.brown.cs.dominion.io.send.MessageType.SELECTION;
-import static edu.brown.cs.dominion.io.send.MessageType.UPDATE_MAP;
-
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import edu.brown.cs.dominion.AI.AIPlayer;
+import edu.brown.cs.dominion.AI.Strategy.BigMoneyBigVictoryPoints;
+import edu.brown.cs.dominion.AI.Strategy.DumbStrategy;
+import edu.brown.cs.dominion.io.ButtonCallback;
+import edu.brown.cs.dominion.io.send.ButtonCall;
+import edu.brown.cs.dominion.io.send.Callback;
 import org.eclipse.jetty.websocket.api.Session;
 
 import com.google.gson.Gson;
@@ -30,6 +30,8 @@ import edu.brown.cs.dominion.io.UserRegistry;
 import edu.brown.cs.dominion.io.Websocket;
 import edu.brown.cs.dominion.io.send.Callback;
 import edu.brown.cs.dominion.io.send.ClientUpdateMap;
+
+import static edu.brown.cs.dominion.io.send.MessageType.*;
 
 /**
  * A wrapper that adds various ajax functionality to the server and then cleans
@@ -55,6 +57,7 @@ public class GameManager implements SocketServer {
     games = new LinkedList<>();
     callbacks = new HashMap<>();
     pendingGames = new HashMap<>();
+    buttonCallbacks = HashMultimap.create();
 
     // TODO GET RID OF DUMMY
     PendingGame p = new PendingGame("GAME1", 1,
@@ -63,6 +66,7 @@ public class GameManager implements SocketServer {
 
     PendingGame p2 = new PendingGame("GAME2", 2,
         new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
+    //p2.addUser(users.registerNewAI(new BigMoneyBigVictoryPoints()));
     pendingGames.put(p2.getId(), p2);
 
     PendingGame p3 = new PendingGame("GAME3", 3,
@@ -76,15 +80,16 @@ public class GameManager implements SocketServer {
   }
 
   private Map<User, Callback> callbacks;
+  private Multimap<User, ButtonCall> buttonCallbacks;
 
-  private ClientUpdateMap action(User user, int cardLocation) {
+  private void action(User user, int cardLocation) {
     Game g = gamesByUser.get(user);
-    return g.doAction(user, cardLocation);
+    g.doAction(user, cardLocation);
   }
 
-  private ClientUpdateMap endActionPhase(User user) {
+  private void endActionPhase(User user) {
     Game g = gamesByUser.get(user);
-    return g.endActionPhase(user);
+    g.endActionPhase(user);
   }
 
   private ClientUpdateMap selection(User u, boolean inHand, int location) {
@@ -109,7 +114,21 @@ public class GameManager implements SocketServer {
     if (c != null) {
       callbacks.putAll(c.getCallbacks());
     }
+    if (c != null){
+      buttonCallbacks.putAll(c.getButtonCallbacks());
+    }
     return c;
+  }
+
+  private ClientUpdateMap button(User u, int id) {
+    List<ButtonCall> buttons = new LinkedList<>(buttonCallbacks.get(u));
+    buttonCallbacks.removeAll(u);
+    for (ButtonCall b : buttons) {
+      if(b.getId() == id) {
+        return b.getBc().clicked(u);
+      }
+    }
+    return null;
   }
 
   @Override
@@ -122,12 +141,10 @@ public class GameManager implements SocketServer {
     if (gamesByUser.containsKey(user)) {
       Game g = gamesByUser.get(user);
       List<Integer> actionIds = g.getBoard().getActionCardIds();
-
       JsonObject container = new JsonObject();
       container.addProperty("gameid", g.getId());
       container.add("cardids", GSON.toJsonTree(actionIds));
       container.add("users", GSON.toJsonTree(g.getAllUsers()));
-
       ws.send(s, INIT_GAME, GSON.toJson(container));
       ws.send(s, UPDATE_MAP, g.fullUpdate(user).prepareUser(user));
     } else {
@@ -140,22 +157,22 @@ public class GameManager implements SocketServer {
     ws.putCommand(DO_ACTION, (w, u, m) -> {
       System.out.println(w + " - " + u + " - " + m);
       JsonObject data = PARSE.parse(m).getAsJsonObject();
-      sendClientUpdateMap(ws, u, action(u, data.get("handloc").getAsInt()));
+      action(u, data.get("handloc").getAsInt());
     });
 
     ws.putCommand(SELECTION, (w, u, m) -> {
       JsonObject data = PARSE.parse(m).getAsJsonObject();
       boolean inHand = data.get("inhand").getAsBoolean();
       int location = data.get("loc").getAsInt();
-      sendClientUpdateMap(ws, u, selection(u, inHand, location));
+      sendClientUpdateMap(selection(u, inHand, location));
     });
 
     ws.putCommand(CANCEL_SELECT, (w, u, m) -> {
-      sendClientUpdateMap(ws, u, cancleSelect(u));
+      sendClientUpdateMap(cancleSelect(u));
     });
 
     ws.putCommand(END_ACTION,
-        (w, u, m) -> sendClientUpdateMap(ws, u, endActionPhase(u)));
+        (w, u, m) -> endActionPhase(u));
 
     ws.putCommand(END_BUY, (w, u, m) -> {
       JsonArray data = PARSE.parse(m).getAsJsonArray();
@@ -164,11 +181,12 @@ public class GameManager implements SocketServer {
         buys.add(e.getAsInt());
       }
       Game g = gamesByUser.get(u);
-      ClientUpdateMap cm = g.endBuyPhase(u, buys);
-      sendClientUpdateMap(ws, u, cm);
-      if (cm != null) {
-        sendClientUpdateMap(ws, g.getCurrent(), g.startTurn(g.getCurrent()));
-      }
+      g.endBuyPhase(u, buys);
+    });
+
+    ws.putCommand(BUTTON_RESPONSE, (w, u, m) -> {
+      int id = Integer.parseInt(m);
+      button(u, id);
     });
 
     ws.putCommand(CHAT, (w, u, m) -> {
@@ -176,6 +194,16 @@ public class GameManager implements SocketServer {
         Game g = gamesByUser.get(u);
         g.sendMessage(u, m);
       }
+    });
+
+    ws.putCommand(EXIT_GAME, (w, u, m) -> {
+      Game g = gamesByUser.get(u);
+      g.removeUser(u);
+      gamesByUser.remove(u);
+      if (g.getAllUsers().isEmpty()) {
+        games.remove(g);
+      }
+      web.send(u, REDIRECT, "lobby");
     });
   }
 
@@ -194,7 +222,7 @@ public class GameManager implements SocketServer {
         pendingByUser.put(u, pg);
         boolean didJoin = pg.addUser(u);
         if (pg.full()) {
-          Game g = pg.convertAndRedirect(ws, web);
+          Game g = pg.convertAndRedirect(ws, this);
           games.add(g);
           pg.getUsers().forEach(us -> gamesByUser.put(us, g));
           pg.getUsers().forEach(us -> pendingByUser.remove(us));
@@ -215,12 +243,15 @@ public class GameManager implements SocketServer {
     }
   }
 
-  private void sendClientUpdateMap(Websocket ws, User u, ClientUpdateMap c) {
+  public void sendClientUpdateMap(ClientUpdateMap c) {
     if (c != null) {
       c = chk(c);
       for (User user : c.getUsers()) {
         if (c.hasUser(user)) {
-          ws.send(user, UPDATE_MAP, c.prepareUser(user));
+          String s = c.prepareUser(user);
+          if (s != null) {
+            web.send(user, UPDATE_MAP, c.prepareUser(user));
+          }
         }
       }
     }
@@ -228,5 +259,9 @@ public class GameManager implements SocketServer {
 
   public void addPendingGame(PendingGame p) {
     pendingGames.put(p.getId(), p);
+  }
+
+  public Websocket web() {
+    return web;
   }
 }

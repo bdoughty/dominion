@@ -1,11 +1,15 @@
+<dmn-notification [text]="notificationText"></dmn-notification>
 <div id="winScreen" *ngIf="game && game.isOver">
   <h2>{{ game.winner().name }} won!</h2>
   <div class="players">
     <div class="player" *ngFor="let player of game.players">
       <span class="player-name">{{ player.name }}</span>
       <div class="vp-container">
-        <div class="vp-bar" [style.width.percent]="player.victoryPoints / game.winner().victoryPoints">
-          {{ player.victoryPoints }}</div>
+        <div class="vp-bar" [style.width.%]="player.victoryPoints / game.winner().victoryPoints * 100">
+        </div>
+        <div class="bar-text">
+          {{ player.victoryPoints }} Victory Points
+        </div>
       </div>
     </div>
   </div>
@@ -17,13 +21,25 @@
     <div id="left-bar">
       <div id="stats">
         <div class="stat">
-          <span class="stat-label">Actions:</span> {{ game.actions }}
+          <span class="stat-label">Actions</span>
+          <div class="icons">
+              <i *ngFor="let i of game.actions | fill" class="actions material-icons">&#xE1AB;</i>
+          </div>
         </div>
         <div class="stat">
-          <span class="stat-label">Buys:</span> {{ game.buys }}
+          <span class="stat-label">Buys</span>
+          <div class="icons">
+              <i *ngFor="let i of game.buys | fill" class="buys material-icons">&#xE8CC;</i>
+          </div>
         </div>
         <div class="stat">
-          <span class="stat-label">Gold:</span> {{ game.gold }}
+          <span class="stat-label">Gold</span>
+          <div class="icons" *ngIf="game.gold <= 5">
+            <i *ngFor="let i of game.gold | fill" class="gold material-icons">&#xE263;</i>
+          </div>
+          <div class="count" *ngIf="game.gold > 5">
+            <i class="material-icons gold">&#xE263;</i> x{{game.gold}}
+          </div>
         </div>
       </div>
       <div id="cart" [ngClass]="{hidden: !shouldDisplayCart()}">
@@ -35,6 +51,8 @@
           </dmn-card>
         </div>
       </div>
+      <button *ngFor="let button of buttons"
+              (click)="customButtonClicked(button.id)">{{button.name}}</button>
       <button *ngIf="game.isSelecting && game.toSelectStoppable && !game.isOver"
               (click)="endSelecting()">End Select</button>
       <button *ngIf="!(game.isSelecting && game.toSelectStoppable) && !game.isOver"
@@ -72,6 +90,9 @@
       </div>
     </div>
     <div id="right-bar-container">
+      <div class="exit-row" (click)="leaveGame()">
+        <span>Leave Game </span><i class="material-icons">&#xE879;</i>
+      </div>
       <div id="right-bar">
         <div class="turns">
           <div *ngFor="let player of game.orderedPlayers; let i = index;"
@@ -82,9 +103,9 @@
               <div class="num-cards">{{ player.numCards }} Cards, {{ player.victoryPoints }} VP</div>
             </div>
           </div>
-          <div class="chat-container">
-            <dmn-chat [endpoint]="'game'" [socket]="_gameSocketService"></dmn-chat>
-          </div>
+        </div>
+        <div class="chat-container">
+          <dmn-chat [endpoint]="'game'" [socket]="_gameSocketService"></dmn-chat>
         </div>
       </div>
     </div>
@@ -93,6 +114,7 @@
     <div class="left">
       <div class="discard">
         <dmn-card [count]="game.discardsize"></dmn-card>
+        <div class="label">Discard</div>
       </div>
     </div>
     <div class="hand-container">
@@ -107,6 +129,7 @@
     </div>
     <div class="deck">
       <dmn-card [count]="game.decksize"></dmn-card>
+      <div class="label">Deck</div>
     </div>
   </div>
 </div>

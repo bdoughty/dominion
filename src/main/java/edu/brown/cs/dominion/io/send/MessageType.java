@@ -6,8 +6,6 @@ package edu.brown.cs.dominion.io.send;
 public enum MessageType {
   NEWID ("userid"),
   UPDATE_MAP ("updatemap"),
-  GLOBAL_UPDATE_MAP ("globalmap"),
-  STOP_HOLD ("stophold"),
   CHAT ("chat"),
   END_BUY ("endbuy"),
   END_ACTION ("endaction"),
@@ -21,7 +19,10 @@ public enum MessageType {
   REDIRECT ("redirect"),
   INIT_GAME ("init"),
   NEW_GAME ("create"),
-  CANCEL_SELECT("cancel");
+  CANCEL_SELECT("cancel"),
+  BUTTON_RESPONSE ("button"),
+  EXIT_GAME("exit"),
+  NOTIFY ("notify");
 
 
   private final String name;

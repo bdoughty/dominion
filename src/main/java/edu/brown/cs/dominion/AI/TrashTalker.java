@@ -1,4 +1,4 @@
-package edu.brown.cs.dominion;
+package edu.brown.cs.dominion.AI;
 
 import java.io.BufferedReader;
 import java.io.File;

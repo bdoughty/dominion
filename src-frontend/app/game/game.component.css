@@ -23,8 +23,9 @@
       #winScreen .players .player .vp-container {
         display: inline-block;
         width: 500px;
-        background: #71d1a0;
-        height: 30px; }
+        background: #a1bdaf;
+        height: 30px;
+        position: relative; }
         #winScreen .players .player .vp-container .vp-bar {
           background: #448866;
           height: 100%;
@@ -32,6 +33,16 @@
           align-items: center;
           padding-left: 8px;
           color: white; }
+        #winScreen .players .player .vp-container .bar-text {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          color: white;
+          display: flex;
+          align-items: center;
+          padding-left: 8px; }
 
 #game {
   overflow: hidden;
@@ -52,19 +63,41 @@
       display: flex;
       flex-direction: column; }
       #game #board #left-bar #stats {
-        padding: 20px 80px 20px 20px;
+        padding: 20px 0px 20px 20px;
         font-size: 18px;
-        font-weight: 300;
+        font-weight: 100;
         color: white; }
         #game #board #left-bar #stats .stat {
           display: flex;
-          align-items: center;
-          justify-content: space-between;
-          margin-bottom: 12px; }
+          margin-bottom: 12px;
+          justify-content: flex-start;
+          font-weight: 300;
+          min-height: 30px;
+          align-items: flex-start; }
           #game #board #left-bar #stats .stat .stat-label {
+            padding-top: 3px;
             font-weight: bold;
+            min-width: 70px;
             text-transform: uppercase;
-            font-size: 0.8em; }
+            padding-right: 8px;
+            font-size: 0.7em;
+            display: inline-block; }
+          #game #board #left-bar #stats .stat i {
+            font-size: 20px; }
+            #game #board #left-bar #stats .stat i.gold {
+              color: #f5de64 !important; }
+            #game #board #left-bar #stats .stat i.buys {
+              color: #9ad6f5 !important; }
+            #game #board #left-bar #stats .stat i.actions {
+              color: #ff8e8e; }
+          #game #board #left-bar #stats .stat .icons {
+            display: inline-block; }
+          #game #board #left-bar #stats .stat .count {
+            display: flex;
+            align-items: center;
+            font-weight: 100; }
+            #game #board #left-bar #stats .stat .count i {
+              margin-right: 4px; }
       #game #board #left-bar #cart {
         background: rgba(0, 0, 0, 0.5);
         flex-grow: 1;
@@ -110,12 +143,35 @@
           font-size: 0; }
     #game #board #right-bar-container {
       width: 320px;
-      padding: 12px; }
+      padding: 12px;
+      display: flex;
+      flex-direction: column; }
+      #game #board #right-bar-container .exit-row {
+        flex-shrink: 0;
+        display: flex;
+        justify-content: flex-end;
+        color: white;
+        align-items: center;
+        padding: 8px;
+        font-weight: 100;
+        text-transform: uppercase;
+        font-size: 13px; }
+        #game #board #right-bar-container .exit-row:hover {
+          cursor: pointer; }
+          #game #board #right-bar-container .exit-row:hover span {
+            text-decoration: underline; }
+        #game #board #right-bar-container .exit-row i {
+          color: white;
+          padding: 0 12px; }
       #game #board #right-bar-container #right-bar {
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.24); }
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.24);
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column; }
         #game #board #right-bar-container #right-bar .turns {
           display: flex;
-          flex-direction: column; }
+          flex-direction: column;
+          flex-shrink: 0; }
           #game #board #right-bar-container #right-bar .turns .turn {
             padding: 18px 14px;
             border-bottom: 1px solid #DDD;
@@ -141,15 +197,17 @@
               display: flex;
               justify-content: space-between; }
         #game #board #right-bar-container #right-bar .chat-container {
-          padding-top: 14px;
           background: rgba(0, 0, 0, 0.5);
           font-size: 0.8em;
           color: white;
-          height: 330px; }
+          flex-grow: 1;
+          display: flex;
+          justify-content: stretch;
+          overflow-y: auto; }
           #game #board #right-bar-container #right-bar .chat-container .message {
             padding: 0 !important; }
   #game #hud {
-    height: 200px;
+    min-height: 200px;
     display: flex;
     align-items: stretch;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.24);
@@ -172,11 +230,20 @@
       padding: 0 18px;
       display: flex;
       justify-content: center;
-      align-items: center; }
+      align-items: center;
+      flex-direction: column; }
+      #game #hud .left .label, #game #hud .deck .label {
+        color: black;
+        text-align: center;
+        text-transform: uppercase;
+        font-family: 'Roboto', helvetica, sans-serif; }
 
 dmn-card {
   display: inline-block;
   margin: 0 4px; }
+
+dmn-chat {
+  width: 100%; }
 
 .hidden {
   visibility: hidden; }

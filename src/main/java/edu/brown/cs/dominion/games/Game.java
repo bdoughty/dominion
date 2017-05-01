@@ -8,8 +8,9 @@ import java.util.Queue;
 
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.GameChat;
-import edu.brown.cs.dominion.TrashTalker;
 import edu.brown.cs.dominion.User;
+import edu.brown.cs.dominion.AI.AIPlayer;
+import edu.brown.cs.dominion.AI.TrashTalker;
 import edu.brown.cs.dominion.gameutil.Board;
 import edu.brown.cs.dominion.gameutil.EmptyPileException;
 import edu.brown.cs.dominion.gameutil.NoActionsException;
@@ -36,8 +37,10 @@ public class Game extends GameStub implements GameEventListener {
 
   private boolean actionPhase = true;
 
-  public Game(List<User> usersTurns, List<Integer> actionCardIds,
-      Websocket ws) {
+  private GameManager gm;
+
+  public Game(List<User> usersTurns, List<Integer> actionCardIds, Websocket ws,
+      GameManager gm) {
     userPlayers = new HashMap<>();
     usersTurns.forEach(u -> userPlayers.put(u, new Player()));
     this.allUsers = new LinkedList<>(usersTurns);
@@ -45,9 +48,10 @@ public class Game extends GameStub implements GameEventListener {
     this.current = this.usersTurns.poll();
     userPlayers.get(current).newTurn();
     this.board = new Board(actionCardIds);
-
     gc = new GameChat(ws, usersTurns);
     spambot.addGame(this);
+    this.gm = gm;
+    startTurn(current);
   }
 
   public User getCurrent() {
@@ -84,9 +88,9 @@ public class Game extends GameStub implements GameEventListener {
   }
 
   @Override
-  public ClientUpdateMap endBuyPhase(User u, List<Integer> toBuy) {
+  public void endBuyPhase(User u, List<Integer> toBuy) {
     if (current.getId() != u.getId()) {
-      return null;
+      return;
     }
 
     actionPhase = true;
@@ -119,33 +123,39 @@ public class Game extends GameStub implements GameEventListener {
     cm.piles(board);
 
     if (board.gameHasEnded()) {
-      Map<Integer, Integer> winners = new HashMap<>();
-
-      for (User usr : allUsers) {
-        winners.put(usr.getId(), getPlayerFromUser(usr).scoreDeck());
-      }
-
-      cm.winner(winners);
+      cm.winner(getVictoryPointMap());
     }
+    cm.victoryPoints(getVictoryPointMap());
 
     sendServerMessage(u.getName() + " ended their turn.");
 
-    return cm;
+    gm.sendClientUpdateMap(cm);
+
+    // TODO THIS IS SOOOOOOO BADDDDD SOOO BADDDDDA
+    // try {
+    // Thread.sleep(1000);
+    // } catch (InterruptedException e) {
+    // e.printStackTrace();
+    // }
+    startTurn(current);
   }
 
   @Override
-  public ClientUpdateMap startTurn(User u) {
+  public void startTurn(User u) {
     userPlayers.get(current).newTurn();
     ClientUpdateMap cm = new ClientUpdateMap(this, u);
     playerUpdateMap(cm, getCurrentPlayer());
     sendServerMessage(u.getName() + " began their turn.");
-    return cm;
+    if (u instanceof AIPlayer) {
+      ((AIPlayer) u).play(this);
+    }
+    gm.sendClientUpdateMap(cm);
   }
 
   @Override
-  public ClientUpdateMap doAction(User u, int LocInHand) {
+  public void doAction(User u, int LocInHand) {
     if (current.getId() != u.getId()) {
-      return null;
+      return;
     }
 
     assert (current.equals(u));
@@ -164,13 +174,13 @@ public class Game extends GameStub implements GameEventListener {
       System.out.println(nae.getMessage());
     }
 
-    return cm;
+    gm.sendClientUpdateMap(cm);
   }
 
   @Override
-  public ClientUpdateMap endActionPhase(User u) {
+  public void endActionPhase(User u) {
     if (current.getId() != u.getId()) {
-      return null;
+      return;
     }
 
     actionPhase = false;
@@ -183,13 +193,14 @@ public class Game extends GameStub implements GameEventListener {
     playerUpdateMap(cm, p);
     cm.setPhase(false);
 
-    return cm;
+    gm.sendClientUpdateMap(cm);
   }
 
   @Override
   public ClientUpdateMap fullUpdate(User u) {
     ClientUpdateMap cm = new ClientUpdateMap(this, u);
     cm.piles(board);
+    cm.turn(current.getId());
     playerUpdateMap(cm, userPlayers.get(u));
     return cm;
   }
@@ -217,6 +228,7 @@ public class Game extends GameStub implements GameEventListener {
   public void othersDraw(int numCards) {
     for (User u : usersTurns) {
       getPlayerFromUser(u).draw(numCards);
+      // TODO send clientupdatemap to all players alerting them to new hand
     }
   }
 
@@ -254,4 +266,32 @@ public class Game extends GameStub implements GameEventListener {
     gc.spambotSend(s);
   }
 
+  public Map<Integer, Integer> getVictoryPointMap() {
+    Map<Integer, Integer> vps = new HashMap<>();
+    allUsers.forEach(u -> vps.put(u.getId(), getPlayerFromUser(u).scoreDeck()));
+    return vps;
+  }
+
+  public void notifyPlayer() {
+    // TODO
+  }
+
+  public void notifyGame() {
+    // TODO
+  }
+
+  public void removeUser(User u) {
+    if (u == current && allUsers.size() > 1) {
+      current = usersTurns.poll();
+      ClientUpdateMap cm = new ClientUpdateMap(this, u);
+      cm.turn(current.getId());
+      cm.piles(board);
+      gm.sendClientUpdateMap(cm);
+    } else {
+      usersTurns.remove(u);
+    }
+    userPlayers.remove(u);
+    allUsers.remove(u);
+    gc.removeUser(u);
+  }
 }

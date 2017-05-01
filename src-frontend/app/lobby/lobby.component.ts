@@ -12,7 +12,7 @@ export class LobbyComponent implements OnInit {
   public selectedGameId;
   public joiningGame = false;
 
-  constructor(private _chatSocketService: ChatSocketService) {
+  constructor(public _chatSocketService: ChatSocketService) {
   }
 
   ngOnInit() {

@@ -5,7 +5,15 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import edu.brown.cs.dominion.Card;
+import edu.brown.cs.dominion.action.Adventurer;
+import edu.brown.cs.dominion.action.Bureaucrat;
 import edu.brown.cs.dominion.action.Cellar;
+import edu.brown.cs.dominion.action.Chancellor;
+import edu.brown.cs.dominion.action.Chapel;
+import edu.brown.cs.dominion.action.CouncilRoom;
+import edu.brown.cs.dominion.action.Feast;
+import edu.brown.cs.dominion.action.Festival;
+import edu.brown.cs.dominion.action.Laboratory;
 import edu.brown.cs.dominion.action.Market;
 import edu.brown.cs.dominion.action.Militia;
 import edu.brown.cs.dominion.action.Mine;
@@ -13,6 +21,7 @@ import edu.brown.cs.dominion.action.Moat;
 import edu.brown.cs.dominion.action.Remodel;
 import edu.brown.cs.dominion.action.Smithy;
 import edu.brown.cs.dominion.action.Village;
+import edu.brown.cs.dominion.action.Witch;
 import edu.brown.cs.dominion.action.Woodcutter;
 import edu.brown.cs.dominion.action.Workshop;
 
@@ -41,6 +50,18 @@ public class CardFactory {
     this.cards.put(14, Village::new);
     this.cards.put(15, Woodcutter::new);
     this.cards.put(16, Workshop::new);
+    this.cards.put(17, Festival::new);
+    this.cards.put(18, Laboratory::new);
+    this.cards.put(19, CouncilRoom::new);
+    this.cards.put(20, Witch::new);
+    this.cards.put(21, Adventurer::new);
+    this.cards.put(22, Bureaucrat::new);
+    this.cards.put(23, Chancellor::new);
+    this.cards.put(24, Chapel::new);
+    this.cards.put(25, Feast::new);
+    // this.cards.put(26, Moneylender::new);
+    // this.cards.put(27, ThroneRoom::new);
+    // this.cards.put(28, Library::new);
   }
 
   public Supplier<Card> getFactory(int id) {
