@@ -18,6 +18,7 @@ import edu.brown.cs.dominion.action.Market;
 import edu.brown.cs.dominion.action.Militia;
 import edu.brown.cs.dominion.action.Mine;
 import edu.brown.cs.dominion.action.Moat;
+import edu.brown.cs.dominion.action.Moneylender;
 import edu.brown.cs.dominion.action.Remodel;
 import edu.brown.cs.dominion.action.Smithy;
 import edu.brown.cs.dominion.action.Village;
@@ -59,7 +60,7 @@ public class CardFactory {
     this.cards.put(23, Chancellor::new);
     this.cards.put(24, Chapel::new);
     this.cards.put(25, Feast::new);
-    // this.cards.put(26, Moneylender::new);
+    this.cards.put(26, Moneylender::new);
     // this.cards.put(27, ThroneRoom::new);
     // this.cards.put(28, Library::new);
   }
