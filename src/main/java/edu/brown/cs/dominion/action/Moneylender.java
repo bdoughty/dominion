@@ -43,5 +43,4 @@ public class Moneylender extends AbstractAction {
   public String toString() {
     return "Moneylender";
   }
-
 }
