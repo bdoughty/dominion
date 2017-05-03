@@ -14,6 +14,7 @@ import edu.brown.cs.dominion.action.CouncilRoom;
 import edu.brown.cs.dominion.action.Feast;
 import edu.brown.cs.dominion.action.Festival;
 import edu.brown.cs.dominion.action.Laboratory;
+import edu.brown.cs.dominion.action.Library;
 import edu.brown.cs.dominion.action.Market;
 import edu.brown.cs.dominion.action.Militia;
 import edu.brown.cs.dominion.action.Mine;
@@ -21,6 +22,7 @@ import edu.brown.cs.dominion.action.Moat;
 import edu.brown.cs.dominion.action.Moneylender;
 import edu.brown.cs.dominion.action.Remodel;
 import edu.brown.cs.dominion.action.Smithy;
+import edu.brown.cs.dominion.action.ThroneRoom;
 import edu.brown.cs.dominion.action.Village;
 import edu.brown.cs.dominion.action.Witch;
 import edu.brown.cs.dominion.action.Woodcutter;
@@ -61,8 +63,8 @@ public class CardFactory {
     this.cards.put(24, Chapel::new);
     this.cards.put(25, Feast::new);
     this.cards.put(26, Moneylender::new);
-    // this.cards.put(27, ThroneRoom::new);
-    // this.cards.put(28, Library::new);
+    this.cards.put(27, ThroneRoom::new);
+    this.cards.put(28, Library::new);
   }
 
   public Supplier<Card> getFactory(int id) {
