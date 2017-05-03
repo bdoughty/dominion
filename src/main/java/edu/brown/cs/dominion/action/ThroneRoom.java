@@ -1,5 +1,6 @@
 package edu.brown.cs.dominion.action;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableList;
@@ -28,6 +29,7 @@ public class ThroneRoom extends AbstractAction {
         if (inHand) {
           currP.incrementActions();
           try {
+            // TODO this
             Card c = currP.play(loc);
             c.play(g, cm);
             c.play(g, cm);
@@ -41,11 +43,14 @@ public class ThroneRoom extends AbstractAction {
       }
     };
 
-    cm.requireSelect(g.getCurrent(),
-        g.getCurrentPlayer().getHand().stream()
-            .filter(c -> c instanceof AbstractAction).map(Card::getId)
-            .collect(Collectors.toList()),
-        ImmutableList.of(), playTwice, "throneroomplay");
+    List<Integer> actions = g.getCurrentPlayer().getHand().stream()
+        .filter(c -> c instanceof AbstractAction).map(Card::getId)
+        .collect(Collectors.toList());
+
+    if (!actions.isEmpty()) {
+      cm.requireSelect(g.getCurrent(), actions, ImmutableList.of(), playTwice,
+          "throneroomplay");
+    }
   }
 
   @Override
