@@ -55,14 +55,14 @@ class LibraryKeep implements ButtonCallback {
 
       ClientUpdateMap cm = new ClientUpdateMap(g, u);
 
+      g.playerUpdateMap(cm, g.getPlayerFromUser(u));
+
       cm.putButton(u, "Keep " + justDrawn.toString(), new LibraryKeep(g));
 
       if (justDrawn instanceof AbstractAction) {
         cm.putButton(u, "Discard " + justDrawn.toString(),
             new LibraryDiscard(g));
       }
-
-      g.playerUpdateMap(cm, g.getPlayerFromUser(u));
 
       return cm;
     } else {
@@ -91,14 +91,14 @@ class LibraryDiscard implements ButtonCallback {
 
       ClientUpdateMap cm = new ClientUpdateMap(g, u);
 
+      g.playerUpdateMap(cm, g.getPlayerFromUser(u));
+
       cm.putButton(u, "Keep " + justDrawn.toString(), new LibraryKeep(g));
 
       if (justDrawn instanceof AbstractAction) {
         cm.putButton(u, "Discard " + justDrawn.toString(),
             new LibraryDiscard(g));
       }
-
-      g.playerUpdateMap(cm, g.getPlayerFromUser(u));
 
       return cm;
     } else {

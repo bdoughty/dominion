@@ -22,10 +22,15 @@ public class Moneylender extends AbstractAction {
     SelectCallback trash = new SelectCallback() {
       @Override
       public ClientUpdateMap call(User u, boolean inHand, int loc) {
-        g.getPlayerFromUser(u).incrementAdditionalMoney(3);
-        ClientUpdateMap cm1 = new ClientUpdateMap(g, u);
-        g.playerUpdateMap(cm1, g.getPlayerFromUser(u));
-        return cm1;
+        if (inHand) {
+          g.trash(g.getPlayerFromUser(u).trash(loc));
+          g.getPlayerFromUser(u).incrementAdditionalMoney(3);
+          ClientUpdateMap cm1 = new ClientUpdateMap(g, u);
+          g.playerUpdateMap(cm1, g.getPlayerFromUser(u));
+          return cm1;
+        } else {
+          return null;
+        }
       }
     };
 
