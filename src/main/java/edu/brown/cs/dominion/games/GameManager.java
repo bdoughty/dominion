@@ -61,12 +61,12 @@ public class GameManager implements SocketServer {
 
     // TODO GET RID OF DUMMY
     PendingGame p = new PendingGame("GAME1", 1,
-        new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
+        new int[] { 23, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
     pendingGames.put(p.getId(), p);
 
     PendingGame p2 = new PendingGame("GAME2", 2,
         new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
-    //p2.addUser(users.registerNewAI(new BigMoneyBigVictoryPoints()));
+    p2.addUser(users.registerNewAI(new BigMoneyBigVictoryPoints()));
     pendingGames.put(p2.getId(), p2);
 
     PendingGame p3 = new PendingGame("GAME3", 3,
@@ -186,7 +186,7 @@ public class GameManager implements SocketServer {
 
     ws.putCommand(BUTTON_RESPONSE, (w, u, m) -> {
       int id = Integer.parseInt(m);
-      button(u, id);
+      sendClientUpdateMap(button(u, id));
     });
 
     ws.putCommand(CHAT, (w, u, m) -> {

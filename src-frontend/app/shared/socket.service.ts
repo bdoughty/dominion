@@ -29,12 +29,12 @@ export class AbstractSocketService {
       const str = event.data;
       const semi = str.indexOf(':');
       const type = str.substring(0, semi);
-      console.log("\n\n\n\nRecieved message of type " + type);
+      console.log("\n\nRecieved message of type " + type);
 
       if (this.listeners[type]) {
         if (str.length > semi + 1) {
           const message = str.substring(semi + 1);
-          console.log(JSON.parse(message));
+          //console.log(JSON.parse(message));
           this.listeners[type].forEach((func) => func(message));
         } else {
           this.listeners[type].forEach((func) => func());
