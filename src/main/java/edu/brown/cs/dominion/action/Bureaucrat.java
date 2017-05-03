@@ -36,11 +36,17 @@ public class Bureaucrat extends AbstractAction {
       if (g.getPlayerFromUser(user).hasMoat()) {
         g.sendServerMessage(user.getName() + " played Moat.");
       } else {
-        cm.requireSelect(user,
-            g.getPlayerFromUser(user).getHand().stream()
-                .filter((card) -> card instanceof AbstractVictoryPoint)
-                .map(Card::getId).collect(Collectors.toList()),
-            ImmutableList.<Integer> of(), new RevealOne(g), "bearocrats");
+        List<Integer> vpCards = g.getPlayerFromUser(user).getHand().stream()
+            .filter((card) -> card instanceof AbstractVictoryPoint)
+            .map(Card::getId).collect(Collectors.toList());
+
+        if (!vpCards.isEmpty()) {
+          cm.requireSelect(user,
+              g.getPlayerFromUser(user).getHand().stream()
+                  .filter((card) -> card instanceof AbstractVictoryPoint)
+                  .map(Card::getId).collect(Collectors.toList()),
+              ImmutableList.<Integer> of(), new RevealOne(g), "bureaucrat");
+        }
       }
     }
   }

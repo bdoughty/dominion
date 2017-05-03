@@ -47,7 +47,7 @@ public class Player {
     return deck;
   }
 
-  private void draw() throws EmptyDeckException {
+  private Card draw() throws EmptyDeckException {
     if (deck.isEmpty()) {
       if (discardPile.isEmpty()) {
         throw new EmptyDeckException("no cards left to draw");
@@ -57,9 +57,11 @@ public class Player {
         discardPile.clear();
       }
     }
+
     Card c = deck.remove(0);
     hand.add(c);
     baseMoney += c.getMonetaryValue();
+    return c;
   }
 
   public void draw(int numCards) {

@@ -13,7 +13,7 @@ public class TrashTalker {
   private static File trashtalk =
       new File("src/main/resources/trash_talk_nice.txt");
   private static Thread spammer;
-  private static int RECOVERY_PERIOD = 10000000;
+  private static int RECOVERY_PERIOD = 180000;
 
   public TrashTalker() {
     spammer = new SpamThread(games);
