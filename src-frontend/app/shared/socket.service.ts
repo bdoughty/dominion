@@ -43,7 +43,7 @@ export class AbstractSocketService {
         } else {
           this.listeners[type].forEach((func) => func());
         }
-      }git 
+      }
     }
   }
 
