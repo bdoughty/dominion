@@ -12,6 +12,7 @@ import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.gameutil.EmptyPileException;
 import edu.brown.cs.dominion.gameutil.NoPileException;
 import edu.brown.cs.dominion.io.send.ClientUpdateMap;
+import edu.brown.cs.dominion.io.send.RequirePlayerAction;
 import edu.brown.cs.dominion.io.send.SelectCallback;
 import edu.brown.cs.dominion.victory.AbstractVictoryPoint;
 
@@ -36,11 +37,18 @@ public class Bureaucrat extends AbstractAction {
       if (g.getPlayerFromUser(user).hasMoat()) {
         g.sendServerMessage(user.getName() + " played Moat.");
       } else {
-        cm.requireSelect(user,
+        List<Integer> vpCards = g.getPlayerFromUser(user).getHand().stream()
+            .filter((card) -> card instanceof AbstractVictoryPoint)
+            .map(Card::getId).collect(Collectors.toList());
+
+        if (!vpCards.isEmpty()) {
+          cm.requirePlayerAction(user, RequirePlayerAction.callback(
             g.getPlayerFromUser(user).getHand().stream()
-                .filter((card) -> card instanceof AbstractVictoryPoint)
-                .map(Card::getId).collect(Collectors.toList()),
-            ImmutableList.<Integer> of(), new RevealOne(g), "bearocrats");
+              .filter((card) -> card instanceof AbstractVictoryPoint)
+              .map(Card::getId).collect(Collectors.toList()),
+            ImmutableList.<Integer> of(), new RevealOne(g), "bureaucrat"
+          ));
+        }
       }
     }
   }

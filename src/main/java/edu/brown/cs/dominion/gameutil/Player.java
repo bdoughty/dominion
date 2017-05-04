@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.brown.cs.dominion.Card;
+import edu.brown.cs.dominion.action.Feast;
 import edu.brown.cs.dominion.action.Moat;
 import edu.brown.cs.dominion.money.AbstractMoney;
 import edu.brown.cs.dominion.money.Copper;
@@ -46,7 +47,7 @@ public class Player {
     return deck;
   }
 
-  private void draw() throws EmptyDeckException {
+  private Card draw() throws EmptyDeckException {
     if (deck.isEmpty()) {
       if (discardPile.isEmpty()) {
         throw new EmptyDeckException("no cards left to draw");
@@ -56,9 +57,11 @@ public class Player {
         discardPile.clear();
       }
     }
+
     Card c = deck.remove(0);
     hand.add(c);
     baseMoney += c.getMonetaryValue();
+    return c;
   }
 
   public void draw(int numCards) {
@@ -132,6 +135,17 @@ public class Player {
     }
   }
 
+  public Card trashFeast() {
+    for (Card c : playedPile) {
+      if (c instanceof Feast) {
+        playedPile.remove(c);
+        return c;
+      }
+    }
+
+    return null;
+  }
+
   public Card trash(int posInHand) {
     assert (posInHand >= 0 && posInHand < hand.size());
     Card c = hand.remove(posInHand);
@@ -155,6 +169,11 @@ public class Player {
     Card c = hand.remove(toDiscard);
     baseMoney -= c.getMonetaryValue();
     discardPile.add(c);
+  }
+
+  public void discardDeck() {
+    discardPile.addAll(deck);
+    deck.clear();
   }
 
   public Card cardToDeck(int loc) {

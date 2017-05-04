@@ -1,35 +1,29 @@
 package edu.brown.cs.dominion.games;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import edu.brown.cs.dominion.AI.AIPlayer;
-import edu.brown.cs.dominion.AI.Strategy.BigMoneyBigVictoryPoints;
-import edu.brown.cs.dominion.AI.Strategy.DumbStrategy;
-import edu.brown.cs.dominion.io.ButtonCallback;
-import edu.brown.cs.dominion.io.send.ButtonCall;
-import edu.brown.cs.dominion.io.send.Callback;
-import org.eclipse.jetty.websocket.api.Session;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
+import edu.brown.cs.dominion.AI.Strategy.BigMoneyBigVictoryPoints;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.io.SocketServer;
 import edu.brown.cs.dominion.io.UserRegistry;
 import edu.brown.cs.dominion.io.Websocket;
+import edu.brown.cs.dominion.io.send.ButtonCall;
 import edu.brown.cs.dominion.io.send.Callback;
 import edu.brown.cs.dominion.io.send.ClientUpdateMap;
+import edu.brown.cs.dominion.io.send.RequirePlayerAction;
+import org.eclipse.jetty.websocket.api.Session;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 import static edu.brown.cs.dominion.io.send.MessageType.*;
 
@@ -57,11 +51,10 @@ public class GameManager implements SocketServer {
     games = new LinkedList<>();
     callbacks = new HashMap<>();
     pendingGames = new HashMap<>();
-    buttonCallbacks = HashMultimap.create();
 
     // TODO GET RID OF DUMMY
     PendingGame p = new PendingGame("GAME1", 1,
-        new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
+        new int[] { 23, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
     pendingGames.put(p.getId(), p);
 
     PendingGame p2 = new PendingGame("GAME2", 2,
@@ -79,8 +72,7 @@ public class GameManager implements SocketServer {
     this.web = web;
   }
 
-  private Map<User, Callback> callbacks;
-  private Multimap<User, ButtonCall> buttonCallbacks;
+  private Map<User, List<RequirePlayerAction>> callbacks;
 
   private void action(User user, int cardLocation) {
     Game g = gamesByUser.get(user);
@@ -94,12 +86,12 @@ public class GameManager implements SocketServer {
 
   private ClientUpdateMap selection(User u, boolean inHand, int location) {
     assert callbacks.containsKey(u);
-    return callbacks.get(u).getCallback().call(u, inHand, location);
+    return callbacks.get(u).get(0).call(u, inHand, location);
   }
 
   private ClientUpdateMap cancleSelect(User u) {
     assert callbacks.containsKey(u);
-    Callback c = callbacks.get(u);
+    Callback c = callbacks.get(u).get(0).getC();
     assert c.isStoppable();
     return c.getCancelHandler().cancel();
   }
@@ -111,21 +103,28 @@ public class GameManager implements SocketServer {
   }
 
   private ClientUpdateMap chk(ClientUpdateMap c) {
-    if (c != null) {
-      callbacks.putAll(c.getCallbacks());
-    }
-    if (c != null){
-      buttonCallbacks.putAll(c.getButtonCallbacks());
+    for(Map.Entry<User, List<RequirePlayerAction>> e : c.getCallbacks().entrySet()) {
+      if (!callbacks.containsKey(e.getKey())) {
+        callbacks.put(e.getKey(), new ArrayList<>());
+      }
+      for(RequirePlayerAction rpa : e.getValue()){
+        if (rpa.isUrgent()) {
+          callbacks.get(e.getKey()).add(0, rpa);
+        } else {
+          callbacks.get(e.getKey()).add(rpa);
+        }
+      }
     }
     return c;
   }
 
   private ClientUpdateMap button(User u, int id) {
-    List<ButtonCall> buttons = new LinkedList<>(buttonCallbacks.get(u));
-    buttonCallbacks.removeAll(u);
+    List<ButtonCall> buttons = new LinkedList<>(callbacks.get(u).get(0)
+      .getBcs());
     for (ButtonCall b : buttons) {
       if(b.getId() == id) {
-        return b.getBc().clicked();
+        callbacks.get(u).remove(0);
+        return b.getBc().clicked(u);
       }
     }
     return null;
@@ -141,12 +140,10 @@ public class GameManager implements SocketServer {
     if (gamesByUser.containsKey(user)) {
       Game g = gamesByUser.get(user);
       List<Integer> actionIds = g.getBoard().getActionCardIds();
-
       JsonObject container = new JsonObject();
       container.addProperty("gameid", g.getId());
       container.add("cardids", GSON.toJsonTree(actionIds));
       container.add("users", GSON.toJsonTree(g.getAllUsers()));
-
       ws.send(s, INIT_GAME, GSON.toJson(container));
       ws.send(s, UPDATE_MAP, g.fullUpdate(user).prepareUser(user));
     } else {
@@ -188,7 +185,7 @@ public class GameManager implements SocketServer {
 
     ws.putCommand(BUTTON_RESPONSE, (w, u, m) -> {
       int id = Integer.parseInt(m);
-      button(u, id);
+      sendClientUpdateMap(button(u, id));
     });
 
     ws.putCommand(CHAT, (w, u, m) -> {
@@ -201,10 +198,11 @@ public class GameManager implements SocketServer {
     ws.putCommand(EXIT_GAME, (w, u, m) -> {
       Game g = gamesByUser.get(u);
       g.removeUser(u);
-      gamesByUser.remove(g, u);
+      gamesByUser.remove(u);
       if (g.getAllUsers().isEmpty()) {
         games.remove(g);
       }
+      web.send(u, REDIRECT, "lobby");
     });
   }
 

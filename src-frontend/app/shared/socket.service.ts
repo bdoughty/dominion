@@ -29,7 +29,7 @@ export class AbstractSocketService {
       const str = event.data;
       const semi = str.indexOf(':');
       const type = str.substring(0, semi);
-      console.log("\n\n\n\nRecieved message of type " + type);
+      console.log("\n\nRecieved message of type " + type);
 
       if (this.listeners[type]) {
         if (str.length > semi + 1) {

@@ -10,16 +10,17 @@ import edu.brown.cs.dominion.io.send.ClientUpdateMap;
 import edu.brown.cs.dominion.io.send.RequirePlayerAction;
 import edu.brown.cs.dominion.io.send.SelectCallback;
 
-public class Workshop extends AbstractAction {
+public class Feast extends AbstractAction {
 
-  public Workshop() {
-    super(16, 3);
+  public Feast() {
+    super(25, 4);
   }
 
   @Override
   public void play(Game g, ClientUpdateMap cm) {
+    g.trash(g.getCurrentPlayer().trashFeast());
     cm.requirePlayerAction(g.getCurrent(), RequirePlayerAction.callback(ImmutableList.of(),
-        g.getBoard().getCardUnderValue(4), new SelectCallback() {
+        g.getBoard().getCardUnderValue(5), new SelectCallback() {
           @Override
           public ClientUpdateMap call(User u, boolean inHand, int loc) {
             if (!inHand) {
@@ -38,12 +39,13 @@ public class Workshop extends AbstractAction {
 
             return cm;
           }
-        }, "workshopdraw"));
+        }, "feastdraw"));
+
   }
 
   @Override
   public String toString() {
-    return "Workshop";
+    return "Feast";
   }
 
 }

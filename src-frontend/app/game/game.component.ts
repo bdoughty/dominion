@@ -50,6 +50,10 @@ export class GameComponent implements OnInit {
     this._gameSocketService.addListener("updatemap", (message) => {
       this.updateMap(JSON.parse(message));
     });
+
+    this._gameSocketService.addListener('redirect', (messageString) => {
+      window.location.replace(messageString);
+    });
   }
 
   public cardClickedPile(card: Card): void {

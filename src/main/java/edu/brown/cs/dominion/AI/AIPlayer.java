@@ -3,7 +3,6 @@ package edu.brown.cs.dominion.AI;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.AI.Strategy.DumbStrategy;
 import edu.brown.cs.dominion.AI.Strategy.Strategy;
@@ -11,7 +10,6 @@ import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.gameutil.NoPileException;
 import edu.brown.cs.dominion.io.send.ButtonCall;
 import edu.brown.cs.dominion.io.send.Callback;
-import edu.brown.cs.dominion.io.send.ClientUpdateMap;
 
 public class AIPlayer extends User implements AI {
   private Strategy st = new DumbStrategy();
@@ -60,21 +58,18 @@ public class AIPlayer extends User implements AI {
     g.endBuyPhase(this, toBuy);
   }
 
-  //WARNING, C might = null or buttons might be empty
+  // WARNING, C might = null or buttons might be empty
   @Override
   public void doCallback(Game g, Callback c, List<ButtonCall> buttons) {
-    // TODO Switch on callback string and act accordingly (buying cards, gaining
-    // cards, discarding, etc.)
-    // TODO how to avoid race conditions on multi-stage actions?? (i think
-    // its fine)
-    // switch (c.getName()) {
-    // case "Militia":
-    // st.discard(g, this);
-    // st.discard(g, this);
-    // case "Workshop":
-    //
-    //
-    // }
-
+    if (!c.equals(null)) {
+      switch (c.getName()) {
+        case "militiadiscard":
+          int toDiscard = st.discard(g, this);
+          if (toDiscard >= 0) {
+            c.getCallback().call(this, true, toDiscard);
+          }
+          break;
+      }
+    }
   }
 }

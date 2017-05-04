@@ -10,6 +10,7 @@ import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.gameutil.Player;
 import edu.brown.cs.dominion.io.send.CancelHandler;
 import edu.brown.cs.dominion.io.send.ClientUpdateMap;
+import edu.brown.cs.dominion.io.send.RequirePlayerAction;
 import edu.brown.cs.dominion.io.send.SelectCallback;
 
 public class Chapel extends AbstractAction {
@@ -20,10 +21,11 @@ public class Chapel extends AbstractAction {
 
   @Override
   public void play(Game g, ClientUpdateMap cm) {
-    cm.requireSelectCanStop(g.getCurrent(),
+    cm.requirePlayerAction(g.getCurrent(), RequirePlayerAction.callback(
         g.getCurrentPlayer().getHand().stream().map(Card::getId)
             .collect(Collectors.toList()),
-        ImmutableList.of(), new TrashOne(g, 1), new CancelChapel(g), "Chapel");
+        ImmutableList.of(), new TrashOne(g, 1), new CancelChapel(g),
+      "Chapel"));
 
   }
 
@@ -53,11 +55,11 @@ class TrashOne implements SelectCallback {
     cm.piles(g.getBoard());
 
     if (trashed < 4) {
-      cm.requireSelectCanStop(u,
+      cm.requirePlayerAction(u, RequirePlayerAction.callback(
           g.getPlayerFromUser(u).getHand().stream().map(Card::getId)
               .collect(Collectors.toList()),
           ImmutableList.<Integer> of(), new TrashOne(g, trashed + 1),
-          new CancelChapel(g), "cancel chaple");
+          new CancelChapel(g), "cancel chaple"));
     }
 
     return cm;
