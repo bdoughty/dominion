@@ -193,8 +193,8 @@ export class GameComponent implements OnInit {
           this.game.playerActionQueue.push(new PlayerAction(
             playerAction.urgent,
             playerAction.select,
-            playerAction.handSelect,
-            playerAction.boardSelect,
+            playerAction.handselect,
+            playerAction.boardselect,
             playerAction.buttons
           ));
         });
