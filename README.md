@@ -19,82 +19,82 @@ https://docs.google.com/a/brown.edu/document/d/1S7Yn5-4c57bUifcHwQGHtDAIXlwFO_fY
 API DOCUMENTATION:
 
 Do Action "doaction": Client -> Server
-  data = {handid:int}
+    data = {handid:int}
 
 End Action Phase "endaction": Client -> Server
-  data = {}
+    data = {}
 
 Make Selection "select": Client -> Server
-  data = {inhand:boolean, loc:int}
+    data = {inhand:boolean, loc:int}
   
 End Buy Phase "endbuy": Client -> Server
-  data = [int]
+    data = [int]
   
 Register New ID "newid": Client -> Server
-  data = {}
+    data = {}
   
 Register Old ID "oldid": Client -> Server
-  data = int
+    data = int
   
 Leave Game "leave": Client -> Server
-  data = {}
+    data = {}
   
 Create Game "/creategame": AJAX
-  data = {tbd}
+    data = {tbd}
   
   
 Join Game "join": Client -> Server
-  data = {gameid:int}
+    data = {gameid:int}
   
 Pending Games "pending": Server -> Client
-  data = [
-            id:int
-            name:string, 
-            maxusers:int, 
-            actioncardids:[int], 
-            users:[
-              {id:int,
-               name:string,
-               color:String}
+    data = [
+              id:int
+              name:string, 
+              maxusers:int, 
+              actioncardids:[int], 
+              users:[
+                {id:int,
+                 name:string,
+                 color:String}
+              ]
             ]
-          ]
           
 Join Game Response "joinresponse": Server -> Client
-  data = [didjoin:boolean, gameid:int]
+    data = [didjoin:boolean, gameid:int]
   
 Leave Game Response "leaveresponse": Server -> Client
-  data = {}
+    data = {}
   
   
   
   
 Game Init "init": Server -> Client
-  data = {
-    gameid:int,
-    users:[{id:int, name:string, color:String}],
-    cardids:[int],
-  }
+    data = {
+      gameid:int,
+      users:[{id:int, name:string, color:String}],
+      cardids:[int],
+    }
   
 Global Update "globalmap" ->
-  data = {
-    ?turn:int
-    ?winner:[{id:int, name:string, color:String}]
-  }
+    data = {
+      ?turn:int
+      ?winner:[{id:int, name:string, color:String}]
+    }
 
 Update Map "updatemap": Server -> Client
-  data = {
-    ?actions:int,
-    ?buys:int,
-    ?gold:int,
-    ?playeractions:[{
-      urgent:boolean
-      select:boolean
-      handselect:[int]
-      boardSelect:[int]
-      buttons:[{id:string, name:string}]
-      }]
-    ?hand:[int],
-    ?decksize:int,
-    ?holding:boolean
-    ?board:{piles:{[id:int->{size:int}]};
-  }
+    data = {
+      ?actions:int,
+      ?buys:int,
+      ?gold:int,
+      ?playeractions:[{
+        urgent:boolean
+        select:boolean
+        handselect:[int]
+        boardSelect:[int]
+        buttons:[{id:string, name:string}]
+        }]
+      ?hand:[int],
+      ?decksize:int,
+      ?holding:boolean
+      ?board:{piles:{[id:int->{size:int}]};
+    }
