@@ -38,11 +38,12 @@ export class AbstractSocketService {
             console.log(JSON.parse(message));
           } catch (e) {
             console.log(message);
-          }this.listeners[type].forEach((func) => func(message));
+          }
+          this.listeners[type].forEach((func) => func(message));
         } else {
           this.listeners[type].forEach((func) => func());
         }
-      }
+      }git 
     }
   }
 
