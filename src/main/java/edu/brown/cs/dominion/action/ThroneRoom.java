@@ -12,6 +12,7 @@ import edu.brown.cs.dominion.gameutil.NoActionsException;
 import edu.brown.cs.dominion.gameutil.NotActionException;
 import edu.brown.cs.dominion.gameutil.Player;
 import edu.brown.cs.dominion.io.send.ClientUpdateMap;
+import edu.brown.cs.dominion.io.send.RequirePlayerAction;
 import edu.brown.cs.dominion.io.send.SelectCallback;
 
 public class ThroneRoom extends AbstractAction {
@@ -48,8 +49,8 @@ public class ThroneRoom extends AbstractAction {
         .collect(Collectors.toList());
 
     if (!actions.isEmpty()) {
-      cm.requireSelect(g.getCurrent(), actions, ImmutableList.of(), playTwice,
-          "throneroomplay");
+      cm.requirePlayerAction(g.getCurrent(), RequirePlayerAction.callback(actions, ImmutableList.of(),
+        playTwice, "throneroomplay"));
     }
   }
 

@@ -12,6 +12,7 @@ import edu.brown.cs.dominion.gameutil.EmptyPileException;
 import edu.brown.cs.dominion.gameutil.NoPileException;
 import edu.brown.cs.dominion.gameutil.Player;
 import edu.brown.cs.dominion.io.send.ClientUpdateMap;
+import edu.brown.cs.dominion.io.send.RequirePlayerAction;
 import edu.brown.cs.dominion.io.send.SelectCallback;
 
 public class Mine extends AbstractAction {
@@ -72,12 +73,14 @@ public class Mine extends AbstractAction {
           }
         };
 
-        cm1.requireSelect(u, ImmutableList.of(), boardIds, gain, "minegain");
+        cm1.requirePlayerAction(u, RequirePlayerAction.callback(ImmutableList.of(), boardIds, gain,
+          "minegain"));
         return cm1;
       }
     };
 
-    cm.requireSelect(currU, handIds, ImmutableList.of(), trash, "minetrash");
+    cm.requirePlayerAction(currU, RequirePlayerAction.callback(handIds, ImmutableList.of(), trash,
+      "minetrash"));
   }
 
   @Override

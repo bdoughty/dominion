@@ -1,5 +1,6 @@
 package edu.brown.cs.dominion.io.send;
 
+import com.google.gson.JsonObject;
 import edu.brown.cs.dominion.io.ButtonCallback;
 
 /**

@@ -4,7 +4,9 @@ import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.io.ButtonCallback;
+import edu.brown.cs.dominion.io.send.ButtonCall;
 import edu.brown.cs.dominion.io.send.ClientUpdateMap;
+import edu.brown.cs.dominion.io.send.RequirePlayerAction;
 
 public class Library extends AbstractAction {
 
@@ -20,12 +22,13 @@ public class Library extends AbstractAction {
       Card justDrawn = g.getCurrentPlayer().getHand()
           .get(g.getCurrentPlayer().getHand().size() - 1);
 
-      cm.putButton(g.getCurrent(), "Keep " + justDrawn.toString(),
-          new LibraryKeep(g));
-
+      ButtonCall b1 = new ButtonCall("Keep " + justDrawn.toString(), new LibraryKeep(g));
       if (justDrawn instanceof AbstractAction) {
-        cm.putButton(g.getCurrent(), "Discard " + justDrawn.toString(),
-            new LibraryDiscard(g));
+        ButtonCall b2 = new ButtonCall("Discard " + justDrawn.toString(),
+          new LibraryDiscard(g));
+        cm.requirePlayerAction(g.getCurrent(), RequirePlayerAction.buttons(b1, b2));
+      } else {
+        cm.requirePlayerAction(g.getCurrent(), RequirePlayerAction.buttons(b1));
       }
     }
   }
@@ -57,11 +60,13 @@ class LibraryKeep implements ButtonCallback {
 
       g.playerUpdateMap(cm, g.getPlayerFromUser(u));
 
-      cm.putButton(u, "Keep " + justDrawn.toString(), new LibraryKeep(g));
-
+      ButtonCall b1 = new ButtonCall("Keep " + justDrawn.toString(), new LibraryKeep(g));
       if (justDrawn instanceof AbstractAction) {
-        cm.putButton(u, "Discard " + justDrawn.toString(),
-            new LibraryDiscard(g));
+        ButtonCall b2 = new ButtonCall("Discard " + justDrawn.toString(),
+          new LibraryDiscard(g));
+        cm.requirePlayerAction(u, RequirePlayerAction.buttons(b1, b2));
+      } else {
+        cm.requirePlayerAction(u, RequirePlayerAction.buttons(b1));
       }
 
       return cm;
@@ -93,11 +98,13 @@ class LibraryDiscard implements ButtonCallback {
 
       g.playerUpdateMap(cm, g.getPlayerFromUser(u));
 
-      cm.putButton(u, "Keep " + justDrawn.toString(), new LibraryKeep(g));
-
+      ButtonCall b1 = new ButtonCall("Keep " + justDrawn.toString(), new LibraryKeep(g));
       if (justDrawn instanceof AbstractAction) {
-        cm.putButton(u, "Discard " + justDrawn.toString(),
-            new LibraryDiscard(g));
+        ButtonCall b2 = new ButtonCall("Discard " + justDrawn.toString(),
+          new LibraryDiscard(g));
+        cm.requirePlayerAction(u, RequirePlayerAction.buttons(b1, b2));
+      } else {
+        cm.requirePlayerAction(u, RequirePlayerAction.buttons(b1));
       }
 
       return cm;

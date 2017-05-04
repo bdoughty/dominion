@@ -7,6 +7,7 @@ import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.gameutil.EmptyPileException;
 import edu.brown.cs.dominion.gameutil.NoPileException;
 import edu.brown.cs.dominion.io.send.ClientUpdateMap;
+import edu.brown.cs.dominion.io.send.RequirePlayerAction;
 import edu.brown.cs.dominion.io.send.SelectCallback;
 
 public class Feast extends AbstractAction {
@@ -18,7 +19,7 @@ public class Feast extends AbstractAction {
   @Override
   public void play(Game g, ClientUpdateMap cm) {
     g.trash(g.getCurrentPlayer().trashFeast());
-    cm.requireSelect(g.getCurrent(), ImmutableList.of(),
+    cm.requirePlayerAction(g.getCurrent(), RequirePlayerAction.callback(ImmutableList.of(),
         g.getBoard().getCardUnderValue(5), new SelectCallback() {
           @Override
           public ClientUpdateMap call(User u, boolean inHand, int loc) {
@@ -38,7 +39,7 @@ public class Feast extends AbstractAction {
 
             return cm;
           }
-        }, "feastdraw");
+        }, "feastdraw"));
 
   }
 
