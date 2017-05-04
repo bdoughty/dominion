@@ -86,12 +86,15 @@ Update Map "updatemap": Server -> Client
     ?actions:int,
     ?buys:int,
     ?gold:int,
-    ?select:boolean true ->
-      handSelect:[int],
-      boardSelect:[int],
+    ?playeractions:[{
+      urgent:boolean
+      select:boolean
+      handselect:[int]
+      boardSelect:[int]
+      buttons:[{id:string, name:string}]
+      }]
     ?hand:[int],
     ?decksize:int,
     ?holding:boolean
-    ?board:{piles:{[id:int->{size:int}]}}
-    ?[{id:string, name:string}]
+    ?board:{piles:{[id:int->{size:int}]};
   }
