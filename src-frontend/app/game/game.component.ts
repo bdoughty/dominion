@@ -6,6 +6,8 @@ import {ClientGame} from "./models/client-game.model";
 import {GameSocketService} from "../shared/gamesocket.service";
 import {Card} from "./card/card.model";
 import {trigger, state, style, animate, transition, keyframes} from "@angular/animations";
+import {PlayerAction} from "./models/player-action.model";
+import {Button} from "./models/button-interface";
 
 @Component({
   selector: 'dmn-game',
@@ -30,7 +32,6 @@ import {trigger, state, style, animate, transition, keyframes} from "@angular/an
 export class GameComponent implements OnInit {
   public title = 'Dominion';
   public game: ClientGame;
-  public buttons: any[] = [{id: '34', name: 'testing'}, {id: '53', name: 'another'}];
   public gameChat = new Chat();
   public notificationText: string = "";
 
@@ -39,12 +40,11 @@ export class GameComponent implements OnInit {
     private _gameSocketService: GameSocketService
   ) {}
 
-
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this._gameSocketService.addListener("init", (message) => {
       if (message === undefined) return;
       let gameState = JSON.parse(message);
-      this.game = this.gameFromState(gameState);
+      this.game = this._gameFromState(gameState);
     });
 
     this._gameSocketService.addListener("updatemap", (message) => {
@@ -52,57 +52,24 @@ export class GameComponent implements OnInit {
     });
   }
 
-  endSelecting() {
-    this._gameSocketService.send('cancel', '');
-    this.game.isSelecting = false;
-    this.game.toSelectStoppable = false;
-    this.game.setNotSelecting();
-  }
-
-  cardClickedPile(card: Card) {
-    if (this.game.isSelecting && this.game.isSelectable(card, false)) {
+  public cardClickedPile(card: Card): void {
+    if (this.game.isSelectable(card, false)) {
       this._gameSocketService.send('select', JSON.stringify({inhand: false, loc: card.id}));
-      if (!this.game.toSelectStoppable) {
-        this.game.isSelecting = false;
-      }
-      this.game.setNotSelecting();
     } else {
-      this.addToCart(card);
+      this._addToCart(card);
     }
   }
 
-  cardClickedHand(card: Card) {
-    if (this.game.isSelecting && this.game.isSelectable(card, true)) {
-      if (!this.game.toSelectStoppable) {
-        this.game.isSelecting = false;
-      }
+  public cardClickedHand(card: Card): void {
+    if (this.game.isSelectable(card, true)) {
       this._gameSocketService.send('select',
         JSON.stringify({inhand: true, loc: card.handPosition}));
-      this.game.setNotSelecting();
     } else {
-      this.play(card);
+      this._play(card);
     }
   }
 
-  play(card: Card) {
-    if (this.game.canPlay(card)) {
-      card.state = 'played';
-      this.game.actions -= 1; // For Instantaneous disabling of cards
-      setTimeout(() => {
-        this._gameSocketService.send('doaction',
-          JSON.stringify({handloc: card.handPosition}));
-      }, 1000);
-      // this.game.removeCardInHand(card);
-    }
-  }
-
-  addToCart(card: Card) {
-    if (this.game.phase === 'buy') {
-      this.game.addToCart(card);
-    }
-  }
-
-  endPhase() {
+  public endPhaseClicked(): void {
     if (this.game.phase === 'action') {
       return this._gameSocketService.send('endaction', '');
     } else if (this.game.phase === 'buy') {
@@ -116,12 +83,51 @@ export class GameComponent implements OnInit {
     throw "Phase is " + this.game.phase + ". Must be 'action' or 'buy'";
   }
 
-
-  shouldDisplayCart() {
+  public shouldDisplayCart(): boolean {
     return this.game.phase === 'buy' && this.game.cart.length !== 0;
   }
 
-  gameFromState(state) {
+  public customButtonClicked(id: string) {
+    this.game.playerActionQueue.pop();
+    this._gameSocketService.send('button', id);
+  }
+
+  public leaveGame() {
+    this._gameSocketService.send('exit', '');
+  }
+
+  public chat(msg) {
+    this.gameChat.addMessage(JSON.parse(msg));
+  }
+
+
+
+  /* ---------------------------- PRIVATE METHODS --------------------------- */
+
+
+  private _addToCart(card: Card): void {
+    if (this.game.phase === 'buy') {
+      this.game.addToCart(card);
+    }
+  }
+
+  private _notify(text: string) {
+    this.notificationText = text;
+  }
+
+  private _play(card: Card): void {
+    if (this.game.canPlay(card)) {
+      card.state = 'played';
+      this.game.actions -= 1; // For Instantaneous disabling of cards
+      setTimeout(() => {
+        this._gameSocketService.send('doaction',
+          JSON.stringify({handloc: card.handPosition}));
+      }, 1000);
+      // this.game.removeCardInHand(card);
+    }
+  }
+
+  private _gameFromState(state): ClientGame {
     const players = state.users.map(player => {
       return new Player(player.id, player.color, player.name);
     });
@@ -133,12 +139,7 @@ export class GameComponent implements OnInit {
     return new ClientGame(players, this._userIdService.id, cards);
   }
 
-  customButtonClicked(id: string) {
-    this.buttons = [];
-    this._gameSocketService.send('button', id);
-  }
-
-  updateMap(update) {
+  private updateMap(update: any) {
     if (this.game != null) {
       if (typeof update.actions !== 'undefined') {
         this.game.actions = update.actions;
@@ -153,18 +154,7 @@ export class GameComponent implements OnInit {
         this.game.phase = update.phase;
 
       }
-      if (typeof update.select !== "undefined") {
-        if (update.select) {
-          this.game.isSelecting = true;
-          this.game.toSelectHand = update.handSelect;
-          this.game.toSelectBoard = update.boardSelect;
-          this.game.toSelectStoppable = update.stoppable;
-        } else {
-          this.game.isSelecting = false;
-        }
-      }
       if (typeof update.hand !== "undefined") {
-
         let i = 0;
         this.game.hand = update.hand.map(cardid => {
           let card = new Card(cardid);
@@ -194,9 +184,15 @@ export class GameComponent implements OnInit {
       if (typeof update.winner !== "undefined") {
         this.game.isOver = true;
       }
-      if (typeof update.buttons !== 'undefined') {
-        this.buttons = update.buttons.sort((button1, button2) => {
-          return button1.id > button2.id;
+      if (typeof update.playeractions !== 'undefined') {
+        update.playeractions.forEach(playerAction => {
+          this.game.playerActionQueue.push(new PlayerAction(
+            playerAction.urgent,
+            playerAction.select,
+            playerAction.handSelect,
+            playerAction.boardSelect,
+            playerAction.buttons
+          ));
         });
       }
       if (typeof update.victorypoints !== 'undefined') {
@@ -205,23 +201,11 @@ export class GameComponent implements OnInit {
         });
       }
       if (typeof update.notify !== 'undefined') {
-        this.notify(update.notify);
+        this._notify(update.notify);
       }
     }
     console.log("\n\n\n\nUPDATED GAME:");
     console.log(this.game);
-  }
-
-  leaveGame() {
-    this._gameSocketService.send('exit', '');
-  }
-
-  chat(msg) {
-    this.gameChat.addMessage(JSON.parse(msg));
-  }
-
-  notify(text: string) {
-    this.notificationText = text;
   }
 
 }
