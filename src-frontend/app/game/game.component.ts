@@ -58,6 +58,7 @@ export class GameComponent implements OnInit {
 
   public cardClickedPile(card: Card): void {
     if (this.game.isSelectable(card, false)) {
+      this.game.playerActionQueue.pop();
       this._gameSocketService.send('select', JSON.stringify({inhand: false, loc: card.id}));
     } else {
       this._addToCart(card);
