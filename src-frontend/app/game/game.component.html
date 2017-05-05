@@ -51,8 +51,10 @@
           </dmn-card>
         </div>
       </div>
-      <button *ngFor="let button of game.playerActionQueue.buttons"
-              (click)="customButtonClicked(button.id)">{{button.name}}</button>
+      <div *ngIf="game.getCurrPlayerAction()">
+        <button *ngFor="let button of game.getCurrPlayerAction().buttons"
+                (click)="customButtonClicked(button.id)">{{button.name}}</button>
+      </div>
       <button *ngIf="game.canEndPhase()"
               (click)="endPhaseClicked()">End {{ game.phase }} Phase</button>
     </div>
