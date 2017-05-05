@@ -8,6 +8,7 @@ import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.io.send.ClientUpdateMap;
+import edu.brown.cs.dominion.io.send.RequirePlayerAction;
 import edu.brown.cs.dominion.io.send.SelectCallback;
 import edu.brown.cs.dominion.money.Copper;
 
@@ -34,14 +35,10 @@ public class Moneylender extends AbstractAction {
       }
     };
 
-    cm.requireSelect(g.getCurrent(),
+    cm.requirePlayerAction(g.getCurrent(), RequirePlayerAction.callback(
         g.getCurrentPlayer().getHand().stream().filter(c -> c instanceof Copper)
             .map(Card::getId).collect(Collectors.toList()),
-        ImmutableList.of(), trash, "moneylendertrash");
-
-    cm.putButton(g.getCurrent(), "Don't Trash Copper", (usr) -> {
-      return null;
-    });
+        ImmutableList.of(), trash, () -> null, "moneylendertrash"));
   }
 
   @Override

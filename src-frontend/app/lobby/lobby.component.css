@@ -6,6 +6,7 @@
   height: 100%;
   background: url('../../assets/bg.jpg') center center;
   background-size: cover;
+  overflow-x: hidden;
 }
 .lobby-panes::after {
   content: '';
@@ -37,8 +38,6 @@
   /*background: rgba(255, 255, 255, 0.9);*/
   background: #FAFAFA;
 }
-
-
 
 .pane#header .pane-content {
 }
@@ -106,11 +105,11 @@
 }
 
 .game-name {
-
+  flex-grow: 1;
 }
 
 .players {
-
+  width: 60px;
 }
 
 .game .cards {

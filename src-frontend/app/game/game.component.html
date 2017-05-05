@@ -51,19 +51,18 @@
           </dmn-card>
         </div>
       </div>
-      <button *ngFor="let button of buttons"
-              (click)="customButtonClicked(button.id)">{{button.name}}</button>
-      <button *ngIf="game.isSelecting && game.toSelectStoppable && !game.isOver"
-              (click)="endSelecting()">End Select</button>
-      <button *ngIf="!(game.isSelecting && game.toSelectStoppable) && !game.isOver"
-              [ngClass]="{hidden: game.isSelecting || !game.isOwnTurn()}"
-              (click)="endPhase()">End {{ game.phase }} Phase</button>
+      <div *ngIf="game.getCurrPlayerAction()">
+        <button *ngFor="let button of game.getCurrPlayerAction().buttons"
+                (click)="customButtonClicked(button.id)">{{button.name}}</button>
+      </div>
+      <button *ngIf="game.canEndPhase()"
+              (click)="endPhaseClicked()">End {{ game.phase }} Phase</button>
     </div>
     <div id="piles">
 
       <div class="pile-row">
         <dmn-card [card]="card"
-                  [disabled]="card.pileCount == 0 || !game.canBuy(card) && !game.isSelectable(card, false)"
+                  [disabled]="game.isDisabled(card, false)"
                   [selectable]="game.isSelectable(card, false)"
                   *ngFor="let card of game.nonactionCards"
                   (click)="cardClickedPile(card)"
@@ -72,21 +71,23 @@
       </div>
       <div class="pile-row">
         <dmn-card [card]="card"
-                  [disabled]="card.pileCount == 0 || !game.canBuy(card) && !game.isSelectable(card, false)"
+                  [disabled]="game.isDisabled(card, false)"
                   [selectable]="game.isSelectable(card, false)"
-                  *ngFor="let card of game.actionCards.slice(0, 6)"
+                  *ngFor="let card of game.actionCards.slice(0, 5)"
                   (click)="cardClickedPile(card)"
         >
         </dmn-card>
+        <!--<div style="width: 127px"></div>-->
       </div>
       <div class="pile-row">
         <dmn-card [card]="card"
-                  [disabled]="card.pileCount == 0 || !game.canBuy(card) && !game.isSelectable(card, false)"
+                  [disabled]="game.isDisabled(card, false)"
                   [selectable]="game.isSelectable(card, false)"
-                  *ngFor="let card of game.actionCards.slice(6, 12)"
+                  *ngFor="let card of game.actionCards.slice(5, 12)"
                   (click)="cardClickedPile(card)"
         >
         </dmn-card>
+        <!--<div style="width: 127px"></div>-->
       </div>
     </div>
     <div id="right-bar-container">
@@ -121,7 +122,7 @@
       <div class="hand">
         <dmn-card *ngFor="let card of game.hand"
                   (click)="cardClickedHand(card)"
-                  [disabled]="!(game.toSelectHand.indexOf(card.id) !== -1 || game.canPlay(card))"
+                  [disabled]="game.isDisabled(card, true)"
                   [selectable]="game.isSelectable(card, true)"
                   [card]="card"
                   [@cardState]="card.state"></dmn-card>

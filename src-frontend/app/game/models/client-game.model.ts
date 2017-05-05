@@ -1,5 +1,6 @@
 import {Player} from "./player.model";
 import {Card} from "../card/card.model";
+import {PlayerAction} from "./player-action.model";
 export class ClientGame {
 
   public turn: number = 0;
@@ -8,13 +9,13 @@ export class ClientGame {
   public hand: Card[] = [];
   public discardsize: number = 0;
   public decksize: number = 10;
-  public isSelecting: boolean = false;
   public toSelectHand = [];
   public toSelectBoard = [];
   public toSelectStoppable = false;
   public phase: string = "action";
   public orderedPlayers: Player[];
   public isOver: boolean = false;
+  public playerActionQueue: PlayerAction[] = [];
 
   public nonactionCards: Card[] =
     [new Card(0), new Card(1), new Card(2), new Card(3), new Card(4), new Card(5)];
@@ -28,7 +29,31 @@ export class ClientGame {
     });
   }
 
-  public winner() {
+  public isDisabled(card: Card, inHand: boolean): boolean {
+    if (this.isSelectable(card, inHand)) {
+      return false;
+    }
+
+    if (inHand) {
+      return !this.canPlay(card);
+    } else {
+      return card.pileCount == 0 || !this.canBuy(card);
+    }
+  }
+
+  public isSelectable(card: Card, inhand: boolean): boolean {
+    const currPlayerAction: PlayerAction = this.getCurrPlayerAction();
+    if (currPlayerAction) {
+      if (inhand) {
+        return currPlayerAction.handSelect.indexOf(card.id) !== -1;
+      } else {
+        return currPlayerAction.boardSelect.indexOf(card.id) !== -1;
+      }
+    }
+    return false;
+  }
+
+  public winner(): Player {
     let winner = this.players[0];
     let max = winner.victoryPoints;
     this.players.forEach(player => {
@@ -39,7 +64,15 @@ export class ClientGame {
     return winner;
   }
 
-  public updatePiles(piles: any) {
+  public getCurrPlayerAction(): PlayerAction {
+    if (this.playerActionQueue.length == 0) {
+      return null;
+    } else {
+      return this.playerActionQueue[0];
+    }
+  }
+
+  public updatePiles(piles: any): void {
     const allCards = this.nonactionCards.concat(this.actionCards);
     allCards.forEach(card => {
       if (piles[card.id]) {
@@ -48,21 +81,7 @@ export class ClientGame {
     });
   }
 
-  public isSelectable(card: Card, inhand: boolean) {
-    if (inhand) {
-      return this.toSelectHand.indexOf(card.id) !== -1;
-    } else {
-      return this.toSelectBoard.indexOf(card.id) !== -1;
-    }
-  }
-
-  // Used to make selecting instant so multiple selections cannot be registered.
-  public setNotSelecting() {
-    this.toSelectHand = [];
-    this.toSelectBoard = [];
-  }
-
-  public getPlayerById(id: number) {
+  public getPlayerById(id: number): Player {
     for (let i = 0; i < this.players.length; i++) {
       if (this.players[i].id == id) {
         return this.players[i];
@@ -119,14 +138,26 @@ export class ClientGame {
     throw "Could not find own player";
   }
 
-
   public removeCardInHand(card: Card): void {
     this.hand.splice(this.hand.indexOf(card), 1);
   }
 
+  public isSelecting(): boolean {
+    if (this.getCurrPlayerAction() == null) {
+      return false;
+    }
+    return this.getCurrPlayerAction().requiresSelect;
+  }
+
+  public canEndPhase(): boolean {
+    return this.isOwnTurn()
+      && !this.isSelecting()
+      && !this.isOver;
+  }
+
   public canPlay(card: Card) {
     return this.isOwnTurn()
-      && !this.isSelecting
+      && !this.isSelecting()
       && this.actions > 0
       && (card.type === 'action' || card.type === 'reaction');
   }

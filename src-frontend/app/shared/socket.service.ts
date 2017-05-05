@@ -34,7 +34,11 @@ export class AbstractSocketService {
       if (this.listeners[type]) {
         if (str.length > semi + 1) {
           const message = str.substring(semi + 1);
-          //console.log(JSON.parse(message));
+          try {
+            console.log(JSON.parse(message));
+          } catch (e) {
+            console.log(message);
+          }
           this.listeners[type].forEach((func) => func(message));
         } else {
           this.listeners[type].forEach((func) => func());

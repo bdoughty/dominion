@@ -10,6 +10,7 @@ import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.io.send.ClientUpdateMap;
+import edu.brown.cs.dominion.io.send.RequirePlayerAction;
 import edu.brown.cs.dominion.io.send.SelectCallback;
 
 public class Militia extends AbstractAction {
@@ -29,10 +30,10 @@ public class Militia extends AbstractAction {
       if (g.getPlayerFromUser(user).hasMoat()) {
         g.sendServerMessage(user.getName() + " played Moat.");
       } else if (g.getPlayerFromUser(user).getHand().size() > 3) {
-        cm.requireSelect(user,
+        cm.requirePlayerAction(user, RequirePlayerAction.callback(
             g.getPlayerFromUser(user).getHand().stream().map(Card::getId)
                 .collect(Collectors.toList()),
-            ImmutableList.<Integer> of(), new DownToThree(g), "militiadiscard");
+            ImmutableList.<Integer> of(), new DownToThree(g), "militiadiscard"));
         g.sendServerMessage(user.getName() + " was forced to discard.");
       }
     }
@@ -62,10 +63,10 @@ class DownToThree implements SelectCallback {
     cm.discardPileSize(g.getPlayerFromUser(u).getDiscard().size());
 
     if (g.getPlayerFromUser(u).getHand().size() > 3) {
-      cm.requireSelect(u,
+      cm.requirePlayerAction(u, RequirePlayerAction.callback(
           g.getPlayerFromUser(u).getHand().stream().map(Card::getId)
               .collect(Collectors.toList()),
-          ImmutableList.<Integer> of(), new DownToThree(g), "militiadiscard");
+          ImmutableList.<Integer> of(), new DownToThree(g), "militiadiscard"));
     }
 
     return cm;
