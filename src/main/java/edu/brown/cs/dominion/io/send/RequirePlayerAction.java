@@ -1,5 +1,6 @@
 package edu.brown.cs.dominion.io.send;
 
+import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import edu.brown.cs.dominion.User;
@@ -78,7 +79,9 @@ public class RequirePlayerAction implements SelectCallback{
                                              SelectCallback sc, CancelHandler
                                                ch, String name){
     Callback c = new Callback(boardIds, handIds, sc, ch, name);
-    return new RequirePlayerAction(c, true);
+
+    ButtonCall bc = new ButtonCall("Cancel", u -> ch.cancel());
+    return new RequirePlayerAction(ImmutableList.of(bc), c, true);
   }
 
   public static RequirePlayerAction buttons(ButtonCall... bc){
