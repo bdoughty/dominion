@@ -10,7 +10,7 @@ export class LobbyComponent implements OnInit {
   public pendings;
   public selectedGame;
   public selectedGameId;
-  public joiningGame = false;
+  public inGame = false;
 
   constructor(public _chatSocketService: ChatSocketService) {
   }
@@ -42,15 +42,19 @@ export class LobbyComponent implements OnInit {
   }
 
   select(pending) {
-    this.selectedGame = pending;
-    this.selectedGameId = pending.id;
+    if (!this.inGame) {
+      this.selectedGame = pending;
+      this.selectedGameId = pending.id;
+    }
   }
 
   leave() {
+    this.inGame = false;
     this._chatSocketService.send('leave', "");
   }
 
   join() {
+    this.inGame = true;
     this._chatSocketService.send('join',
       JSON.stringify({gameid: this.selectedGame.id}));
   }

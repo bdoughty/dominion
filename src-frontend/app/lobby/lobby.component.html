@@ -40,7 +40,7 @@
             <div class="game-name">
               {{ selectedGame.name }}
             </div>
-            <div class="join-status" *ngIf="joiningGame">
+            <div class="join-status" *ngIf="inGame">
               Joined, waiting for users...
             </div>
           </div>
@@ -55,8 +55,8 @@
             </div>
           </div>
           <div class="join-game">
-            <button (click)="join()">Join Game</button>
-            <button (click)="leave()">Leave Game</button>
+            <button *ngIf="!inGame" (click)="join()">Join Game</button>
+            <button *ngIf="inGame" (click)="leave()">Leave Game</button>
           </div>
           <div class="cards">
             <div class="card" *ngFor="let card of selectedGame.actioncardids">
