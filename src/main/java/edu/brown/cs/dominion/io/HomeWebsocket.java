@@ -69,8 +69,11 @@ public class HomeWebsocket implements SocketServer, UserMessageListener {
           crds[i] = cards.get(i).getAsInt();
         }
         PendingGame p = new PendingGame(name, numPlayers, crds);
+
+
         w.send(u, REDIRECT, "lobby");
         gm.addPendingGame(p);
+        w.sendAll(PENDING_GAMES, GSON.toJson(gm.getPendingGames()));
       }
     );
   }
