@@ -11,6 +11,7 @@ export class LobbyComponent implements OnInit {
   public selectedGame;
   public selectedGameId;
   public inGame = false;
+  public searchText = "";
 
   constructor(public _chatSocketService: ChatSocketService) {
   }
@@ -39,6 +40,14 @@ export class LobbyComponent implements OnInit {
     this._chatSocketService.addListener('redirect', (messageString) => {
       window.location.replace(messageString);
     });
+  }
+
+  gameMatchesSearch(game): boolean {
+    if (this.searchText == "") {
+      return true;
+    } else {
+      return game.name.toLowerCase().includes(this.searchText.toLowerCase());
+    }
   }
 
   select(pending) {

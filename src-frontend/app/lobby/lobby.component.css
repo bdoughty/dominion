@@ -96,6 +96,11 @@
   background: white;
   transition: background 0.15s;
 }
+
+.game.selected, .game.selected:hover {
+  background: #f8fff9;
+}
+
 .game:first-child {
   border-top: 1px solid #CCC;
 }

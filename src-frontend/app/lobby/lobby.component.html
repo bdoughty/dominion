@@ -4,24 +4,29 @@
     <div class="pane" id="game-listing">
       <div class="pane-content">
         <div class="header">
-          <input type="text" placeholder="Search for a game..." />
+          <input [(ngModel)]="searchText" type="text" placeholder="Search for a game..." />
           <div class="button-container">
             <a routerLink="/create"><button>Create Game</button></a>
           </div>
         </div>
         <ul class="games">
-          <li class="game"
-              *ngFor="let pending of pendings"
-              (click)="select(pending)"
-              [ngClass]="{selected: pending.id === selectedGameId}">
-            <div class="game-name">{{ pending.name }}</div>
-            <div class="players">{{ pending.users.length }} / {{ pending.maxusers }}</div>
-            <div class="cards">
-              <div class="card" *ngFor="let card of pending.actioncardids">
-                <img src="../../assets/card/card{{ card }}.jpg">
+
+          <li *ngFor="let pending of pendings">
+            <div
+                  *ngIf="gameMatchesSearch(pending)"
+                  class="game"
+                  (click)="select(pending)"
+                  [ngClass]="{selected: pending.id === selectedGameId}">
+              <div class="game-name">{{ pending.name }}</div>
+              <div class="players">{{ pending.users.length }} / {{ pending.maxusers }}</div>
+              <div class="cards">
+                <div class="card" *ngFor="let card of pending.actioncardids">
+                  <img src="../../assets/card/card{{ card }}.jpg">
+                </div>
               </div>
             </div>
           </li>
+
         </ul>
       </div>
     </div>
@@ -35,7 +40,6 @@
     <div class="pane" id="game-info">
       <div class="pane-content">
         <div class="pane-content-inner" *ngIf="selectedGame">
-
           <div class="game-info-header">
             <div class="game-name">
               {{ selectedGame.name }}
