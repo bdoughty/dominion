@@ -58,7 +58,7 @@ export class GameComponent implements OnInit {
 
   public cardClickedPile(card: Card): void {
     if (this.game.isSelectable(card, false)) {
-      this.game.playerActionQueue.pop();
+      this.game.playerActionQueue.shift();
       this._gameSocketService.send('select', JSON.stringify({inhand: false, loc: card.id}));
     } else {
       this._addToCart(card);
@@ -67,6 +67,7 @@ export class GameComponent implements OnInit {
 
   public cardClickedHand(card: Card): void {
     if (this.game.isSelectable(card, true)) {
+      this.game.playerActionQueue.shift();
       this._gameSocketService.send('select',
         JSON.stringify({inhand: true, loc: card.handPosition}));
     } else {
@@ -93,7 +94,7 @@ export class GameComponent implements OnInit {
   }
 
   public customButtonClicked(id: string) {
-    this.game.playerActionQueue.pop();
+    this.game.playerActionQueue.shift();
     this._gameSocketService.send('button', id);
   }
 

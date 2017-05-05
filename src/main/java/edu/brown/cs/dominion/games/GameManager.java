@@ -92,6 +92,7 @@ public class GameManager implements SocketServer {
   private ClientUpdateMap cancleSelect(User u) {
     assert callbacks.containsKey(u);
     Callback c = callbacks.get(u).get(0).getC();
+    callbacks.get(u).remove(0);
     assert c.isStoppable();
     return c.getCancelHandler().cancel();
   }

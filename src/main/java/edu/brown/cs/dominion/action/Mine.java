@@ -34,6 +34,7 @@ public class Mine extends AbstractAction {
       @Override
       public ClientUpdateMap call(User u, boolean inHand, int loc) {
         // TODO
+        System.out.println("trashing");
         assert (inHand);
         Player nestedCurrP = g.getPlayerFromUser(u);
         // how to assert this?

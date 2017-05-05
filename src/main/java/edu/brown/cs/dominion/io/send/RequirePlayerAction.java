@@ -69,7 +69,7 @@ public class RequirePlayerAction implements SelectCallback{
   public static RequirePlayerAction callback(List<Integer> handIds,
                                              List<Integer> boardIds,
                                              SelectCallback sc, String name){
-    Callback c = new Callback(handIds, boardIds, sc, name);
+    Callback c = new Callback(boardIds, handIds, sc, name);
     return new RequirePlayerAction(c, true);
   }
 
@@ -77,7 +77,7 @@ public class RequirePlayerAction implements SelectCallback{
                                              List<Integer> boardIds,
                                              SelectCallback sc, CancelHandler
                                                ch, String name){
-    Callback c = new Callback(handIds, boardIds, sc, ch, name);
+    Callback c = new Callback(boardIds, handIds, sc, ch, name);
     return new RequirePlayerAction(c, true);
   }
 
