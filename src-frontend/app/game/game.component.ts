@@ -44,9 +44,7 @@ export class GameComponent implements OnInit {
   }
 
   public cardClickedPile(card: Card): void {
-
     console.log(this.game);
-
 
     if (this.game.isSelectable(card, false)) {
       this.game.playerActionQueue.shift();
