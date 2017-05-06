@@ -36,62 +36,11 @@ export class GameComponent implements OnInit {
   public notificationText: string = "";
 
   constructor(
-    private _userIdService: UserIdService,
     private _gameSocketService: GameSocketService
   ) {}
 
   public ngOnInit(): void {
-    this._gameSocketService.addListener("init", (message) => {
-      if (message === undefined) return;
-      let gameState = JSON.parse(message);
-      this.game = this._gameFromState(gameState);
-    });
-
-    this._gameSocketService.addListener("updatemap", (message) => {
-      this.updateMap(JSON.parse(message));
-    });
-
-    this._gameSocketService.addListener('redirect', (messageString) => {
-      window.location.replace(messageString);
-    });
-
-    this._gameSocketService.addListener('actions', (message) => {
-      if(this.game != null) {
-        this.game.actions = parseInt(message);
-      }
-    });
-
-    this._gameSocketService.addListener('buys', (message) => {
-      if(this.game != null) {
-        this.game.buys = parseInt(message);
-      }
-    });
-
-    this._gameSocketService.addListener('gold', (message) => {
-      if(this.game != null) {
-        this.game.gold = parseInt(message);
-      }
-    });
-
-    this._gameSocketService.addListener('phase', (message) => {
-      if(this.game != null) {
-        this.game.phase = message;
-      }
-    });
-
-    this._gameSocketService.addListener('hand', (message) => {
-      if(this.game != null) {
-        let i = 0;
-        var hand = JSON.parse(message);
-        this.game.hand = hand.map(cardid => {
-          let card = new Card(cardid);
-          card.handPosition = i++;
-          return card;
-        });
-      }
-    });
-
-
+    this._addListeners();
   }
 
   public cardClickedPile(card: Card): void {
@@ -183,70 +132,102 @@ export class GameComponent implements OnInit {
     return new ClientGame(players, state.id, cards);
   }
 
-  private updateMap(update: any) {
-    if (this.game != null) {
-      if (typeof update.actions !== 'undefined') {
-        this.game.actions = update.actions;
+  private _addListeners() {
+
+    this._gameSocketService.addListener("init", (message) => {
+      if (message === undefined) return;
+      let gameState = JSON.parse(message);
+      this.game = this._gameFromState(gameState);
+    });
+
+    this._gameSocketService.addListener('redirect', (messageString) => {
+      window.location.replace(messageString);
+    });
+
+    this._gameSocketService.addListener('actions', (message) => {
+      if(this.game != null) {
+        this.game.actions = parseInt(message);
       }
-      if (typeof update.buys !== "undefined") {
-        this.game.buys = update.buys;
+    });
+
+    this._gameSocketService.addListener('buys', (message) => {
+      if(this.game != null) {
+        this.game.buys = parseInt(message);
       }
-      if (typeof update.gold !== "undefined") {
-        this.game.gold = update.gold;
+    });
+
+    this._gameSocketService.addListener('gold', (message) => {
+      if(this.game != null) {
+        this.game.gold = parseInt(message);
       }
-      if (typeof update.phase !== "undefined") {
-        this.game.phase = update.phase;
+    });
+
+    this._gameSocketService.addListener('phase', (message) => {
+      if(this.game != null) {
+        this.game.phase = message;
       }
-      if (typeof update.hand !== "undefined") {
+    });
+
+    this._gameSocketService.addListener('hand', (message) => {
+      if(this.game != null) {
         let i = 0;
-        this.game.hand = update.hand.map(cardid => {
+        let hand = JSON.parse(message);
+        this.game.hand = hand.map(cardid => {
           let card = new Card(cardid);
           card.handPosition = i++;
           return card;
         });
       }
-      if (typeof update.decksize !== "undefined") {
-        this.game.decksize = update.decksize;
-      }
-      if (typeof update.discardsize !== "undefined") {
-        this.game.discardsize = update.discardsize;
-      }
-      if (typeof update.holding !== "undefined") {
-        this.game.holding = update.holding;
-      }
-      if (typeof update.handcardnum !== 'undefined') {
-        const player = this.game.getPlayerById(update.handcardnum.id);
-        player.numCards = update.handcardnum.cards;
-      }
-      if (typeof update.turn !== "undefined") {
-        this.game.setTurn(update.turn);
-      }
-      if (typeof update.board !== 'undefined') {
-        this.game.updatePiles(update.board.piles);
-      }
-      if (typeof update.winner !== "undefined") {
-        this.game.isOver = true;
-      }
-      if (typeof update.playeractions !== 'undefined') {
-        update.playeractions.forEach(playerAction => {
-          this.game.playerActionQueue.push(new PlayerAction(
-            playerAction.urgent,
-            playerAction.select,
-            playerAction.handselect,
-            playerAction.boardselect,
-            playerAction.buttons
-          ));
-        });
-      }
-      if (typeof update.victorypoints !== 'undefined') {
-        this.game.players.forEach(player => {
-          player.victoryPoints = update.victorypoints[player.id];
-        });
-      }
-      if (typeof update.notify !== 'undefined') {
-        this._notify(update.notify);
-      }
-    }
+    });
+
+    this._gameSocketService.addListener('decksize', (message) => {
+      this.game.decksize = parseInt(message);
+    });
+
+    this._gameSocketService.addListener('discardsize', (message) => {
+      this.game.discardsize = parseInt(message);
+    });
+
+    this._gameSocketService.addListener('handcardnum', (message) => {
+      const update = JSON.parse(message);
+      const player = this.game.getPlayerById(update.handcardnum.id);
+      player.numCards = update.handcardnum.cards;
+    });
+
+    this._gameSocketService.addListener('turn', (message) => {
+      this.game.setTurn(parseInt(message));
+    });
+
+    this._gameSocketService.addListener('board', (message) => {
+      this.game.updatePiles(JSON.parse(message).piles);
+    });
+
+    this._gameSocketService.addListener('winner', () => {
+      this.game.isOver = true;
+    });
+
+    this._gameSocketService.addListener('playeractions', (message) => {
+      JSON.parse(message).forEach(playerAction => {
+        this.game.playerActionQueue.push(new PlayerAction(
+          playerAction.urgent,
+          playerAction.select,
+          playerAction.handselect,
+          playerAction.boardselect,
+          playerAction.buttons
+        ));
+      });
+    });
+
+    this._gameSocketService.addListener('victorypoints', (message) => {
+      const victorypoints = JSON.parse(message);
+      this.game.players.forEach(player => {
+        player.victoryPoints = victorypoints[player.id];
+      });
+    });
+
+    this._gameSocketService.addListener('notify', (message) => {
+      this._notify(message);
+    });
     console.log("\n\n\n\nUPDATED GAME:");
     console.log(this.game);
   }
