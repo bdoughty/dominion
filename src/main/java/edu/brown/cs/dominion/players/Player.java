@@ -1,6 +1,12 @@
 package edu.brown.cs.dominion.players;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 import com.google.gson.JsonObject;
+
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.action.Feast;
 import edu.brown.cs.dominion.action.Moat;
@@ -11,11 +17,6 @@ import edu.brown.cs.dominion.io.send.Button;
 import edu.brown.cs.dominion.money.AbstractMoney;
 import edu.brown.cs.dominion.money.Copper;
 import edu.brown.cs.dominion.victory.Estate;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 
 public abstract class Player {
   private static int nextId = 0;
@@ -55,11 +56,11 @@ public abstract class Player {
     this.id = nextId++;
   }
 
-  public void setGame(Game g){
+  public void setGame(Game g) {
     this.game = g;
   }
 
-  public Game getGame(){
+  public Game getGame() {
     return game;
   }
 
@@ -87,12 +88,11 @@ public abstract class Player {
     }
   }
 
-  private Card draw() throws EmptyDeckException {
+  private void draw() throws EmptyDeckException {
     recycleDiscard();
     Card c = deck.remove(0);
     hand.add(c);
     baseMoney += c.getMonetaryValue();
-    return c;
   }
 
   public void draw(int numCards) {
@@ -103,6 +103,14 @@ public abstract class Player {
         System.out.println(ede.getMessage());
       }
     }
+  }
+
+  public Card drawOne() throws EmptyDeckException {
+    recycleDiscard();
+    Card c = deck.remove(0);
+    hand.add(c);
+    baseMoney += c.getMonetaryValue();
+    return c;
   }
 
   public int getId() {
@@ -281,7 +289,7 @@ public abstract class Player {
     return points;
   }
 
-  public void endActionPhase(){
+  public void endActionPhase() {
     setActions(0);
     burnHand();
     actionPhase = false;
@@ -321,7 +329,7 @@ public abstract class Player {
 
   public abstract JsonObject toJson();
 
-  public boolean isActionPhase(){
+  public boolean isActionPhase() {
     return actionPhase;
   }
 
