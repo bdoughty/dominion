@@ -95,9 +95,7 @@ public class GameManager implements SocketServer {
     UserPlayer p = userPlayers.get(u);
     synchronized (p) {
       p.wakeData = location;
-      if (inHand) {
-        p.wakeType = inHand ? PlayerWake.SELECT_HAND : PlayerWake.SELECT_BOARD;
-      }
+      p.wakeType = inHand ? PlayerWake.SELECT_HAND : PlayerWake.SELECT_BOARD;
       p.notifyAll();
     }
   }

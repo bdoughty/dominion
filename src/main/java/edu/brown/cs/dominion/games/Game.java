@@ -84,13 +84,16 @@ public class Game extends GameStub {
 
   public void doActions(Player p) {
     int loc;
+    System.out.println("new action loop");
     while(-1 != (loc = p.playHandAction())){
+      System.out.println("played card " + loc);
       try {
         Card c = p.play(loc);
         c.play(p);
         // sendServerMessage(u.getName() + " played " + c.toString() + ".");
       } catch (NoActionsException ignored) {}
       catch (NotActionException e) {}
+      System.out.println("trying new action");
     }
     p.endActionPhase();
   }
