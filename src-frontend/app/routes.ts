@@ -17,7 +17,7 @@ export const appRoutes: Routes = [
     path: 'create',
     component: CreationComponent
   },
-  { path: '',
+  { path: 'name',
     component: NamePageComponent,
     pathMatch: 'full'
   },

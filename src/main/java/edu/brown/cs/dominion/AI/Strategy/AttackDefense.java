@@ -3,7 +3,6 @@ package edu.brown.cs.dominion.AI.Strategy;
 import java.util.Arrays;
 import java.util.List;
 
-import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.players.Player;
 
 public class AttackDefense implements Strategy {
@@ -22,7 +21,7 @@ public class AttackDefense implements Strategy {
   }
 
   @Override
-  public int playAction(Game g, Player who) {
+  public int playAction(Player who) {
     // TODO Auto-generated method stub
     return 0;
   }

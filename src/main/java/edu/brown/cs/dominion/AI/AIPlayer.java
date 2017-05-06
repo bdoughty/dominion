@@ -18,6 +18,7 @@ public class AIPlayer extends Player {
   }
 
   /*
+   * <<<<<<< HEAD
    * @Override public void play(Game g) {
    * System.out.println("started the game!!!!!"); while
    * (g.getPlayerFromUser(this).getActions() > 0) { int actionLoc =
@@ -28,7 +29,17 @@ public class AIPlayer extends Player {
    * (buyId == -1) { break; } try { toBuy.add(buyId); buys--; money -=
    * g.getBoard().getCostFromId(buyId); } catch (NoPileException npe) {
    * System.out.println(npe.getMessage()); break; } } g.endBuyPhase(this,
-   * toBuy); }
+   * toBuy); } =======
+   * @Override public void play(Game g) { System.out.println(
+   * "started the game!!!!!"); while (g.getPlayerFromUser(this).getActions() >
+   * 0) { int actionLoc = st.playAction(g, this); if (actionLoc == -1) { break;
+   * } } g.endActionPhase(this); int buys = g.getPlayerFromUser(this).getBuys();
+   * int money = g.getPlayerFromUser(this).getMoney(); List<Integer> toBuy = new
+   * LinkedList<>(); while (buys > 0) { int buyId = st.buy(money, g, this); if
+   * (buyId == -1) { break; } try { toBuy.add(buyId); buys--; money -=
+   * g.getBoard().getCostFromId(buyId); } catch (NoPileException npe) {
+   * System.out.println(npe.getMessage()); break; } } g.endBuyPhase(this,
+   * toBuy); } >>>>>>> d2e08df82acb2aa4492a8085b698d766b94dfa55
    */
 
   /*
@@ -45,7 +56,7 @@ public class AIPlayer extends Player {
    */
   @Override
   public int playHandAction() {
-    return st.playAction(getGame(), this);
+    return st.playAction(this);
   }
 
   /**
@@ -55,6 +66,7 @@ public class AIPlayer extends Player {
    */
   @Override
   public List<Integer> buyCards() {
+    // TODO this
     return null;
   }
 
@@ -72,6 +84,11 @@ public class AIPlayer extends Player {
   @Override
   public int selectHand(List<Integer> cardIds, boolean cancelable,
       String name) {
+    switch (name) {
+      case "mine trash":
+
+    }
+    // TODO this
     return 0;
   }
 
@@ -89,6 +106,7 @@ public class AIPlayer extends Player {
   @Override
   public int selectBoard(List<Integer> cardIds, boolean cancelable,
       String name) {
+    // TODO this
     return 0;
   }
 
@@ -100,6 +118,7 @@ public class AIPlayer extends Player {
    */
   @Override
   public Button selectButtons(Button... buttons) {
+    // TODO this
     return null;
   }
 
