@@ -54,6 +54,44 @@ export class GameComponent implements OnInit {
     this._gameSocketService.addListener('redirect', (messageString) => {
       window.location.replace(messageString);
     });
+
+    this._gameSocketService.addListener('actions', (message) => {
+      if(this.game != null) {
+        this.game.actions = parseInt(message);
+      }
+    });
+
+    this._gameSocketService.addListener('buys', (message) => {
+      if(this.game != null) {
+        this.game.buys = parseInt(message);
+      }
+    });
+
+    this._gameSocketService.addListener('gold', (message) => {
+      if(this.game != null) {
+        this.game.gold = parseInt(message);
+      }
+    });
+
+    this._gameSocketService.addListener('phase', (message) => {
+      if(this.game != null) {
+        this.game.phase = message;
+      }
+    });
+
+    this._gameSocketService.addListener('hand', (message) => {
+      if(this.game != null) {
+        let i = 0;
+        var hand = JSON.parse(message);
+        this.game.hand = hand.map(cardid => {
+          let card = new Card(cardid);
+          card.handPosition = i++;
+          return card;
+        });
+      }
+    });
+
+
   }
 
   public cardClickedPile(card: Card): void {
@@ -142,7 +180,7 @@ export class GameComponent implements OnInit {
       return new Card(cardid);
     });
 
-    return new ClientGame(players, this._userIdService.id, cards);
+    return new ClientGame(players, state.id, cards);
   }
 
   private updateMap(update: any) {
@@ -158,7 +196,6 @@ export class GameComponent implements OnInit {
       }
       if (typeof update.phase !== "undefined") {
         this.game.phase = update.phase;
-
       }
       if (typeof update.hand !== "undefined") {
         let i = 0;

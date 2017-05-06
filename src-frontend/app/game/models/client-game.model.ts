@@ -2,7 +2,6 @@ import {Player} from "./player.model";
 import {Card} from "../card/card.model";
 import {PlayerAction} from "./player-action.model";
 export class ClientGame {
-
   public turn: number = 0;
   public holding: boolean = false;
   public cart = [];
@@ -163,6 +162,7 @@ export class ClientGame {
   }
 
   public canBuy(card: Card) {
+    console.log(card.pileCount);
     return card.pileCount > 0 && (this.phase === 'buy') && card.cost <= this.gold && this.buys > 0;
   }
 

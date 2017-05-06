@@ -40,7 +40,8 @@ public class TrashTalker {
     public void run() {
       while (true) {
         for (Game g : tospam) {
-          g.sendSpamMessage(getRandomSpamMessage());
+          //TODO reimlement trash talker
+          //g.sendSpamMessage(getRandomSpamMessage());
         }
         try {
           Thread.sleep(RECOVERY_PERIOD);

@@ -21,14 +21,14 @@ public class AttackDefense implements Strategy {
 
   @Override
   public int discard(Game g, User who) {
-    List<Integer> hand = g.getPlayerFromUser(who).getHand().stream()
-        .map((card) -> card.getId()).collect(Collectors.toList());
-    if (hand.size() > 0) {
-      return g.getPlayerFromUser(who).getHand()
-          .indexOf(Collections.min(hand,
-              (one, two) -> Integer.compare(DISCARD_PREFERENCES.indexOf(one),
-                  DISCARD_PREFERENCES.indexOf(two))));
-    }
+//    List<Integer> hand = g.getPlayerFromUser(who).getHand().stream()
+//        .map((card) -> card.getId()).collect(Collectors.toList());
+//    if (hand.size() > 0) {
+//      return g.getPlayerFromUser(who).getHand()
+//          .indexOf(Collections.min(hand,
+//              (one, two) -> Integer.compare(DISCARD_PREFERENCES.indexOf(one),
+//                  DISCARD_PREFERENCES.indexOf(two))));
+//    }
 
     return -1;
   }

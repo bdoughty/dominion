@@ -1,7 +1,6 @@
 package edu.brown.cs.dominion.action;
 
-import edu.brown.cs.dominion.games.Game;
-import edu.brown.cs.dominion.io.send.ClientUpdateMap;
+import edu.brown.cs.dominion.players.Player;
 
 public class Moat extends AbstractAction {
 
@@ -10,8 +9,8 @@ public class Moat extends AbstractAction {
   }
 
   @Override
-  public void play(Game g, ClientUpdateMap cm) {
-    g.currentDraw(2);
+  public void play(Player p) {
+    p.draw(2);
   }
 
   @Override

@@ -14,23 +14,23 @@ public class DumbStrategy implements Strategy {
 
   @Override
   public int playAction(Game g, User who) {
-    List<Card> actions = g.getPlayerFromUser(who).getHand().stream()
-        .filter((card) -> card instanceof AbstractAction)
-        .collect(Collectors.toList());
-    if (actions.size() > 0) {
-      return g.getPlayerFromUser(who).getHand()
-          .indexOf(actions.get(r.nextInt(actions.size())).getId());
-    }
+//    List<Card> actions = g.getPlayerFromUser(who).getHand().stream()
+//        .filter((card) -> card instanceof AbstractAction)
+//        .collect(Collectors.toList());
+//    if (actions.size() > 0) {
+//      return g.getPlayerFromUser(who).getHand()
+//          .indexOf(actions.get(r.nextInt(actions.size())).getId());
+//    }
 
     return -1;
   }
 
   @Override
   public int discard(Game g, User who) {
-    List<Card> hand = g.getPlayerFromUser(who).getHand();
-    if (hand.size() > 0) {
-      return r.nextInt(hand.size());
-    }
+//    List<Card> hand = g.getPlayerFromUser(who).getHand();
+//    if (hand.size() > 0) {
+//      return r.nextInt(hand.size());
+//    }
 
     return -1;
   }

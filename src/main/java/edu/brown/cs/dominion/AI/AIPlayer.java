@@ -1,24 +1,22 @@
 package edu.brown.cs.dominion.AI;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import edu.brown.cs.dominion.User;
+import com.google.gson.JsonObject;
 import edu.brown.cs.dominion.AI.Strategy.DumbStrategy;
 import edu.brown.cs.dominion.AI.Strategy.Strategy;
 import edu.brown.cs.dominion.games.Game;
-import edu.brown.cs.dominion.gameutil.NoPileException;
-import edu.brown.cs.dominion.io.send.ButtonCall;
-import edu.brown.cs.dominion.io.send.Callback;
+import edu.brown.cs.dominion.players.Player;
 
-public class AIPlayer extends User implements AI {
+import java.util.List;
+
+public class AIPlayer extends Player {
   private Strategy st = new DumbStrategy();
 
-  public AIPlayer(int id, int startId, Strategy st) {
-    super(id, startId);
+  public AIPlayer(Game g, Strategy st) {
+    super(g);
     this.st = st;
   }
 
+  /*
   @Override
   public void play(Game g) {
     System.out.println("started the game!!!!!");
@@ -57,8 +55,9 @@ public class AIPlayer extends User implements AI {
 
     g.endBuyPhase(this, toBuy);
   }
+  */
 
-  // WARNING, C might = null or buttons might be empty
+  /*
   @Override
   public void doCallback(Game g, Callback c, List<ButtonCall> buttons) {
     if (!c.equals(null)) {
@@ -72,4 +71,39 @@ public class AIPlayer extends User implements AI {
       }
     }
   }
+  */
+
+  @Override
+  public int playHandAction() {
+    return 0;
+  }
+
+  @Override
+  public List<Integer> buyCards() {
+    return null;
+  }
+
+  @Override
+  public int selectHand(List<Integer> cardIds, boolean cancelable, String name) {
+    return 0;
+  }
+
+  @Override
+  public int selectBoard(List<Integer> cardIds, boolean cancelable, String name) {
+    return 0;
+  }
+
+  @Override
+  public String selectButtons(List<String> buttonNames, String name) {
+    return null;
+  }
+  @Override
+  public JsonObject toJson() {
+    JsonObject main = new JsonObject();
+    main.addProperty("id", getId());
+    main.addProperty("color", "#444");
+    main.addProperty("name", "Computer " + getId());
+    return main;
+  }
+
 }

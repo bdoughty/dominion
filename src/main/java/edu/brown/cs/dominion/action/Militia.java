@@ -1,17 +1,7 @@
 package edu.brown.cs.dominion.action;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
 
-import com.google.common.collect.ImmutableList;
-
-import edu.brown.cs.dominion.Card;
-import edu.brown.cs.dominion.User;
-import edu.brown.cs.dominion.games.Game;
-import edu.brown.cs.dominion.io.send.ClientUpdateMap;
-import edu.brown.cs.dominion.io.send.RequirePlayerAction;
-import edu.brown.cs.dominion.io.send.SelectCallback;
+import edu.brown.cs.dominion.players.Player;
 
 public class Militia extends AbstractAction {
 
@@ -20,55 +10,14 @@ public class Militia extends AbstractAction {
   }
 
   @Override
-  public void play(Game g, ClientUpdateMap cm) {
-    g.incrementAdditionalMoney(2);
+  public void play(Player p) {
+    p.incrementAdditionalMoney(2);
 
-    List<User> users = new LinkedList<>(g.getAllUsers());
-    users.remove(g.getCurrent());
-
-    for (User user : users) {
-      if (g.getPlayerFromUser(user).hasMoat()) {
-        g.sendServerMessage(user.getName() + " played Moat.");
-      } else if (g.getPlayerFromUser(user).getHand().size() > 3) {
-        cm.requirePlayerAction(user, RequirePlayerAction.callback(
-            g.getPlayerFromUser(user).getHand().stream().map(Card::getId)
-                .collect(Collectors.toList()),
-            ImmutableList.<Integer> of(), new DownToThree(g), "militiadiscard"));
-        g.sendServerMessage(user.getName() + " was forced to discard.");
-      }
-    }
+    //TODO get all players to discard
   }
 
   @Override
   public String toString() {
     return "Militia";
-  }
-}
-
-class DownToThree implements SelectCallback {
-  private Game g;
-
-  public DownToThree(Game g) {
-    this.g = g;
-  }
-
-  @Override
-  public ClientUpdateMap call(User u, boolean inHand, int loc) {
-    if (inHand) {
-      g.getPlayerFromUser(u).discard(loc);
-    }
-
-    ClientUpdateMap cm = new ClientUpdateMap(g, u);
-    cm.hand(g.getPlayerFromUser(u).getHand());
-    cm.discardPileSize(g.getPlayerFromUser(u).getDiscard().size());
-
-    if (g.getPlayerFromUser(u).getHand().size() > 3) {
-      cm.requirePlayerAction(u, RequirePlayerAction.callback(
-          g.getPlayerFromUser(u).getHand().stream().map(Card::getId)
-              .collect(Collectors.toList()),
-          ImmutableList.<Integer> of(), new DownToThree(g), "militiadiscard"));
-    }
-
-    return cm;
   }
 }
