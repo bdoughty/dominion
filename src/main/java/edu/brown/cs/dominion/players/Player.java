@@ -290,7 +290,7 @@ public abstract class Player {
 
   private void burnHand() {
     while (!hand.isEmpty()) {
-      discardPile.add(hand.remove(0));
+      playedPile.add(hand.remove(0));
     }
   }
 
