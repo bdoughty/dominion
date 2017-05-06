@@ -52,6 +52,9 @@
           </dmn-card>
         </div>
       </div>
+      <div *ngIf="game.getCurrPlayerAction() && game.getCurrPlayerAction().cancel">
+        <button (click)="cancel()">Cancel</button>
+      </div>
       <div *ngIf="game.getCurrPlayerAction()">
         <button *ngFor="let button of game.getCurrPlayerAction().buttons"
                 (click)="customButtonClicked(button.id)">{{button.name}}</button>

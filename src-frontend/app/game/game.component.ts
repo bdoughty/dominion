@@ -95,6 +95,10 @@ export class GameComponent implements OnInit {
     this.gameChat.addMessage(JSON.parse(msg));
   }
 
+  public cancel() {
+    this._gameSocketService.send('cancel', '');
+  }
+
 
 
   /* ---------------------------- PRIVATE METHODS --------------------------- */
