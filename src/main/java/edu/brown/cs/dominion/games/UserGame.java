@@ -7,6 +7,7 @@ import edu.brown.cs.dominion.GameChat;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.gameutil.EmptyPileException;
 import edu.brown.cs.dominion.gameutil.NoPileException;
+import edu.brown.cs.dominion.gameutil.TooExpensiveException;
 import edu.brown.cs.dominion.io.MessageListener;
 import edu.brown.cs.dominion.io.Websocket;
 import edu.brown.cs.dominion.players.Player;
@@ -28,15 +29,18 @@ public class UserGame extends Game {
   private List<User> allUsers;
   private Websocket gameSocket;
   private GameChat gc;
+  private GameManager gm;
   public UserGame(List<User> usersTurns,
                   List<Integer> actionCardIds,
-                  Websocket gameSocket) {
+                  Websocket gameSocket,
+                  GameManager gm) {
     super(usersTurns.stream().map(u -> new UserPlayer(u, gameSocket)).collect
       (Collectors.toList()), actionCardIds);
     allUsers = usersTurns;
     getPlayers().forEach(p -> p.setGame(this));
     gc = new GameChat(gameSocket, allUsers);
     this.gameSocket = gameSocket;
+    this.gm = gm;
   }
 
   public Map<User, UserPlayer> getUserPlayerMap () {
@@ -74,6 +78,14 @@ public class UserGame extends Game {
     return c;
   }
 
+  @Override
+  public Card buyCard(int buyId, int money) throws NoPileException, TooExpensiveException, EmptyPileException {
+    Card c = super.buyCard(buyId, money);
+    sendBoard();
+    return c;
+  }
+
+
   private void sendBoard() {
     sendAll(MessageType.BOARD, GSON.toJson(getBoard()));
   }
@@ -86,6 +98,7 @@ public class UserGame extends Game {
   public void win(){
     super.win();
     sendAll(MessageType.WINNER, GSON.toJson(getVictoryPointMap()));
+    gm.finish(allUsers);
   }
 
   public void sendTurn(Session s) {

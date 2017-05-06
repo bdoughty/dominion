@@ -50,7 +50,7 @@ public class Board {
     // victory points
     piles.put(3, new Pile(Estate::new, 12));
     piles.put(4, new Pile(Duchy::new, 12));
-    piles.put(5, new Pile(Province::new, 12));
+    piles.put(5, new Pile(Province::new, 1));
     piles.put(6, new Pile(Curse::new, 30));
 
     // actions

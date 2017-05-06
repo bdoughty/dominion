@@ -54,7 +54,7 @@ public class Game extends GameStub {
     List<Integer> toBuy = p.buyCards();
     for (int buyId : toBuy) {
       try {
-        Card c = board.buyCard(buyId, money);
+        Card c = buyCard(buyId, money);
         p.buyCard(c);
         money -= c.getCost();
         //sendServerMessage(u.getName() + " bought " + c.toString() + ".");
@@ -63,6 +63,10 @@ public class Game extends GameStub {
       }
     }
     p.endTurn();
+  }
+
+  public Card buyCard(int buyId, int money) throws NoPileException, TooExpensiveException, EmptyPileException {
+    return board.buyCard(buyId, money);
   }
 
   public void win(){

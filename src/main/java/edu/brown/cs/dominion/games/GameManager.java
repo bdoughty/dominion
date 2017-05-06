@@ -41,16 +41,11 @@ public class GameManager implements SocketServer {
   private static JsonParser PARSE = new JsonParser();
 
   private Websocket web;
-  private UserRegistry users;
   private Map<User, UserPlayer> userPlayers;
-
-  //private List<Game> games;
-
   private Map<Integer, PendingGame> pendingGames;
   private Map<User, PendingGame> pendingByUser;
 
   public GameManager(UserRegistry users) {
-    this.users = users;
     userPlayers = new HashMap<>();
     pendingGames = new HashMap<>();
 
@@ -202,6 +197,7 @@ public class GameManager implements SocketServer {
       UserPlayer p = userPlayers.get(u);
       Game g = p.getGame();
       g.removeUser(p);
+      userPlayers.remove(u);
       web.send(u, REDIRECT, "lobby");
     });
   }
@@ -233,6 +229,10 @@ public class GameManager implements SocketServer {
     }
   }
 
+  public void removePendingByUser(List<User> users){
+    users.forEach(u -> pendingByUser.remove(u));
+  }
+
   public void leave(User u) {
     if (pendingByUser.containsKey(u)) {
       PendingGame g = pendingByUser.remove(u);
@@ -246,5 +246,10 @@ public class GameManager implements SocketServer {
 
   public Websocket web() {
     return web;
+  }
+
+  public void finish(List<User> allUsers) {
+    allUsers.forEach(u -> userPlayers.remove(u));
+    System.out.println("removing users");
   }
 }

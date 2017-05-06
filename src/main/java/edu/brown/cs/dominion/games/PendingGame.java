@@ -48,7 +48,8 @@ public class PendingGame extends GameStub{
     for(int i : actioncardids){
       cards.add(i);
     }
-    UserGame g = new UserGame(users, cards, gameManager.web());
+    gameManager.removePendingByUser(users);
+    UserGame g = new UserGame(users, cards, gameManager.web(), gameManager);
     users.forEach(u -> ws.send(u, MessageType.REDIRECT, "game"));
     new Thread(g::play).start();
     return g;
