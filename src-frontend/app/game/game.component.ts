@@ -190,8 +190,8 @@ export class GameComponent implements OnInit {
 
     this._gameSocketService.addListener('handcardnum', (message) => {
       const update = JSON.parse(message);
-      const player = this.game.getPlayerById(update.handcardnum.id);
-      player.numCards = update.handcardnum.cards;
+      const player = this.game.getPlayerById(update.id);
+      player.numCards = update.cards;
     });
 
     this._gameSocketService.addListener('turn', (message) => {
@@ -228,8 +228,6 @@ export class GameComponent implements OnInit {
     this._gameSocketService.addListener('notify', (message) => {
       this._notify(message);
     });
-    console.log("\n\n\n\nUPDATED GAME:");
-    console.log(this.game);
   }
 
 }

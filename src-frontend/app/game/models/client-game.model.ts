@@ -162,7 +162,6 @@ export class ClientGame {
   }
 
   public canBuy(card: Card) {
-    console.log(card.pileCount);
     return card.pileCount > 0 && (this.phase === 'buy') && card.cost <= this.gold && this.buys > 0;
   }
 
