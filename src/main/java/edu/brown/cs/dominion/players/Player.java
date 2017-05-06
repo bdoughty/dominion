@@ -41,13 +41,8 @@ public abstract class Player {
   public abstract String selectButtons(List<String> buttonNames, String name);
 
   public Player(Game g) {
-    this.deck = initializeDeck();
-    this.hand = new ArrayList<>();
-    this.discardPile = new LinkedList<>();
-    this.playedPile = new LinkedList<>();
-    draw(5);
+    this();
     this.game = g;
-    this.id = nextId++;
   }
 
   public Player() {
@@ -56,6 +51,7 @@ public abstract class Player {
     this.discardPile = new LinkedList<>();
     this.playedPile = new LinkedList<>();
     draw(5);
+    this.id = nextId++;
   }
 
   public void setGame(Game g){

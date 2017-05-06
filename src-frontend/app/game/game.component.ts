@@ -44,6 +44,10 @@ export class GameComponent implements OnInit {
   }
 
   public cardClickedPile(card: Card): void {
+
+    console.log(this.game);
+
+
     if (this.game.isSelectable(card, false)) {
       this.game.playerActionQueue.shift();
       this._gameSocketService.send('select', JSON.stringify({inhand: false, loc: card.id}));

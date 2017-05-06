@@ -1,4 +1,5 @@
-<dmn-notification [text]="notificationText"></dmn-notification>
+<dmn-notification [(text)]="notificationText"></dmn-notification>
+
 <div id="winScreen" *ngIf="game && game.isOver">
   <h2>{{ game.winner().name }} won!</h2>
   <div class="players">
@@ -21,7 +22,7 @@
     <div id="left-bar">
       <div id="stats">
         <div class="stat">
-          <span class="stat-label">Actions</span>
+          <span class="stat-label">{{notificationText}}Actions</span>
           <div class="icons">
               <i *ngFor="let i of game.actions | fill" class="actions material-icons">&#xE1AB;</i>
           </div>

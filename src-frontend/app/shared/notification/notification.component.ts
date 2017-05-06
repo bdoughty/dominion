@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 const VISIBLE_FOR_TIME = 3000;
 
 @Component({
@@ -8,9 +8,12 @@ const VISIBLE_FOR_TIME = 3000;
 })
 export class NotificationComponent {
   public visible = false;
+
   @Input() public text = '';
+  @Output() public textChange = new EventEmitter();
 
   ngOnChanges() {
+    console.log("NOTIFIED");
     if (this.text !== '') {
       this.visible = true;
 
@@ -23,7 +26,7 @@ export class NotificationComponent {
   hide() {
     this.visible = false;
     this.text = '';
+    this.textChange.emit(this.text);
   }
-
 }
 
