@@ -19,12 +19,14 @@ import java.util.Map;
  */
 public class Game extends GameStub {
   private List<Player> allPlayers;
+  private Player currentPlayer;
   private Board board;
   private boolean actionPhase = true;
 
   public Game(List<Player> usersTurns, List<Integer> actionCardIds) {
     this.allPlayers = new LinkedList<>(usersTurns);
     this.board = new Board(actionCardIds);
+    currentPlayer = allPlayers.get(0);
   }
 
   public void play() {
@@ -64,23 +66,29 @@ public class Game extends GameStub {
   }
 
   public void win(){
+    System.out.println("Game Over");
     // nothing is necessary
   }
 
   public void playTurn(Player p) {
+    currentPlayer = p;
     p.newTurn();
     doActions(p);
     buyPhase(p);
     p.endTurn();
   }
 
+  public int getCurrentPlayerId(){
+    return currentPlayer.getId();
+  }
+
   public void doActions(Player p) {
-    int loc = -1;
+    int loc;
     while(-1 != (loc = p.playHandAction())){
       try {
         Card c = p.play(loc);
-        // sendServerMessage(u.getName() + " played " + c.toString() + ".");
         c.play(p);
+        // sendServerMessage(u.getName() + " played " + c.toString() + ".");
       } catch (NoActionsException ignored) {}
       catch (NotActionException e) {}
     }

@@ -175,6 +175,7 @@ public class UserPlayer extends Player {
 
   public void newTurn() {
     super.newTurn();
+    sendNotify("Your Turn");
     sendActions();
     sendBuys();
     sendPhase("action");
@@ -238,6 +239,7 @@ public class UserPlayer extends Player {
       ints.add(c.getId());
     }
     if (u != null) {
+      getUserGame().sendAllHandSize(this);
       gameSocket.send(u, HAND, GSON.toJson(ints));
     }
     sendMoney();
@@ -289,11 +291,13 @@ public class UserPlayer extends Player {
     }
   }
 
+  private void sendNotify(String s) {
+    gameSocket.send(u, NOTIFY, s);
+  }
+
   public User getUser() {
     return u;
   }
-
-
 
   public void sendAll (Session s) {
     List<Integer> ints = new ArrayList<>();

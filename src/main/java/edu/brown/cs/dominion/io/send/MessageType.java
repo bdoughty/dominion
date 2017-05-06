@@ -32,7 +32,9 @@ public enum MessageType {
   BOARD ("board"),
   PHASE ("phase"),
   TURN("turn"),
-  WINNER("winner");
+  WINNER("winner"),
+  VICTORY_POINTS("victorypoints"),
+  HAND_NUM("handcardnum");
 
 
   private final String name;

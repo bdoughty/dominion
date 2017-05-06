@@ -1,11 +1,13 @@
 package edu.brown.cs.dominion.games;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.GameChat;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.gameutil.EmptyPileException;
 import edu.brown.cs.dominion.gameutil.NoPileException;
+import edu.brown.cs.dominion.io.MessageListener;
 import edu.brown.cs.dominion.io.Websocket;
 import edu.brown.cs.dominion.players.Player;
 import edu.brown.cs.dominion.players.UserPlayer;
@@ -62,6 +64,7 @@ public class UserGame extends Game {
   public void playTurn(Player p) {
     sendAll(MessageType.TURN, Integer.toString(p.getId()));
     super.playTurn(p);
+    sendAll(MessageType.VICTORY_POINTS, GSON.toJson(getVictoryPointMap()));
   }
 
   @Override
@@ -86,7 +89,13 @@ public class UserGame extends Game {
   }
 
   public void sendTurn(Session s) {
-    //super.win();
-    //sendAll(MessageType.WINNER, GSON.toJson(getVictoryPointMap()));
+    gameSocket.send(s, MessageType.TURN, getCurrentPlayerId());
+  }
+
+  public void sendAllHandSize(Player p) {
+    JsonObject handSize = new JsonObject();
+    handSize.addProperty("id", p.getId());
+    handSize.addProperty("cards", p.getHand().size());
+    sendAll(MessageType.HAND_NUM, GSON.toJson(handSize));
   }
 }
