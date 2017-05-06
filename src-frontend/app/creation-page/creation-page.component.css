@@ -139,11 +139,27 @@ a.return .text:hover {
   font-size: 3vmin;
 }
 
+.AiSelect {
+  display: inline-block;
+}
+
 #addAiButton {
   position: absolute;
   bottom: 3px;
   right: 3px;
   left: 3px;
+}
+
+.remove-button-container {
+  display: inline-block;
+  width: 1em;
+  height: 1ex;
+}
+
+.remove-button {
+  text-transform: none;
+  color: darkgray;
+  border: none;
 }
 
 .pane#chat .pane-content {

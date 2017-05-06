@@ -36,12 +36,16 @@
           <div class="AiList">
             <div id="currentAis" *ngIf="desiredAis.length > 0">
               <div class="AiPlayer" *ngFor="let ai of desiredAis; let i = index">
-                <select class="AiSelect">
+                <select class="AiSelect" id="AiNumber{{ i }}" (change)="changeAiByIndex(i)" [(ngModel)]="ai.type" name="Ai{{i}}">
                   <option *ngFor="let type of AiTypes" value="{{ type }}" [attr.selected]="type == ai ? true : null">
                     {{ type }}
                   </option>
                 </select>
-                <div
+                <div class="remove-button-container">
+                  <button class="remove-button" (click)="removeAi(i)">
+                    x
+                  </button>
+                </div>
               </div>
             </div>
             <div class="clear-button-container" id="addAiButton">

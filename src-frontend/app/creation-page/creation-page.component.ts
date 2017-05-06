@@ -43,12 +43,13 @@ import {ChatSocketService} from "../shared/chatsocket.service";
   validate() {
     if(this.selected.size == 10) {
       if((<HTMLInputElement>document.getElementById("gameName")).value != "") {
-        let out = [];
-        this.selected.forEach((car) => {out.push(car)});
-        console.log(out);
+        let desCards = [];
+        this.selected.forEach((car) => {desCards.push(car)});
+        let desAis = [];
+        this.desiredAis.forEach((d) => {desAis.push(d.type)});
         const toSend = JSON.stringify({
           name: (<HTMLInputElement>document.getElementById("gameName")).value,
-          numPlayers: (<HTMLInputElement>document.getElementById("numPlayers")).value, cards: out});
+          numPlayers: (<HTMLInputElement>document.getElementById("numPlayers")).value, cards: desCards, ais: desAis});
         console.log(toSend);
         this._chatSocketService.send("create", toSend);
       } else {
@@ -108,7 +109,7 @@ import {ChatSocketService} from "../shared/chatsocket.service";
 
   addAi() {
     if(this.desiredAis.length < this.getNumPlayers() - 1) {
-      this.desiredAis.push("DumbStrategy");
+      this.desiredAis.push({ type: "DumbStrategy" });
     }
   }
 
@@ -118,8 +119,19 @@ import {ChatSocketService} from "../shared/chatsocket.service";
     }
   }
 
+  changeAiByIndex(pos: number) {
+    if(pos >= 0 && pos < this.desiredAis.length) {
+      this.desiredAis.splice(pos, 1, { type: this.getAiAt(pos) });
+    }
+    console.log(this.desiredAis);
+  }
+
   getNumPlayers() {
     return parseInt((<HTMLInputElement>document.getElementById("numPlayers")).value);
+  }
+
+  getAiAt(pos: number) {
+    return (<HTMLInputElement>document.getElementById("AiNumber" + pos)).value;
   }
 
   numChange() {
