@@ -7,6 +7,7 @@ import edu.brown.cs.dominion.action.Moat;
 import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.gameutil.EmptyDeckException;
 import edu.brown.cs.dominion.gameutil.NoActionsException;
+import edu.brown.cs.dominion.io.send.Button;
 import edu.brown.cs.dominion.money.AbstractMoney;
 import edu.brown.cs.dominion.money.Copper;
 import edu.brown.cs.dominion.victory.Estate;
@@ -38,7 +39,7 @@ public abstract class Player {
                                  String name);
   public abstract int selectBoard(List<Integer> cardIds, boolean cancelable,
                                   String name);
-  public abstract String selectButtons(List<String> buttonNames, String name);
+  public abstract Button selectButtons(Button... buttons);
 
   public Player(Game g) {
     this();
@@ -164,6 +165,7 @@ public abstract class Player {
     for (Card c : playedPile) {
       if (c instanceof Feast) {
         playedPile.remove(c);
+        getGame().trash(c);
         return c;
       }
     }
@@ -175,6 +177,7 @@ public abstract class Player {
     assert (posInHand >= 0 && posInHand < hand.size());
     Card c = hand.remove(posInHand);
     baseMoney -= c.getMonetaryValue();
+    getGame().trash(c);
     return c;
   }
 
@@ -321,4 +324,6 @@ public abstract class Player {
   public boolean isActionPhase(){
     return actionPhase;
   }
+
+  public abstract String getName();
 }

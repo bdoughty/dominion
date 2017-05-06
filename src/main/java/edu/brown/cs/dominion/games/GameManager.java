@@ -51,15 +51,15 @@ public class GameManager implements SocketServer {
 
     // TODO GET RID OF DUMMY
     PendingGame p = new PendingGame("GAME1", 1,
-        new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
+        new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 23 });
     pendingGames.put(p.getId(), p);
 
     PendingGame p2 = new PendingGame("GAME2", 2,
-        new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
+        new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 22 });
     pendingGames.put(p2.getId(), p2);
 
     PendingGame p3 = new PendingGame("GAME3", 3,
-        new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
+        new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 22 });
     pendingGames.put(p3.getId(), p3);
     pendingByUser = new HashMap<>();
   }

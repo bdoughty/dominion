@@ -20,5 +20,4 @@ public class Market extends AbstractAction {
   public String toString() {
     return "Market";
   }
-
 }

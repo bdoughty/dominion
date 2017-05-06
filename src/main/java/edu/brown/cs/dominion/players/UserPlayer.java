@@ -8,12 +8,15 @@ import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.games.UserGame;
 import edu.brown.cs.dominion.gameutil.NoActionsException;
 import edu.brown.cs.dominion.io.Websocket;
+import edu.brown.cs.dominion.io.send.Button;
 import edu.brown.cs.dominion.io.send.Callback;
 import edu.brown.cs.dominion.io.send.RequirePlayerAction;
 import org.eclipse.jetty.websocket.api.Session;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import static edu.brown.cs.dominion.io.send.MessageType.*;
 import static edu.brown.cs.dominion.players.PlayerWake.*;
@@ -23,6 +26,7 @@ import static edu.brown.cs.dominion.players.PlayerWake.*;
  */
 public class UserPlayer extends Player {
   private static Gson GSON = new Gson();
+  private List<String> userActions;
 
   private Websocket gameSocket;
   private User u;
@@ -31,6 +35,7 @@ public class UserPlayer extends Player {
     super();
     this.u = u;
     this.gameSocket = gameSocket;
+    userActions = new ArrayList<>();
   }
 
   public UserPlayer(User u, Websocket gameSocket, UserGame g) {
@@ -76,8 +81,8 @@ public class UserPlayer extends Player {
   @Override
   public synchronized int selectHand(List<Integer> cardIds, boolean
     cancelable, String name) {
-    sendPlayerAction(new RequirePlayerAction(this, SELECT_BOARD, new
-      Callback(ImmutableList.of(), cardIds, name, cancelable), true));
+    Finisher f = sendPlayerAction(new RequirePlayerAction(this, SELECT_BOARD,
+      new Callback(ImmutableList.of(), cardIds, name, cancelable), true));
     try {
       while (wakeType != SELECT_HAND) {
         wait();
@@ -86,6 +91,7 @@ public class UserPlayer extends Player {
         }
       }
       wakeType = NONE;
+      f.finish();
       return wakeData;
     } catch (InterruptedException ignored) { }
     return -2;
@@ -94,9 +100,8 @@ public class UserPlayer extends Player {
   @Override
   public synchronized int selectBoard(List<Integer> cardIds, boolean cancelable, String
     name) {
-    sendPlayerAction(new RequirePlayerAction(this, SELECT_BOARD, new Callback(
-      cardIds, ImmutableList.of(), name, cancelable
-    ), true));
+    Finisher f = sendPlayerAction(new RequirePlayerAction(this, SELECT_BOARD,
+      new Callback(cardIds, ImmutableList.of(), name, cancelable), true));
     try {
       while (wakeType != SELECT_BOARD) {
         wait();
@@ -105,13 +110,31 @@ public class UserPlayer extends Player {
         }
       }
       wakeType = NONE;
+      f.finish();
       return wakeData;
     } catch (InterruptedException ignored) { }
     return -2;
   }
 
   @Override
-  public String selectButtons(List<String> buttonNames, String name) {
+  public Button selectButtons(Button... buttons) {
+    Finisher f = sendPlayerAction(new RequirePlayerAction(this, PRESS_BUTTON,
+      Arrays.asList(buttons), true));
+    try {
+      synchronized (this) {
+        while (wakeType != PRESS_BUTTON) {
+          wait();
+        }
+        wakeType = NONE;
+        f.finish();
+      }
+      for(Button b : buttons) {
+        if (b.getId() == wakeData) {
+          return b;
+        }
+      }
+    } catch (InterruptedException ignored) {}
+    System.out.println("ERROR: button id is incorrect");
     return null;
   }
 
@@ -171,7 +194,6 @@ public class UserPlayer extends Player {
   public void endTurn() {
     super.endTurn();
     sendHand();
-    //TODO possibly send the turn here or something
   }
 
   public void resetTurnValues() {
@@ -241,6 +263,11 @@ public class UserPlayer extends Player {
     return main;
   }
 
+  @Override
+  public String getName() {
+    return u.getName();
+  }
+
   private void sendHand() {
     List<Integer> ints = new ArrayList<>();
     for(Card c : getHand()){
@@ -285,12 +312,16 @@ public class UserPlayer extends Player {
       gameSocket.send(u, BUYS, getBuys());
     }
   }
-  private void sendPlayerAction (RequirePlayerAction rpa) {
+  private Finisher sendPlayerAction (RequirePlayerAction rpa) {
     List<JsonObject> requireActions = new ArrayList<>();
     requireActions.add(rpa.toJson());
     if (u != null) {
-      gameSocket.send(u, PLAYER_ACTIONS, GSON.toJson(requireActions));
+      String s = GSON.toJson(requireActions);
+      userActions.add(s);
+      gameSocket.send(u, PLAYER_ACTIONS, s);
+      return () -> {userActions.remove(s);};
     }
+    return () -> {};
   }
 
   private void sendPhase(String phase) {
@@ -299,7 +330,7 @@ public class UserPlayer extends Player {
     }
   }
 
-  private void sendNotify(String s) {
+  public void sendNotify(String s) {
     gameSocket.send(u, NOTIFY, s);
   }
 
@@ -319,8 +350,16 @@ public class UserPlayer extends Player {
     gameSocket.send(s, DISCARD_SIZE, getDiscard().size());
     gameSocket.send(s, DECK_SIZE, getDeck().size());
     gameSocket.send(s, PHASE, isActionPhase() ? "action" : "buy");
+    userActions.forEach(a ->
+      gameSocket.send(s, PLAYER_ACTIONS, a)
+    );
     getUserGame().sendBoard(s);
     getUserGame().sendTurn(s);
   }
+}
+
+@FunctionalInterface
+interface Finisher{
+  void finish();
 }
 

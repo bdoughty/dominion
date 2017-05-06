@@ -49,6 +49,7 @@ public class RequirePlayerAction {
     JsonObject main = new JsonObject();
     main.addProperty("urgent", this.isUrgent());
     main.addProperty("select", c != null);
+    main.addProperty("cancel", c.isStoppable());
     main.add("handselect",
       GSON.toJsonTree(c != null ? c.getHandIds() : new ArrayList<>()));
     main.add("boardselect",

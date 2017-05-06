@@ -62,7 +62,6 @@ public class Game extends GameStub {
         System.out.println(tee.getMessage());
       }
     }
-    p.endTurn();
   }
 
   public Card buyCard(int buyId, int money) throws NoPileException, TooExpensiveException, EmptyPileException {
@@ -110,7 +109,7 @@ public class Game extends GameStub {
     }
   }
 
-  public void trash(Card c) {board.trashCard(c); }
+  public void trash(Card c) { board.trashCard(c); }
 
   public Card gain(int id) throws EmptyPileException, NoPileException {
     return board.gainCard(id);

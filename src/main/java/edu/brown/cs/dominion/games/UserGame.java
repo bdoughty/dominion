@@ -111,4 +111,8 @@ public class UserGame extends Game {
     handSize.addProperty("cards", p.getHand().size());
     sendAll(MessageType.HAND_NUM, GSON.toJson(handSize));
   }
+
+  public void sendServerMessage(String message){
+    gc.serverSend(message);
+  }
 }

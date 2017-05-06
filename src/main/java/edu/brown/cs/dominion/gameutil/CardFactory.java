@@ -6,7 +6,9 @@ import java.util.function.Supplier;
 
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.action.Adventurer;
+import edu.brown.cs.dominion.action.Bureaucrat;
 import edu.brown.cs.dominion.action.Cellar;
+import edu.brown.cs.dominion.action.Chancellor;
 import edu.brown.cs.dominion.action.Feast;
 import edu.brown.cs.dominion.action.Market;
 import edu.brown.cs.dominion.action.Militia;
@@ -48,8 +50,8 @@ public class CardFactory {
 //    this.cards.put(19, CouncilRoom::new);
 //    this.cards.put(20, Witch::new);
 //    this.cards.put(21, Adventurer::new);
-//    this.cards.put(22, Bureaucrat::new);
-//    this.cards.put(23, Chancellor::new);
+    this.cards.put(22, Bureaucrat::new);
+    this.cards.put(23, Chancellor::new);
 //    this.cards.put(24, Chapel::new);
 //    this.cards.put(25, Feast::new);
 //    this.cards.put(26, Moneylender::new);
