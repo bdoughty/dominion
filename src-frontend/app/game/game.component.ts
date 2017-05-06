@@ -55,8 +55,13 @@ export class GameComponent implements OnInit {
     this.timerState = 'end';
 
     if (this.game.isSelectable(card, false)) {
-      this.game.playerActionQueue.shift();
-      this._gameSocketService.send('select', JSON.stringify({inhand: false, loc: card.id}));
+      const playerAction = this.game.playerActionQueue.shift();
+      this._gameSocketService.send('select',
+        JSON.stringify({
+          inhand: false,
+          loc: card.id,
+          id: playerAction.id
+        }));
     } else {
       this._addToCart(card);
     }
@@ -64,9 +69,14 @@ export class GameComponent implements OnInit {
 
   public cardClickedHand(card: Card): void {
     if (this.game.isSelectable(card, true)) {
-      this.game.playerActionQueue.shift();
+      const playerAction = this.game.playerActionQueue.shift();
+
       this._gameSocketService.send('select',
-        JSON.stringify({inhand: true, loc: card.handPosition}));
+        JSON.stringify({
+          inhand: true,
+          loc: card.handPosition,
+          id: playerAction.id
+        }));
     } else {
       this._play(card);
     }
@@ -104,7 +114,8 @@ export class GameComponent implements OnInit {
   }
 
   public cancel() {
-    this._gameSocketService.send('cancel', '');
+    this._gameSocketService.send('cancel',
+      this.game.getCurrPlayerAction().id + '');
   }
 
 
@@ -233,7 +244,8 @@ export class GameComponent implements OnInit {
           playerAction.handselect,
           playerAction.boardselect,
           playerAction.buttons,
-          playerAction.cancel
+          playerAction.cancel,
+          playerAction.id
         ));
       });
     });
