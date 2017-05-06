@@ -2,9 +2,9 @@ package edu.brown.cs.dominion.neuralNetwork;
 
 public class FCLayer implements Layer{
   ActivationFunction af;
-  int inputSize;
-  int outputSize;
-  double[][] weights;
+  public int inputSize;
+  public int outputSize;
+  public double[][] weights;
   double[] inputs;
   double[] preActOuputDerivatives;
   double[] outputs;

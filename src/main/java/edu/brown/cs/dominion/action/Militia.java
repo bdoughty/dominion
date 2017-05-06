@@ -3,6 +3,7 @@ package edu.brown.cs.dominion.action;
 
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.players.Player;
+import edu.brown.cs.dominion.players.UserInteruptedException;
 import edu.brown.cs.dominion.players.UserPlayer;
 
 import java.util.stream.Collectors;
@@ -23,9 +24,17 @@ public class Militia extends AbstractAction {
         }
         new Thread(() -> {
           while (p.getHand().size() > 3) {
-            int discard = p.selectHand(p.getHand().stream().map(Card::getId)
-              .collect(Collectors.toList()), false, "militiadiscard");
-            p.discard(discard);
+            int discard = 0;
+            try {
+              discard = p.selectHand(p.getHand().stream().map(Card::getId)
+                .collect(Collectors.toList()), false, "militiadiscard");
+              p.discard(discard);
+            } catch (UserInteruptedException e) {
+              while(p.getHand().size() > 3){
+                p.discard(0);
+              }
+              return;
+            }
           }
         }).start();
       }

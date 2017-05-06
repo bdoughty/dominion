@@ -3,7 +3,7 @@ package edu.brown.cs.dominion.neuralNetwork;
 import java.util.Arrays;
 
 public class NeuralNetwork {
-  FCLayer[] layers;
+  public FCLayer[] layers;
   double[] lastOutput;
 
   public NeuralNetwork(int... layerSizes){

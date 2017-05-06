@@ -20,7 +20,7 @@ public class Workshop extends AbstractAction {
     } catch (UserInteruptedException e) {
       return;
     }
-    
+
     try {
       p.gain(p.getGame().gain(toGain), false, false);
     } catch (EmptyPileException | NoPileException e) {
