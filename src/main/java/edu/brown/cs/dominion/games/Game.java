@@ -1,18 +1,18 @@
 package edu.brown.cs.dominion.games;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.gameutil.Board;
 import edu.brown.cs.dominion.gameutil.EmptyPileException;
 import edu.brown.cs.dominion.gameutil.NoActionsException;
 import edu.brown.cs.dominion.gameutil.NoPileException;
 import edu.brown.cs.dominion.gameutil.NotActionException;
-import edu.brown.cs.dominion.players.Player;
 import edu.brown.cs.dominion.gameutil.TooExpensiveException;
-
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import edu.brown.cs.dominion.players.Player;
 
 /**
  * Created by henry on 4/2/2017.
@@ -30,12 +30,16 @@ public class Game extends GameStub {
   }
 
   public void play() {
-    while(true) {
+    while (true) {
       for (Player allPlayer : allPlayers) {
         playTurn(allPlayer);
-        if (board.gameHasEnded()) { break; }
+        if (board.gameHasEnded()) {
+          break;
+        }
       }
-      if(board.gameHasEnded()) { break; }
+      if (board.gameHasEnded()) {
+        break;
+      }
     }
     win();
   }
@@ -57,18 +61,20 @@ public class Game extends GameStub {
         Card c = buyCard(buyId, money);
         p.buyCard(c);
         money -= c.getCost();
-        //sendServerMessage(u.getName() + " bought " + c.toString() + ".");
-      } catch (TooExpensiveException | EmptyPileException | NoPileException tee) {
+        // sendServerMessage(u.getName() + " bought " + c.toString() + ".");
+      } catch (TooExpensiveException | EmptyPileException
+          | NoPileException tee) {
         System.out.println(tee.getMessage());
       }
     }
   }
 
-  public Card buyCard(int buyId, int money) throws NoPileException, TooExpensiveException, EmptyPileException {
+  public Card buyCard(int buyId, int money)
+      throws NoPileException, TooExpensiveException, EmptyPileException {
     return board.buyCard(buyId, money);
   }
 
-  public void win(){
+  public void win() {
     System.out.println("Game Over");
     // nothing is necessary
   }
@@ -81,27 +87,28 @@ public class Game extends GameStub {
     p.endTurn();
   }
 
-  public int getCurrentPlayerId(){
+  public int getCurrentPlayerId() {
     return currentPlayer.getId();
   }
 
   public void doActions(Player p) {
     int loc;
     System.out.println("new action loop");
-    while(-1 != (loc = p.playHandAction())){
+    while (-1 != (loc = p.playHandAction())) {
       System.out.println("played card " + loc);
       try {
         Card c = p.play(loc);
         c.play(p);
         // sendServerMessage(u.getName() + " played " + c.toString() + ".");
-      } catch (NoActionsException ignored) {}
-      catch (NotActionException e) {}
+      } catch (NoActionsException ignored) {
+      } catch (NotActionException e) {
+      }
       System.out.println("trying new action");
     }
     p.endActionPhase();
   }
 
-  public void othersDraw(Player curr ,int numCards) {
+  public void othersDraw(Player curr, int numCards) {
     for (Player p : allPlayers) {
       if (p != curr) {
         p.draw(numCards);
@@ -109,14 +116,16 @@ public class Game extends GameStub {
     }
   }
 
-  public void trash(Card c) { board.trashCard(c); }
+  public void trash(Card c) {
+    board.trashCard(c);
+  }
 
   public Card gain(int id) throws EmptyPileException, NoPileException {
     return board.gainCard(id);
   }
 
   public void othersGainCurse(Player curr) {
-    for (Player p :allPlayers) {
+    for (Player p : allPlayers) {
       if (p != curr) {
         try {
           p.gain(gain(6), false, false);
@@ -134,7 +143,8 @@ public class Game extends GameStub {
   }
 
   public void removeUser(Player p) {
-    //TODO end turn and whatnot
+    // TODO end turn and whatnot
     allPlayers.remove(p);
   }
+
 }

@@ -1,25 +1,41 @@
 package edu.brown.cs.dominion.players;
 
+import static edu.brown.cs.dominion.io.send.MessageType.ACTIONS;
+import static edu.brown.cs.dominion.io.send.MessageType.BUYS;
+import static edu.brown.cs.dominion.io.send.MessageType.DECK_SIZE;
+import static edu.brown.cs.dominion.io.send.MessageType.DISCARD_SIZE;
+import static edu.brown.cs.dominion.io.send.MessageType.GOLD;
+import static edu.brown.cs.dominion.io.send.MessageType.HAND;
+import static edu.brown.cs.dominion.io.send.MessageType.NOTIFY;
+import static edu.brown.cs.dominion.io.send.MessageType.PHASE;
+import static edu.brown.cs.dominion.io.send.MessageType.PLAYER_ACTIONS;
+import static edu.brown.cs.dominion.players.PlayerWake.BUY_CARDS;
+import static edu.brown.cs.dominion.players.PlayerWake.CANCEL;
+import static edu.brown.cs.dominion.players.PlayerWake.NONE;
+import static edu.brown.cs.dominion.players.PlayerWake.PLAY_ACTION;
+import static edu.brown.cs.dominion.players.PlayerWake.PRESS_BUTTON;
+import static edu.brown.cs.dominion.players.PlayerWake.SELECT_BOARD;
+import static edu.brown.cs.dominion.players.PlayerWake.SELECT_HAND;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.eclipse.jetty.websocket.api.Session;
+
 import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.games.UserGame;
+import edu.brown.cs.dominion.gameutil.EmptyDeckException;
 import edu.brown.cs.dominion.gameutil.NoActionsException;
 import edu.brown.cs.dominion.io.Websocket;
 import edu.brown.cs.dominion.io.send.Button;
 import edu.brown.cs.dominion.io.send.Callback;
 import edu.brown.cs.dominion.io.send.RequirePlayerAction;
-import org.eclipse.jetty.websocket.api.Session;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import static edu.brown.cs.dominion.io.send.MessageType.*;
-import static edu.brown.cs.dominion.players.PlayerWake.*;
 
 /**
  * Created by henry on 5/5/2017.
@@ -44,12 +60,12 @@ public class UserPlayer extends Player {
     this.gameSocket = gameSocket;
   }
 
-  //TODO perhaps this is not a great idea
-  public UserGame getUserGame(){
+  // TODO perhaps this is not a great idea
+  public UserGame getUserGame() {
     return (UserGame) getGame();
   }
 
-  //TODO should these be public ??? probs not
+  // TODO should these be public ??? probs not
   public PlayerWake wakeType = NONE;
   public int wakeData = 0;
   public List<Integer> wakeDataList = ImmutableList.of();
@@ -62,7 +78,8 @@ public class UserPlayer extends Player {
       }
       wakeType = NONE;
       return wakeData;
-    } catch (InterruptedException ignored) { }
+    } catch (InterruptedException ignored) {
+    }
     throw new RuntimeException("faulty play action");
   }
 
@@ -74,52 +91,55 @@ public class UserPlayer extends Player {
       }
       wakeType = NONE;
       return wakeDataList;
-    } catch (InterruptedException ignored) { }
+    } catch (InterruptedException ignored) {
+    }
     throw new RuntimeException("faulty buy action");
   }
 
   @Override
-  public synchronized int selectHand(List<Integer> cardIds, boolean
-    cancelable, String name) {
+  public synchronized int selectHand(List<Integer> cardIds, boolean cancelable,
+      String name) {
     Finisher f = sendPlayerAction(new RequirePlayerAction(this, SELECT_BOARD,
-      new Callback(ImmutableList.of(), cardIds, name, cancelable), true));
+        new Callback(ImmutableList.of(), cardIds, name, cancelable), true));
     try {
       while (wakeType != SELECT_HAND) {
         wait();
-        if(wakeType == CANCEL && cancelable) {
+        if (wakeType == CANCEL && cancelable) {
           return -1;
         }
       }
       wakeType = NONE;
       f.finish();
       return wakeData;
-    } catch (InterruptedException ignored) { }
+    } catch (InterruptedException ignored) {
+    }
     return -2;
   }
 
   @Override
-  public synchronized int selectBoard(List<Integer> cardIds, boolean cancelable, String
-    name) {
+  public synchronized int selectBoard(List<Integer> cardIds, boolean cancelable,
+      String name) {
     Finisher f = sendPlayerAction(new RequirePlayerAction(this, SELECT_BOARD,
-      new Callback(cardIds, ImmutableList.of(), name, cancelable), true));
+        new Callback(cardIds, ImmutableList.of(), name, cancelable), true));
     try {
       while (wakeType != SELECT_BOARD) {
         wait();
-        if(wakeType == CANCEL && cancelable) {
+        if (wakeType == CANCEL && cancelable) {
           return -1;
         }
       }
       wakeType = NONE;
       f.finish();
       return wakeData;
-    } catch (InterruptedException ignored) { }
+    } catch (InterruptedException ignored) {
+    }
     return -2;
   }
 
   @Override
   public Button selectButtons(Button... buttons) {
     Finisher f = sendPlayerAction(new RequirePlayerAction(this, PRESS_BUTTON,
-      Arrays.asList(buttons), true));
+        Arrays.asList(buttons), true));
     try {
       synchronized (this) {
         while (wakeType != PRESS_BUTTON) {
@@ -128,23 +148,29 @@ public class UserPlayer extends Player {
         wakeType = NONE;
         f.finish();
       }
-      for(Button b : buttons) {
+      for (Button b : buttons) {
         if (b.getId() == wakeData) {
           return b;
         }
       }
-    } catch (InterruptedException ignored) {}
+    } catch (InterruptedException ignored) {
+    }
     System.out.println("ERROR: button id is incorrect");
     return null;
   }
 
-
-  // ========           OVERRIDE WITH SEND TO THE CLIENT     ========== //
+  // ======== OVERRIDE WITH SEND TO THE CLIENT ========== //
 
   @Override
   public void draw(int numCards) {
     super.draw(numCards);
     sendHand();
+  }
+
+  public Card drawOne() throws EmptyDeckException {
+    Card c = super.drawOne();
+    sendHand();
+    return c;
   }
 
   public void adventurer() {
@@ -241,9 +267,8 @@ public class UserPlayer extends Player {
     sendMoney();
   }
 
-
   @Override
-  public void endActionPhase(){
+  public void endActionPhase() {
     super.endActionPhase();
     sendHand();
     sendPhase("buy");
@@ -270,7 +295,7 @@ public class UserPlayer extends Player {
 
   private void sendHand() {
     List<Integer> ints = new ArrayList<>();
-    for(Card c : getHand()){
+    for (Card c : getHand()) {
       ints.add(c.getId());
     }
     if (u != null) {
@@ -294,34 +319,38 @@ public class UserPlayer extends Player {
     }
   }
 
-  private void sendMoney (){
+  private void sendMoney() {
     if (u != null) {
       System.out.println("$: " + getMoney());
       gameSocket.send(u, GOLD, getMoney());
     }
   }
 
-  private void sendActions (){
+  private void sendActions() {
     if (u != null) {
       gameSocket.send(u, ACTIONS, getActions());
     }
   }
 
-  private void sendBuys (){
+  private void sendBuys() {
     if (u != null) {
       gameSocket.send(u, BUYS, getBuys());
     }
   }
-  private Finisher sendPlayerAction (RequirePlayerAction rpa) {
+
+  private Finisher sendPlayerAction(RequirePlayerAction rpa) {
     List<JsonObject> requireActions = new ArrayList<>();
     requireActions.add(rpa.toJson());
     if (u != null) {
       String s = GSON.toJson(requireActions);
       userActions.add(s);
       gameSocket.send(u, PLAYER_ACTIONS, s);
-      return () -> {userActions.remove(s);};
+      return () -> {
+        userActions.remove(s);
+      };
     }
-    return () -> {};
+    return () -> {
+    };
   }
 
   private void sendPhase(String phase) {
@@ -338,9 +367,9 @@ public class UserPlayer extends Player {
     return u;
   }
 
-  public void sendAll (Session s) {
+  public void sendAll(Session s) {
     List<Integer> ints = new ArrayList<>();
-    for(Card c : getHand()){
+    for (Card c : getHand()) {
       ints.add(c.getId());
     }
     gameSocket.send(s, HAND, GSON.toJson(ints));
@@ -350,16 +379,13 @@ public class UserPlayer extends Player {
     gameSocket.send(s, DISCARD_SIZE, getDiscard().size());
     gameSocket.send(s, DECK_SIZE, getDeck().size());
     gameSocket.send(s, PHASE, isActionPhase() ? "action" : "buy");
-    userActions.forEach(a ->
-      gameSocket.send(s, PLAYER_ACTIONS, a)
-    );
+    userActions.forEach(a -> gameSocket.send(s, PLAYER_ACTIONS, a));
     getUserGame().sendBoard(s);
     getUserGame().sendTurn(s);
   }
 }
 
 @FunctionalInterface
-interface Finisher{
+interface Finisher {
   void finish();
 }
-
