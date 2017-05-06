@@ -75,11 +75,15 @@ public class UserPlayer extends Player {
 
   @Override
   public synchronized int selectHand(List<Integer> cardIds, boolean
-    cancelable, String
-    name) {
+    cancelable, String name) {
+    sendPlayerAction(new RequirePlayerAction(this, SELECT_BOARD, new
+      Callback(ImmutableList.of(), cardIds, name, cancelable), true));
     try {
-      while (wakeType != PLAY_ACTION) {
+      while (wakeType != SELECT_HAND) {
         wait();
+        if(wakeType == CANCEL && cancelable) {
+          return -1;
+        }
       }
       wakeType = NONE;
       return wakeData;
@@ -96,6 +100,9 @@ public class UserPlayer extends Player {
     try {
       while (wakeType != SELECT_BOARD) {
         wait();
+        if(wakeType == CANCEL && cancelable) {
+          return -1;
+        }
       }
       wakeType = NONE;
       return wakeData;
