@@ -2,6 +2,7 @@ import {Routes} from "@angular/router";
 import {LobbyComponent} from "./lobby/lobby.component";
 import {GameComponent} from "./game/game.component";
 import {CreationComponent} from "./creation-page/creation-page.component";
+import {NamePageComponent} from "./name-page/name-page.component";
 
 export const appRoutes: Routes = [
   {
@@ -17,7 +18,7 @@ export const appRoutes: Routes = [
     component: CreationComponent
   },
   { path: '',
-    redirectTo: '/lobby',
+    component: NamePageComponent,
     pathMatch: 'full'
   },
   {
