@@ -63,6 +63,24 @@
   //background: url('../../assets/parchment-002.jpg') center center;
   background: url('../../assets/bg_blur.png') center center;
   background-size: cover;
+  position: relative;
+
+  .timer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 8px;
+    z-index: 12;
+    background: #bed8f5;
+
+    .timer-inner {
+      height: 100%;
+      width: 30%;
+      background: #609ad2;
+    }
+  }
+
 
   #board {
     flex-grow: 1;
