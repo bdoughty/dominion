@@ -12,7 +12,7 @@ public class Workshop extends AbstractAction {
 
   @Override
   public void play(Player p) {
-    int toGain = p.selectBoard(p.getGame().getBoard().getCardUnderValue(4),
+    int toGain = p.selectBoard(p.getGame().getBoard().getCardsUnderValue(4),
       false, "workshop");
     try {
       p.gain(p.getGame().gain(toGain), false, false);
