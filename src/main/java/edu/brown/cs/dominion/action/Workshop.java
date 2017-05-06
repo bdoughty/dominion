@@ -15,11 +15,12 @@ public class Workshop extends AbstractAction {
   public void play(Player p) {
     int toGain = 0;
     try {
-      toGain = p.selectBoard(p.getGame().getBoard().getCardUnderValue(4),
+      toGain = p.selectBoard(p.getGame().getBoard().getCardsUnderValue(4),
         false, "workshop");
     } catch (UserInteruptedException e) {
       return;
     }
+    
     try {
       p.gain(p.getGame().gain(toGain), false, false);
     } catch (EmptyPileException | NoPileException e) {

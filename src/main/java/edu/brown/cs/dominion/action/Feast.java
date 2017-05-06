@@ -14,7 +14,7 @@ public class Feast extends AbstractAction {
   @Override
   public void play(Player p) {
     p.trashFeast();
-    int selected = p.selectBoard(p.getGame().getBoard().getCardUnderValue(5)
+    int selected = p.selectBoard(p.getGame().getBoard().getCardsUnderValue(5)
       , false, "feast");
     try {
       p.gain(p.getGame().gain(selected), false, false);

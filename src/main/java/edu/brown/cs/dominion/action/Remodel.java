@@ -26,8 +26,7 @@ public class Remodel extends AbstractAction {
       return;
     }
     Card c = p.trash(toTrash);
-    List<Integer> boardIds = p.getGame().getBoard()
-      .getCardUnderValue(c.getCost() + 2);
+    List<Integer> boardIds = p.getGame().getBoard().getCardUnderValue(c.getCost() + 2);
     int toGain = 0;
     try {
       toGain = p.selectBoard(boardIds, false, "remodel board");
