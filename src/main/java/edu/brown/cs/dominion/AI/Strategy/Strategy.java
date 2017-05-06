@@ -12,9 +12,9 @@ public interface Strategy {
 
   List<Integer> getBuyPreferences();
 
-  int playAction(Game g, Player who);
+  int playAction(Player who);
 
-  default int discard(Game g, Player who) {
+  default int discard(Player who) {
     List<Integer> hand = who.getHand().stream().map((card) -> card.getId())
         .collect(Collectors.toList());
     if (hand.size() > 0) {
@@ -28,8 +28,8 @@ public interface Strategy {
     return -1;
   }
 
-  default int buy(int money, Game g, Player who) {
-    List<Integer> buyable = Strategy.buyable(money, g);
+  default int buy(int money, Player who) {
+    List<Integer> buyable = Strategy.buyable(money, who.getGame());
     if (buyable.size() > 0) {
       return Collections.min(buyable,
           (one, two) -> Integer.compare(getBuyPreferences().indexOf(one),
