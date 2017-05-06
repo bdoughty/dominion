@@ -44,7 +44,8 @@ export class GameComponent implements OnInit {
   }
 
   public cardClickedPile(card: Card): void {
-    console.log(this.game);
+    // console.log(this.game);
+    console.log(this.game.getCurrPlayerAction());
 
     if (this.game.isSelectable(card, false)) {
       this.game.playerActionQueue.shift();
@@ -98,7 +99,6 @@ export class GameComponent implements OnInit {
   public cancel() {
     this._gameSocketService.send('cancel', '');
   }
-
 
 
   /* ---------------------------- PRIVATE METHODS --------------------------- */
@@ -219,7 +219,8 @@ export class GameComponent implements OnInit {
           playerAction.select,
           playerAction.handselect,
           playerAction.boardselect,
-          playerAction.buttons
+          playerAction.buttons,
+          playerAction.cancel
         ));
       });
     });

@@ -5,6 +5,7 @@ export class PlayerAction {
     public requiresSelect: boolean,
     public handSelect: number[],
     public boardSelect: number[],
-    public buttons: Button[]
+    public buttons: Button[],
+    public cancel: boolean,
   ) {}
 }
