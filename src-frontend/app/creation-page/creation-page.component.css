@@ -77,12 +77,14 @@ a.return .text:hover {
 .pane {
   position: relative;
   display: inline-block;
+  padding: 5px;
 }
 
 .pane-content {
   height: 100%;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.24);
   background: #FAFAFA;
+  position: relative;
 }
 
 #header {
@@ -119,9 +121,29 @@ a.return .text:hover {
 }
 
 #chat {
-  margin-left: 10px;
-  margin-right: 10px;
   width: 100%;
+}
+
+#AIs {
+  width: 25em;
+}
+
+#AiList {
+  align-items: center;
+  position: relative;
+}
+
+.AiPlayer {
+  margin: 5px;
+  width: 100%;
+  font-size: 3vmin;
+}
+
+#addAiButton {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  left: 3px;
 }
 
 .pane#chat .pane-content {
@@ -196,10 +218,39 @@ a.return .text:hover {
 .wide-button {
   width: 100%;
   height: 100%;
+}
+
+#submitButton {
   font-size: 5vmin;
 }
 
 button:focus {
-  border: none;
-  /*alskjl*/
+  outline: none;
+}
+
+select:focus {
+  outline: none;
+}
+
+.clear-button-container {
+  background-color: firebrick;
+}
+
+.clearing-button-container {
+  width: 100%;
+  background-color: firebrick;
+}
+
+.clearing {
+  width: 100%;
+  height: 100%;
+  font-size: 2vmin;
+}
+
+.AiPlayer {
+  width: 100%;
+}
+
+button {
+  text-transform: none !important;
 }

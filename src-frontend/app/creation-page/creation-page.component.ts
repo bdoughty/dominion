@@ -11,6 +11,8 @@ import {ChatSocketService} from "../shared/chatsocket.service";
   private basicPreset = new Set([7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
   private moneyPreset = new Set([21, 22, 23, 24, 25, 18, 8, 10, 26, 27]);
   private trashPreset = new Set([24, 14, 16, 15, 25, 26, 12, 10, 17, 8]);
+  private desiredAis = [];
+  private AiTypes = ["DumbStrategy", "BigMoneyBigVictoryPoints", "ChapelHeavy", "AttackDefense"];
 
   constructor(public _chatSocketService: ChatSocketService) {
     _chatSocketService.addListener('redirect', (messageString) => {
@@ -58,10 +60,8 @@ import {ChatSocketService} from "../shared/chatsocket.service";
   }
 
   highlightPreset(toHighlight: Set<number>) {
-    console.log("toHighlight: " + toHighlight);
     this.selected.clear();
     this.allCards.forEach((i) => {
-      console.log(i);
       if(toHighlight.has(i)) {
         this.selected.add(i);
         document.getElementById("card" + i).style.border = "3px solid yellow";
@@ -101,6 +101,31 @@ import {ChatSocketService} from "../shared/chatsocket.service";
   trash() {
     this.highlightPreset(this.trashPreset);
   }
-}
 
+  clear() {
+    this.highlightPreset(new Set());
+  }
+
+  addAi() {
+    if(this.desiredAis.length < this.getNumPlayers() - 1) {
+      this.desiredAis.push("DumbStrategy");
+    }
+  }
+
+  removeAi(pos: number) {
+    if(pos >= 0 && pos < this.desiredAis.length) {
+      this.desiredAis.splice(pos, 1);
+    }
+  }
+
+  getNumPlayers() {
+    return parseInt((<HTMLInputElement>document.getElementById("numPlayers")).value);
+  }
+
+  numChange() {
+    while(this.getNumPlayers() - 1 < this.desiredAis.length) {
+      this.desiredAis.pop();
+    }
+  }
+}
 
