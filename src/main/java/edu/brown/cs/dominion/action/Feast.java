@@ -1,9 +1,9 @@
 package edu.brown.cs.dominion.action;
 
-
 import edu.brown.cs.dominion.gameutil.EmptyPileException;
 import edu.brown.cs.dominion.gameutil.NoPileException;
 import edu.brown.cs.dominion.players.Player;
+import edu.brown.cs.dominion.players.UserInteruptedException;
 
 public class Feast extends AbstractAction {
 
@@ -14,12 +14,12 @@ public class Feast extends AbstractAction {
   @Override
   public void play(Player p) {
     p.trashFeast();
-    int selected = p.selectBoard(p.getGame().getBoard().getCardsUnderValue(5)
-      , false, "feast");
     try {
+      int selected = p.selectBoard(p.getGame().getBoard().getCardsUnderValue(5),
+          false, "feast");
       p.gain(p.getGame().gain(selected), false, false);
-    } catch (EmptyPileException | NoPileException epe) {
-      System.out.println(epe.getMessage());
+    } catch (EmptyPileException | NoPileException | UserInteruptedException e) {
+      System.out.println(e.getMessage());
     }
   }
 

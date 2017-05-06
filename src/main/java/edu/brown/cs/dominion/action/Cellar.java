@@ -4,6 +4,7 @@ import java.util.stream.Collectors;
 
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.players.Player;
+import edu.brown.cs.dominion.players.UserInteruptedException;
 
 public class Cellar extends AbstractAction {
 
@@ -17,12 +18,16 @@ public class Cellar extends AbstractAction {
     int cardsDiscarded = 0;
     int discard = 0;
     while (discard != -1) {
-      discard = p.selectHand(
-          p.getHand().stream().map(Card::getId).collect(Collectors.toList()),
-          true, "cellardiscard");
-      if (discard != -1) {
-        p.discard(discard);
-        cardsDiscarded++;
+      try {
+        discard = p.selectHand(
+            p.getHand().stream().map(Card::getId).collect(Collectors.toList()),
+            true, "cellardiscard");
+        if (discard != -1) {
+          p.discard(discard);
+          cardsDiscarded++;
+        }
+      } catch (UserInteruptedException uie) {
+        break;
       }
     }
     p.draw(cardsDiscarded);
