@@ -1,3 +1,4 @@
+package edu.brown.cs.dominion.neuralNetwork;
 
 public interface Layer {
   NDArray calc(NDArray input);

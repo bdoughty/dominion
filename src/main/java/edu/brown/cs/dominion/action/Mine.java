@@ -8,6 +8,7 @@ import edu.brown.cs.dominion.gameutil.EmptyPileException;
 import edu.brown.cs.dominion.gameutil.NoPileException;
 import edu.brown.cs.dominion.money.AbstractMoney;
 import edu.brown.cs.dominion.players.Player;
+import edu.brown.cs.dominion.players.UserInteruptedException;
 
 public class Mine extends AbstractAction {
 
@@ -20,11 +21,22 @@ public class Mine extends AbstractAction {
     List<Integer> handIds = p.getHand().stream()
         .filter(c -> c instanceof AbstractMoney).map(Card::getId)
         .collect(Collectors.toList());
-    int toTrash = p.selectHand(handIds, false, "mine trash");
+    int toTrash = 0;
+    try {
+      toTrash = p.selectHand(handIds, false, "mine trash");
+    } catch (UserInteruptedException e) {
+      return;
+    }
     Card c = p.trash(toTrash);
     List<Integer> boardIds = p.getGame().getBoard()
         .getMoneyUnderValue(c.getCost() + 3);
-    int toGain = p.selectBoard(boardIds, false, "mine board");
+    int toGain = 0;
+    try {
+      toGain = p.selectBoard(boardIds, false, "mine board");
+    } catch (UserInteruptedException e) {
+      p.gain(c, true, false);
+      return;
+    }
     try {
       p.gain(p.getGame().gain(toGain), true, false);
     } catch (EmptyPileException | NoPileException ignored) {

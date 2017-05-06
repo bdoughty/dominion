@@ -1,23 +1,25 @@
+package edu.brown.cs.dominion.neuralNetwork;
+
 import java.util.Arrays;
 
 public class NeuralNetwork {
-  FCLayer[] layers;
+  public FCLayer[] layers;
   double[] lastOutput;
-  
+
   public NeuralNetwork(int... layerSizes){
     layers = new FCLayer[layerSizes.length - 1];
     for(int i = 0; i < layers.length - 1; i++){
       layers[i] = new FCLayer(
-          layerSizes[i], 
-          layerSizes[i + 1], 
+          layerSizes[i],
+          layerSizes[i + 1],
           ActivationFunction.TANH);
     }
     layers[layers.length - 1] = new FCLayer(
-        layerSizes[layers.length - 1], 
-        layerSizes[layers.length], 
+        layerSizes[layers.length - 1],
+        layerSizes[layers.length],
         ActivationFunction.LINEAR);
   }
-  
+
   public double[] run(double[] input) {
     NDArray data = new NDArray(input);
     for (FCLayer l : layers) {
@@ -26,13 +28,13 @@ public class NeuralNetwork {
     lastOutput = data.toDoubleArray();
     return data.toDoubleArray();
   }
-  
+
   public double[] runPrint(double[] input) {
     double[] data = run(input);
     System.out.println(Arrays.toString(data));
     return data;
   }
-  
+
   public void backprop(double[] result, double learningRate) {
     double[] temp = diff(result, lastOutput);
     double diffMag = mag(temp);
@@ -54,7 +56,7 @@ public class NeuralNetwork {
       }
     }
   }
-  
+
   private double[] clone(double[] a){
     double[] b = new double[a.length];
     for(int i = 0;i < a.length;i++){
@@ -62,7 +64,7 @@ public class NeuralNetwork {
     }
     return b;
   }
-  
+
   private double[] diff(double[] a, double[] b){
     double[] c = new double[a.length];
     for(int i = 0;i < a.length;i++){
@@ -70,7 +72,7 @@ public class NeuralNetwork {
     }
     return c;
   }
-  
+
   private double mag(double[] a){
     double b = 0;
     for(int i = 0; i < a.length;i++){

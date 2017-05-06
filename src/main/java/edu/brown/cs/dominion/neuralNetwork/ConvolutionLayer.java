@@ -1,5 +1,6 @@
-import java.awt.event.WindowEvent;
+package edu.brown.cs.dominion.neuralNetwork;
 
+@Deprecated
 public class ConvolutionLayer implements Layer{
   NDArray weights;
   int cx;
@@ -8,12 +9,12 @@ public class ConvolutionLayer implements Layer{
   @Override
   public NDArray calc(NDArray input) {
     assert input.getDimension() == weights.getDimension();
-    
+
     NDArray output = new NDArray(input.getDimensions());
     input.forEach(loc -> {
        output.set(input.get(loc), loc);
     });
-    
+
     return output;
   }
 
@@ -32,7 +33,7 @@ public class ConvolutionLayer implements Layer{
   @Override
   public void updateWeights(double derivativeMag, double learningRate) {
     // TODO Auto-generated method stub
-    
+
   }
 
 }

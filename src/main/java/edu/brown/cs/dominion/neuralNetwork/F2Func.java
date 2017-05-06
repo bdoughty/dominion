@@ -1,3 +1,4 @@
+package edu.brown.cs.dominion.neuralNetwork;
 
 @FunctionalInterface
 public interface F2Func {

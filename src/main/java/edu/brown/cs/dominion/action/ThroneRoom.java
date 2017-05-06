@@ -7,6 +7,7 @@ import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.gameutil.NoActionsException;
 import edu.brown.cs.dominion.gameutil.NotActionException;
 import edu.brown.cs.dominion.players.Player;
+import edu.brown.cs.dominion.players.UserInteruptedException;
 
 public class ThroneRoom extends AbstractAction {
 
@@ -19,7 +20,12 @@ public class ThroneRoom extends AbstractAction {
     List<Integer> handIds = p.getHand().stream()
         .filter(c -> c instanceof AbstractAction).map(Card::getId)
         .collect(Collectors.toList());
-    int toPlay = p.selectHand(handIds, false, "throne room play");
+    int toPlay = 0;
+    try {
+      toPlay = p.selectHand(handIds, false, "throne room play");
+    } catch (UserInteruptedException e) {
+      return;
+    }
     p.incrementActions();
     Card c;
     try {

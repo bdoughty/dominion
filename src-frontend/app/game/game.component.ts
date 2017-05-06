@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {UserIdService} from "../shared/user-id.service";
 import {Chat} from "../chat/chat.model";
 import {Player} from "./models/player.model";
 import {ClientGame} from "./models/client-game.model";
@@ -7,7 +6,8 @@ import {GameSocketService} from "../shared/gamesocket.service";
 import {Card} from "./card/card.model";
 import {trigger, state, style, animate, transition, keyframes} from "@angular/animations";
 import {PlayerAction} from "./models/player-action.model";
-import {Button} from "./models/button-interface";
+
+const TURN_TIME = 60000; // ms
 
 @Component({
   selector: 'dmn-game',
@@ -26,6 +26,11 @@ import {Button} from "./models/button-interface";
           style({width: '0', offset: 0.8})
         ]))
       ])
+    ]),
+    trigger('timerState', [
+      state('start', style({width: '100%'})),
+      state('end', style({width: '0%'})),
+      transition('start => end', animate(TURN_TIME + 'ms linear'))
     ])
   ]
 })
@@ -34,6 +39,7 @@ export class GameComponent implements OnInit {
   public game: ClientGame;
   public gameChat = new Chat();
   public notificationText: string = "";
+  public timerState = 'start';
 
   constructor(
     private _gameSocketService: GameSocketService
@@ -46,6 +52,7 @@ export class GameComponent implements OnInit {
   public cardClickedPile(card: Card): void {
     // console.log(this.game);
     console.log(this.game.getCurrPlayerAction());
+    this.timerState = 'end';
 
     if (this.game.isSelectable(card, false)) {
       this.game.playerActionQueue.shift();
@@ -202,6 +209,12 @@ export class GameComponent implements OnInit {
 
     this._gameSocketService.addListener('turn', (message) => {
       this.game.setTurn(parseInt(message));
+      this.timerState = 'start';
+      setTimeout(() => { // Wait 1 tick to restart timer for 1 player game.
+        if (this.game.isOwnTurn()) {
+          this.timerState = 'end';
+        }
+      }, 0);
     });
 
     this._gameSocketService.addListener('board', (message) => {

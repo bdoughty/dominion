@@ -17,6 +17,8 @@ import {GameSocketService} from "./shared/gamesocket.service";
 import {CardComponent} from "./game/card/card.component";
 import {NotificationComponent} from "./shared/notification/notification.component";
 import {FillPipe} from "./shared/fill.pipe";
+import {NamePageComponent} from "./name-page/name-page.component";
+import {NameSocketService} from "./shared/namesocket.service";
 
 @NgModule({
   declarations: [
@@ -27,6 +29,8 @@ import {FillPipe} from "./shared/fill.pipe";
     GameComponent,
     LobbyComponent,
     CreationComponent,
+
+    NamePageComponent,
 
     ChatComponent,
     CardComponent,
@@ -44,7 +48,8 @@ import {FillPipe} from "./shared/fill.pipe";
   providers: [
     UserIdService,
     ChatSocketService,
-    GameSocketService
+    GameSocketService,
+    NameSocketService
     // SocketService
   ],
   bootstrap: [AppComponent]

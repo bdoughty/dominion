@@ -1,3 +1,7 @@
+import edu.brown.cs.dominion.neuralNetwork.ActivationFunction;
+import edu.brown.cs.dominion.neuralNetwork.FCLayer;
+import edu.brown.cs.dominion.neuralNetwork.NeuralNetwork;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,7 +26,7 @@ public class NeuralNetworkIO {
       bw.close();
     } catch (IOException e) { e.printStackTrace(); }
   }
-  
+
   private static void writeLayer(BufferedWriter bw, FCLayer l) throws IOException {
     for(int input = 0;input < l.inputSize + 1;input++){
       for(int output = 0;output < l.outputSize;output++){
@@ -32,7 +36,7 @@ public class NeuralNetworkIO {
       bw.write("\n");
     }
   }
-  
+
   public static NeuralNetwork load(String filename) {
     try {
       Scanner s = new Scanner(new File(filename));
@@ -41,20 +45,20 @@ public class NeuralNetworkIO {
       for(int i = 0;i < Ssizes.length;i++){
         sizes[i] = Integer.parseInt(Ssizes[i]);
       }
-      
+
       NeuralNetwork nn = new NeuralNetwork(sizes);
       for(int i = 0;i < Ssizes.length - 2;i++){
         nn.layers[i] = loadLayer(s, sizes[i], sizes[i+1], ActivationFunction.RELU);
       }
       nn.layers[sizes.length - 2] = loadLayer(s, sizes[sizes.length - 2], sizes[sizes.length - 1], ActivationFunction.LINEAR);
-      
+
       System.out.println(Arrays.toString(sizes));
-      
+
       return nn;
     } catch (FileNotFoundException e) { e.printStackTrace(); }
     return null;
   }
-  
+
   private static FCLayer loadLayer(Scanner s, int is, int os, ActivationFunction af){
     FCLayer l = new FCLayer(is, os, af);
     for(int input = 0;input < l.inputSize + 1;input++){
