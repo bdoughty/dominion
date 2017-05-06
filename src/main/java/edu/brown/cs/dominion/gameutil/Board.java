@@ -134,7 +134,7 @@ public class Board {
     return cards;
   }
 
-  public List<Integer> getCardUnderValue(int cost) {
+  public List<Integer> getCardsUnderValue(int cost) {
     List<Integer> cards = new LinkedList<>();
 
     for (Pile p : piles.values()) {
