@@ -4,6 +4,7 @@ import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.gameutil.EmptyDeckException;
 import edu.brown.cs.dominion.io.send.Button;
 import edu.brown.cs.dominion.players.Player;
+import edu.brown.cs.dominion.players.UserInteruptedException;
 
 public class Library extends AbstractAction {
 
@@ -22,7 +23,8 @@ public class Library extends AbstractAction {
           p.discard(p.getHand().size() - 1);
         });
         p.selectButtons(b1, b2).pressed();
-      } catch (EmptyDeckException ede) {
+      } catch (EmptyDeckException | UserInteruptedException e) {
+        System.out.println(e.getMessage());
         break;
       }
     }
