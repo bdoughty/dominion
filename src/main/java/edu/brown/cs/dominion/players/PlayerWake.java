@@ -6,9 +6,8 @@ package edu.brown.cs.dominion.players;
 public enum PlayerWake {
   PLAY_ACTION,
   BUY_CARDS,
-  SELECT_HAND,
-  SELECT_BOARD,
-  PRESS_BUTTON,
+  REQUEST_RESPONSE,
   NONE,
-  CANCEL;
+  CANCEL,
+  LEAVE;
 }

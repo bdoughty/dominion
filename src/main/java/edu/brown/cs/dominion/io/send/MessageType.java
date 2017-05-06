@@ -31,10 +31,11 @@ public enum MessageType {
   DISCARD_SIZE ("discardsize"),
   BOARD ("board"),
   PHASE ("phase"),
-  TURN("turn"),
-  WINNER("winner"),
-  VICTORY_POINTS("victorypoints"),
-  HAND_NUM("handcardnum");
+  TURN ("turn"),
+  WINNER ("winner"),
+  VICTORY_POINTS ("victorypoints"),
+  HAND_NUM ("handcardnum"),
+  CHANGE_NAME ("changename");
 
 
   private final String name;

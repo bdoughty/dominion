@@ -29,7 +29,7 @@ public class HomeWebsocket implements SocketServer, UserMessageListener {
 
   @Override
   public void newUser(Websocket ws, User user) {
-    //NOTHING
+    ws.send(user, REDIRECT, "name");
   }
 
   @Override

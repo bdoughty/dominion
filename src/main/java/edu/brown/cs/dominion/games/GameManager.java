@@ -86,11 +86,12 @@ public class GameManager implements SocketServer {
     }
   }
 
-  private void selection(User u, boolean inHand, int location) {
+  private void selection(User u, boolean inHand, int location, int id) {
     UserPlayer p = userPlayers.get(u);
     synchronized (p) {
       p.wakeData = location;
-      p.wakeType = inHand ? PlayerWake.SELECT_HAND : PlayerWake.SELECT_BOARD;
+      p.wakeRequestID = id;
+      p.wakeType = PlayerWake.REQUEST_RESPONSE;
       p.notifyAll();
     }
   }
@@ -114,7 +115,7 @@ public class GameManager implements SocketServer {
     UserPlayer p = userPlayers.get(u);
     synchronized (p) {
       p.wakeData = id;
-      p.wakeType = PlayerWake.PRESS_BUTTON;
+      p.wakeType = PlayerWake.REQUEST_RESPONSE;
       p.notifyAll();
     }
   }
@@ -130,7 +131,7 @@ public class GameManager implements SocketServer {
 
   @Override
   public void newUser(Websocket ws, User user) {
-    // redirect??
+    ws.send(user, REDIRECT, "name");
   }
 
   @Override
@@ -164,8 +165,9 @@ public class GameManager implements SocketServer {
     ws.putCommand(SELECTION, (w, u, m) -> {
       JsonObject data = PARSE.parse(m).getAsJsonObject();
       boolean inHand = data.get("inhand").getAsBoolean();
+      int id = data.get("id").getAsInt();
       int location = data.get("loc").getAsInt();
-      selection(u, inHand, location);
+      selection(u, inHand, location, id);
     });
 
     ws.putCommand(CANCEL_SELECT, (w, u, m) -> {

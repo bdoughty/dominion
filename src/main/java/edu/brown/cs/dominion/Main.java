@@ -15,6 +15,7 @@ import java.nio.file.Paths;
 
 import edu.brown.cs.dominion.games.GameManager;
 import edu.brown.cs.dominion.io.HomeWebsocket;
+import edu.brown.cs.dominion.io.NewUserWebsocket;
 import edu.brown.cs.dominion.io.UserRegistry;
 import edu.brown.cs.dominion.io.Websocket;
 import joptsimple.OptionParser;
@@ -30,6 +31,7 @@ public class Main {
   private static final int DEFAULT_PORT = 4567;
   private UserRegistry users;
   private HomeWebsocket home;
+  private NewUserWebsocket newUser;
 
   public static void main(String[] args) {
     Main m = new Main();
@@ -58,6 +60,7 @@ public class Main {
     exception(Exception.class, new ExceptionPrinter());
 
     webSocket("/home", new Websocket(users, home));
+    webSocket("/name", new Websocket(users, newUser));
     Websocket gameWs = new Websocket(users, gm);
     gm.setWeb(gameWs);
     webSocket("/gamesocket", gameWs);

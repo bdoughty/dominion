@@ -8,6 +8,7 @@ import edu.brown.cs.dominion.gameutil.NoPileException;
 import edu.brown.cs.dominion.gameutil.NotActionException;
 import edu.brown.cs.dominion.players.Player;
 import edu.brown.cs.dominion.gameutil.TooExpensiveException;
+import edu.brown.cs.dominion.players.UserInteruptedException;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -51,7 +52,12 @@ public class Game extends GameStub {
   public void buyPhase(Player p) {
     actionPhase = true;
     int money = p.getMoney();
-    List<Integer> toBuy = p.buyCards();
+    List<Integer> toBuy = null;
+    try {
+      toBuy = p.buyCards();
+    } catch (UserInteruptedException e) {
+      return;
+    }
     for (int buyId : toBuy) {
       try {
         Card c = buyCard(buyId, money);
@@ -88,16 +94,17 @@ public class Game extends GameStub {
   public void doActions(Player p) {
     int loc;
     System.out.println("new action loop");
-    while(-1 != (loc = p.playHandAction())){
-      System.out.println("played card " + loc);
-      try {
-        Card c = p.play(loc);
-        c.play(p);
-        // sendServerMessage(u.getName() + " played " + c.toString() + ".");
-      } catch (NoActionsException ignored) {}
-      catch (NotActionException e) {}
-      System.out.println("trying new action");
-    }
+    try {
+      while(-1 != (loc = p.playHandAction())){
+        System.out.println("played card " + loc);
+        try {
+          Card c = p.play(loc);
+          c.play(p);
+          // sendServerMessage(u.getName() + " played " + c.toString() + ".");
+        } catch (NoActionsException | NotActionException ignored) {}
+        System.out.println("trying new action");
+      }
+    } catch (UserInteruptedException ignored) { }
     p.endActionPhase();
   }
 

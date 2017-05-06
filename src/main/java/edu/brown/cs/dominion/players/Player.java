@@ -33,13 +33,13 @@ public abstract class Player {
   private Game game;
   private boolean actionPhase = true;
 
-  public abstract int playHandAction();
-  public abstract List<Integer> buyCards();
+  public abstract int playHandAction() throws UserInteruptedException;
+  public abstract List<Integer> buyCards() throws UserInteruptedException;
   public abstract int selectHand(List<Integer> cardIds, boolean cancelable,
-                                 String name);
+                                 String name) throws UserInteruptedException;
   public abstract int selectBoard(List<Integer> cardIds, boolean cancelable,
-                                  String name);
-  public abstract Button selectButtons(Button... buttons);
+                                  String name) throws UserInteruptedException;
+  public abstract Button selectButtons(Button... buttons) throws UserInteruptedException;
 
   public Player(Game g) {
     this();

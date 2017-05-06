@@ -106,4 +106,8 @@ public class User {
       return "Dave " + (id - 23);
     }
   }
+
+  public void setName(String name) {
+    this.name = name;
+  }
 }
