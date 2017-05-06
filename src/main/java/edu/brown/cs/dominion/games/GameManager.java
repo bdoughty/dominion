@@ -75,9 +75,11 @@ public class GameManager implements SocketServer {
 
   private void action(User user, int cardLocation) {
     UserPlayer p = userPlayers.get(user);
-    p.wakeData = cardLocation;
-    p.wakeType = PlayerWake.PLAY_ACTION;
-    p.notifyAll();
+    synchronized (p) {
+      p.wakeData = cardLocation;
+      p.wakeType = PlayerWake.PLAY_ACTION;
+      p.notifyAll();
+    }
   }
 
   private void endActionPhase(User user) {

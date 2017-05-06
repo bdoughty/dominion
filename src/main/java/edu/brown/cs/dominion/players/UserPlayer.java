@@ -84,11 +84,12 @@ public class UserPlayer extends Player {
       wakeType = NONE;
       return wakeData;
     } catch (InterruptedException ignored) { }
-    return 0;
+    return -2;
   }
 
   @Override
-  public int selectBoard(List<Integer> cardIds, boolean cancelable, String name) {
+  public synchronized int selectBoard(List<Integer> cardIds, boolean cancelable, String
+    name) {
     sendPlayerAction(new RequirePlayerAction(this, SELECT_BOARD, new Callback(
       cardIds, ImmutableList.of(), name, cancelable
     ), true));
@@ -99,7 +100,7 @@ public class UserPlayer extends Player {
       wakeType = NONE;
       return wakeData;
     } catch (InterruptedException ignored) { }
-    return 0;
+    return -2;
   }
 
   @Override
