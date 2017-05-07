@@ -165,7 +165,7 @@ public class UserPlayer extends Player {
       Arrays.asList(buttons), true, requestId));
     try {
       synchronized (this) {
-        while (wakeType != REQUEST_RESPONSE && wakeRequestID == requestId) {
+        while (wakeType != REQUEST_RESPONSE) {
           wait();
           if(wakeType == NONE) {
             throw new UserInteruptedException();
