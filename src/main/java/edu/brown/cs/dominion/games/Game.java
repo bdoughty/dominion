@@ -12,8 +12,8 @@ import edu.brown.cs.dominion.gameutil.NoActionsException;
 import edu.brown.cs.dominion.gameutil.NoPileException;
 import edu.brown.cs.dominion.gameutil.NotActionException;
 import edu.brown.cs.dominion.gameutil.TooExpensiveException;
-import edu.brown.cs.dominion.players.UserInteruptedException;
 import edu.brown.cs.dominion.players.Player;
+import edu.brown.cs.dominion.players.UserInteruptedException;
 
 /**
  * Created by henry on 4/2/2017.
@@ -70,7 +70,7 @@ public class Game extends GameStub {
         Card c = buyCard(buyId, money);
         p.buyCard(c);
         money -= c.getCost();
-        // sendServerMessage(u.getName() + " bought " + c.toString() + ".");
+        sendMessage(p.getName() + " bought " + c.toString() + ".");
       } catch (TooExpensiveException | EmptyPileException
           | NoPileException tee) {
         System.out.println(tee.getMessage());
@@ -89,25 +89,32 @@ public class Game extends GameStub {
   }
 
   public void playTurn(Player p) {
+    sendMessage(p.getName() + " began their turn.");
     Thread turnEnder = new Thread(() -> {
       try {
         turnStartTime = System.currentTimeMillis();
         Thread.sleep(61000);
         cancelTurn();
         System.out.println("ending turn");
-      } catch (InterruptedException ignored) { }
+      } catch (InterruptedException ignored) {
+      }
     });
-    //turnEnder.start();
+    // turnEnder.start();
     currentPlayer = p;
     p.newTurn();
-    if(!turnCanceled) {doActions(p);}
-    if(!turnCanceled) {buyPhase(p);}
+    if (!turnCanceled) {
+      doActions(p);
+    }
+    if (!turnCanceled) {
+      buyPhase(p);
+    }
     p.endTurn();
+    sendMessage(p.getName() + " ended their turn.");
     turnCanceled = false;
     turnEnder.interrupt();
   }
 
-  public void cancelTurn(){
+  public void cancelTurn() {
     turnCanceled = true;
     synchronized (currentPlayer) {
       currentPlayer.notifyAll();
@@ -122,16 +129,18 @@ public class Game extends GameStub {
     int loc;
     System.out.println("new action loop");
     try {
-      while(-1 != (loc = p.playHandAction()) && !turnCanceled){
+      while (-1 != (loc = p.playHandAction()) && !turnCanceled) {
         System.out.println("played card " + loc);
         try {
           Card c = p.play(loc);
           c.play(p);
-          // sendServerMessage(u.getName() + " played " + c.toString() + ".");
-        } catch (NoActionsException | NotActionException ignored) {}
+          sendMessage(p.getName() + " played " + c.toString() + ".");
+        } catch (NoActionsException | NotActionException ignored) {
+        }
         System.out.println("trying new action");
       }
-    } catch (UserInteruptedException ignored) { }
+    } catch (UserInteruptedException ignored) {
+    }
     p.endActionPhase();
   }
 
@@ -170,17 +179,20 @@ public class Game extends GameStub {
   }
 
   public void removeUser(Player p) {
-    if(p == currentPlayer) {
+    if (p == currentPlayer) {
       cancelTurn();
     }
     allPlayers.remove(p);
   }
 
-  public int getTimeLeftOnTurn(){
+  public int getTimeLeftOnTurn() {
     return (int) (System.currentTimeMillis() - turnStartTime);
   }
 
   public void addPlayer(Player p) {
     allPlayers.add(p);
+  }
+
+  public void sendMessage(String s) {
   }
 }

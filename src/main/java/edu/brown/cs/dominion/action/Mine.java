@@ -9,6 +9,7 @@ import edu.brown.cs.dominion.gameutil.NoPileException;
 import edu.brown.cs.dominion.money.AbstractMoney;
 import edu.brown.cs.dominion.players.Player;
 import edu.brown.cs.dominion.players.UserInteruptedException;
+import edu.brown.cs.dominion.players.UserPlayer;
 
 public class Mine extends AbstractAction {
 
@@ -22,9 +23,16 @@ public class Mine extends AbstractAction {
         .filter(c -> c instanceof AbstractMoney).map(Card::getId)
         .collect(Collectors.toList());
     int toTrash = 0;
-    try {
-      toTrash = p.selectHand(handIds, false, "mine trash");
-    } catch (UserInteruptedException e) {
+    if (!handIds.isEmpty()) {
+      try {
+        toTrash = p.selectHand(handIds, false, "mine trash");
+      } catch (UserInteruptedException e) {
+        return;
+      }
+    } else {
+      if (p instanceof UserPlayer) {
+        ((UserPlayer) p).sendNotify("No money to trash!");
+      }
       return;
     }
     Card c = p.trash(toTrash);
