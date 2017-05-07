@@ -1,5 +1,6 @@
 package edu.brown.cs.dominion.AI;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.JsonObject;
@@ -66,8 +67,13 @@ public class AIPlayer extends Player {
    */
   @Override
   public List<Integer> buyCards() {
-    // TODO this
-    return null;
+    List<Integer> out = new ArrayList<>();
+    int left = getBuys();
+    while (left > 0 && st.buy(getMoney(), this) != -1) {
+      out.add(st.buy(getMoney(), this));
+    }
+
+    return out;
   }
 
   /**
@@ -85,8 +91,32 @@ public class AIPlayer extends Player {
   public int selectHand(List<Integer> cardIds, boolean cancelable,
       String name) {
     switch (name) {
+      case "reveal bureaucrat":
+
+        break;
+      case "cellardiscard":
+
+        break;
+      case "chapel":
+
+        break;
+      case "militiadiscard":
+
+        break;
       case "mine trash":
 
+        break;
+      case "MoneyLender":
+
+        break;
+      case "remodel trash":
+
+        break;
+      case "throne room play":
+
+        break;
+      default:
+        System.out.println("help");
     }
     // TODO this
     return 0;

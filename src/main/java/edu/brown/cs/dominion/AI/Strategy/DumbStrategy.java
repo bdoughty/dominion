@@ -12,12 +12,12 @@ public class DumbStrategy implements Strategy {
   private Random r = new Random();
 
   @Override
-  public List<Integer> getDiscardPreferences() {
+  public List<Integer> getDiscardPreferences(Player who) {
     return null;
   }
 
   @Override
-  public List<Integer> getBuyPreferences() {
+  public List<Integer> getBuyPreferences(Player who) {
     return null;
   }
 

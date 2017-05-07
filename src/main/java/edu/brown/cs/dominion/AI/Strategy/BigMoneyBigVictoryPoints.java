@@ -10,12 +10,12 @@ public class BigMoneyBigVictoryPoints implements Strategy {
       DISCARD_PREFERENCES = Arrays.asList(3, 4, 5, 0, 1, 2);
 
   @Override
-  public List<Integer> getDiscardPreferences() {
+  public List<Integer> getDiscardPreferences(Player who) {
     return DISCARD_PREFERENCES;
   }
 
   @Override
-  public List<Integer> getBuyPreferences() {
+  public List<Integer> getBuyPreferences(Player who) {
     return BUY_PREFERENCES;
   }
 

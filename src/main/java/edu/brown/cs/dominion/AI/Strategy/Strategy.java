@@ -8,9 +8,9 @@ import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.players.Player;
 
 public interface Strategy {
-  List<Integer> getDiscardPreferences();
+  List<Integer> getDiscardPreferences(Player who);
 
-  List<Integer> getBuyPreferences();
+  List<Integer> getBuyPreferences(Player who);
 
   int playAction(Player who);
 
@@ -21,8 +21,8 @@ public interface Strategy {
       return who.getHand()
           .indexOf(Collections.min(hand,
               (one, two) -> Integer.compare(
-                  getDiscardPreferences().indexOf(one),
-                  getDiscardPreferences().indexOf(two))));
+                  getDiscardPreferences(who).indexOf(one),
+                  getDiscardPreferences(who).indexOf(two))));
     }
 
     return -1;
@@ -32,8 +32,8 @@ public interface Strategy {
     List<Integer> buyable = Strategy.buyable(money, who.getGame());
     if (buyable.size() > 0) {
       return Collections.min(buyable,
-          (one, two) -> Integer.compare(getBuyPreferences().indexOf(one),
-              getBuyPreferences().indexOf(two)));
+          (one, two) -> Integer.compare(getBuyPreferences(who).indexOf(one),
+              getBuyPreferences(who).indexOf(two)));
     }
 
     return -1;
