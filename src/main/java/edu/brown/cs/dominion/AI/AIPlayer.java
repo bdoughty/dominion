@@ -131,6 +131,7 @@ public class AIPlayer extends Player {
         System.out.println(1 / 0);
         return -1;
     }
+    return 0;
     // TODO this
   }
 

@@ -201,8 +201,8 @@ public class GameManager implements SocketServer {
     });
   }
 
-  public List<PendingGame> getPendingGames() {
-    return new ArrayList<>(pendingGames.values());
+  public List<JsonObject> getPendingGames() {
+    return pendingGames.values().stream().map(PendingGame::toJson).collect(Collectors.toList());
   }
 
   public boolean joinGame(Websocket ws, User u, int id) {
