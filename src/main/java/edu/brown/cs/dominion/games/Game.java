@@ -97,7 +97,7 @@ public class Game extends GameStub {
         System.out.println("ending turn");
       } catch (InterruptedException ignored) { }
     });
-    turnEnder.start();
+    //turnEnder.start();
     currentPlayer = p;
     p.newTurn();
     if(!turnCanceled) {doActions(p);}

@@ -72,6 +72,7 @@ public class AIPlayer extends Player {
     int left = getBuys();
     while (left > 0 && st.buy(getMoney(), this) != -1) {
       out.add(st.buy(getMoney(), this));
+      left--;
     }
 
     return out;
