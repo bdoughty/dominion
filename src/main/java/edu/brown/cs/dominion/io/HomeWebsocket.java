@@ -12,6 +12,9 @@ import edu.brown.cs.dominion.games.GameManager;
 import edu.brown.cs.dominion.games.PendingGame;
 import org.eclipse.jetty.websocket.api.Session;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Websocket for the home page
  * Created by henry on 4/14/2017.
@@ -63,13 +66,19 @@ public class HomeWebsocket implements SocketServer, UserMessageListener {
         JsonObject data = PARSE.parse(m).getAsJsonObject();
         String name = data.get("name").getAsString();
         JsonArray cards = data.get("cards").getAsJsonArray();
+        JsonArray ais = data.get("ais").getAsJsonArray();
+
         int numPlayers = data.get("numPlayers").getAsInt();
         int[] crds = new int[10];
         for (int i = 0; i < 10; i++) {
           crds[i] = cards.get(i).getAsInt();
         }
-        PendingGame p = new PendingGame(name, numPlayers, crds);
+        List<String> aiTypes = new ArrayList<>();
+        for (int i = 0;i < ais.size();i++) {
+          aiTypes.add(ais.get(i).getAsString());
+        }
 
+        PendingGame p = new PendingGame(name, numPlayers, crds, aiTypes);
 
         w.send(u, REDIRECT, "lobby");
         gm.addPendingGame(p);

@@ -35,7 +35,7 @@ public class Bureaucrat extends AbstractAction {
       if (p.hasMoat()) {
         sendGameMessge(p.getGame(), p.getName() + " played Moat.");
       } else {
-        List<Integer> vpCards = play.getHand().stream()
+        List<Integer> vpCards = p.getHand().stream()
             .filter((card) -> card instanceof AbstractVictoryPoint)
             .map(Card::getId).collect(Collectors.toList());
         if (!vpCards.isEmpty()) {

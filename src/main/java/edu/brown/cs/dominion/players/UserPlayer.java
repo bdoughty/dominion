@@ -213,6 +213,7 @@ public class UserPlayer extends Player {
   public Card play(int posInHand) throws NoActionsException {
     Card c = super.play(posInHand);
     sendHand();
+    sendActions();
     return c;
   }
 

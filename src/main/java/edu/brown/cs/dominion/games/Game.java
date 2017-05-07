@@ -180,4 +180,8 @@ public class Game extends GameStub {
   public int getTimeLeftOnTurn(){
     return (int) (System.currentTimeMillis() - turnStartTime);
   }
+
+  public void addPlayer(Player p) {
+    allPlayers.add(p);
+  }
 }
