@@ -80,7 +80,7 @@ public interface Strategy {
   default Button chancellor(Button[] buttons) {
     // TODO make this not default, have strategies implement this
     assert (buttons.length == 2);
-    return buttons[1];
+    return buttons[0];
   }
 
   default Button library(Button[] buttons) {
