@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import edu.brown.cs.dominion.Card;
-import edu.brown.cs.dominion.games.Game;
-import edu.brown.cs.dominion.games.UserGame;
 import edu.brown.cs.dominion.gameutil.EmptyPileException;
 import edu.brown.cs.dominion.gameutil.NoPileException;
 import edu.brown.cs.dominion.players.Player;
@@ -33,7 +31,7 @@ public class Bureaucrat extends AbstractAction {
 
     for (Player p : players) {
       if (p.hasMoat()) {
-        sendGameMessge(p.getGame(), p.getName() + " played Moat.");
+        p.getGame().sendMessage(p.getName() + " played Moat.");
       } else {
         List<Integer> vpCards = p.getHand().stream()
             .filter((card) -> card instanceof AbstractVictoryPoint)
@@ -44,7 +42,7 @@ public class Bureaucrat extends AbstractAction {
             try {
               int loc = p.selectHand(vpCards, false, "reveal bureaucrat");
               Card c = p.cardToDeck(loc);
-              sendGameMessge(p.getGame(), p.getName() + " put " + c.toString()
+              p.getGame().sendMessage(p.getName() + " put " + c.toString()
                   + " on top of their deck.");
             } catch (UserInteruptedException uie) {
             }
@@ -54,11 +52,11 @@ public class Bureaucrat extends AbstractAction {
     }
   }
 
-  private void sendGameMessge(Game g, String message) {
-    if (g instanceof UserGame) {
-      ((UserGame) g).sendServerMessage(message);
-    }
-  }
+  // private void sendGameMessge(Game g, String message) {
+  // if (g instanceof UserGame) {
+  // ((UserGame) g).sendServerMessage(message);
+  // }
+  // }
 
   private void sendNotification(Player p, String message) {
     if (p instanceof UserPlayer) {
