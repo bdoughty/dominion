@@ -106,8 +106,9 @@ public class AIPlayer extends Player {
           return getHand().indexOf(5);
         }
       case "cellardiscard":
-
-        break;
+        int out = st.discard(this);
+        assert (cardIds.contains(getHand().get(out).getId()));
+        return out;
       case "chapel":
 
         break;
@@ -115,8 +116,9 @@ public class AIPlayer extends Player {
 
         break;
       case "mine trash":
-
-        break;
+        int o = st.discard(this);
+        assert (cardIds.contains(getHand().get(o).getId()));
+        return o;
       case "MoneyLender":
 
         break;
@@ -131,8 +133,8 @@ public class AIPlayer extends Player {
         System.out.println(1 / 0);
         return -1;
     }
-    return 0;
-    // TODO this
+    return getHand().indexOf(cardIds.get(0));
+    // TODO literally the above line is so funny
   }
 
   /**
