@@ -1,7 +1,6 @@
 package edu.brown.cs.dominion.action;
 
-import edu.brown.cs.dominion.games.Game;
-import edu.brown.cs.dominion.io.send.ClientUpdateMap;
+import edu.brown.cs.dominion.players.Player;
 
 public class Market extends AbstractAction {
 
@@ -10,16 +9,15 @@ public class Market extends AbstractAction {
   }
 
   @Override
-  public void play(Game g, ClientUpdateMap cm) {
-    g.currentDraw(1);
-    g.incrementActions();
-    g.incrementBuys();
-    g.incrementAdditionalMoney(1);
+  public void play(Player p) {
+    p.draw(1);
+    p.incrementActions();
+    p.incrementBuys();
+    p.incrementAdditionalMoney(1);
   }
 
   @Override
   public String toString() {
     return "Market";
   }
-
 }

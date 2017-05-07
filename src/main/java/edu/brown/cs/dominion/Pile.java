@@ -13,8 +13,4 @@ public class Pile {
     this.card = card;
     this.count = count;
   }
-
-  public Pile(String cardName, int count) {
-    this(Card.getCardFromName(cardName), count);
-  }
 }

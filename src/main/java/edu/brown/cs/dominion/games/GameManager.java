@@ -12,10 +12,12 @@ import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.io.SocketServer;
 import edu.brown.cs.dominion.io.UserRegistry;
 import edu.brown.cs.dominion.io.Websocket;
-import edu.brown.cs.dominion.io.send.ButtonCall;
 import edu.brown.cs.dominion.io.send.Callback;
 import edu.brown.cs.dominion.io.send.ClientUpdateMap;
 import edu.brown.cs.dominion.io.send.RequirePlayerAction;
+import edu.brown.cs.dominion.players.Player;
+import edu.brown.cs.dominion.players.PlayerWake;
+import edu.brown.cs.dominion.players.UserPlayer;
 import org.eclipse.jetty.websocket.api.Session;
 
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static edu.brown.cs.dominion.io.send.MessageType.*;
 
@@ -34,36 +37,29 @@ import static edu.brown.cs.dominion.io.send.MessageType.*;
  * Created by henry on 3/22/2017.
  */
 public class GameManager implements SocketServer {
-  private Websocket web;
   private static Gson GSON = new Gson();
   private static JsonParser PARSE = new JsonParser();
 
-  private UserRegistry users;
-  private Map<User, Game> gamesByUser;
-  private List<Game> games;
+  private Websocket web;
+  private Map<User, UserPlayer> userPlayers;
   private Map<Integer, PendingGame> pendingGames;
   private Map<User, PendingGame> pendingByUser;
 
   public GameManager(UserRegistry users) {
-    this.web = web;
-    this.users = users;
-    gamesByUser = new HashMap<>();
-    games = new LinkedList<>();
-    callbacks = new HashMap<>();
+    userPlayers = new HashMap<>();
     pendingGames = new HashMap<>();
 
     // TODO GET RID OF DUMMY
     PendingGame p = new PendingGame("GAME1", 1,
-        new int[] { 23, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
+        new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 23 });
     pendingGames.put(p.getId(), p);
 
     PendingGame p2 = new PendingGame("GAME2", 2,
-        new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
-    p2.addUser(users.registerNewAI(new BigMoneyBigVictoryPoints()));
+        new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 22 });
     pendingGames.put(p2.getId(), p2);
 
     PendingGame p3 = new PendingGame("GAME3", 3,
-        new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
+        new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 22 });
     pendingGames.put(p3.getId(), p3);
     pendingByUser = new HashMap<>();
   }
@@ -72,29 +68,41 @@ public class GameManager implements SocketServer {
     this.web = web;
   }
 
-  private Map<User, List<RequirePlayerAction>> callbacks;
-
   private void action(User user, int cardLocation) {
-    Game g = gamesByUser.get(user);
-    g.doAction(user, cardLocation);
+    UserPlayer p = userPlayers.get(user);
+    synchronized (p) {
+      p.wakeData = cardLocation;
+      p.wakeType = PlayerWake.PLAY_ACTION;
+      p.notifyAll();
+    }
   }
 
   private void endActionPhase(User user) {
-    Game g = gamesByUser.get(user);
-    g.endActionPhase(user);
+    UserPlayer p = userPlayers.get(user);
+    synchronized (p) {
+      p.wakeData = -1;
+      p.wakeType = PlayerWake.PLAY_ACTION;
+      p.notifyAll();
+    }
   }
 
-  private ClientUpdateMap selection(User u, boolean inHand, int location) {
-    assert callbacks.containsKey(u);
-    return callbacks.get(u).get(0).call(u, inHand, location);
+  private void selection(User u, boolean inHand, int location, int id) {
+    UserPlayer p = userPlayers.get(u);
+    synchronized (p) {
+      p.wakeData = location;
+      p.wakeRequestID = id;
+      p.wakeType = PlayerWake.REQUEST_RESPONSE;
+      p.notifyAll();
+    }
   }
 
-  private ClientUpdateMap cancleSelect(User u) {
-    assert callbacks.containsKey(u);
-    Callback c = callbacks.get(u).get(0).getC();
-    callbacks.get(u).remove(0);
-    assert c.isStoppable();
-    return c.getCancelHandler().cancel();
+  private void cancleSelect(User u) {
+    UserPlayer p = userPlayers.get(u);
+    synchronized (p) {
+      p.wakeData = -1;
+      p.wakeType = PlayerWake.CANCEL;
+      p.notifyAll();
+    }
   }
 
   private <T, K> List<K> map(List<T> list, Function<T, K> convert) {
@@ -103,50 +111,47 @@ public class GameManager implements SocketServer {
     return output;
   }
 
-  private ClientUpdateMap chk(ClientUpdateMap c) {
-    for(Map.Entry<User, List<RequirePlayerAction>> e : c.getCallbacks().entrySet()) {
-      if (!callbacks.containsKey(e.getKey())) {
-        callbacks.put(e.getKey(), new ArrayList<>());
-      }
-      for(RequirePlayerAction rpa : e.getValue()){
-        if (rpa.isUrgent()) {
-          callbacks.get(e.getKey()).add(0, rpa);
-        } else {
-          callbacks.get(e.getKey()).add(rpa);
-        }
-      }
+  private void button(User u, int id) {
+    UserPlayer p = userPlayers.get(u);
+    synchronized (p) {
+      p.wakeData = id;
+      p.wakeType = PlayerWake.REQUEST_RESPONSE;
+      p.notifyAll();
     }
-    return c;
   }
 
-  private ClientUpdateMap button(User u, int id) {
-    List<ButtonCall> buttons = new LinkedList<>(callbacks.get(u).get(0)
-      .getBcs());
-    for (ButtonCall b : buttons) {
-      if(b.getId() == id) {
-        callbacks.get(u).remove(0);
-        return b.getBc().clicked(u);
-      }
+  private void endBuy(User u, List<Integer> buys) {
+    UserPlayer p = userPlayers.get(u);
+    synchronized (p) {
+      p.wakeDataList = buys;
+      p.wakeType = PlayerWake.BUY_CARDS;
+      p.notifyAll();
     }
-    return null;
   }
 
   @Override
   public void newUser(Websocket ws, User user) {
-    // redirect??
+    ws.send(user, REDIRECT, "name");
   }
 
   @Override
   public void newSession(Websocket ws, User user, Session s) {
-    if (gamesByUser.containsKey(user)) {
-      Game g = gamesByUser.get(user);
+    if (userPlayers.containsKey(user)) {
+      UserPlayer p =  userPlayers.get(user);
+      Game g = p.getGame();
+
       List<Integer> actionIds = g.getBoard().getActionCardIds();
       JsonObject container = new JsonObject();
       container.addProperty("gameid", g.getId());
       container.add("cardids", GSON.toJsonTree(actionIds));
-      container.add("users", GSON.toJsonTree(g.getAllUsers()));
+      container.add("users", GSON.toJsonTree(g.getPlayers().stream().map
+        (Player::toJson).collect(Collectors.toList())));
+      container.addProperty("id", userPlayers.get(user).getId());
+      container.addProperty("time",
+        p.getId() == g.getCurrentPlayerId() ? g.getTimeLeftOnTurn() - 1000 :
+          60000);
       ws.send(s, INIT_GAME, GSON.toJson(container));
-      ws.send(s, UPDATE_MAP, g.fullUpdate(user).prepareUser(user));
+      p.sendAll(s);
     } else {
       System.out.println("User is not in a game");
     }
@@ -163,12 +168,13 @@ public class GameManager implements SocketServer {
     ws.putCommand(SELECTION, (w, u, m) -> {
       JsonObject data = PARSE.parse(m).getAsJsonObject();
       boolean inHand = data.get("inhand").getAsBoolean();
+      int id = data.get("id").getAsInt();
       int location = data.get("loc").getAsInt();
-      sendClientUpdateMap(selection(u, inHand, location));
+      selection(u, inHand, location, id);
     });
 
     ws.putCommand(CANCEL_SELECT, (w, u, m) -> {
-      sendClientUpdateMap(cancleSelect(u));
+      cancleSelect(u);
     });
 
     ws.putCommand(END_ACTION,
@@ -180,29 +186,23 @@ public class GameManager implements SocketServer {
       for (JsonElement e : data) {
         buys.add(e.getAsInt());
       }
-      Game g = gamesByUser.get(u);
-      g.endBuyPhase(u, buys);
+      endBuy(u, buys);
     });
 
     ws.putCommand(BUTTON_RESPONSE, (w, u, m) -> {
       int id = Integer.parseInt(m);
-      sendClientUpdateMap(button(u, id));
+      button(u, id);
     });
 
     ws.putCommand(CHAT, (w, u, m) -> {
-      if (gamesByUser.containsKey(u)) {
-        Game g = gamesByUser.get(u);
-        g.sendMessage(u, m);
-      }
+      userPlayers.get(u).getUserGame().sendChat(u, m);
     });
 
     ws.putCommand(EXIT_GAME, (w, u, m) -> {
-      Game g = gamesByUser.get(u);
-      g.removeUser(u);
-      gamesByUser.remove(u);
-      if (g.getAllUsers().isEmpty()) {
-        games.remove(g);
-      }
+      UserPlayer p = userPlayers.get(u);
+      Game g = p.getGame();
+      g.removeUser(p);
+      userPlayers.remove(u);
       web.send(u, REDIRECT, "lobby");
     });
   }
@@ -212,7 +212,7 @@ public class GameManager implements SocketServer {
   }
 
   public boolean joinGame(Websocket ws, User u, int id) {
-    if (gamesByUser.containsKey(u) || pendingByUser.containsKey(u)) {
+    if (userPlayers.containsKey(u) || pendingByUser.containsKey(u)) {
       System.out.println(
           "ERROR: user tried to join game but is already in a " + "game");
       return false;
@@ -222,10 +222,8 @@ public class GameManager implements SocketServer {
         pendingByUser.put(u, pg);
         boolean didJoin = pg.addUser(u);
         if (pg.full()) {
-          Game g = pg.convertAndRedirect(ws, this);
-          games.add(g);
-          pg.getUsers().forEach(us -> gamesByUser.put(us, g));
-          pg.getUsers().forEach(us -> pendingByUser.remove(us));
+          UserGame g = pg.convertAndRedirect(ws, this);
+          userPlayers.putAll(g.getUserPlayerMap());
           pendingGames.remove(id);
         }
         return didJoin;
@@ -236,24 +234,14 @@ public class GameManager implements SocketServer {
     }
   }
 
+  public void removePendingByUser(List<User> users){
+    users.forEach(u -> pendingByUser.remove(u));
+  }
+
   public void leave(User u) {
     if (pendingByUser.containsKey(u)) {
       PendingGame g = pendingByUser.remove(u);
       g.removeUser(u);
-    }
-  }
-
-  public void sendClientUpdateMap(ClientUpdateMap c) {
-    if (c != null) {
-      c = chk(c);
-      for (User user : c.getUsers()) {
-        if (c.hasUser(user)) {
-          String s = c.prepareUser(user);
-          if (s != null) {
-            web.send(user, UPDATE_MAP, c.prepareUser(user));
-          }
-        }
-      }
     }
   }
 
@@ -263,5 +251,10 @@ public class GameManager implements SocketServer {
 
   public Websocket web() {
     return web;
+  }
+
+  public void finish(List<User> allUsers) {
+    allUsers.forEach(u -> userPlayers.remove(u));
+    System.out.println("removing users");
   }
 }

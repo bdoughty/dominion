@@ -31,12 +31,6 @@ public class UserRegistry{
     nextId++;
     return u;
   }
-  public AIPlayer registerNewAI(Strategy s){
-    AIPlayer u = new AIPlayer(nextId, startId, s);
-    users.put(nextId, u);
-    nextId++;
-    return u;
-  }
 
   public User getById(int id) {
     if (users.containsKey(id)) {

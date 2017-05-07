@@ -1,21 +1,20 @@
 import {Player} from "./player.model";
 import {Card} from "../card/card.model";
 import {PlayerAction} from "./player-action.model";
-export class ClientGame {
 
+export class ClientGame {
   public turn: number = 0;
-  public holding: boolean = false;
   public cart = [];
   public hand: Card[] = [];
   public discardsize: number = 0;
   public decksize: number = 10;
-  public toSelectHand = [];
-  public toSelectBoard = [];
-  public toSelectStoppable = false;
   public phase: string = "action";
   public orderedPlayers: Player[];
   public isOver: boolean = false;
   public playerActionQueue: PlayerAction[] = [];
+  public gold = 0;
+  public actions = 0;
+  public buys = 0;
 
   public nonactionCards: Card[] =
     [new Card(0), new Card(1), new Card(2), new Card(3), new Card(4), new Card(5)];
@@ -164,29 +163,5 @@ export class ClientGame {
 
   public canBuy(card: Card) {
     return card.pileCount > 0 && (this.phase === 'buy') && card.cost <= this.gold && this.buys > 0;
-  }
-
-  get buys() {
-    return this.getOwnPlayer().buys;
-  }
-
-  set buys(buys: number) {
-    this.getOwnPlayer().buys = buys;
-  }
-
-  get actions() {
-    return this.getOwnPlayer().actions;
-  }
-
-  set actions(actions: number) {
-    this.getOwnPlayer().actions = actions;
-  }
-
-  get gold() {
-    return this.getOwnPlayer().gold;
-  }
-
-  set gold(gold: number) {
-    this.getOwnPlayer().gold = gold;
   }
 }

@@ -5,7 +5,6 @@ package edu.brown.cs.dominion.io.send;
  */
 public enum MessageType {
   NEWID ("userid"),
-  UPDATE_MAP ("updatemap"),
   CHAT ("chat"),
   END_BUY ("endbuy"),
   END_ACTION ("endaction"),
@@ -22,7 +21,21 @@ public enum MessageType {
   CANCEL_SELECT("cancel"),
   BUTTON_RESPONSE ("button"),
   EXIT_GAME("exit"),
-  NOTIFY ("notify");
+  NOTIFY ("notify"),
+  ACTIONS("actions"),
+  BUYS("buys"),
+  GOLD("gold"),
+  PLAYER_ACTIONS ("playeractions"),
+  HAND ("hand"),
+  DECK_SIZE ("decksize"),
+  DISCARD_SIZE ("discardsize"),
+  BOARD ("board"),
+  PHASE ("phase"),
+  TURN ("turn"),
+  WINNER ("winner"),
+  VICTORY_POINTS ("victorypoints"),
+  HAND_NUM ("handcardnum"),
+  CHANGE_NAME ("changename");
 
 
   private final String name;

@@ -5,20 +5,29 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import edu.brown.cs.dominion.Card;
-import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.action.AbstractAction;
-import edu.brown.cs.dominion.games.Game;
+import edu.brown.cs.dominion.players.Player;
 
 public class DumbStrategy implements Strategy {
   private Random r = new Random();
 
   @Override
-  public int playAction(Game g, User who) {
-    List<Card> actions = g.getPlayerFromUser(who).getHand().stream()
-        .filter((card) -> card instanceof AbstractAction)
-        .collect(Collectors.toList());
+  public List<Integer> getDiscardPreferences(Player who) {
+    return null;
+  }
+
+  @Override
+  public List<Integer> getBuyPreferences(Player who) {
+    return null;
+  }
+
+  @Override
+  public int playAction(Player who) {
+    List<Card> actions =
+        who.getHand().stream().filter((card) -> card instanceof AbstractAction)
+            .collect(Collectors.toList());
     if (actions.size() > 0) {
-      return g.getPlayerFromUser(who).getHand()
+      return who.getHand()
           .indexOf(actions.get(r.nextInt(actions.size())).getId());
     }
 
@@ -26,8 +35,8 @@ public class DumbStrategy implements Strategy {
   }
 
   @Override
-  public int discard(Game g, User who) {
-    List<Card> hand = g.getPlayerFromUser(who).getHand();
+  public int discard(Player who) {
+    List<Card> hand = who.getHand();
     if (hand.size() > 0) {
       return r.nextInt(hand.size());
     }
@@ -36,8 +45,8 @@ public class DumbStrategy implements Strategy {
   }
 
   @Override
-  public int buy(int money, Game g, User who) {
-    List<Integer> buyable = g.getBoard().getCardUnderValue(money);
+  public int buy(int money, Player who) {
+    List<Integer> buyable = who.getGame().getBoard().getCardsUnderValue(money);
     if (buyable.size() > 0) {
       return buyable.get(r.nextInt(buyable.size()));
     }

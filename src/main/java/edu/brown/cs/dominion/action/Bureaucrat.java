@@ -4,16 +4,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.ImmutableList;
-
 import edu.brown.cs.dominion.Card;
-import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.games.Game;
+import edu.brown.cs.dominion.games.UserGame;
 import edu.brown.cs.dominion.gameutil.EmptyPileException;
 import edu.brown.cs.dominion.gameutil.NoPileException;
-import edu.brown.cs.dominion.io.send.ClientUpdateMap;
-import edu.brown.cs.dominion.io.send.RequirePlayerAction;
-import edu.brown.cs.dominion.io.send.SelectCallback;
+import edu.brown.cs.dominion.players.Player;
+import edu.brown.cs.dominion.players.UserInteruptedException;
+import edu.brown.cs.dominion.players.UserPlayer;
 import edu.brown.cs.dominion.victory.AbstractVictoryPoint;
 
 public class Bureaucrat extends AbstractAction {
@@ -23,61 +21,53 @@ public class Bureaucrat extends AbstractAction {
   }
 
   @Override
-  public void play(Game g, ClientUpdateMap cm) {
+  public void play(Player play) {
     try {
-      g.getCurrentPlayer().gain(g.gain(1), false, true);
+      play.gain(play.getGame().gain(1), false, true);
     } catch (EmptyPileException | NoPileException e) {
       System.out.println(e.getMessage());
     }
 
-    List<User> users = new LinkedList<>(g.getAllUsers());
-    users.remove(g.getCurrent());
+    List<Player> players = new LinkedList<>(play.getGame().getPlayers());
+    players.remove(play);
 
-    for (User user : users) {
-      if (g.getPlayerFromUser(user).hasMoat()) {
-        g.sendServerMessage(user.getName() + " played Moat.");
+    for (Player p : players) {
+      if (p.hasMoat()) {
+        sendGameMessge(p.getGame(), p.getName() + " played Moat.");
       } else {
-        List<Integer> vpCards = g.getPlayerFromUser(user).getHand().stream()
+        List<Integer> vpCards = play.getHand().stream()
             .filter((card) -> card instanceof AbstractVictoryPoint)
             .map(Card::getId).collect(Collectors.toList());
-
         if (!vpCards.isEmpty()) {
-          cm.requirePlayerAction(user, RequirePlayerAction.callback(
-            g.getPlayerFromUser(user).getHand().stream()
-              .filter((card) -> card instanceof AbstractVictoryPoint)
-              .map(Card::getId).collect(Collectors.toList()),
-            ImmutableList.<Integer> of(), new RevealOne(g), "bureaucrat"
-          ));
+          new Thread(() -> {
+            sendNotification(p, "Bureaucrat");
+            try {
+              int loc = p.selectHand(vpCards, false, "reveal bureaucrat");
+              Card c = p.cardToDeck(loc);
+              sendGameMessge(p.getGame(), p.getName() + " put " + c.toString()
+                  + " on top of their deck.");
+            } catch (UserInteruptedException uie) {
+            }
+          }).start();
         }
       }
+    }
+  }
+
+  private void sendGameMessge(Game g, String message) {
+    if (g instanceof UserGame) {
+      ((UserGame) g).sendServerMessage(message);
+    }
+  }
+
+  private void sendNotification(Player p, String message) {
+    if (p instanceof UserPlayer) {
+      ((UserPlayer) p).sendNotify(message);
     }
   }
 
   @Override
   public String toString() {
     return "Bureaucrat";
-  }
-}
-
-class RevealOne implements SelectCallback {
-  private Game g;
-
-  public RevealOne(Game g) {
-    this.g = g;
-  }
-
-  @Override
-  public ClientUpdateMap call(User u, boolean inHand, int loc) {
-    if (inHand) {
-      Card c = g.getPlayerFromUser(u).cardToDeck(loc);
-      g.sendServerMessage(
-          u.getName() + " put " + c.toString() + " on top of their deck.");
-    }
-
-    ClientUpdateMap cm = new ClientUpdateMap(g, u);
-    cm.hand(g.getPlayerFromUser(u).getHand());
-    cm.deckRemaining(g.getPlayerFromUser(u).getDeck().size());
-
-    return cm;
   }
 }

@@ -43,13 +43,15 @@ public class PendingGame extends GameStub{
   }
 
   //TODO
-  public Game convertAndRedirect(Websocket ws, GameManager gameManager){
+  public UserGame convertAndRedirect(Websocket ws, GameManager gameManager){
     List<Integer> cards = new LinkedList<>();
     for(int i : actioncardids){
       cards.add(i);
     }
-    Game g = new Game(users, cards, gameManager.web(), gameManager);
+    gameManager.removePendingByUser(users);
+    UserGame g = new UserGame(users, cards, gameManager.web(), gameManager);
     users.forEach(u -> ws.send(u, MessageType.REDIRECT, "game"));
+    new Thread(g::play).start();
     return g;
   }
 

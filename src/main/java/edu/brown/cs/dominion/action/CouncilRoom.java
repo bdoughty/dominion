@@ -1,7 +1,6 @@
 package edu.brown.cs.dominion.action;
 
-import edu.brown.cs.dominion.games.Game;
-import edu.brown.cs.dominion.io.send.ClientUpdateMap;
+import edu.brown.cs.dominion.players.Player;
 
 public class CouncilRoom extends AbstractAction {
 
@@ -10,10 +9,10 @@ public class CouncilRoom extends AbstractAction {
   }
 
   @Override
-  public void play(Game g, ClientUpdateMap cm) {
-    g.currentDraw(4);
-    g.incrementBuys();
-    g.othersDraw(1);
+  public void play(Player p) {
+    p.draw(4);
+    p.incrementBuys();
+    p.getGame().othersDraw(p, 1);
   }
 
   @Override

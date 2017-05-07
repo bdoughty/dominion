@@ -1,0 +1,51 @@
+#name-page {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FAFAFA; }
+  #name-page .container {
+    position: relative;
+    top: -40px; }
+    #name-page .container label {
+      font-weight: 300;
+      text-transform: uppercase;
+      font-size: 1.2em;
+      display: block;
+      margin-bottom: 14px;
+      color: #666; }
+    #name-page .container input {
+      width: 500px;
+      font-size: 2em;
+      padding: 20px;
+      font-weight: 100;
+      transition: box-shadow 0.15s;
+      background: white;
+      border: none;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.24); }
+      #name-page .container input:focus {
+        background: white; }
+    #name-page .container .button-container {
+      padding: 24px 8px;
+      width: 100%;
+      text-align: right; }
+      #name-page .container .button-container button {
+        border: none;
+        background: #519e4b;
+        color: white;
+        padding: 12px 0;
+        min-width: 140px;
+        font-size: 1em;
+        font-weight: 100;
+        transition: all 0.15s; }
+        #name-page .container .button-container button:focus, #name-page .container .button-container button:active {
+          outline: none; }
+        #name-page .container .button-container button:not(.disabled):hover {
+          background: #4ba94b;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.24); }
+        #name-page .container .button-container button.disabled {
+          background: #b3cbb2; }
+          #name-page .container .button-container button.disabled:hover {
+            cursor: auto; }
+
+/*# sourceMappingURL=name-page.component.css.map */

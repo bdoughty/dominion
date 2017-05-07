@@ -1,9 +1,8 @@
 package edu.brown.cs.dominion.victory;
 
 import edu.brown.cs.dominion.Card;
-import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.gameutil.NotActionException;
-import edu.brown.cs.dominion.io.send.ClientUpdateMap;
+import edu.brown.cs.dominion.players.Player;
 
 public abstract class AbstractVictoryPoint extends Card {
 
@@ -12,7 +11,7 @@ public abstract class AbstractVictoryPoint extends Card {
   }
 
   @Override
-  public void play(Game g, ClientUpdateMap cm) throws NotActionException {
+  public void play(Player p) throws NotActionException {
     throw new NotActionException("can't play victory points");
   }
 

@@ -1,17 +1,12 @@
 package edu.brown.cs.dominion.action;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import com.google.common.collect.ImmutableList;
 
 import edu.brown.cs.dominion.Card;
-import edu.brown.cs.dominion.User;
-import edu.brown.cs.dominion.games.Game;
-import edu.brown.cs.dominion.io.send.ClientUpdateMap;
-import edu.brown.cs.dominion.io.send.RequirePlayerAction;
-import edu.brown.cs.dominion.io.send.SelectCallback;
+import edu.brown.cs.dominion.players.Player;
+import edu.brown.cs.dominion.players.UserInteruptedException;
+import edu.brown.cs.dominion.players.UserPlayer;
+
+import java.util.stream.Collectors;
 
 public class Militia extends AbstractAction {
 
@@ -20,21 +15,28 @@ public class Militia extends AbstractAction {
   }
 
   @Override
-  public void play(Game g, ClientUpdateMap cm) {
-    g.incrementAdditionalMoney(2);
-
-    List<User> users = new LinkedList<>(g.getAllUsers());
-    users.remove(g.getCurrent());
-
-    for (User user : users) {
-      if (g.getPlayerFromUser(user).hasMoat()) {
-        g.sendServerMessage(user.getName() + " played Moat.");
-      } else if (g.getPlayerFromUser(user).getHand().size() > 3) {
-        cm.requirePlayerAction(user, RequirePlayerAction.callback(
-            g.getPlayerFromUser(user).getHand().stream().map(Card::getId)
-                .collect(Collectors.toList()),
-            ImmutableList.<Integer> of(), new DownToThree(g), "militiadiscard"));
-        g.sendServerMessage(user.getName() + " was forced to discard.");
+  public void play(Player play) {
+    play.incrementAdditionalMoney(2);
+    for(Player p : play.getGame().getPlayers()) {
+      if (p != play && !p.hasMoat()) {
+        if(p instanceof UserPlayer) {
+          ((UserPlayer) p).sendNotify("Militia");
+        }
+        new Thread(() -> {
+          while (p.getHand().size() > 3) {
+            int discard = 0;
+            try {
+              discard = p.selectHand(p.getHand().stream().map(Card::getId)
+                .collect(Collectors.toList()), false, "militiadiscard");
+              p.discard(discard);
+            } catch (UserInteruptedException e) {
+              while(p.getHand().size() > 3){
+                p.discard(0);
+              }
+              return;
+            }
+          }
+        }).start();
       }
     }
   }
@@ -42,33 +44,5 @@ public class Militia extends AbstractAction {
   @Override
   public String toString() {
     return "Militia";
-  }
-}
-
-class DownToThree implements SelectCallback {
-  private Game g;
-
-  public DownToThree(Game g) {
-    this.g = g;
-  }
-
-  @Override
-  public ClientUpdateMap call(User u, boolean inHand, int loc) {
-    if (inHand) {
-      g.getPlayerFromUser(u).discard(loc);
-    }
-
-    ClientUpdateMap cm = new ClientUpdateMap(g, u);
-    cm.hand(g.getPlayerFromUser(u).getHand());
-    cm.discardPileSize(g.getPlayerFromUser(u).getDiscard().size());
-
-    if (g.getPlayerFromUser(u).getHand().size() > 3) {
-      cm.requirePlayerAction(u, RequirePlayerAction.callback(
-          g.getPlayerFromUser(u).getHand().stream().map(Card::getId)
-              .collect(Collectors.toList()),
-          ImmutableList.<Integer> of(), new DownToThree(g), "militiadiscard"));
-    }
-
-    return cm;
   }
 }

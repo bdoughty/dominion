@@ -1,4 +1,4 @@
-<dmn-notification [text]="notificationText"></dmn-notification>
+
 <div id="winScreen" *ngIf="game && game.isOver">
   <h2>{{ game.winner().name }} won!</h2>
   <div class="players">
@@ -17,6 +17,10 @@
 </div>
 
 <div id="game">
+  <dmn-notification [(text)]="notificationText"></dmn-notification>
+  <div class="timer" *ngIf="game && game.isOwnTurn()">
+    <div class="timer-inner" [style.width.%]="timerPercent * 100"></div>
+  </div>
   <div id="board" *ngIf="game">
     <div id="left-bar">
       <div id="stats">
@@ -50,6 +54,9 @@
 
           </dmn-card>
         </div>
+      </div>
+      <div *ngIf="game.getCurrPlayerAction() && game.getCurrPlayerAction().cancel">
+        <button (click)="cancel()">Cancel</button>
       </div>
       <div *ngIf="game.getCurrPlayerAction()">
         <button *ngFor="let button of game.getCurrPlayerAction().buttons"

@@ -1,8 +1,7 @@
 package edu.brown.cs.dominion;
 
-import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.gameutil.NotActionException;
-import edu.brown.cs.dominion.io.send.ClientUpdateMap;
+import edu.brown.cs.dominion.players.Player;
 
 /**
  * Created by henry on 3/22/2017.
@@ -36,17 +35,7 @@ public abstract class Card {
     return monetaryValue;
   }
 
-  public static Card getCardFromId(int id) {
-    // TODO this
-    return null;
-  }
-
-  public static Card getCardFromName(String name) {
-    // TODO this
-    return null;
-  }
-
-  public void play(Game g, ClientUpdateMap cm) throws NotActionException {
+  public void play(Player p) throws NotActionException {
 
   }
 }

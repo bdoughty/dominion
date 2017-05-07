@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {UserIdService} from "../shared/user-id.service";
 import {Chat} from "../chat/chat.model";
 import {Player} from "./models/player.model";
 import {ClientGame} from "./models/client-game.model";
@@ -7,7 +6,8 @@ import {GameSocketService} from "../shared/gamesocket.service";
 import {Card} from "./card/card.model";
 import {trigger, state, style, animate, transition, keyframes} from "@angular/animations";
 import {PlayerAction} from "./models/player-action.model";
-import {Button} from "./models/button-interface";
+
+const MAX_TIME = 60000; // ms
 
 @Component({
   selector: 'dmn-game',
@@ -27,6 +27,11 @@ import {Button} from "./models/button-interface";
         ]))
       ])
     ])
+    // ,trigger('timerState', [
+    //   state('start', style({width: '100%'})),
+    //   state('end', style({width: '0%'})),
+    //   transition('start => end', animate(TURN_TIME + 's linear'))
+    // ])
   ]
 })
 export class GameComponent implements OnInit {
@@ -35,31 +40,28 @@ export class GameComponent implements OnInit {
   public gameChat = new Chat();
   public notificationText: string = "";
 
+  private _currTime = MAX_TIME;
+  private _timerInterval;
+
   constructor(
-    private _userIdService: UserIdService,
     private _gameSocketService: GameSocketService
   ) {}
 
   public ngOnInit(): void {
-    this._gameSocketService.addListener("init", (message) => {
-      if (message === undefined) return;
-      let gameState = JSON.parse(message);
-      this.game = this._gameFromState(gameState);
-    });
-
-    this._gameSocketService.addListener("updatemap", (message) => {
-      this.updateMap(JSON.parse(message));
-    });
-
-    this._gameSocketService.addListener('redirect', (messageString) => {
-      window.location.replace(messageString);
-    });
+    this._addListeners();
   }
 
   public cardClickedPile(card: Card): void {
+    console.log(this.game);
+
     if (this.game.isSelectable(card, false)) {
-      this.game.playerActionQueue.shift();
-      this._gameSocketService.send('select', JSON.stringify({inhand: false, loc: card.id}));
+      const playerAction = this.game.playerActionQueue.shift();
+      this._gameSocketService.send('select',
+        JSON.stringify({
+          inhand: false,
+          loc: card.id,
+          id: playerAction.id
+        }));
     } else {
       this._addToCart(card);
     }
@@ -67,9 +69,14 @@ export class GameComponent implements OnInit {
 
   public cardClickedHand(card: Card): void {
     if (this.game.isSelectable(card, true)) {
-      this.game.playerActionQueue.shift();
+      const playerAction = this.game.playerActionQueue.shift();
+
       this._gameSocketService.send('select',
-        JSON.stringify({inhand: true, loc: card.handPosition}));
+        JSON.stringify({
+          inhand: true,
+          loc: card.handPosition,
+          id: playerAction.id
+        }));
     } else {
       this._play(card);
     }
@@ -106,6 +113,14 @@ export class GameComponent implements OnInit {
     this.gameChat.addMessage(JSON.parse(msg));
   }
 
+  public cancel() {
+    this._gameSocketService.send('cancel',
+      this.game.getCurrPlayerAction().id + '');
+  }
+
+  public get timerPercent() {
+    return this._currTime / MAX_TIME;
+  }
 
 
   /* ---------------------------- PRIVATE METHODS --------------------------- */
@@ -142,76 +157,120 @@ export class GameComponent implements OnInit {
       return new Card(cardid);
     });
 
-    return new ClientGame(players, this._userIdService.id, cards);
+    return new ClientGame(players, state.id, cards);
   }
 
-  private updateMap(update: any) {
-    if (this.game != null) {
-      if (typeof update.actions !== 'undefined') {
-        this.game.actions = update.actions;
-      }
-      if (typeof update.buys !== "undefined") {
-        this.game.buys = update.buys;
-      }
-      if (typeof update.gold !== "undefined") {
-        this.game.gold = update.gold;
-      }
-      if (typeof update.phase !== "undefined") {
-        this.game.phase = update.phase;
+  private _addListeners() {
 
+    this._gameSocketService.addListener("init", (message) => {
+      if (message === undefined) return;
+      let gameState = JSON.parse(message);
+      this.game = this._gameFromState(gameState);
+    });
+
+    this._gameSocketService.addListener('redirect', (messageString) => {
+      window.location.replace(messageString);
+    });
+
+    this._gameSocketService.addListener('actions', (message) => {
+      if(this.game != null) {
+        this.game.actions = parseInt(message);
       }
-      if (typeof update.hand !== "undefined") {
+    });
+
+    this._gameSocketService.addListener('buys', (message) => {
+      if(this.game != null) {
+        this.game.buys = parseInt(message);
+      }
+    });
+
+    this._gameSocketService.addListener('gold', (message) => {
+      if(this.game != null) {
+        this.game.gold = parseInt(message);
+      }
+    });
+
+    this._gameSocketService.addListener('phase', (message) => {
+      if(this.game != null) {
+        this.game.phase = message;
+      }
+    });
+
+    this._gameSocketService.addListener('hand', (message) => {
+      if(this.game != null) {
         let i = 0;
-        this.game.hand = update.hand.map(cardid => {
+        let hand = JSON.parse(message);
+        this.game.hand = hand.map(cardid => {
           let card = new Card(cardid);
           card.handPosition = i++;
           return card;
         });
       }
-      if (typeof update.decksize !== "undefined") {
-        this.game.decksize = update.decksize;
-      }
-      if (typeof update.discardsize !== "undefined") {
-        this.game.discardsize = update.discardsize;
-      }
-      if (typeof update.holding !== "undefined") {
-        this.game.holding = update.holding;
-      }
-      if (typeof update.handcardnum !== 'undefined') {
-        const player = this.game.getPlayerById(update.handcardnum.id);
-        player.numCards = update.handcardnum.cards;
-      }
-      if (typeof update.turn !== "undefined") {
-        this.game.setTurn(update.turn);
-      }
-      if (typeof update.board !== 'undefined') {
-        this.game.updatePiles(update.board.piles);
-      }
-      if (typeof update.winner !== "undefined") {
-        this.game.isOver = true;
-      }
-      if (typeof update.playeractions !== 'undefined') {
-        update.playeractions.forEach(playerAction => {
-          this.game.playerActionQueue.push(new PlayerAction(
-            playerAction.urgent,
-            playerAction.select,
-            playerAction.handselect,
-            playerAction.boardselect,
-            playerAction.buttons
-          ));
-        });
-      }
-      if (typeof update.victorypoints !== 'undefined') {
-        this.game.players.forEach(player => {
-          player.victoryPoints = update.victorypoints[player.id];
-        });
-      }
-      if (typeof update.notify !== 'undefined') {
-        this._notify(update.notify);
-      }
-    }
-    console.log("\n\n\n\nUPDATED GAME:");
-    console.log(this.game);
-  }
+    });
 
+    this._gameSocketService.addListener('decksize', (message) => {
+      this.game.decksize = parseInt(message);
+    });
+
+    this._gameSocketService.addListener('discardsize', (message) => {
+      this.game.discardsize = parseInt(message);
+    });
+
+    this._gameSocketService.addListener('handcardnum', (message) => {
+      const update = JSON.parse(message);
+      const player = this.game.getPlayerById(update.id);
+      player.numCards = update.cards;
+    });
+
+    this._gameSocketService.addListener('turn', (message) => {
+      this.game.setTurn(parseInt(message));
+
+      const updateRate = 10; // ms
+      clearInterval(this._timerInterval);
+      this._currTime = MAX_TIME;
+      this._timerInterval = setInterval(() => {
+        this._currTime -= updateRate;
+        if (this._currTime < 0) {
+          clearInterval(this._timerInterval);
+        }
+      }, updateRate);
+    });
+
+    this._gameSocketService.addListener('board', (message) => {
+      this.game.updatePiles(JSON.parse(message).piles);
+    });
+
+    this._gameSocketService.addListener('winner', () => {
+      this.game.isOver = true;
+    });
+
+    this._gameSocketService.addListener('playeractions', (message) => {
+      JSON.parse(message).forEach(playerAction => {
+        this.game.playerActionQueue.push(new PlayerAction(
+          playerAction.urgent,
+          playerAction.select,
+          playerAction.handselect,
+          playerAction.boardselect,
+          playerAction.buttons,
+          playerAction.cancel,
+          playerAction.id
+        ));
+      });
+    });
+
+    this._gameSocketService.addListener('victorypoints', (message) => {
+      const victorypoints = JSON.parse(message);
+      this.game.players.forEach(player => {
+        player.victoryPoints = victorypoints[player.id];
+      });
+    });
+
+    this._gameSocketService.addListener('notify', (message) => {
+      this._notify(message);
+    });
+
+    this._gameSocketService.addListener('time', (message) => {
+      this._currTime = parseInt(message);
+    });
+  }
 }

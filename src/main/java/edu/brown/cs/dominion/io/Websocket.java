@@ -136,7 +136,6 @@ public class Websocket {
 
   @OnWebSocketMessage
   public void onMessage(Session sess, String message) {
-    System.out.println(message);
     String type = message.substring(0, message.indexOf(':')).toLowerCase();
     String data = message.substring(message.indexOf(':') + 1);
     if (commands.containsKey(type)) {

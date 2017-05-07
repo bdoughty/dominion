@@ -2,6 +2,7 @@ package edu.brown.cs.dominion.action;
 
 import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.io.send.ClientUpdateMap;
+import edu.brown.cs.dominion.players.Player;
 
 public class Woodcutter extends AbstractAction {
 
@@ -10,9 +11,9 @@ public class Woodcutter extends AbstractAction {
   }
 
   @Override
-  public void play(Game g, ClientUpdateMap cm) {
-    g.incrementBuys();
-    g.incrementAdditionalMoney(2);
+  public void play(Player p) {
+    p.incrementBuys();
+    p.incrementAdditionalMoney(2);
   }
 
   @Override

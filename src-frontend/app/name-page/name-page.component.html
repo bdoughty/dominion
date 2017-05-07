@@ -1,0 +1,11 @@
+<div id="name-page">
+  <form class="container">
+    <label>
+      Choose your name:
+    </label>
+    <input type="text" name='name' [(ngModel)]="name"/>
+    <div class="button-container">
+      <button (click)="submit()" [ngClass]="{disabled: !isValid(name)}">Play!</button>
+    </div>
+  </form>
+</div>
