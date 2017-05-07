@@ -28,6 +28,7 @@ public class Game extends GameStub {
   private boolean turnCanceled = false;
 
   public Game(List<Player> usersTurns, List<Integer> actionCardIds) {
+    usersTurns.forEach(u -> u.setGame(this));
     this.allPlayers = new LinkedList<>(usersTurns);
     this.board = new Board(actionCardIds);
     currentPlayer = allPlayers.get(0);
@@ -127,7 +128,6 @@ public class Game extends GameStub {
 
   public void doActions(Player p) {
     int loc;
-    System.out.println("new action loop");
     try {
       while (-1 != (loc = p.playHandAction()) && !turnCanceled) {
         System.out.println("played card " + loc);
@@ -137,7 +137,6 @@ public class Game extends GameStub {
           sendMessage(p.getName() + " played " + c.toString() + ".");
         } catch (NoActionsException | NotActionException ignored) {
         }
-        System.out.println("trying new action");
       }
     } catch (UserInteruptedException ignored) {
     }
