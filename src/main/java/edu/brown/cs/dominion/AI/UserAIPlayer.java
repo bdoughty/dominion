@@ -1,18 +1,11 @@
 package edu.brown.cs.dominion.AI;
 
-import com.google.gson.JsonObject;
 import edu.brown.cs.dominion.AI.Strategy.Strategy;
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.games.UserGame;
 import edu.brown.cs.dominion.gameutil.EmptyDeckException;
 import edu.brown.cs.dominion.gameutil.NoActionsException;
-import edu.brown.cs.dominion.io.send.Button;
-import edu.brown.cs.dominion.players.Player;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class UserAIPlayer extends AIPlayer {
   private Strategy st;

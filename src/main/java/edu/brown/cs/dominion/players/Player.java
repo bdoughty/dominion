@@ -48,8 +48,13 @@ public abstract class Player {
       throws UserInteruptedException;
 
   public Player(Game g) {
-    this();
     this.game = g;
+    this.deck = initializeDeck();
+    this.hand = new ArrayList<>();
+    this.discardPile = new LinkedList<>();
+    this.playedPile = new LinkedList<>();
+    draw(5);
+    this.id = nextId++;
   }
 
   public Player() {
