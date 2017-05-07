@@ -69,6 +69,7 @@ public class Main {
     // start right now.
     get("/hello", (req, res) -> "Hello World");
     get("/game", (req, res) -> new String(Files.readAllBytes(Paths.get("dist/index.html"))));
+    get("/name", (req, res) -> new String(Files.readAllBytes(Paths.get("dist/index.html"))));
     get("/lobby", (req, res) -> new String(Files.readAllBytes(Paths.get("dist/index.html"))));
     get("/create", (req, res) -> new String(Files.readAllBytes(Paths.get("dist/index.html"))));
   }

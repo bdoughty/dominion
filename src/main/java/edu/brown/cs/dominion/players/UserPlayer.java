@@ -105,18 +105,22 @@ public class UserPlayer extends Player {
   public synchronized int selectHand(List<Integer> cardIds, boolean
     cancelable, String name) throws UserInteruptedException {
     int requestId = RequirePlayerAction.nextId++;
+    System.out.println(requestId);
+
     Finisher f = sendPlayerAction(new RequirePlayerAction(this, REQUEST_RESPONSE,
       new Callback(ImmutableList.of(), cardIds, name, cancelable), true, requestId));
     try {
-      while (wakeType != REQUEST_RESPONSE && wakeRequestID == requestId) {
+      do {
         wait();
+        System.out.println("wakeup");
         if (wakeType == CANCEL && cancelable) {
           return -1;
         }
         if(wakeType == NONE) {
           throw new UserInteruptedException();
         }
-      }
+      } while (wakeType != REQUEST_RESPONSE && wakeRequestID == requestId);
+
       wakeType = NONE; wakeRequestID = -1;
       f.finish();
       return wakeData;
@@ -132,7 +136,7 @@ public class UserPlayer extends Player {
     Finisher f = sendPlayerAction(new RequirePlayerAction(this, REQUEST_RESPONSE,
       new Callback(cardIds, ImmutableList.of(), name, cancelable), true, requestId));
     try {
-      while (wakeType != REQUEST_RESPONSE && requestId == wakeRequestID) {
+      do {
         wait();
         if (wakeType == CANCEL && cancelable) {
           return -1;
@@ -140,7 +144,7 @@ public class UserPlayer extends Player {
         if(wakeType == NONE) {
           throw new UserInteruptedException();
         }
-      }
+      } while (wakeType != REQUEST_RESPONSE && requestId == wakeRequestID);
       wakeType = NONE; wakeRequestID = -1;
       f.finish();
       return wakeData;
@@ -176,6 +180,7 @@ public class UserPlayer extends Player {
         }
       }
     } catch (InterruptedException ignored) {
+      f.finish();
     }
     System.out.println("ERROR: button id is incorrect");
     return null;
