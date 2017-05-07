@@ -3,7 +3,7 @@
     <label>
       Choose your name:
     </label>
-    <input type="text" name='name' [(ngModel)]="name"/>
+    <input type="text" name='name' [(ngModel)]="name" autofocus/>
     <div class="button-container">
       <button (click)="submit()" [ngClass]="{disabled: !isValid(name)}">Play!</button>
     </div>

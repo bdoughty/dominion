@@ -1,11 +1,13 @@
 package edu.brown.cs.dominion.AI.Strategy;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.AI.neuralNetwork.NeuralNetwork;
@@ -13,13 +15,15 @@ import edu.brown.cs.dominion.AI.neuralNetwork.NeuralNetworkIO;
 import edu.brown.cs.dominion.players.Player;
 
 public class NeuralNetAi implements Strategy {
+  private static List<Integer> DISCARD_PREFERENCES =
+      Arrays.asList(6, 3, 4, 5, 0, 1, 2);
+
   private static NeuralNetwork nn =
       NeuralNetworkIO.load("src/main/resources/best.nn");
 
   @Override
   public List<Integer> getDiscardPreferences(Player who) {
-    // TODO Auto-generated method stub
-    return null;
+    return DISCARD_PREFERENCES;
   }
 
   @Override
@@ -29,7 +33,9 @@ public class NeuralNetAi implements Strategy {
     allCards.addAll(who.getHand());
     allCards.addAll(who.getDiscard());
     allCards.forEach((card) -> {
-      possessions[card.getId()] = possessions[card.getId()] + 1;
+      if (card.getId() < 6) {
+        possessions[card.getId()] = possessions[card.getId()] + 1;
+      }
     });
 
     double[] results = nn.run(possessions);
@@ -40,6 +46,10 @@ public class NeuralNetAi implements Strategy {
       map.put(i, results[i]);
     }
     List<Integer> out = new ArrayList<>();
+    if (!allCards.stream().map(Card::getId).collect(Collectors.toList())
+        .contains(10)) {
+      out.add(10);
+    }
 
     while (map.size() > 0) {
       double max = Collections.max(map.values());
@@ -48,8 +58,7 @@ public class NeuralNetAi implements Strategy {
       map.remove(indexOfMax);
     }
 
-    System.out.println(1 / 0); // because I'm sure this code is wrong, so I'll
-                               // come back later and fix it? hopefully?
+    System.out.println("out: " + Arrays.toString(out.toArray()));
 
     return out;
   }
@@ -67,25 +76,26 @@ public class NeuralNetAi implements Strategy {
   @Override
   public int trashForChapel(Player who) {
     // TODO Auto-generated method stub
-    return 0;
+    return -1;
   }
 
   @Override
   public int trashForRemodel(Player who) {
     // TODO Auto-generated method stub
-    return 0;
+    return -1;
   }
 
   @Override
   public int playThroneRoom(Player who) {
     // TODO Auto-generated method stub
-    return 0;
+    return -1;
   }
 
   @Override
   public int playAction(Player who) {
     // TODO Auto-generated method stub
-    return 0;
+    return who.getHand().stream().map(Card::getId).collect(Collectors.toList())
+        .indexOf(10);
   }
 
 }
