@@ -5,6 +5,6 @@ import {UserIdService} from "./user-id.service";
 @Injectable()
 export class NameSocketService extends AbstractSocketService {
   constructor(public _userIdService: UserIdService) {
-    super(_userIdService, "/name");
+    super(_userIdService, "/namesocket");
   }
 }
