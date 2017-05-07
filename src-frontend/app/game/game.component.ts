@@ -115,7 +115,7 @@ export class GameComponent implements OnInit {
 
   public cancel() {
     this._gameSocketService.send('cancel',
-      this.game.getCurrPlayerAction().id + '');
+      this.game.playerActionQueue.shift().id + '');
   }
 
   public get timerPercent() {
