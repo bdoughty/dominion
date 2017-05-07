@@ -23,6 +23,9 @@ public class Game extends GameStub {
   private Player currentPlayer;
   private Board board;
   private boolean actionPhase = true;
+  private long turnStartTime;
+
+  private boolean turnCanceled = false;
 
   public Game(List<Player> usersTurns, List<Integer> actionCardIds) {
     this.allPlayers = new LinkedList<>(usersTurns);
@@ -86,11 +89,29 @@ public class Game extends GameStub {
   }
 
   public void playTurn(Player p) {
+    Thread turnEnder = new Thread(() -> {
+      try {
+        turnStartTime = System.currentTimeMillis();
+        Thread.sleep(61000);
+        cancelTurn();
+        System.out.println("ending turn");
+      } catch (InterruptedException ignored) { }
+    });
+    turnEnder.start();
     currentPlayer = p;
     p.newTurn();
-    doActions(p);
-    buyPhase(p);
+    if(!turnCanceled) {doActions(p);}
+    if(!turnCanceled) {buyPhase(p);}
     p.endTurn();
+    turnCanceled = false;
+    turnEnder.interrupt();
+  }
+
+  public void cancelTurn(){
+    turnCanceled = true;
+    synchronized (currentPlayer) {
+      currentPlayer.notifyAll();
+    }
   }
 
   public int getCurrentPlayerId() {
@@ -101,7 +122,7 @@ public class Game extends GameStub {
     int loc;
     System.out.println("new action loop");
     try {
-      while(-1 != (loc = p.playHandAction())){
+      while(-1 != (loc = p.playHandAction()) && !turnCanceled){
         System.out.println("played card " + loc);
         try {
           Card c = p.play(loc);
@@ -150,7 +171,13 @@ public class Game extends GameStub {
 
   public void removeUser(Player p) {
     // TODO end turn and whatnot
+    if(p == currentPlayer) {
+      cancelTurn();
+    }
     allPlayers.remove(p);
   }
 
+  public int getTimeLeftOnTurn(){
+    return (int) (System.currentTimeMillis() - turnStartTime);
+  }
 }
