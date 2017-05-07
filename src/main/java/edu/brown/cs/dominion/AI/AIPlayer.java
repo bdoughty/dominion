@@ -117,13 +117,14 @@ public class AIPlayer extends Player {
         break;
       default:
         System.out.println("help");
+        System.out.println(1 / 0);
     }
     // TODO this
     return 0;
   }
 
   /**
-   * Select a card from your hand
+   * Select a card from the board
    *
    * @param cardIds
    *          the ids of the cards on the board that can be selected
