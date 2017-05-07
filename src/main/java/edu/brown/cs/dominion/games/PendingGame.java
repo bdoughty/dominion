@@ -14,10 +14,7 @@ import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.io.Websocket;
 import edu.brown.cs.dominion.io.send.MessageType;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by henry on 4/15/2017.
@@ -36,6 +33,7 @@ public class PendingGame extends GameStub{
     this.maxusers = maxUsers;
     this.actioncardids = actionCardIds;
     this.users = new LinkedList<>();
+    this.aiTypes = Collections.emptyList();
   }
 
   public PendingGame(String name, int numPlayers, int[] crds, List<String> aiTypes) {
