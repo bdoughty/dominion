@@ -158,7 +158,6 @@ public abstract class Player {
   }
 
   public int getMoney() {
-
     return (baseMoney + additionalMoney);
   }
 

@@ -9,6 +9,7 @@ import edu.brown.cs.dominion.AI.Strategy.BigMoneyBigVictoryPoints;
 import edu.brown.cs.dominion.AI.Strategy.ChapelHeavy;
 import edu.brown.cs.dominion.AI.Strategy.DumbStrategy;
 import edu.brown.cs.dominion.AI.Strategy.NeuralNetAi;
+import edu.brown.cs.dominion.AI.UserAIPlayer;
 import edu.brown.cs.dominion.io.User;
 import edu.brown.cs.dominion.io.Websocket;
 import edu.brown.cs.dominion.io.send.MessageType;
@@ -84,15 +85,15 @@ public class PendingGame extends GameStub{
     users.forEach(u -> ws.send(u, MessageType.REDIRECT, "game"));
     aiTypes.forEach(type -> {
       switch(type) {
-        case "AttackDefense": g.addPlayer(new AIPlayer(g, new AttackDefense()
+        case "AttackDefense": g.addPlayer(new UserAIPlayer(g, new AttackDefense()
         )); return;
-        case "BigMoneyBigVictoryPoints": g.addPlayer(new AIPlayer(g, new BigMoneyBigVictoryPoints()
+        case "BigMoneyBigVictoryPoints": g.addPlayer(new UserAIPlayer(g, new BigMoneyBigVictoryPoints()
         )); return;
-        case "ChapelHeavy": g.addPlayer(new AIPlayer(g, new ChapelHeavy()
+        case "ChapelHeavy": g.addPlayer(new UserAIPlayer(g, new ChapelHeavy()
         )); return;
-        case "DumbStrategy": g.addPlayer(new AIPlayer(g, new DumbStrategy()
+        case "DumbStrategy": g.addPlayer(new UserAIPlayer(g, new DumbStrategy()
         )); return;
-        case "NeuralNetAi": g.addPlayer(new AIPlayer(g, new NeuralNetAi()
+        case "NeuralNetAi": g.addPlayer(new UserAIPlayer(g, new NeuralNetAi()
         )); return;
       }
     });
