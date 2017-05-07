@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * An objects that represents an action that the playyer has to do
  * Created by henry on 5/4/2017.
  */
 public class RequirePlayerAction {
@@ -18,35 +19,27 @@ public class RequirePlayerAction {
 
   private List<Button> buttons = null;
   private Callback c = null;
-  private transient UserPlayer player;
-  private transient PlayerWake waker;
   private boolean urgent;
   private int id;
 
-  public RequirePlayerAction (UserPlayer p, PlayerWake waker, List<Button>
-    buttons, boolean urgent, int id) {
-    this.player = p;
+
+  public RequirePlayerAction (List<Button> buttons, boolean urgent, int id) {
     this.buttons = buttons;
     this.urgent = urgent;
-    this.waker = waker;
     this.id = id;
   }
 
-  public RequirePlayerAction (UserPlayer p, PlayerWake waker, Callback c, boolean urgent, int id) {
-    this.player = p;
+  public RequirePlayerAction (Callback c, boolean urgent, int id) {
     this.c = c;
     this.urgent = urgent;
-    this.waker = waker;
     this.id = id;
   }
 
-  public RequirePlayerAction (UserPlayer p, PlayerWake waker, List<Button> buttons, Callback c,
+  public RequirePlayerAction (List<Button> buttons, Callback c,
                               boolean urgent, int id) {
-    this.player = p;
     this.buttons = buttons;
     this.c = c;
     this.urgent = urgent;
-    this.waker = waker;
     this.id = id;
   }
 
@@ -74,12 +67,6 @@ public class RequirePlayerAction {
 
   public List<Button> getBcs() {
     return buttons;
-  }
-
-  public void call(int response) {
-    player.wakeType = waker;
-    player.wakeData = response;
-    player.notifyAll();
   }
 
   public int getId() {

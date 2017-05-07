@@ -5,7 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import edu.brown.cs.dominion.User;
+import edu.brown.cs.dominion.io.User;
 import edu.brown.cs.dominion.io.SocketServer;
 import edu.brown.cs.dominion.io.UserRegistry;
 import edu.brown.cs.dominion.io.Websocket;
@@ -14,7 +14,6 @@ import edu.brown.cs.dominion.players.PlayerWake;
 import edu.brown.cs.dominion.players.UserPlayer;
 import org.eclipse.jetty.websocket.api.Session;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -44,83 +43,62 @@ public class GameManager implements SocketServer {
     pendingGames = new HashMap<>();
 
     // TODO GET RID OF DUMMY
-    PendingGame p = new PendingGame("GAME1", 1,
+    PendingGame p = new PendingGame("Henry's game", 1,
         new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 23 });
     pendingGames.put(p.getId(), p);
 
-    PendingGame p2 = new PendingGame("GAME2", 2,
+    PendingGame p2 = new PendingGame("Brendan's Game", 2,
         new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 22 });
     pendingGames.put(p2.getId(), p2);
 
-    PendingGame p3 = new PendingGame("GAME3", 3,
+    PendingGame p3 = new PendingGame("Hank's Game", 3,
         new int[] { 7, 8, 9, 10, 11, 12, 13, 14, 15, 22 });
     pendingGames.put(p3.getId(), p3);
     pendingByUser = new HashMap<>();
   }
 
+  /**
+   * Set the websocket post construction.
+   * @param web the websocket to set.
+   */
   public void setWeb(Websocket web) {
     this.web = web;
   }
 
   private void action(User user, int cardLocation) {
     UserPlayer p = userPlayers.get(user);
-    synchronized (p) {
-      p.wakeData = cardLocation;
-      p.wakeType = PlayerWake.PLAY_ACTION;
-      p.notifyAll();
-    }
+    //notify the player if waiting on action with action.
+    p.wake(PlayerWake.PLAY_ACTION, cardLocation);
   }
 
   private void endActionPhase(User user) {
     UserPlayer p = userPlayers.get(user);
-    synchronized (p) {
-      p.wakeData = -1;
-      p.wakeType = PlayerWake.PLAY_ACTION;
-      p.notifyAll();
-    }
+    //notify the player if waiting on action with end action phase
+    p.wake(PlayerWake.PLAY_ACTION, -1);
   }
 
   private void selection(User u, boolean inHand, int location, int id) {
     UserPlayer p = userPlayers.get(u);
-    synchronized (p) {
-      p.wakeData = location;
-      p.wakeRequestID = id;
-      p.wakeType = PlayerWake.REQUEST_RESPONSE;
-      p.notifyAll();
-    }
+    //notify the player of a selection.
+    p.wake(PlayerWake.REQUEST_RESPONSE, location, id);
   }
 
   private void cancleSelect(User u) {
     UserPlayer p = userPlayers.get(u);
-    synchronized (p) {
-      p.wakeData = -1;
-      p.wakeType = PlayerWake.CANCEL;
-      p.notifyAll();
-    }
-  }
-
-  private <T, K> List<K> map(List<T> list, Function<T, K> convert) {
-    List<K> output = new LinkedList<>();
-    list.forEach(s -> output.add(convert.apply(s)));
-    return output;
+    //notify the player if waiting on action with cancel.
+    p.wake(PlayerWake.CANCEL, -1);
   }
 
   private void button(User u, int id) {
     UserPlayer p = userPlayers.get(u);
-    synchronized (p) {
-      p.wakeData = id;
-      p.wakeType = PlayerWake.REQUEST_RESPONSE;
-      p.notifyAll();
-    }
+    // notify the player if waiting on button press
+    p.wake(PlayerWake.REQUEST_RESPONSE, id);
   }
 
   private void endBuy(User u, List<Integer> buys) {
     UserPlayer p = userPlayers.get(u);
-    synchronized (p) {
-      p.wakeDataList = buys;
-      p.wakeType = PlayerWake.BUY_CARDS;
-      p.notifyAll();
-    }
+    // notify the player if waiting on buys
+    p.wake(PlayerWake.BUY_CARDS, buys);
   }
 
   @Override
@@ -195,7 +173,7 @@ public class GameManager implements SocketServer {
     ws.putCommand(EXIT_GAME, (w, u, m) -> {
       UserPlayer p = userPlayers.get(u);
       Game g = p.getGame();
-      g.removeUser(p);
+      p.getUserGame().removeUser(p, u);
       userPlayers.remove(u);
       web.send(u, REDIRECT, "lobby");
     });

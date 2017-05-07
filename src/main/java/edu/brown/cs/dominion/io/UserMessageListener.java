@@ -1,11 +1,7 @@
 package edu.brown.cs.dominion.io;
 
-import edu.brown.cs.dominion.User;
-import edu.brown.cs.dominion.io.Websocket;
-
 /**
- * An interface to allow classes to pull different messages from the central
- * messaging system.
+ * An interface to allow classes to subscribe to a message type on a websocket.
  * Created by henry on 4/14/2017.
  */
 @FunctionalInterface

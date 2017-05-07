@@ -1,4 +1,4 @@
-package edu.brown.cs.dominion.neuralNetwork;
+package edu.brown.cs.dominion.AI.neuralNetwork;
 
 import java.io.BufferedWriter;
 import java.io.File;

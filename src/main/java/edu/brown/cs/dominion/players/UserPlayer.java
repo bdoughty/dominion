@@ -26,16 +26,21 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import edu.brown.cs.dominion.Card;
-import edu.brown.cs.dominion.User;
 import edu.brown.cs.dominion.games.UserGame;
 import edu.brown.cs.dominion.gameutil.EmptyDeckException;
 import edu.brown.cs.dominion.gameutil.NoActionsException;
+import edu.brown.cs.dominion.io.User;
 import edu.brown.cs.dominion.io.Websocket;
 import edu.brown.cs.dominion.io.send.Button;
 import edu.brown.cs.dominion.io.send.Callback;
 import edu.brown.cs.dominion.io.send.RequirePlayerAction;
 
 /**
+ * A player which is implemented across the network
+ *
+ * Automatically updates the client through pseudo-decorator pattern on super
+ * class.
+ *
  * Created by henry on 5/5/2017.
  */
 public class UserPlayer extends Player {
@@ -58,16 +63,39 @@ public class UserPlayer extends Player {
     this.gameSocket = gameSocket;
   }
 
-  // TODO perhaps this is not a great idea
+  /**
+   * the game of all UserPlayers must be a UserGame, and therefore it has the
+   * ability to get its game as a UserGame.
+   * 
+   * @return the UserGame that this player is a part of.
+   */
   public UserGame getUserGame() {
     return (UserGame) getGame();
   }
 
-  // TODO should these be public ??? probs not
-  public PlayerWake wakeType = NONE;
-  public int wakeData = 0;
-  public int wakeRequestID = 0;
-  public List<Integer> wakeDataList = ImmutableList.of();
+  public synchronized void wake(PlayerWake wakeType, int wakeData) {
+    this.wakeData = wakeData;
+    this.wakeType = wakeType;
+    notifyAll();
+  }
+
+  public synchronized void wake(PlayerWake wakeType, List<Integer> wakeData) {
+    this.wakeType = wakeType;
+    this.wakeDataList = wakeData;
+    notifyAll();
+  }
+
+  public synchronized void wake(PlayerWake wakeType, int wakeData,
+      int requestId) {
+    this.wakeRequestID = requestId;
+    wake(wakeType, wakeData);
+  }
+
+  // waking data to only trigger specific threads.
+  private PlayerWake wakeType = NONE;
+  private int wakeData = 0;
+  private int wakeRequestID = 0;
+  private List<Integer> wakeDataList = ImmutableList.of();
 
   @Override
   public synchronized int playHandAction() throws UserInteruptedException {
@@ -105,10 +133,9 @@ public class UserPlayer extends Player {
   public synchronized int selectHand(List<Integer> cardIds, boolean cancelable,
       String name) throws UserInteruptedException {
     int requestId = RequirePlayerAction.nextId++;
-    Finisher f = sendPlayerAction(
-        new RequirePlayerAction(this, REQUEST_RESPONSE,
-            new Callback(ImmutableList.of(), cardIds, name, cancelable), true,
-            requestId));
+    Finisher f = sendPlayerAction(new RequirePlayerAction(
+        new Callback(ImmutableList.of(), cardIds, name, cancelable), true,
+        requestId));
     System.out.println("NEW SELECT HAND: " + requestId);
     userActions.forEach(System.out::println);
     try {
@@ -139,10 +166,9 @@ public class UserPlayer extends Player {
   public synchronized int selectBoard(List<Integer> cardIds, boolean cancelable,
       String name) throws UserInteruptedException {
     int requestId = RequirePlayerAction.nextId++;
-    Finisher f = sendPlayerAction(
-        new RequirePlayerAction(this, REQUEST_RESPONSE,
-            new Callback(cardIds, ImmutableList.of(), name, cancelable), true,
-            requestId));
+    Finisher f = sendPlayerAction(new RequirePlayerAction(
+        new Callback(cardIds, ImmutableList.of(), name, cancelable), true,
+        requestId));
     try {
       do {
         wait();
@@ -168,8 +194,8 @@ public class UserPlayer extends Player {
   public Button selectButtons(String name, Button... buttons)
       throws UserInteruptedException {
     int requestId = RequirePlayerAction.nextId++;
-    Finisher f = sendPlayerAction(new RequirePlayerAction(this,
-        REQUEST_RESPONSE, Arrays.asList(buttons), true, requestId));
+    Finisher f = sendPlayerAction(
+        new RequirePlayerAction(Arrays.asList(buttons), true, requestId));
     try {
       synchronized (this) {
         while (wakeType != REQUEST_RESPONSE) {

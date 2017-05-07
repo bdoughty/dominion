@@ -170,7 +170,6 @@ public class Game extends GameStub {
   }
 
   public void removeUser(Player p) {
-    // TODO end turn and whatnot
     if(p == currentPlayer) {
       cancelTurn();
     }

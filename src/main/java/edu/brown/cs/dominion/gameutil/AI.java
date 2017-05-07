@@ -1,6 +1,6 @@
 package edu.brown.cs.dominion.gameutil;
 
-import edu.brown.cs.dominion.User;
+import edu.brown.cs.dominion.io.User;
 
 public class AI extends User {
 
