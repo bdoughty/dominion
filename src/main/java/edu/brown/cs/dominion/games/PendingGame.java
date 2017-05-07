@@ -9,7 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import edu.brown.cs.dominion.AI.AIPlayer;
+import edu.brown.cs.dominion.AI.UserAIPlayer;
 import edu.brown.cs.dominion.AI.Strategy.AttackDefense;
 import edu.brown.cs.dominion.AI.Strategy.BigMoneyBigVictoryPoints;
 import edu.brown.cs.dominion.AI.Strategy.DumbStrategy;
@@ -89,16 +89,16 @@ public class PendingGame extends GameStub {
     aiTypes.forEach(type -> {
       switch (type) {
         case "AttackDefense":
-          g.addPlayer(new AIPlayer(g, new AttackDefense()));
+          g.addPlayer(new UserAIPlayer(g, new AttackDefense()));
           return;
         case "BigMoneyBigVictoryPoints":
-          g.addPlayer(new AIPlayer(g, new BigMoneyBigVictoryPoints()));
+          g.addPlayer(new UserAIPlayer(g, new BigMoneyBigVictoryPoints()));
           return;
         case "DumbStrategy":
-          g.addPlayer(new AIPlayer(g, new DumbStrategy()));
+          g.addPlayer(new UserAIPlayer(g, new DumbStrategy()));
           return;
         case "NeuralNetAi":
-          g.addPlayer(new AIPlayer(g, new NeuralNetAi()));
+          g.addPlayer(new UserAIPlayer(g, new NeuralNetAi()));
           return;
       }
     });

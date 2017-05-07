@@ -40,8 +40,9 @@ export class GameComponent implements OnInit {
   public gameChat = new Chat();
   public notificationText: string = "";
 
-  private _currTime = MAX_TIME;
+  private _currTime;
   private _timerInterval;
+  private _firstTimer = true;
 
   constructor(
     private _gameSocketService: GameSocketService
@@ -53,7 +54,6 @@ export class GameComponent implements OnInit {
 
   public cardClickedPile(card: Card): void {
     console.log(this.game);
-    console.log(this._currTime);
 
     if (this.game.isSelectable(card, false)) {
       const playerAction = this.game.playerActionQueue.shift();
@@ -167,6 +167,7 @@ export class GameComponent implements OnInit {
       if (message === undefined) return;
       let gameState = JSON.parse(message);
       this.game = this._gameFromState(gameState);
+
       this._currTime = gameState.time;
     });
 
@@ -227,9 +228,13 @@ export class GameComponent implements OnInit {
     this._gameSocketService.addListener('turn', (message) => {
       this.game.setTurn(parseInt(message));
 
-      const updateRate = 10; // ms
+      if (!this._firstTimer) {
+        this._currTime = MAX_TIME;
+        this._firstTimer = false;
+      }
+
+      const updateRate = 10; // Reset timer after every turn
       clearInterval(this._timerInterval);
-      this._currTime = MAX_TIME;
       this._timerInterval = setInterval(() => {
         this._currTime -= updateRate;
         if (this._currTime < 0) {
