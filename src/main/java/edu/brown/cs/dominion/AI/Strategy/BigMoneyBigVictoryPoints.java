@@ -7,7 +7,7 @@ import edu.brown.cs.dominion.players.Player;
 
 public class BigMoneyBigVictoryPoints implements Strategy {
   private static List<Integer> BUY_PREFERENCES = Arrays.asList(5, 2, 4, 1),
-      DISCARD_PREFERENCES = Arrays.asList(3, 4, 5, 0, 1, 2);
+      DISCARD_PREFERENCES = Arrays.asList(6, 3, 4, 5, 0, 1, 2);
 
   @Override
   public List<Integer> getDiscardPreferences(Player who) {
@@ -22,24 +22,23 @@ public class BigMoneyBigVictoryPoints implements Strategy {
   @Override
   public int trashForChapel(Player who) {
     // TODO Auto-generated method stub
-    return 0;
+    return -1;
   }
 
   @Override
   public int trashForRemodel(Player who) {
     // TODO Auto-generated method stub
-    return 0;
+    return -1;
   }
 
   @Override
   public int playThroneRoom(Player who) {
     // TODO Auto-generated method stub
-    return 0;
+    return -1;
   }
 
   @Override
   public int playAction(Player who) {
-    // TODO Auto-generated method stub
-    return 0;
+    return -1;
   }
 }
