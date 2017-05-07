@@ -154,4 +154,8 @@ public class Board {
     }
   }
 
+  public Map<Integer, Pile> getPiles() {
+    return piles;
+  }
+
 }

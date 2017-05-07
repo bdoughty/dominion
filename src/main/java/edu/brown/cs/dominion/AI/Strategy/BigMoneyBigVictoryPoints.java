@@ -20,6 +20,24 @@ public class BigMoneyBigVictoryPoints implements Strategy {
   }
 
   @Override
+  public int trashForChapel(Player who) {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
+  @Override
+  public int trashForRemodel(Player who) {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
+  @Override
+  public int playThroneRoom(Player who) {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
+  @Override
   public int playAction(Player who) {
     // TODO Auto-generated method stub
     return 0;

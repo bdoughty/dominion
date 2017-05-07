@@ -22,6 +22,24 @@ public class DumbStrategy implements Strategy {
   }
 
   @Override
+  public int trashForChapel(Player who) {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
+  @Override
+  public int trashForRemodel(Player who) {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
+  @Override
+  public int playThroneRoom(Player who) {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
+  @Override
   public int playAction(Player who) {
     List<Card> actions =
         who.getHand().stream().filter((card) -> card instanceof AbstractAction)

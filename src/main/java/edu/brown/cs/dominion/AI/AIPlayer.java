@@ -1,6 +1,7 @@
 package edu.brown.cs.dominion.AI;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.gson.JsonObject;
@@ -110,32 +111,24 @@ public class AIPlayer extends Player {
         assert (cardIds.contains(getHand().get(out).getId()));
         return out;
       case "chapel":
-
-        break;
+        return st.trashForChapel(this);
       case "militiadiscard":
-
-        break;
-      case "mine trash":
         int o = st.discard(this);
         assert (cardIds.contains(getHand().get(o).getId()));
         return o;
+      case "mine trash":
+        return st.trashForMine(this);
       case "MoneyLender":
-
-        break;
+        assert (Collections.singleton(0).containsAll(cardIds));
+        return getHand().indexOf(0);
       case "remodel trash":
-
-        break;
+        return st.trashForRemodel(this);
       case "throne room play":
-
-        break;
+        return st.playThroneRoom(this);
       default:
         System.out.println("help");
-        System.out.println(1 / 0);
-        return -1;
+        throw new RuntimeException();
     }
-
-    return getHand().indexOf(cardIds.get(0));
-    // TODO literally the above line is so funny
   }
 
   /**
