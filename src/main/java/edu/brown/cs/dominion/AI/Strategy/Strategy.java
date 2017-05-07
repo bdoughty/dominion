@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import edu.brown.cs.dominion.games.Game;
+import edu.brown.cs.dominion.io.send.Button;
 import edu.brown.cs.dominion.players.Player;
 
 public interface Strategy {
@@ -57,6 +58,16 @@ public interface Strategy {
     return -1;
   }
 
+  default int gain(List<Integer> cardIds, Player who) {
+    if (cardIds.size() > 0) {
+      return Collections.min(cardIds,
+          (one, two) -> Integer.compare(getBuyPreferences(who).indexOf(one),
+              getBuyPreferences(who).indexOf(two)));
+    }
+
+    return -1;
+  }
+
   static List<Integer> buyable(int money, Game g) {
     return g.getBoard().getCardsUnderValue(money);
   }
@@ -65,4 +76,17 @@ public interface Strategy {
     return who.getHand().stream().map((card) -> card.getId())
         .collect(Collectors.toList());
   }
+
+  default Button chancellor(Button[] buttons) {
+    // TODO make this not default, have strategies implement this
+    assert (buttons.length == 2);
+    return buttons[1];
+  }
+
+  default Button library(Button[] buttons) {
+    // TODO make this not default, have strategies implement this
+    assert (buttons.length == 2);
+    return buttons[1];
+  }
+
 }

@@ -16,7 +16,7 @@ public class Chancellor extends AbstractAction {
     Button b2 = new Button("Don't Discard Deck", () -> {
     });
     try {
-      p.selectButtons(b1, b2).pressed();
+      p.selectButtons("chancellor", b1, b2).pressed();
     } catch (UserInteruptedException uie) {
     }
   }

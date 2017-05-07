@@ -21,17 +21,18 @@ public class AIPlayer extends Player {
 
   /*
    * <<<<<<< HEAD
-   * @Override public void play(Game g) {
-   * System.out.println("started the game!!!!!"); while
-   * (g.getPlayerFromUser(this).getActions() > 0) { int actionLoc =
-   * st.playAction(g, this); if (actionLoc == -1) { break; } }
-   * g.endActionPhase(this); int buys = g.getPlayerFromUser(this).getBuys(); int
-   * money = g.getPlayerFromUser(this).getMoney(); List<Integer> toBuy = new
+   * 
+   * @Override public void play(Game g) { System.out.println(
+   * "started the game!!!!!"); while (g.getPlayerFromUser(this).getActions() >
+   * 0) { int actionLoc = st.playAction(g, this); if (actionLoc == -1) { break;
+   * } } g.endActionPhase(this); int buys = g.getPlayerFromUser(this).getBuys();
+   * int money = g.getPlayerFromUser(this).getMoney(); List<Integer> toBuy = new
    * LinkedList<>(); while (buys > 0) { int buyId = st.buy(money, g, this); if
    * (buyId == -1) { break; } try { toBuy.add(buyId); buys--; money -=
    * g.getBoard().getCostFromId(buyId); } catch (NoPileException npe) {
    * System.out.println(npe.getMessage()); break; } } g.endBuyPhase(this,
    * toBuy); } =======
+   * 
    * @Override public void play(Game g) { System.out.println(
    * "started the game!!!!!"); while (g.getPlayerFromUser(this).getActions() >
    * 0) { int actionLoc = st.playAction(g, this); if (actionLoc == -1) { break;
@@ -146,8 +147,19 @@ public class AIPlayer extends Player {
   @Override
   public int selectBoard(List<Integer> cardIds, boolean cancelable,
       String name) {
-    // TODO this
-    return 0;
+    switch (name) {
+      case "feast":
+        return st.gain(cardIds, this);
+      case "mine board":
+        return st.gain(cardIds, this);
+      case "remodel board":
+        return st.gain(cardIds, this);
+      case "workshop":
+        return st.gain(cardIds, this);
+      default:
+        System.out.println("help");
+        throw new RuntimeException();
+    }
   }
 
   /**
@@ -157,9 +169,20 @@ public class AIPlayer extends Player {
    * @return
    */
   @Override
-  public Button selectButtons(Button... buttons) {
-    // TODO this
-    return null;
+  public Button selectButtons(String name, Button... buttons) {
+    switch (name) {
+      case "chancellor":
+        return st.chancellor(buttons);
+      case "library keep":
+        assert (buttons.length == 1);
+        return buttons[0];
+      case "library discard":
+        assert (buttons.length == 2);
+        return st.library(buttons);
+      default:
+        System.out.println("help");
+        throw new RuntimeException();
+    }
   }
 
   @Override

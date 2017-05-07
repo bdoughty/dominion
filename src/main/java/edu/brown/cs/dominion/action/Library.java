@@ -17,14 +17,15 @@ public class Library extends AbstractAction {
     while (p.getHand().size() < 7) {
       try {
         Card justDrawn = p.drawOne();
-        Button b1 = new Button("Keep " + justDrawn.toString(), () -> {});
+        Button b1 = new Button("Keep " + justDrawn.toString(), () -> {
+        });
         Button b2 = new Button("Discard " + justDrawn.toString(), () -> {
           p.discard(p.getHand().size() - 1);
         });
-        if(justDrawn instanceof AbstractAction) {
-          p.selectButtons(b1, b2).pressed();
+        if (justDrawn instanceof AbstractAction) {
+          p.selectButtons("library discard", b1, b2).pressed();
         } else {
-          p.selectButtons(b1).pressed();
+          p.selectButtons("library keep", b1).pressed();
         }
       } catch (EmptyDeckException | UserInteruptedException e) {
         System.out.println(e.getMessage());

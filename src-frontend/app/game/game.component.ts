@@ -53,6 +53,7 @@ export class GameComponent implements OnInit {
 
   public cardClickedPile(card: Card): void {
     console.log(this.game);
+    console.log(this._currTime);
 
     if (this.game.isSelectable(card, false)) {
       const playerAction = this.game.playerActionQueue.shift();
@@ -166,6 +167,7 @@ export class GameComponent implements OnInit {
       if (message === undefined) return;
       let gameState = JSON.parse(message);
       this.game = this._gameFromState(gameState);
+      this._currTime = gameState.time;
     });
 
     this._gameSocketService.addListener('redirect', (messageString) => {
@@ -269,8 +271,9 @@ export class GameComponent implements OnInit {
       this._notify(message);
     });
 
-    this._gameSocketService.addListener('time', (message) => {
-      this._currTime = parseInt(message);
+
+    this._gameSocketService.addListener('removeplayer', (playerId) => {
+      this.game.removePlayer(parseInt(playerId));
     });
   }
 }

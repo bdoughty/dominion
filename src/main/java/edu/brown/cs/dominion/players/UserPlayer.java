@@ -26,10 +26,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import edu.brown.cs.dominion.Card;
-import edu.brown.cs.dominion.io.User;
 import edu.brown.cs.dominion.games.UserGame;
 import edu.brown.cs.dominion.gameutil.EmptyDeckException;
 import edu.brown.cs.dominion.gameutil.NoActionsException;
+import edu.brown.cs.dominion.io.User;
 import edu.brown.cs.dominion.io.Websocket;
 import edu.brown.cs.dominion.io.send.Button;
 import edu.brown.cs.dominion.io.send.Callback;
@@ -66,13 +66,12 @@ public class UserPlayer extends Player {
   /**
    * the game of all UserPlayers must be a UserGame, and therefore it has the
    * ability to get its game as a UserGame.
+   * 
    * @return the UserGame that this player is a part of.
    */
   public UserGame getUserGame() {
     return (UserGame) getGame();
   }
-
-
 
   public synchronized void wake(PlayerWake wakeType, int wakeData) {
     this.wakeData = wakeData;
@@ -86,8 +85,8 @@ public class UserPlayer extends Player {
     notifyAll();
   }
 
-  public synchronized void wake(PlayerWake wakeType, int wakeData, int
-    requestId) {
+  public synchronized void wake(PlayerWake wakeType, int wakeData,
+      int requestId) {
     this.wakeRequestID = requestId;
     wake(wakeType, wakeData);
   }
@@ -103,7 +102,7 @@ public class UserPlayer extends Player {
     try {
       while (wakeType != PLAY_ACTION) {
         wait();
-        if(wakeType == NONE) {
+        if (wakeType == NONE) {
           throw new UserInteruptedException();
         }
       }
@@ -119,7 +118,7 @@ public class UserPlayer extends Player {
     try {
       while (wakeType != BUY_CARDS) {
         wait();
-        if(wakeType == NONE) {
+        if (wakeType == NONE) {
           throw new UserInteruptedException();
         }
       }
@@ -131,11 +130,12 @@ public class UserPlayer extends Player {
   }
 
   @Override
-  public synchronized int selectHand(List<Integer> cardIds, boolean
-    cancelable, String name) throws UserInteruptedException {
+  public synchronized int selectHand(List<Integer> cardIds, boolean cancelable,
+      String name) throws UserInteruptedException {
     int requestId = RequirePlayerAction.nextId++;
     Finisher f = sendPlayerAction(new RequirePlayerAction(
-      new Callback(ImmutableList.of(), cardIds, name, cancelable), true, requestId));
+        new Callback(ImmutableList.of(), cardIds, name, cancelable), true,
+        requestId));
     System.out.println("NEW SELECT HAND: " + requestId);
     userActions.forEach(System.out::println);
     try {
@@ -146,13 +146,14 @@ public class UserPlayer extends Player {
           f.finish();
           return -1;
         }
-        if(wakeType == NONE) {
+        if (wakeType == NONE) {
           f.finish();
           throw new UserInteruptedException();
         }
       } while (wakeType != REQUEST_RESPONSE && wakeRequestID == requestId);
 
-      wakeType = NONE; wakeRequestID = -1;
+      wakeType = NONE;
+      wakeRequestID = -1;
       f.finish();
       return wakeData;
     } catch (InterruptedException ignored) {
@@ -162,11 +163,12 @@ public class UserPlayer extends Player {
   }
 
   @Override
-  public synchronized int selectBoard(List<Integer> cardIds, boolean cancelable, String
-    name) throws UserInteruptedException {
+  public synchronized int selectBoard(List<Integer> cardIds, boolean cancelable,
+      String name) throws UserInteruptedException {
     int requestId = RequirePlayerAction.nextId++;
     Finisher f = sendPlayerAction(new RequirePlayerAction(
-      new Callback(cardIds, ImmutableList.of(), name, cancelable), true, requestId));
+        new Callback(cardIds, ImmutableList.of(), name, cancelable), true,
+        requestId));
     try {
       do {
         wait();
@@ -174,12 +176,13 @@ public class UserPlayer extends Player {
           f.finish();
           return -1;
         }
-        if(wakeType == NONE) {
+        if (wakeType == NONE) {
           f.finish();
           throw new UserInteruptedException();
         }
       } while (wakeType != REQUEST_RESPONSE && requestId == wakeRequestID);
-      wakeType = NONE; wakeRequestID = -1;
+      wakeType = NONE;
+      wakeRequestID = -1;
       f.finish();
       return wakeData;
     } catch (InterruptedException ignored) {
@@ -188,18 +191,19 @@ public class UserPlayer extends Player {
   }
 
   @Override
-  public Button selectButtons(Button... buttons) throws UserInteruptedException {
+  public Button selectButtons(String name, Button... buttons)
+      throws UserInteruptedException {
     int requestId = RequirePlayerAction.nextId++;
-    Finisher f = sendPlayerAction(new RequirePlayerAction(
-      Arrays.asList(buttons), true, requestId));
+    Finisher f = sendPlayerAction(
+        new RequirePlayerAction(Arrays.asList(buttons), true, requestId));
     try {
       synchronized (this) {
         while (wakeType != REQUEST_RESPONSE) {
           wait();
-          if(wakeType == NONE) {
+          if (wakeType == NONE) {
             throw new UserInteruptedException();
           }
-          for(Button b : buttons) {
+          for (Button b : buttons) {
             if (b.getId() == wakeData) {
               f.finish();
               wakeType = NONE;
