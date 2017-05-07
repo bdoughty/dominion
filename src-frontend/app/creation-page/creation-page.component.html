@@ -42,14 +42,14 @@
                   </option>
                 </select>
                 <div class="remove-button-container">
-                  <button class="remove-button" (click)="removeAi(i)">
+                  <button type='button' class="remove-button" (click)="removeAi(i)">
                     x
                   </button>
                 </div>
               </div>
             </div>
             <div class="clear-button-container" id="addAiButton">
-              <button class="wide-button" (click)="addAi()">Add an AI Player</button>
+              <button type='button' class="wide-button" (click)="addAi()">Add an AI Player</button>
             </div>
           </div>
         </div>
@@ -66,31 +66,31 @@
             <tr>
               <td>
                 <div class="button-container">
-                  <button (click)="basic()">First Game</button>
+                  <button type='button' (click)="basic()">First Game</button>
                 </div>
               </td>
               <td>
                 <div class="button-container">
-                  <button (click)="money()">Big Money</button>
+                  <button type='button' (click)="money()">Big Money</button>
                 </div>
               </td>
             </tr>
             <tr>
               <td>
                 <div class="button-container">
-                  <button (click)="randomSelect()">Random</button>
+                  <button type='button' (click)="randomSelect()">Random</button>
                 </div>
               </td>
               <td>
                 <div class="button-container">
-                  <button (click)="trash()">Trash Heap</button>
+                  <button type='button' (click)="trash()">Trash Heap</button>
                 </div>
               </td>
             </tr>
             <tr>
               <td colspan="2">
                 <div class="clearing-button-container">
-                  <button class="clearing" (click)="clear()">Deselect All</button>
+                  <button type='button' class="clearing" (click)="clear()">Deselect All</button>
                 </div>
               </td>
             </tr>
@@ -113,7 +113,7 @@
           </div>
         </div>
         <div class="wide-button-container">
-          <button class="wide-button" id="submitButton" (click)="validate()">Start The Game</button>
+          <button type='button' class="wide-button" id="submitButton" (click)="validate()">Start The Game</button>
         </div>
       </div>
       <div class="pane" id="blowUp">
