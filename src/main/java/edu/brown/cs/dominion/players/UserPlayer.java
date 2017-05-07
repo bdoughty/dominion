@@ -74,7 +74,7 @@ public class UserPlayer extends Player {
     try {
       while (wakeType != PLAY_ACTION) {
         wait();
-        if(wakeType == NONE) {
+        if (wakeType == NONE) {
           throw new UserInteruptedException();
         }
       }
@@ -90,7 +90,7 @@ public class UserPlayer extends Player {
     try {
       while (wakeType != BUY_CARDS) {
         wait();
-        if(wakeType == NONE) {
+        if (wakeType == NONE) {
           throw new UserInteruptedException();
         }
       }
@@ -102,11 +102,13 @@ public class UserPlayer extends Player {
   }
 
   @Override
-  public synchronized int selectHand(List<Integer> cardIds, boolean
-    cancelable, String name) throws UserInteruptedException {
+  public synchronized int selectHand(List<Integer> cardIds, boolean cancelable,
+      String name) throws UserInteruptedException {
     int requestId = RequirePlayerAction.nextId++;
-    Finisher f = sendPlayerAction(new RequirePlayerAction(this, REQUEST_RESPONSE,
-      new Callback(ImmutableList.of(), cardIds, name, cancelable), true, requestId));
+    Finisher f = sendPlayerAction(
+        new RequirePlayerAction(this, REQUEST_RESPONSE,
+            new Callback(ImmutableList.of(), cardIds, name, cancelable), true,
+            requestId));
     System.out.println("NEW SELECT HAND: " + requestId);
     userActions.forEach(System.out::println);
     try {
@@ -117,13 +119,14 @@ public class UserPlayer extends Player {
           f.finish();
           return -1;
         }
-        if(wakeType == NONE) {
+        if (wakeType == NONE) {
           f.finish();
           throw new UserInteruptedException();
         }
       } while (wakeType != REQUEST_RESPONSE && wakeRequestID == requestId);
 
-      wakeType = NONE; wakeRequestID = -1;
+      wakeType = NONE;
+      wakeRequestID = -1;
       f.finish();
       return wakeData;
     } catch (InterruptedException ignored) {
@@ -133,11 +136,13 @@ public class UserPlayer extends Player {
   }
 
   @Override
-  public synchronized int selectBoard(List<Integer> cardIds, boolean cancelable, String
-    name) throws UserInteruptedException {
+  public synchronized int selectBoard(List<Integer> cardIds, boolean cancelable,
+      String name) throws UserInteruptedException {
     int requestId = RequirePlayerAction.nextId++;
-    Finisher f = sendPlayerAction(new RequirePlayerAction(this, REQUEST_RESPONSE,
-      new Callback(cardIds, ImmutableList.of(), name, cancelable), true, requestId));
+    Finisher f = sendPlayerAction(
+        new RequirePlayerAction(this, REQUEST_RESPONSE,
+            new Callback(cardIds, ImmutableList.of(), name, cancelable), true,
+            requestId));
     try {
       do {
         wait();
@@ -145,12 +150,13 @@ public class UserPlayer extends Player {
           f.finish();
           return -1;
         }
-        if(wakeType == NONE) {
+        if (wakeType == NONE) {
           f.finish();
           throw new UserInteruptedException();
         }
       } while (wakeType != REQUEST_RESPONSE && requestId == wakeRequestID);
-      wakeType = NONE; wakeRequestID = -1;
+      wakeType = NONE;
+      wakeRequestID = -1;
       f.finish();
       return wakeData;
     } catch (InterruptedException ignored) {
@@ -159,18 +165,19 @@ public class UserPlayer extends Player {
   }
 
   @Override
-  public Button selectButtons(Button... buttons) throws UserInteruptedException {
+  public Button selectButtons(String name, Button... buttons)
+      throws UserInteruptedException {
     int requestId = RequirePlayerAction.nextId++;
-    Finisher f = sendPlayerAction(new RequirePlayerAction(this, REQUEST_RESPONSE,
-      Arrays.asList(buttons), true, requestId));
+    Finisher f = sendPlayerAction(new RequirePlayerAction(this,
+        REQUEST_RESPONSE, Arrays.asList(buttons), true, requestId));
     try {
       synchronized (this) {
         while (wakeType != REQUEST_RESPONSE) {
           wait();
-          if(wakeType == NONE) {
+          if (wakeType == NONE) {
             throw new UserInteruptedException();
           }
-          for(Button b : buttons) {
+          for (Button b : buttons) {
             if (b.getId() == wakeData) {
               f.finish();
               wakeType = NONE;
