@@ -12,7 +12,7 @@ import {ChatSocketService} from "../shared/chatsocket.service";
   private moneyPreset = new Set([21, 22, 23, 24, 25, 18, 8, 10, 26, 27]);
   private trashPreset = new Set([24, 14, 16, 15, 25, 26, 12, 10, 17, 8]);
   private desiredAis = [];
-  private AiTypes = ["DumbStrategy", "BigMoneyBigVictoryPoints", "ChapelHeavy", "AttackDefense"];
+  private AiTypes = ["DumbStrategy", "BigMoneyBigVictoryPoints", "NeuralNetAi", "ChapelHeavy", "AttackDefense"];
 
   constructor(public _chatSocketService: ChatSocketService) {
     _chatSocketService.addListener('redirect', (messageString) => {
