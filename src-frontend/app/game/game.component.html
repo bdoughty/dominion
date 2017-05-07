@@ -19,9 +19,7 @@
 <div id="game">
   <dmn-notification [(text)]="notificationText"></dmn-notification>
   <div class="timer" *ngIf="game && game.isOwnTurn()">
-    <div class="timer-inner" [@timerState]="timerState">
-
-    </div>
+    <div class="timer-inner" [style.width.%]="timerPercent * 100"></div>
   </div>
   <div id="board" *ngIf="game">
     <div id="left-bar">
