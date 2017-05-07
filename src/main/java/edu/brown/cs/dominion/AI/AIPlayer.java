@@ -6,7 +6,12 @@ import java.util.List;
 
 import com.google.gson.JsonObject;
 
+<<<<<<< HEAD
 import edu.brown.cs.dominion.AI.Strategy.DumbStrategy;
+=======
+import edu.brown.cs.dominion.Card;
+import edu.brown.cs.dominion.Mapper;
+>>>>>>> fdbd8e9162a5269bfb1adf946fdc7055581ab0a5
 import edu.brown.cs.dominion.AI.Strategy.Strategy;
 import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.io.send.Button;
@@ -66,9 +71,16 @@ public class AIPlayer extends Player {
   @Override
   public int selectHand(List<Integer> cardIds, boolean cancelable,
       String name) {
-    if (cardIds.size() == 0 || !getHand().containsAll(cardIds)) {
+    if ((cardIds.size() == 0 && !cancelable)
+        || !Mapper.map(getHand(), Card::getId).containsAll(cardIds)) {
       throw new RuntimeException();
+    } else if (cardIds.size() == 0) {
+      if (!cancelable) {
+        throw new RuntimeException();
+      }
+      return -1;
     }
+
     switch (name) {
       case "reveal bureaucrat":
         if (cardIds.contains(6)) {
