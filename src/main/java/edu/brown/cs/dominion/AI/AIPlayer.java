@@ -90,10 +90,21 @@ public class AIPlayer extends Player {
   @Override
   public int selectHand(List<Integer> cardIds, boolean cancelable,
       String name) {
+    if (cardIds.size() == 0 || !getHand().containsAll(cardIds)) {
+      throw new RuntimeException();
+    }
     switch (name) {
       case "reveal bureaucrat":
-
-        break;
+        if (cardIds.contains(6)) {
+          return getHand().indexOf(6);
+        } else if (cardIds.contains(3)) {
+          return getHand().indexOf(3);
+        } else if (cardIds.contains(4)) {
+          return getHand().indexOf(4);
+        } else {
+          assert (cardIds.contains(5));
+          return getHand().indexOf(5);
+        }
       case "cellardiscard":
 
         break;
@@ -118,9 +129,9 @@ public class AIPlayer extends Player {
       default:
         System.out.println("help");
         System.out.println(1 / 0);
+        return -1;
     }
     // TODO this
-    return 0;
   }
 
   /**

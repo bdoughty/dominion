@@ -38,7 +38,7 @@ export const cardInfo = {
   6: {
     name: 'Curse',
     text: '-1 Victory Point',
-    type: 'action',
+    type: 'victory',
     cost: 0
   },
   7: {
