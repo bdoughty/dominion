@@ -104,6 +104,16 @@ export class ClientGame {
     this.cart.splice(this.cart.indexOf(card), 1);
   }
 
+  public removePlayer(id: number): void {
+    for (let i = 0; i < this.players.length; i) {
+      const player = this.players[i];
+      if (player.id == id) {
+        this.players.splice(i, 1);
+        break;
+      }
+    }
+  }
+
   public setTurn(id: number): void {
     let found = false;
     for (let i = 0; i < this.players.length; i++) {

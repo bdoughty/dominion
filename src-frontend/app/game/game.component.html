@@ -56,7 +56,7 @@
         </div>
       </div>
       <div *ngIf="game.getCurrPlayerAction() && game.getCurrPlayerAction().cancel">
-        <button (click)="cancel()">Cancel</button>
+        <button (click)="cancel()">Cancel / Finish</button>
       </div>
       <div *ngIf="game.getCurrPlayerAction()">
         <button *ngFor="let button of game.getCurrPlayerAction().buttons"
