@@ -165,6 +165,7 @@ public class Game extends GameStub {
       if (p != curr) {
         try {
           p.gain(gain(6), false, false);
+          sendMessage(p.getName() + " gained a Curse.");
         } catch (EmptyPileException | NoPileException e) {
           System.out.println(e.getMessage());
         }
