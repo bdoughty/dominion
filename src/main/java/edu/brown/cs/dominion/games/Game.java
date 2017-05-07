@@ -37,11 +37,11 @@ public class Game extends GameStub {
     while (true) {
       for (Player allPlayer : allPlayers) {
         playTurn(allPlayer);
-        if (board.gameHasEnded()) {
+        if (board.gameHasEnded() || allPlayers.size() == 0) {
           break;
         }
       }
-      if (board.gameHasEnded()) {
+      if (board.gameHasEnded() || allPlayers.size() == 0) {
         break;
       }
     }
@@ -89,17 +89,17 @@ public class Game extends GameStub {
   }
 
   public void playTurn(Player p) {
+    turnStartTime = System.currentTimeMillis();
     sendMessage(p.getName() + " began their turn.");
     Thread turnEnder = new Thread(() -> {
       try {
-        turnStartTime = System.currentTimeMillis();
         Thread.sleep(61000);
         cancelTurn();
         System.out.println("ending turn");
       } catch (InterruptedException ignored) {
       }
     });
-    // turnEnder.start();
+    turnEnder.start();
     currentPlayer = p;
     p.newTurn();
     if (!turnCanceled) {
