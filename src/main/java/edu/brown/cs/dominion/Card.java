@@ -38,4 +38,17 @@ public abstract class Card {
   public void play(Player p) throws NotActionException {
 
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || !(o instanceof Card)) {
+      return false;
+    }
+    return ((Card) o).getId() == getId();
+  }
+
+  @Override
+  public int hashCode() {
+    return Integer.hashCode(getId());
+  }
 }

@@ -45,8 +45,8 @@ public class DumbStrategy implements Strategy {
         who.getHand().stream().filter((card) -> card instanceof AbstractAction)
             .collect(Collectors.toList());
     if (actions.size() > 0) {
-      return who.getHand()
-          .indexOf(actions.get(r.nextInt(actions.size())).getId());
+      System.out.println("has an action");
+      return who.getHand().indexOf(actions.get(r.nextInt(actions.size())));
     }
 
     return -1;
