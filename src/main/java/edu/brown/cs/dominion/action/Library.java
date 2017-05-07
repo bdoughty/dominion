@@ -5,6 +5,7 @@ import edu.brown.cs.dominion.gameutil.EmptyDeckException;
 import edu.brown.cs.dominion.io.send.Button;
 import edu.brown.cs.dominion.players.Player;
 import edu.brown.cs.dominion.players.UserInteruptedException;
+import edu.brown.cs.dominion.victory.AbstractVictoryPoint;
 
 public class Library extends AbstractAction {
 
@@ -19,10 +20,14 @@ public class Library extends AbstractAction {
         Card justDrawn = p.drawOne();
         Button b1 = new Button("Keep " + justDrawn.toString(), () -> {
         });
-        Button b2 = new Button("Discard " + justDrawn.toString(), () -> {
-          p.discard(p.getHand().size() - 1);
-        });
-        p.selectButtons(b1, b2).pressed();
+        if (justDrawn instanceof AbstractVictoryPoint) {
+          Button b2 = new Button("Discard " + justDrawn.toString(), () -> {
+            p.discard(p.getHand().size() - 1);
+          });
+          p.selectButtons(b1, b2).pressed();
+        } else {
+          p.selectButtons(b1).pressed();
+        }
       } catch (EmptyDeckException | UserInteruptedException e) {
         System.out.println(e.getMessage());
         break;
