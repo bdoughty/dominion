@@ -272,5 +272,9 @@ export class GameComponent implements OnInit {
     this._gameSocketService.addListener('time', (message) => {
       this._currTime = parseInt(message);
     });
+
+    this._gameSocketService.addListener('removeplayer', (playerId) => {
+      this.game.removePlayer(parseInt(playerId));
+    });
   }
 }
