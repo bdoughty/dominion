@@ -1,6 +1,5 @@
 package edu.brown.cs.dominion.games;
 
-import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -10,7 +9,7 @@ import edu.brown.cs.dominion.AI.Strategy.BigMoneyBigVictoryPoints;
 import edu.brown.cs.dominion.AI.Strategy.ChapelHeavy;
 import edu.brown.cs.dominion.AI.Strategy.DumbStrategy;
 import edu.brown.cs.dominion.AI.Strategy.NeuralNetAi;
-import edu.brown.cs.dominion.User;
+import edu.brown.cs.dominion.io.User;
 import edu.brown.cs.dominion.io.Websocket;
 import edu.brown.cs.dominion.io.send.MessageType;
 

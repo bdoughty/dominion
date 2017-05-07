@@ -8,8 +8,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import edu.brown.cs.dominion.Card;
-import edu.brown.cs.dominion.neuralNetwork.NeuralNetwork;
-import edu.brown.cs.dominion.neuralNetwork.NeuralNetworkIO;
+import edu.brown.cs.dominion.AI.neuralNetwork.NeuralNetwork;
+import edu.brown.cs.dominion.AI.neuralNetwork.NeuralNetworkIO;
 import edu.brown.cs.dominion.players.Player;
 
 public class NeuralNetAi implements Strategy {

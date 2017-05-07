@@ -1,7 +1,6 @@
-package edu.brown.cs.dominion.neuralNetwork;
+package edu.brown.cs.dominion.AI.neuralNetwork;
 
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class NDArray {
   int[] dimSizes;

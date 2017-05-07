@@ -31,7 +31,6 @@ public class Main {
   private static final int DEFAULT_PORT = 4567;
   private UserRegistry users;
   private HomeWebsocket home;
-  private NewUserWebsocket newUser;
 
   public static void main(String[] args) {
     Main m = new Main();
@@ -54,6 +53,10 @@ public class Main {
     runSparkServer((int) options.valueOf("port"));
   }
 
+  /**
+   * Run the spark server, setting up websockets and web routes.
+   * @param portNum the port to set the server up on.
+   */
   private void runSparkServer(int portNum) {
     port(portNum);
     externalStaticFileLocation("dist");

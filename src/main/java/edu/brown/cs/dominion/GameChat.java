@@ -2,6 +2,7 @@ package edu.brown.cs.dominion;
 
 import java.util.Collection;
 
+import edu.brown.cs.dominion.io.User;
 import edu.brown.cs.dominion.io.Websocket;
 import edu.brown.cs.dominion.io.send.MessageType;
 
