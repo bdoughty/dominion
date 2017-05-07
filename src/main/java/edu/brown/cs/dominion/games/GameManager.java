@@ -147,6 +147,9 @@ public class GameManager implements SocketServer {
       container.add("users", GSON.toJsonTree(g.getPlayers().stream().map
         (Player::toJson).collect(Collectors.toList())));
       container.addProperty("id", userPlayers.get(user).getId());
+      container.addProperty("time",
+        p.getId() == g.getCurrentPlayerId() ? g.getTimeLeftOnTurn() - 1000 :
+          60000);
       ws.send(s, INIT_GAME, GSON.toJson(container));
       p.sendAll(s);
     } else {

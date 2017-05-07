@@ -25,6 +25,7 @@ public class NewUserWebsocket implements SocketServer{
       String name = LETTERS.retainFrom(m);
       if (name.length() > 20) { name = name.substring(0, 20); }
       u.setName(name);
+      ws.send(u, REDIRECT, "lobby");
     });
   }
 }

@@ -60,7 +60,7 @@ public class Main {
     exception(Exception.class, new ExceptionPrinter());
 
     webSocket("/home", new Websocket(users, home));
-    webSocket("/name", new Websocket(users, newUser));
+    webSocket("/name", new Websocket(users, new NewUserWebsocket()));
     Websocket gameWs = new Websocket(users, gm);
     gm.setWeb(gameWs);
     webSocket("/gamesocket", gameWs);
