@@ -35,7 +35,8 @@ public enum MessageType {
   WINNER ("winner"),
   VICTORY_POINTS ("victorypoints"),
   HAND_NUM ("handcardnum"),
-  CHANGE_NAME ("changename");
+  CHANGE_NAME ("changename"),
+  REMOVE_PLAYER("removeplayer");
 
 
   private final String name;

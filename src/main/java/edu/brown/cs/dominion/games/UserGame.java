@@ -114,4 +114,10 @@ public class UserGame extends Game {
   public void sendServerMessage(String message){
     gc.serverSend(message);
   }
+
+  public void removeUser(Player p, User u) {
+    removeUser(p);
+    allUsers.remove(u);
+    sendAll(MessageType.REMOVE_PLAYER, Integer.toString(p.getId()));
+  }
 }

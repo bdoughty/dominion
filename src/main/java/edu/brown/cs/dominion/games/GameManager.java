@@ -173,7 +173,7 @@ public class GameManager implements SocketServer {
     ws.putCommand(EXIT_GAME, (w, u, m) -> {
       UserPlayer p = userPlayers.get(u);
       Game g = p.getGame();
-      g.removeUser(p);
+      p.getUserGame().removeUser(p, u);
       userPlayers.remove(u);
       web.send(u, REDIRECT, "lobby");
     });
