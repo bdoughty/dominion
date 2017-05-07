@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.google.gson.JsonObject;
 
+import edu.brown.cs.dominion.Card;
+import edu.brown.cs.dominion.Mapper;
 import edu.brown.cs.dominion.AI.Strategy.Strategy;
 import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.io.send.Button;
@@ -21,7 +23,6 @@ public class AIPlayer extends Player {
 
   /*
    * <<<<<<< HEAD
-   * 
    * @Override public void play(Game g) { System.out.println(
    * "started the game!!!!!"); while (g.getPlayerFromUser(this).getActions() >
    * 0) { int actionLoc = st.playAction(g, this); if (actionLoc == -1) { break;
@@ -32,7 +33,6 @@ public class AIPlayer extends Player {
    * g.getBoard().getCostFromId(buyId); } catch (NoPileException npe) {
    * System.out.println(npe.getMessage()); break; } } g.endBuyPhase(this,
    * toBuy); } =======
-   * 
    * @Override public void play(Game g) { System.out.println(
    * "started the game!!!!!"); while (g.getPlayerFromUser(this).getActions() >
    * 0) { int actionLoc = st.playAction(g, this); if (actionLoc == -1) { break;
@@ -93,9 +93,16 @@ public class AIPlayer extends Player {
   @Override
   public int selectHand(List<Integer> cardIds, boolean cancelable,
       String name) {
-    if (cardIds.size() == 0 || !getHand().containsAll(cardIds)) {
+    if ((cardIds.size() == 0 && !cancelable)
+        || !Mapper.map(getHand(), Card::getId).containsAll(cardIds)) {
       throw new RuntimeException();
+    } else if (cardIds.size() == 0) {
+      if (!cancelable) {
+        throw new RuntimeException();
+      }
+      return -1;
     }
+
     switch (name) {
       case "reveal bureaucrat":
         if (cardIds.contains(6)) {
