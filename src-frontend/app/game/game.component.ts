@@ -7,7 +7,7 @@ import {Card} from "./card/card.model";
 import {trigger, state, style, animate, transition, keyframes} from "@angular/animations";
 import {PlayerAction} from "./models/player-action.model";
 
-const TURN_TIME = 60000; // ms
+const MAX_TIME = 60000; // ms
 
 @Component({
   selector: 'dmn-game',
@@ -26,12 +26,12 @@ const TURN_TIME = 60000; // ms
           style({width: '0', offset: 0.8})
         ]))
       ])
-    ]),
-    trigger('timerState', [
-      state('start', style({width: '100%'})),
-      state('end', style({width: '0%'})),
-      transition('start => end', animate(TURN_TIME + 'ms linear'))
     ])
+    // ,trigger('timerState', [
+    //   state('start', style({width: '100%'})),
+    //   state('end', style({width: '0%'})),
+    //   transition('start => end', animate(TURN_TIME + 's linear'))
+    // ])
   ]
 })
 export class GameComponent implements OnInit {
@@ -39,7 +39,9 @@ export class GameComponent implements OnInit {
   public game: ClientGame;
   public gameChat = new Chat();
   public notificationText: string = "";
-  public timerState = 'start';
+
+  private _currTime = MAX_TIME;
+  private _timerInterval;
 
   constructor(
     private _gameSocketService: GameSocketService
@@ -50,13 +52,16 @@ export class GameComponent implements OnInit {
   }
 
   public cardClickedPile(card: Card): void {
-    // console.log(this.game);
-    console.log(this.game.getCurrPlayerAction());
-    this.timerState = 'end';
+    console.log(this.game);
 
     if (this.game.isSelectable(card, false)) {
-      this.game.playerActionQueue.shift();
-      this._gameSocketService.send('select', JSON.stringify({inhand: false, loc: card.id}));
+      const playerAction = this.game.playerActionQueue.shift();
+      this._gameSocketService.send('select',
+        JSON.stringify({
+          inhand: false,
+          loc: card.id,
+          id: playerAction.id
+        }));
     } else {
       this._addToCart(card);
     }
@@ -64,9 +69,14 @@ export class GameComponent implements OnInit {
 
   public cardClickedHand(card: Card): void {
     if (this.game.isSelectable(card, true)) {
-      this.game.playerActionQueue.shift();
+      const playerAction = this.game.playerActionQueue.shift();
+
       this._gameSocketService.send('select',
-        JSON.stringify({inhand: true, loc: card.handPosition}));
+        JSON.stringify({
+          inhand: true,
+          loc: card.handPosition,
+          id: playerAction.id
+        }));
     } else {
       this._play(card);
     }
@@ -104,7 +114,12 @@ export class GameComponent implements OnInit {
   }
 
   public cancel() {
-    this._gameSocketService.send('cancel', '');
+    this._gameSocketService.send('cancel',
+      this.game.getCurrPlayerAction().id + '');
+  }
+
+  public get timerPercent() {
+    return this._currTime / MAX_TIME;
   }
 
 
@@ -209,12 +224,16 @@ export class GameComponent implements OnInit {
 
     this._gameSocketService.addListener('turn', (message) => {
       this.game.setTurn(parseInt(message));
-      this.timerState = 'start';
-      setTimeout(() => { // Wait 1 tick to restart timer for 1 player game.
-        if (this.game.isOwnTurn()) {
-          this.timerState = 'end';
+
+      const updateRate = 10; // ms
+      clearInterval(this._timerInterval);
+      this._currTime = MAX_TIME;
+      this._timerInterval = setInterval(() => {
+        this._currTime -= updateRate;
+        if (this._currTime < 0) {
+          clearInterval(this._timerInterval);
         }
-      }, 0);
+      }, updateRate);
     });
 
     this._gameSocketService.addListener('board', (message) => {
@@ -233,7 +252,8 @@ export class GameComponent implements OnInit {
           playerAction.handselect,
           playerAction.boardselect,
           playerAction.buttons,
-          playerAction.cancel
+          playerAction.cancel,
+          playerAction.id
         ));
       });
     });
@@ -247,6 +267,10 @@ export class GameComponent implements OnInit {
 
     this._gameSocketService.addListener('notify', (message) => {
       this._notify(message);
+    });
+
+    this._gameSocketService.addListener('time', (message) => {
+      this._currTime = parseInt(message);
     });
   }
 }

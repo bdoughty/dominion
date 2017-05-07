@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.action.AbstractAction;
-import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.players.Player;
 
 public class DumbStrategy implements Strategy {
@@ -23,7 +22,7 @@ public class DumbStrategy implements Strategy {
   }
 
   @Override
-  public int playAction(Game g, Player who) {
+  public int playAction(Player who) {
     List<Card> actions =
         who.getHand().stream().filter((card) -> card instanceof AbstractAction)
             .collect(Collectors.toList());
@@ -36,7 +35,7 @@ public class DumbStrategy implements Strategy {
   }
 
   @Override
-  public int discard(Game g, Player who) {
+  public int discard(Player who) {
     List<Card> hand = who.getHand();
     if (hand.size() > 0) {
       return r.nextInt(hand.size());
@@ -46,8 +45,8 @@ public class DumbStrategy implements Strategy {
   }
 
   @Override
-  public int buy(int money, Game g, Player who) {
-    List<Integer> buyable = g.getBoard().getCardsUnderValue(money);
+  public int buy(int money, Player who) {
+    List<Integer> buyable = who.getGame().getBoard().getCardsUnderValue(money);
     if (buyable.size() > 0) {
       return buyable.get(r.nextInt(buyable.size()));
     }

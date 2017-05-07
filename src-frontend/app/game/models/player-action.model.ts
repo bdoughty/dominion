@@ -7,5 +7,6 @@ export class PlayerAction {
     public boardSelect: number[],
     public buttons: Button[],
     public cancel: boolean,
+    public id: number
   ) {}
 }
