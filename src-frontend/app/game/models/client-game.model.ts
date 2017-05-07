@@ -145,7 +145,7 @@ export class ClientGame {
     if (this.getCurrPlayerAction() == null) {
       return false;
     }
-    return this.getCurrPlayerAction().requiresSelect;
+    return this.getCurrPlayerAction().requiresSelect; // TODO: || this.getCurrPlayerAction().<buttons>
   }
 
   public canEndPhase(): boolean {

@@ -45,7 +45,7 @@ public class Websocket {
     allUserCommands.put(type.toString(), ml);
   }
 
-  public void send(User u, MessageType type, Object message) {
+  public synchronized void send(User u, MessageType type, Object message) {
     for (Session s : userSessions.get(u)) {
       try {
         s.getRemote().sendString(type + ":" + message.toString());
@@ -57,14 +57,14 @@ public class Websocket {
     }
   }
 
-  public void sendAll(MessageType type, Object message) {
+  public synchronized void sendAll(MessageType type, Object message) {
     String mess = message.toString();
     for (User u : userSessions.keySet()) {
       send(u, type, message);
     }
   }
 
-  public void sendRaw(User u, String message) {
+  public synchronized void sendRaw(User u, String message) {
     for (Session s : userSessions.get(u)) {
       try {
         s.getRemote().sendString(message);
@@ -76,13 +76,13 @@ public class Websocket {
     }
   }
 
-  public void sendAllRaw(String message) {
+  public synchronized void sendAllRaw(String message) {
     for (User u : userSessions.keySet()) {
       sendRaw(u, message);
     }
   }
 
-  public void send(Session s, MessageType type, Object message) {
+  public synchronized void send(Session s, MessageType type, Object message) {
     try {
       s.getRemote().sendString(type + ":" + message.toString());
     } catch (IOException e) {
