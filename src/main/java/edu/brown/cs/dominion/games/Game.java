@@ -5,10 +5,13 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.gameutil.Board;
@@ -113,13 +116,18 @@ public class Game extends GameStub {
     return board.buyCard(buyId, money);
   }
 
-  public void win() {
+  public Set<Integer> win() {
     System.out.println("Game Over");
     try {
       updateDatabase();
     } catch (ClassNotFoundException e) {
       System.out.println(e.getMessage());
     }
+    Map<Integer, Integer> vps = getVictoryPointMap();
+    int maxScore = Collections.max(vps.values());
+    return vps.keySet().stream().filter((key) -> {
+      return vps.get(key) == maxScore;
+    }).collect(Collectors.toSet());
   }
 
   public void updateDatabase() throws ClassNotFoundException {

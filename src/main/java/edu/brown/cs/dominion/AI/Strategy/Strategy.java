@@ -1,5 +1,7 @@
 package edu.brown.cs.dominion.AI.Strategy;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,6 +50,7 @@ public interface Strategy {
 
   default List<Integer> buy(int money, Player who) {
     List<Integer> buyable = Strategy.buyable(money, who.getGame());
+    buyable.retainAll(getBuyPreferences(who));
     if (buyable.size() > 0) {
       Collections.sort(buyable,
           (one, two) -> Integer.compare(getBuyPreferences(who).indexOf(one),
@@ -58,8 +61,10 @@ public interface Strategy {
   }
 
   default int gain(List<Integer> cardIds, Player who) {
-    if (cardIds.size() > 0) {
-      return Collections.min(cardIds,
+    List<Integer> gainable = new ArrayList<>(cardIds);
+    gainable.retainAll(Arrays.asList(0, 1, 2, 3, 4, 5, 10));
+    if (gainable.size() > 0) {
+      return Collections.min(gainable,
           (one, two) -> Integer.compare(getBuyPreferences(who).indexOf(one),
               getBuyPreferences(who).indexOf(two)));
     }

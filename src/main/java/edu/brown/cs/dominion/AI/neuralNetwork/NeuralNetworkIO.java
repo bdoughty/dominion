@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class NeuralNetworkIO {
@@ -55,7 +54,7 @@ public class NeuralNetworkIO {
       nn.layers[sizes.length - 2] = loadLayer(s, sizes[sizes.length - 2],
           sizes[sizes.length - 1], ActivationFunction.LINEAR);
 
-      System.out.println(Arrays.toString(sizes));
+      // System.out.println(Arrays.toString(sizes));
 
       return nn;
     } catch (FileNotFoundException e) {
