@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class AITest {
   public static void main(String[] args) {
-    for(int i = 0;i < 1;i++){
+    for(int i = 0;i < 50;i++){
       Game g = new Game(ImmutableList.of(
         new AIPlayer(new DumbStrategy())),
         get10cards());

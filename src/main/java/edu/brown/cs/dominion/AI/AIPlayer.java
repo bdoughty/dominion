@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.google.gson.JsonObject;
 
-
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.Mapper;
 import edu.brown.cs.dominion.AI.Strategy.Strategy;

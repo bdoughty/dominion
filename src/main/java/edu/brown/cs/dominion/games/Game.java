@@ -115,7 +115,7 @@ public class Game extends GameStub {
       } catch (InterruptedException ignored) {
       }
     });
-    turnEnder.start();
+    //turnEnder.start();
     currentPlayer = p;
     p.newTurn();
     if (!turnCanceled) {
@@ -147,12 +147,13 @@ public class Game extends GameStub {
     int loc;
     try {
       while (-1 != (loc = p.playHandAction()) && !turnCanceled) {
-        System.out.println("played card " + loc);
         try {
           Card c = p.play(loc);
           c.play(p);
           sendMessage(p.getName() + " played " + c.toString() + ".");
         } catch (NoActionsException | NotActionException ignored) {
+          p.endActionPhase();
+          return;
         }
       }
     } catch (UserInteruptedException ignored) {
