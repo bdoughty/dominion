@@ -19,9 +19,9 @@ public class Mine extends AbstractAction {
 
   @Override
   public void play(Player p) {
-    List<Integer> handIds = p.getHand().stream()
-        .filter(c -> c instanceof AbstractMoney).map(Card::getId)
-        .collect(Collectors.toList());
+    List<Integer> handIds =
+        p.getHand().stream().filter(c -> c instanceof AbstractMoney)
+            .map(Card::getId).collect(Collectors.toList());
     int toTrash = 0;
     if (!handIds.isEmpty()) {
       try {
@@ -36,8 +36,8 @@ public class Mine extends AbstractAction {
       return;
     }
     Card c = p.trash(toTrash);
-    List<Integer> boardIds = p.getGame().getBoard()
-        .getMoneyUnderValue(c.getCost() + 3);
+    List<Integer> boardIds =
+        p.getGame().getBoard().getMoneyUnderValue(c.getCost() + 3);
     int toGain = 0;
     try {
       toGain = p.selectBoard(boardIds, false, "mine board");
@@ -48,7 +48,7 @@ public class Mine extends AbstractAction {
     try {
       p.gain(p.getGame().gain(toGain), true, false);
     } catch (EmptyPileException | NoPileException ignored) {
-      System.out.println("Pile is empty");
+      System.out.println("Cannot mine, pile is empty");
     }
   }
 
