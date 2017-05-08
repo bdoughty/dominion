@@ -124,7 +124,7 @@ public class UserGame extends Game {
   }
 
   public void removeUser(Player p, User u) {
-    removeUser(p);
+    super.removeUser(p);
     allUsers.remove(u);
     sendAll(MessageType.REMOVE_PLAYER, Integer.toString(p.getId()));
   }

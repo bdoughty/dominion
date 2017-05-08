@@ -22,6 +22,7 @@ import edu.brown.cs.dominion.gameutil.NotActionException;
 import edu.brown.cs.dominion.gameutil.TooExpensiveException;
 import edu.brown.cs.dominion.players.Player;
 import edu.brown.cs.dominion.players.UserInteruptedException;
+import edu.brown.cs.dominion.players.UserPlayer;
 
 /**
  * Created by henry on 4/2/2017.
@@ -207,8 +208,8 @@ public class Game extends GameStub {
 
   public void cancelTurn() {
     turnCanceled = true;
-    synchronized (currentPlayer) {
-      currentPlayer.notifyAll();
+    if(currentPlayer instanceof UserPlayer) {
+      ((UserPlayer) currentPlayer).cancelAll();
     }
   }
 

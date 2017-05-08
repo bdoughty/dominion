@@ -106,6 +106,7 @@ public class UserPlayer extends Player {
       while (wakeType != PLAY_ACTION) {
         wait();
         if (wakeType == NONE) {
+          System.out.println("escaped handaction");
           throw new UserInteruptedException();
         }
       }
@@ -122,6 +123,7 @@ public class UserPlayer extends Player {
       while (wakeType != BUY_CARDS) {
         wait();
         if (wakeType == NONE) {
+          System.out.println("buy");
           throw new UserInteruptedException();
         }
       }
@@ -150,6 +152,7 @@ public class UserPlayer extends Player {
           return -1;
         }
         if (wakeType == NONE) {
+          System.out.println("escaped selectHand");
           f.finish();
           throw new UserInteruptedException();
         }
@@ -180,6 +183,7 @@ public class UserPlayer extends Player {
           return -1;
         }
         if (wakeType == NONE) {
+          System.out.println("escaped selectboard");
           f.finish();
           throw new UserInteruptedException();
         }
@@ -208,6 +212,7 @@ public class UserPlayer extends Player {
         while (wakeType != REQUEST_RESPONSE) {
           wait();
           if (wakeType == NONE) {
+            System.out.println("escaped selectButtons");
             throw new UserInteruptedException();
           }
           for (Button b : buttons) {
@@ -389,7 +394,6 @@ public class UserPlayer extends Player {
 
   private void sendMoney() {
     if (u != null) {
-      System.out.println("$: " + getMoney());
       gameSocket.send(u, GOLD, getMoney());
     }
   }
@@ -459,6 +463,11 @@ public class UserPlayer extends Player {
 
   public boolean hasUserActions(){
     return !userActions.isEmpty();
+  }
+
+  public synchronized void cancelAll(){
+    wakeType = NONE;
+    notifyAll();
   }
 }
 
