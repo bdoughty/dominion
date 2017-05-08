@@ -42,6 +42,7 @@ public class Game extends GameStub {
   public void play() {
     while (true) {
       for (int i = 0; i < allPlayers.size(); i++) {
+        System.out.println("starting turn of player " + i);
         Player p = allPlayers.get(i);
         if (playTurn(p)) {
           i--;
@@ -118,9 +119,15 @@ public class Game extends GameStub {
     p.newTurn();
     if (!turnCanceled) {
       doActions(p);
+      System.out.println("canceled1");
+    }else {
+      System.out.println("canceled2");
     }
     if (!turnCanceled) {
       buyPhase(p);
+      System.out.println("canceled3");
+    }else {
+      System.out.println("canceled4");
     }
     p.endTurn();
     sendMessage(p.getName() + " ended their turn.");
