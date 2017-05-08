@@ -14,7 +14,7 @@ import edu.brown.cs.dominion.AI.neuralNetwork.NeuralNetwork;
 import edu.brown.cs.dominion.AI.neuralNetwork.NeuralNetworkIO;
 import edu.brown.cs.dominion.players.Player;
 
-public class NeuralNetAi implements Strategy {
+public class NeuralNetMine implements Strategy {
   private static List<Integer> DISCARD_PREFERENCES =
       Arrays.asList(6, 3, 4, 5, 0, 1, 2);
 
@@ -50,10 +50,11 @@ public class NeuralNetAi implements Strategy {
       map.put(i, results[i]);
     }
     List<Integer> out = new ArrayList<>();
-    // if (!allCards.stream().map(Card::getId).collect(Collectors.toList())
-    // .contains(10)) {
-    // out.add(10);
-    // }
+    if (countOccurrances(
+        allCards.stream().map(Card::getId).collect(Collectors.toList()),
+        10) < 3) {
+      out.add(10);
+    }
 
     while (map.size() > 0) {
       double max = Collections.max(map.values());
@@ -64,6 +65,17 @@ public class NeuralNetAi implements Strategy {
 
     // System.out.println(Arrays.toString(out.toArray()) + ", hand: "
     // + Arrays.toString(who.getHand().toArray()));
+
+    return out;
+  }
+
+  private static int countOccurrances(List<Integer> l, int i) {
+    int out = 0;
+    for (int in : l) {
+      if (i == in) {
+        out++;
+      }
+    }
 
     return out;
   }

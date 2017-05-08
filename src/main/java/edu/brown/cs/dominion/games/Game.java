@@ -1,10 +1,13 @@
 package edu.brown.cs.dominion.games;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.gameutil.Board;
@@ -91,7 +94,7 @@ public class Game extends GameStub {
     return board.buyCard(buyId, money);
   }
 
-  public void win() {
+  public Set<Integer> win() {
     // System.out.println("Game Over");
     // // TODO
     // try (FileWriter fw = new FileWriter(stats)) {
@@ -100,6 +103,11 @@ public class Game extends GameStub {
     // }
     // } catch (IOException ioe) {
     // }
+    Map<Integer, Integer> vps = getVictoryPointMap();
+    int maxScore = Collections.max(vps.values());
+    return vps.keySet().stream().filter((key) -> {
+      return vps.get(key) == maxScore;
+    }).collect(Collectors.toSet());
   }
 
   public boolean playTurn(Player p) {
