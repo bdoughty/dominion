@@ -16,6 +16,8 @@ public class AITest {
   public static void main(String[] args) {
     for(int i = 0;i < 50;i++){
       Game g = new Game(ImmutableList.of(
+        new AIPlayer(new DumbStrategy()),
+        new AIPlayer(new DumbStrategy()),
         new AIPlayer(new DumbStrategy())),
         get10cards());
       g.play();
@@ -26,7 +28,7 @@ public class AITest {
     List<Integer> a = new ArrayList<>();
     while(a.size() < 10){
       int n = (int) (Math.random() * 22 + 7);
-      if(!a.contains(n)){
+      if (!a.contains(n)) {
         a.add(n);
       }
     }

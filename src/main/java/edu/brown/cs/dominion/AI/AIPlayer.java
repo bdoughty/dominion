@@ -49,7 +49,7 @@ public class AIPlayer extends Player {
     int left = getBuys();
     int money = getMoney();
     while (left > 0 && st.buy(money, this) != -1) {
-      int a = st.buy(getMoney(), this);
+      int a = st.buy(money, this);
       try {
         money -= getGame().getBoard().getCostFromId(a);
       } catch (NoPileException ignored) {}
