@@ -76,4 +76,13 @@ public class DumbStrategy implements Strategy {
     return -1;
   }
 
+  @Override
+  public int gain(List<Integer> cardIds, Player who) {
+    if (cardIds.size() > 0) {
+      return cardIds.get(r.nextInt(cardIds.size()));
+    }
+
+    return -1;
+  }
+
 }
