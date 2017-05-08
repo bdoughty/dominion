@@ -6,12 +6,9 @@ import java.util.List;
 
 import com.google.gson.JsonObject;
 
-<<<<<<< HEAD
-import edu.brown.cs.dominion.AI.Strategy.DumbStrategy;
-=======
+
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.Mapper;
->>>>>>> fdbd8e9162a5269bfb1adf946fdc7055581ab0a5
 import edu.brown.cs.dominion.AI.Strategy.Strategy;
 import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.io.send.Button;

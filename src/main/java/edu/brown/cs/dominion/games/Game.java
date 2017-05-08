@@ -22,7 +22,6 @@ public class Game extends GameStub {
   private List<Player> allPlayers;
   private Player currentPlayer;
   private Board board;
-  private boolean actionPhase = true;
   private long turnStartTime;
 
   private boolean turnCanceled = false;
@@ -36,8 +35,11 @@ public class Game extends GameStub {
 
   public void play() {
     while (true) {
-      for (Player allPlayer : allPlayers) {
-        playTurn(allPlayer);
+      for (int i = 0;i < allPlayers.size();i++) {
+        Player p = allPlayers.get(i);
+        if (playTurn(p)) {
+          i--;
+        }
         if (board.gameHasEnded() || allPlayers.size() == 0) {
           break;
         }
@@ -58,7 +60,6 @@ public class Game extends GameStub {
   }
 
   public void buyPhase(Player p) {
-    actionPhase = true;
     int money = p.getMoney();
     List<Integer> toBuy = null;
     try {
@@ -89,7 +90,7 @@ public class Game extends GameStub {
     // nothing is necessary
   }
 
-  public void playTurn(Player p) {
+  public boolean playTurn(Player p) {
     turnStartTime = System.currentTimeMillis();
     sendMessage(p.getName() + " began their turn.");
     Thread turnEnder = new Thread(() -> {
@@ -111,8 +112,10 @@ public class Game extends GameStub {
     }
     p.endTurn();
     sendMessage(p.getName() + " ended their turn.");
+    boolean c = turnCanceled;
     turnCanceled = false;
     turnEnder.interrupt();
+    return c;
   }
 
   public void cancelTurn() {
