@@ -14,9 +14,10 @@ import edu.brown.cs.dominion.games.Game;
  */
 public class AITest {
   public static void main(String[] args) {
-    for (int i = 0; i < 500; i++) {
+    for (int i = 0; i < 50; i++) {
       Game g = new Game(ImmutableList.of(new AIPlayer(new DumbStrategy()),
-          new AIPlayer(new DumbStrategy())), get10cards());
+          new AIPlayer(new DumbStrategy()), new AIPlayer(new DumbStrategy())),
+          get10cards());
       g.play();
     }
   }
