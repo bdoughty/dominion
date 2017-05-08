@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.gameutil.EmptyPileException;
 import edu.brown.cs.dominion.gameutil.NoPileException;
+import edu.brown.cs.dominion.io.send.ButtonCallback;
 import edu.brown.cs.dominion.players.Player;
 import edu.brown.cs.dominion.players.UserInteruptedException;
 import edu.brown.cs.dominion.players.UserPlayer;
@@ -34,21 +35,28 @@ public class Bureaucrat extends AbstractAction {
       if (p.hasMoat()) {
         p.getGame().sendMessage(p.getName() + " played Moat.");
       } else {
-        List<Integer> vpCards = p.getHand().stream()
-            .filter((card) -> card instanceof AbstractVictoryPoint)
-            .map(Card::getId).collect(Collectors.toList());
-        if (!vpCards.isEmpty()) {
-          new Thread(() -> {
-            sendNotification(p, "Bureaucrat");
-            try {
-              int loc = p.selectHand(vpCards, false, "reveal bureaucrat");
-              Card c = p.cardToDeck(loc);
-              p.getGame().sendMessage(p.getName() + " put " + c.toString()
+        new Thread(() -> {
+          ButtonCallback send = () -> {
+            List<Integer> vpCards = p.getHand().stream()
+              .filter((card) -> card instanceof AbstractVictoryPoint)
+              .map(Card::getId).collect(Collectors.toList());
+            if (!vpCards.isEmpty()) {
+              sendNotification(p, "Bureaucrat");
+              try {
+                int loc = p.selectHand(vpCards, false, "reveal bureaucrat");
+                Card c = p.cardToDeck(loc);
+                p.getGame().sendMessage(p.getName() + " put " + c.toString()
                   + " on top of their deck.");
-            } catch (UserInteruptedException uie) {
+              } catch (UserInteruptedException uie) {
+              }
             }
-          }).start();
-        }
+          };
+          if (p instanceof UserPlayer) {
+            ((UserPlayer) p).lazySend(send);
+          } else {
+            send.pressed();
+          }
+        }).start();
       }
     }
   }

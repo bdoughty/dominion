@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import edu.brown.cs.dominion.io.send.ButtonCallback;
 import org.eclipse.jetty.websocket.api.Session;
 
 import com.google.common.collect.ImmutableList;
@@ -47,6 +48,7 @@ public class UserPlayer extends Player {
   private static Gson GSON = new Gson();
   private List<String> userActions;
 
+  private LazySender lazy;
   private Websocket gameSocket;
   private User u;
 
@@ -55,6 +57,7 @@ public class UserPlayer extends Player {
     this.u = u;
     this.gameSocket = gameSocket;
     userActions = new ArrayList<>();
+    lazy = new LazySender();
   }
 
   public UserPlayer(User u, Websocket gameSocket, UserGame g) {
@@ -66,7 +69,7 @@ public class UserPlayer extends Player {
   /**
    * the game of all UserPlayers must be a UserGame, and therefore it has the
    * ability to get its game as a UserGame.
-   * 
+   *
    * @return the UserGame that this player is a part of.
    */
   public UserGame getUserGame() {
@@ -188,6 +191,10 @@ public class UserPlayer extends Player {
     } catch (InterruptedException ignored) {
     }
     return -2;
+  }
+
+  public void lazySend(ButtonCallback bc){
+    lazy.sendLazyHand(this, bc);
   }
 
   @Override
@@ -408,6 +415,11 @@ public class UserPlayer extends Player {
       gameSocket.send(u, PLAYER_ACTIONS, s);
       return () -> {
         userActions.remove(s);
+        if(userActions.size() == 0){
+          synchronized (lazy) {
+            lazy.notifyAll();
+          }
+        }
       };
     }
     return () -> {
@@ -443,6 +455,10 @@ public class UserPlayer extends Player {
     userActions.forEach(a -> gameSocket.send(s, PLAYER_ACTIONS, a));
     getUserGame().sendBoard(s);
     getUserGame().sendTurn(s);
+  }
+
+  public boolean hasUserActions(){
+    return !userActions.isEmpty();
   }
 }
 
