@@ -101,7 +101,7 @@ public class Game extends GameStub {
       } catch (InterruptedException ignored) {
       }
     });
-    turnEnder.start();
+    //turnEnder.start();
     currentPlayer = p;
     p.newTurn();
     if (!turnCanceled) {
@@ -139,6 +139,8 @@ public class Game extends GameStub {
           c.play(p);
           sendMessage(p.getName() + " played " + c.toString() + ".");
         } catch (NoActionsException | NotActionException ignored) {
+          p.endActionPhase();
+          return;
         }
       }
     } catch (UserInteruptedException ignored) {
