@@ -41,6 +41,26 @@ public class Game extends GameStub {
     this.allPlayers = new LinkedList<>(usersTurns);
     this.board = new Board(actionCardIds);
     currentPlayer = allPlayers.get(0);
+
+    try {
+      clearDatabase();
+    } catch (ClassNotFoundException cnfe) {
+      System.out.println(cnfe.getMessage());
+    }
+  }
+
+  public void clearDatabase() throws ClassNotFoundException {
+    Class.forName("org.sqlite.JDBC");
+    String url = "jdbc:sqlite:stats.sqlite3";
+    try (Connection conn = DriverManager.getConnection(url);
+        Statement stat = conn.createStatement()) {
+      stat.executeUpdate("PRAGMA foreign_keys = ON;");
+      stat.executeUpdate("DELETE FROM games;");
+      stat.executeUpdate("DELETE FROM gameplayers;");
+      stat.executeUpdate("DELETE FROM players;");
+    } catch (SQLException sqle) {
+      System.out.println(sqle.getMessage());
+    }
   }
 
   public void play() {
