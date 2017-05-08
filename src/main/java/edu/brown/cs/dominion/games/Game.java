@@ -118,13 +118,15 @@ public class Game extends GameStub {
     return board.buyCard(buyId, money);
   }
 
-  public Set<Integer> win() {
-    System.out.println("Game Over");
-    try {
-      updateDatabase();
-    } catch (ClassNotFoundException e) {
-      System.out.println(e.getMessage());
-    }
+  public void win() {
+    // try {
+    // updateDatabase();
+    // } catch (ClassNotFoundException e) {
+    // System.out.println(e.getMessage());
+    // }
+  }
+
+  public Set<Integer> winners() {
     Map<Integer, Integer> vps = getVictoryPointMap();
     int maxScore = Collections.max(vps.values());
     return vps.keySet().stream().filter((key) -> {
