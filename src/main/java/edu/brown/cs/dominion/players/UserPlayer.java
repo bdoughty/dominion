@@ -9,11 +9,7 @@ import static edu.brown.cs.dominion.io.send.MessageType.HAND;
 import static edu.brown.cs.dominion.io.send.MessageType.NOTIFY;
 import static edu.brown.cs.dominion.io.send.MessageType.PHASE;
 import static edu.brown.cs.dominion.io.send.MessageType.PLAYER_ACTIONS;
-import static edu.brown.cs.dominion.players.PlayerWake.BUY_CARDS;
-import static edu.brown.cs.dominion.players.PlayerWake.CANCEL;
-import static edu.brown.cs.dominion.players.PlayerWake.NONE;
-import static edu.brown.cs.dominion.players.PlayerWake.PLAY_ACTION;
-import static edu.brown.cs.dominion.players.PlayerWake.REQUEST_RESPONSE;
+import static edu.brown.cs.dominion.players.PlayerWake.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -105,7 +101,7 @@ public class UserPlayer extends Player {
     try {
       while (wakeType != PLAY_ACTION) {
         wait();
-        if (wakeType == NONE) {
+        if (wakeType == LEAVE) {
           System.out.println("escaped handaction");
           throw new UserInteruptedException();
         }
@@ -122,7 +118,7 @@ public class UserPlayer extends Player {
     try {
       while (wakeType != BUY_CARDS) {
         wait();
-        if (wakeType == NONE) {
+        if (wakeType == LEAVE) {
           System.out.println("buy");
           throw new UserInteruptedException();
         }
@@ -151,7 +147,7 @@ public class UserPlayer extends Player {
           f.finish();
           return -1;
         }
-        if (wakeType == NONE) {
+        if (wakeType == LEAVE) {
           System.out.println("escaped selectHand");
           f.finish();
           throw new UserInteruptedException();
@@ -182,7 +178,7 @@ public class UserPlayer extends Player {
           f.finish();
           return -1;
         }
-        if (wakeType == NONE) {
+        if (wakeType == LEAVE) {
           System.out.println("escaped selectboard");
           f.finish();
           throw new UserInteruptedException();
@@ -211,7 +207,7 @@ public class UserPlayer extends Player {
       synchronized (this) {
         while (wakeType != REQUEST_RESPONSE) {
           wait();
-          if (wakeType == NONE) {
+          if (wakeType == LEAVE) {
             System.out.println("escaped selectButtons");
             throw new UserInteruptedException();
           }
@@ -466,7 +462,7 @@ public class UserPlayer extends Player {
   }
 
   public synchronized void cancelAll(){
-    wakeType = NONE;
+    wakeType = LEAVE;
     notifyAll();
   }
 }
