@@ -24,6 +24,8 @@ public class DumbStrategy implements Strategy {
 
   @Override
   public int trashForChapel(Player who) {
+    if (Math.random() > 0.25)
+      return -1;
     return r.nextInt(who.getHand().size() + 1) - 1;
   }
 
