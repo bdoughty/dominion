@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.google.gson.JsonObject;
 
+
 import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.Mapper;
 import edu.brown.cs.dominion.AI.Strategy.Strategy;
@@ -21,36 +22,10 @@ public class AIPlayer extends Player {
     this.st = st;
   }
 
-  /*
-   * <<<<<<< HEAD
-   * @Override public void play(Game g) { System.out.println(
-   * "started the game!!!!!"); while (g.getPlayerFromUser(this).getActions() >
-   * 0) { int actionLoc = st.playAction(g, this); if (actionLoc == -1) { break;
-   * } } g.endActionPhase(this); int buys = g.getPlayerFromUser(this).getBuys();
-   * int money = g.getPlayerFromUser(this).getMoney(); List<Integer> toBuy = new
-   * LinkedList<>(); while (buys > 0) { int buyId = st.buy(money, g, this); if
-   * (buyId == -1) { break; } try { toBuy.add(buyId); buys--; money -=
-   * g.getBoard().getCostFromId(buyId); } catch (NoPileException npe) {
-   * System.out.println(npe.getMessage()); break; } } g.endBuyPhase(this,
-   * toBuy); } =======
-   * @Override public void play(Game g) { System.out.println(
-   * "started the game!!!!!"); while (g.getPlayerFromUser(this).getActions() >
-   * 0) { int actionLoc = st.playAction(g, this); if (actionLoc == -1) { break;
-   * } } g.endActionPhase(this); int buys = g.getPlayerFromUser(this).getBuys();
-   * int money = g.getPlayerFromUser(this).getMoney(); List<Integer> toBuy = new
-   * LinkedList<>(); while (buys > 0) { int buyId = st.buy(money, g, this); if
-   * (buyId == -1) { break; } try { toBuy.add(buyId); buys--; money -=
-   * g.getBoard().getCostFromId(buyId); } catch (NoPileException npe) {
-   * System.out.println(npe.getMessage()); break; } } g.endBuyPhase(this,
-   * toBuy); } >>>>>>> d2e08df82acb2aa4492a8085b698d766b94dfa55
-   */
-
-  /*
-   * @Override public void doCallback(Game g, Callback c, List<ButtonCall>
-   * buttons) { if (!c.equals(null)) { switch (c.getName()) { case
-   * "militiadiscard": int toDiscard = st.discard(g, this); if (toDiscard >= 0)
-   * { c.getCallback().call(this, true, toDiscard); } break; } } }
-   */
+  public AIPlayer(Strategy st) {
+    super();
+    this.st = st;
+  }
 
   /**
    * Play a card from your hand
