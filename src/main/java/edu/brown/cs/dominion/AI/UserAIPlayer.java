@@ -6,6 +6,7 @@ import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.games.UserGame;
 import edu.brown.cs.dominion.gameutil.EmptyDeckException;
 import edu.brown.cs.dominion.gameutil.NoActionsException;
+import edu.brown.cs.dominion.players.Player;
 
 public class UserAIPlayer extends AIPlayer {
   public UserAIPlayer(Game g, Strategy st) {

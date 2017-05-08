@@ -8,6 +8,7 @@ import java.util.List;
 import com.google.gson.JsonObject;
 
 import edu.brown.cs.dominion.Card;
+import edu.brown.cs.dominion.action.AbstractAction;
 import edu.brown.cs.dominion.action.Feast;
 import edu.brown.cs.dominion.action.Moat;
 import edu.brown.cs.dominion.games.Game;
@@ -16,6 +17,7 @@ import edu.brown.cs.dominion.gameutil.NoActionsException;
 import edu.brown.cs.dominion.io.send.Button;
 import edu.brown.cs.dominion.money.AbstractMoney;
 import edu.brown.cs.dominion.money.Copper;
+import edu.brown.cs.dominion.victory.AbstractVictoryPoint;
 import edu.brown.cs.dominion.victory.Estate;
 
 public abstract class Player {
@@ -328,6 +330,80 @@ public abstract class Player {
 
   public List<Card> getDeck() {
     return deck;
+  }
+
+  public int getNumVps() {
+    int numVps = 0;
+    for (Card c : deck) {
+      if (c instanceof AbstractVictoryPoint) {
+        numVps++;
+      }
+    }
+    for (Card c : hand) {
+      if (c instanceof AbstractVictoryPoint) {
+        numVps++;
+      }
+    }
+    for (Card c : discardPile) {
+      if (c instanceof AbstractVictoryPoint) {
+        numVps++;
+      }
+    }
+    return numVps;
+  }
+
+  public int getNumActs() {
+    int numActs = 0;
+    for (Card c : deck) {
+      if (c instanceof AbstractAction) {
+        numActs++;
+      }
+    }
+    for (Card c : hand) {
+      if (c instanceof AbstractAction) {
+        numActs++;
+      }
+    }
+    for (Card c : discardPile) {
+      if (c instanceof AbstractAction) {
+        numActs++;
+      }
+    }
+    return numActs;
+  }
+
+  public int getNumMoney() {
+    int numMon = 0;
+    for (Card c : deck) {
+      if (c instanceof AbstractMoney) {
+        numMon++;
+      }
+    }
+    for (Card c : hand) {
+      if (c instanceof AbstractMoney) {
+        numMon++;
+      }
+    }
+    for (Card c : discardPile) {
+      if (c instanceof AbstractMoney) {
+        numMon++;
+      }
+    }
+    return numMon;
+  }
+
+  public int countMoney() {
+    int money = 0;
+    for (Card c : deck) {
+      money += c.getMonetaryValue();
+    }
+    for (Card c : hand) {
+      money += c.getMonetaryValue();
+    }
+    for (Card c : discardPile) {
+      money += c.getMonetaryValue();
+    }
+    return money;
   }
 
   public List<Card> getDiscard() {
