@@ -133,7 +133,6 @@ public class Game extends GameStub {
     int loc;
     try {
       while (-1 != (loc = p.playHandAction()) && !turnCanceled) {
-        System.out.println("played card " + loc);
         try {
           Card c = p.play(loc);
           c.play(p);
