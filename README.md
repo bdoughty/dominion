@@ -3,17 +3,18 @@
   **Team Members:**
 Sol Zitter, Ben Doughty, Brendan Le, Henry Stone
   
-  **Project Idea:** _Fill this in!_
+  **Project Idea:**
   
- +Dominion Multiplayer Card Game
- +
-  **Mentor TA:** _Put your mentor TA's name and email here once you're assigned one!_
+Dominion Multiplayer Card Game
+ 
+  **Mentor TA:**
+Adam DeHovitz <adam_dehovitz@brown.edu>
   
   ## Project Requirements
 https://docs.google.com/a/brown.edu/document/d/1S7Yn5-4c57bUifcHwQGHtDAIXlwFO_fYcHr3zk-i3bY
   
   ## Project Specs and Mockup
-  _A link to your specifications document and your mockup will go here!_
+https://drive.google.com/drive/u/2/folders/0B9iSPjAB_b_pVnZJRmRHSElvRVU
 
   
 API DOCUMENTATION:
