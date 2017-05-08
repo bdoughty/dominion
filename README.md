@@ -4,7 +4,6 @@
 Sol Zitter, Ben Doughty, Brendan Le, Henry Stone
   
   **Project Idea:**
-  
 Dominion Multiplayer Card Game
  
   **Mentor TA:**
