@@ -43,11 +43,6 @@ public class Game extends GameStub {
     this.board = new Board(actionCardIds);
     currentPlayer = allPlayers.get(0);
 
-//    try {
-//      clearDatabase();
-//    } catch (ClassNotFoundException cnfe) {
-//      System.out.println(cnfe.getMessage());
-//    }
   }
 
   public void clearDatabase() throws ClassNotFoundException {
@@ -185,7 +180,7 @@ public class Game extends GameStub {
       } catch (InterruptedException ignored) {
       }
     });
-    // turnEnder.start();
+    turnEnder.start();
     currentPlayer = p;
     p.newTurn();
     if (!turnCanceled) {
