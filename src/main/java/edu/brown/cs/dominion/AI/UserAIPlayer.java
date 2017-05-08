@@ -1,20 +1,18 @@
 package edu.brown.cs.dominion.AI;
 
-import edu.brown.cs.dominion.AI.Strategy.Strategy;
 import edu.brown.cs.dominion.Card;
+import edu.brown.cs.dominion.AI.Strategy.Strategy;
 import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.games.UserGame;
 import edu.brown.cs.dominion.gameutil.EmptyDeckException;
 import edu.brown.cs.dominion.gameutil.NoActionsException;
 
 public class UserAIPlayer extends AIPlayer {
-  private Strategy st;
-
   public UserAIPlayer(Game g, Strategy st) {
     super(g, st);
   }
 
-  public UserGame getUserGame(){
+  public UserGame getUserGame() {
     return (UserGame) getGame();
   }
 

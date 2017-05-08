@@ -106,14 +106,14 @@ public class AIPlayer extends Player {
     switch (name) {
       case "reveal bureaucrat":
         if (cardIds.contains(6)) {
-          return getHand().indexOf(6);
+          return Mapper.map(getHand(), Card::getId).indexOf(6);
         } else if (cardIds.contains(3)) {
-          return getHand().indexOf(3);
+          return Mapper.map(getHand(), Card::getId).indexOf(3);
         } else if (cardIds.contains(4)) {
-          return getHand().indexOf(4);
+          return Mapper.map(getHand(), Card::getId).indexOf(4);
         } else {
           assert (cardIds.contains(5));
-          return getHand().indexOf(5);
+          return Mapper.map(getHand(), Card::getId).indexOf(5);
         }
       case "cellardiscard":
         int out = st.discard(this);
@@ -129,7 +129,7 @@ public class AIPlayer extends Player {
         return st.trashForMine(this);
       case "MoneyLender":
         assert (Collections.singleton(0).containsAll(cardIds));
-        return getHand().indexOf(0);
+        return Mapper.map(getHand(), Card::getId).indexOf(0);
       case "remodel trash":
         return st.trashForRemodel(this);
       case "throne room play":
