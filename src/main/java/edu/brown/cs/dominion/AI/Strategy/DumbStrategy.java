@@ -1,6 +1,5 @@
 package edu.brown.cs.dominion.AI.Strategy;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -46,9 +45,9 @@ public class DumbStrategy implements Strategy {
             .collect(Collectors.toList());
     if (actions.size() > 0) {
       int toPlay = r.nextInt(actions.size());
-      System.out.println("has actions: " + Arrays.toString(actions.toArray())
-          + ", going to play: " + toPlay + ", hand is: "
-          + Arrays.toString(who.getHand().toArray()));
+      // System.out.println("has actions: " + Arrays.toString(actions.toArray())
+      // + ", going to play: " + toPlay + ", hand is: "
+      // + Arrays.toString(who.getHand().toArray()));
       return who.getHand().indexOf(actions.get(toPlay));
     }
 
