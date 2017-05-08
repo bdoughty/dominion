@@ -47,8 +47,9 @@ public class DumbStrategy implements Strategy {
             .collect(Collectors.toList());
     if (actions.size() > 0) {
       int toPlay = r.nextInt(actions.size());
-      System.out.println("has an action: " + Arrays.toString(actions.toArray())
-          + ", going to play " + toPlay);
+      System.out.println("has actions: " + Arrays.toString(actions.toArray())
+          + ", going to play: " + toPlay + ", hand is: "
+          + Arrays.toString(who.getHand().toArray()));
       return who.getHand().indexOf(actions.get(toPlay));
     }
 
