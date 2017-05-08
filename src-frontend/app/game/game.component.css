@@ -231,11 +231,19 @@
         font-size: 24px !important; }
     #game #hud .hand-container {
       flex-grow: 1;
-      display: flex;
+      float: left;
+      white-space: nowrap;
+      overflow: auto;
+      align-items: center;
+      vertical-align: middle;
       justify-content: center;
-      align-items: center; }
+      overflow-y: hidden; }
       #game #hud .hand-container .hand {
-        display: inline-block; }
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        white-space: normal !important; }
         #game #hud .hand-container .hand .card {
           padding: 0 4px; }
     #game #hud .left, #game #hud .deck {

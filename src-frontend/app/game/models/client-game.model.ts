@@ -17,7 +17,7 @@ export class ClientGame {
   public buys = 0;
 
   public nonactionCards: Card[] =
-    [new Card(0), new Card(1), new Card(2), new Card(3), new Card(4), new Card(5)];
+    [new Card(0), new Card(1), new Card(2), new Card(3), new Card(4), new Card(5), new Card(6)];
 
   constructor(public players: Player[],
               public ownPlayerId: number,

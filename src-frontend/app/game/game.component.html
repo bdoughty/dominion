@@ -71,7 +71,7 @@
         <dmn-card [card]="card"
                   [disabled]="game.isDisabled(card, false)"
                   [selectable]="game.isSelectable(card, false)"
-                  *ngFor="let card of game.nonactionCards"
+                  *ngFor="let card of game.nonactionCards.slice(0, 6)"
                   (click)="cardClickedPile(card)"
         >
         </dmn-card>
@@ -84,6 +84,10 @@
                   (click)="cardClickedPile(card)"
         >
         </dmn-card>
+        <dmn-card [card]="game.nonactionCards[6]"
+                  [disabled]="game.isDisabled(game.nonactionCards[6], false)"
+                  [selectable]="game.isSelectable(game.nonactionCards[6], false)"
+                  (click)="cardClickedPile(game.nonactionCards[6])"></dmn-card>
         <!--<div style="width: 127px"></div>-->
       </div>
       <div class="pile-row">
