@@ -140,7 +140,11 @@ export class ClientGame {
   }
 
   public isOwnTurn(): boolean {
-    return this.players[this.turn].id === this.ownPlayerId;
+    if (this.players.length > this.turn) {
+      return this.players[this.turn].id === this.ownPlayerId;
+    } else {
+      return false;
+    }
   }
 
   public getOwnPlayer(): Player {

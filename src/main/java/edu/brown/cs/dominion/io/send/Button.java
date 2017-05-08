@@ -1,5 +1,7 @@
 package edu.brown.cs.dominion.io.send;
 
+import edu.brown.cs.dominion.players.UserInteruptedException;
+
 /**
  * A button to be displayed on the client side in the button selection pane.
  * Created by henry on 5/5/2017.
@@ -42,7 +44,7 @@ public class Button implements ButtonCallback{
   }
 
   @Override
-  public void pressed() {
+  public void pressed() throws UserInteruptedException{
     bc.pressed();
   }
 }

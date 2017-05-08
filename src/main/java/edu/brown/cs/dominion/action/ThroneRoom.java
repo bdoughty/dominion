@@ -17,7 +17,7 @@ public class ThroneRoom extends AbstractAction {
   }
 
   @Override
-  public void play(Player p) {
+  public void play(Player p) throws UserInteruptedException {
     List<Integer> handIds =
         p.getHand().stream().filter(c -> c instanceof AbstractAction)
             .map(Card::getId).collect(Collectors.toList());
@@ -28,12 +28,8 @@ public class ThroneRoom extends AbstractAction {
       return;
     }
     int toPlay = 0;
-    try {
-      toPlay = p.selectHand(handIds, true, "throne room play");
-      if (toPlay == -1) {
-        return;
-      }
-    } catch (UserInteruptedException e) {
+    toPlay = p.selectHand(handIds, true, "throne room play");
+    if (toPlay == -1) {
       return;
     }
     p.incrementActions();

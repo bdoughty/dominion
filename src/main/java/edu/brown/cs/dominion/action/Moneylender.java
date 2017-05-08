@@ -14,17 +14,13 @@ public class Moneylender extends AbstractAction {
   }
 
   @Override
-  public void play(Player p) {
+  public void play(Player p) throws UserInteruptedException {
     int toTrash = 0;
-    try {
-      toTrash = p
-          .selectHand(
-              p.getHand().stream().filter(c -> c instanceof Copper)
-                  .map(Card::getId).collect(Collectors.toList()),
-              true, "MoneyLender");
-    } catch (UserInteruptedException e) {
-      return;
-    }
+    toTrash = p
+        .selectHand(
+            p.getHand().stream().filter(c -> c instanceof Copper)
+                .map(Card::getId).collect(Collectors.toList()),
+            true, "MoneyLender");
     if (toTrash >= 0) {
       p.trash(toTrash);
       p.incrementAdditionalMoney(3);

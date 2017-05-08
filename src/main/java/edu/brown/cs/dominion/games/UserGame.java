@@ -66,6 +66,7 @@ public class UserGame extends Game {
 
   @Override
   public boolean playTurn(Player p) {
+    System.out.println("turn starting");
     sendAll(MessageType.TURN, Integer.toString(p.getId()));
     boolean b = super.playTurn(p);
     sendAll(MessageType.VICTORY_POINTS, GSON.toJson(getVictoryPointMap()));

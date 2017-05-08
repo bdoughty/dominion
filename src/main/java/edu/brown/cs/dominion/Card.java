@@ -36,7 +36,7 @@ public abstract class Card {
     return monetaryValue;
   }
 
-  public void play(Player p) throws NotActionException {
+  public void play(Player p) throws NotActionException, UserInteruptedException {
   }
 
   @Override

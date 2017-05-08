@@ -13,7 +13,7 @@ public class Cellar extends AbstractAction {
   }
 
   @Override
-  public void play(Player p) {
+  public void play(Player p) throws UserInteruptedException {
     p.incrementActions();
     int cardsDiscarded = 0;
     int discard = 0;
@@ -29,7 +29,7 @@ public class Cellar extends AbstractAction {
         }
       } catch (UserInteruptedException uie) {
         p.draw(cardsDiscarded);
-        return;
+        throw uie;
       }
     }
     p.draw(cardsDiscarded);

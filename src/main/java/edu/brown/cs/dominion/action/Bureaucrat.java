@@ -42,19 +42,24 @@ public class Bureaucrat extends AbstractAction {
               .map(Card::getId).collect(Collectors.toList());
             if (!vpCards.isEmpty()) {
               sendNotification(p, "Bureaucrat");
-              try {
-                int loc = p.selectHand(vpCards, false, "reveal bureaucrat");
-                Card c = p.cardToDeck(loc);
-                p.getGame().sendMessage(p.getName() + " put " + c.toString()
-                  + " on top of their deck.");
-              } catch (UserInteruptedException uie) {
-              }
+              int loc = p.selectHand(vpCards, false, "reveal bureaucrat");
+              Card c = p.cardToDeck(loc);
+              p.getGame().sendMessage(p.getName() + " put " + c.toString()
+                + " on top of their deck.");
             }
           };
           if (p instanceof UserPlayer) {
-            ((UserPlayer) p).lazySend(send);
+            try {
+              ((UserPlayer) p).lazySend(send);
+            } catch (UserInteruptedException e) {
+              System.out.println("bero failed to send");
+            }
           } else {
-            send.pressed();
+            try {
+              send.pressed();
+            } catch (UserInteruptedException e) {
+              System.out.println("Bero interrupted");
+            }
           }
         }).start();
       }

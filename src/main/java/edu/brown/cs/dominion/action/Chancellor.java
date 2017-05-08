@@ -10,15 +10,11 @@ public class Chancellor extends AbstractAction {
   }
 
   @Override
-  public void play(Player p) {
+  public void play(Player p) throws UserInteruptedException {
     p.incrementAdditionalMoney(2);
     Button b1 = new Button("Discard Deck", p::discardDeck);
-    Button b2 = new Button("Don't Discard Deck", () -> {
-    });
-    try {
-      p.selectButtons("chancellor", b1, b2).pressed();
-    } catch (UserInteruptedException uie) {
-    }
+    Button b2 = new Button("Don't Discard Deck", () -> {});
+    p.selectButtons("chancellor", b1, b2).pressed();
   }
 
   @Override
