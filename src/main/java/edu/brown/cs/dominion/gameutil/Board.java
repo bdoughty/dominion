@@ -78,6 +78,7 @@ public class Board {
       if (piles.get(id).getCost() <= currMoney) {
         return piles.get(id).draw();
       } else {
+        new TooExpensiveException("Can't afford card " + id).printStackTrace();
         throw new TooExpensiveException("Can't afford card " + id);
       }
     } else {
