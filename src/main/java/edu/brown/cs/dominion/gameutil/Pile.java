@@ -20,7 +20,7 @@ public class Pile {
       size--;
       return (card.get());
     } else {
-      throw new EmptyPileException("empty pile: " + card.toString());
+      throw new EmptyPileException("empty pile: " + card.get().toString());
     }
   }
 
@@ -41,7 +41,7 @@ public class Pile {
   }
 
   public boolean isEmpty() {
-    return (size == 0);
+    return !(size > 0);
   }
 
   public int getCost() {
@@ -50,6 +50,10 @@ public class Pile {
 
   public int getId() {
     return c.getId();
+  }
+
+  public int size() {
+    return size;
   }
 
 }

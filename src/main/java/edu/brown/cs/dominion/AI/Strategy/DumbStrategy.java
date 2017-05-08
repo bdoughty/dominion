@@ -1,5 +1,6 @@
 package edu.brown.cs.dominion.AI.Strategy;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -65,13 +66,10 @@ public class DumbStrategy implements Strategy {
   }
 
   @Override
-  public int buy(int money, Player who) {
+  public List<Integer> buy(int money, Player who) {
     List<Integer> buyable = who.getGame().getBoard().getCardsUnderValue(money);
-    if (buyable.size() > 0) {
-      return buyable.get(r.nextInt(buyable.size()));
-    }
-
-    return -1;
+    Collections.shuffle(buyable);
+    return buyable;
   }
 
   @Override

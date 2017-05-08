@@ -51,9 +51,4 @@ public abstract class Card {
   public int hashCode() {
     return Integer.hashCode(getId());
   }
-
-  @Override
-  public String toString() {
-    return getId() + "";
-  }
 }

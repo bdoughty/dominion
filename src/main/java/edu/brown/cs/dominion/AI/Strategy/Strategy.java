@@ -46,15 +46,15 @@ public interface Strategy {
     return -1;
   }
 
-  default int buy(int money, Player who) {
+  default List<Integer> buy(int money, Player who) {
     List<Integer> buyable = Strategy.buyable(money, who.getGame());
     if (buyable.size() > 0) {
-      return Collections.min(buyable,
+      Collections.sort(buyable,
           (one, two) -> Integer.compare(getBuyPreferences(who).indexOf(one),
               getBuyPreferences(who).indexOf(two)));
     }
 
-    return -1;
+    return buyable;
   }
 
   default int gain(List<Integer> cardIds, Player who) {

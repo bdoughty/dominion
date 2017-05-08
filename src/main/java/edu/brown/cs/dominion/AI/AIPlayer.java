@@ -1,8 +1,11 @@
 package edu.brown.cs.dominion.AI;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gson.JsonObject;
 
@@ -10,8 +13,8 @@ import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.Mapper;
 import edu.brown.cs.dominion.AI.Strategy.Strategy;
 import edu.brown.cs.dominion.games.Game;
-import edu.brown.cs.dominion.gameutil.CardFactory;
 import edu.brown.cs.dominion.gameutil.NoPileException;
+import edu.brown.cs.dominion.gameutil.Pile;
 import edu.brown.cs.dominion.io.send.Button;
 import edu.brown.cs.dominion.players.Player;
 
@@ -48,16 +51,51 @@ public class AIPlayer extends Player {
     List<Integer> out = new ArrayList<>();
     int left = getBuys();
     int money = getMoney();
-    while (left > 0 && st.buy(money, this) != -1) {
-      int a = st.buy(money, this);
+    while (left > 0 && getDesiredSuitableCard(st.buy(money, this),
+        getGame().getBoard().getPiles(), listOfBuysToMapOfIdsToNumBought(out,
+            getGame().getBoard().getPiles().keySet())) != -1) {
+      int a = getDesiredSuitableCard(st.buy(money, this),
+          getGame().getBoard().getPiles(), listOfBuysToMapOfIdsToNumBought(out,
+              getGame().getBoard().getPiles().keySet()));
       try {
         money -= getGame().getBoard().getCostFromId(a);
-      } catch (NoPileException ignored) {}
+      } catch (NoPileException ignored) {
+      }
       out.add(a);
       left--;
     }
 
     return out;
+  }
+
+  private static Map<Integer, Integer> listOfBuysToMapOfIdsToNumBought(
+      List<Integer> ids, Collection<Integer> allKeys) {
+    Map<Integer, Integer> out = new HashMap<>();
+    for (int i : ids) {
+      if (out.containsKey(i)) {
+        out.put(i, out.get(i) + 1);
+      } else {
+        out.put(i, 1);
+      }
+    }
+    List<Integer> remainingKeys = new ArrayList<>(allKeys);
+    remainingKeys.removeAll(out.keySet());
+    for (int k : remainingKeys) {
+      out.put(k, 0);
+    }
+    return out;
+  }
+
+  private static int getDesiredSuitableCard(List<Integer> affordablePreferences,
+      Map<Integer, Pile> piles, Map<Integer, Integer> idsToNumBoughtSoFar) {
+    for (int i = 0; i < affordablePreferences.size(); i++) {
+      if (piles.get(affordablePreferences.get(i)).size()
+          - idsToNumBoughtSoFar.get(affordablePreferences.get(i)) > 0) {
+        return affordablePreferences.get(i);
+      }
+    }
+
+    return -1;
   }
 
   /**

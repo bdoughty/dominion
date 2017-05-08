@@ -43,6 +43,7 @@ export class GameComponent implements OnInit {
   private _currTime;
   private _timerInterval;
   private _firstTimer = true;
+  private _animating = false;
 
   constructor(
     private _gameSocketService: GameSocketService
@@ -69,6 +70,10 @@ export class GameComponent implements OnInit {
   }
 
   public cardClickedHand(card: Card): void {
+    if (this._animating) {
+      return;
+    }
+
     if (this.game.isSelectable(card, true)) {
       const playerAction = this.game.playerActionQueue.shift();
 
@@ -141,10 +146,12 @@ export class GameComponent implements OnInit {
     if (this.game.canPlay(card)) {
       card.state = 'played';
       this.game.actions -= 1; // For Instantaneous disabling of cards
+      this._animating = true;
       setTimeout(() => {
+        this._animating = false;
         this._gameSocketService.send('doaction',
           JSON.stringify({handloc: card.handPosition}));
-      }, 1000);
+      }, 1100);
       // this.game.removeCardInHand(card);
     }
   }

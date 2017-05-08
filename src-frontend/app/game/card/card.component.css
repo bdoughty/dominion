@@ -16,6 +16,8 @@
     background: #b1dae0; }
   .card.victory {
     background: #afe0b1; }
+  .card.curse {
+    background: #dab6e0; }
   .card.selectable {
     box-shadow: 0 0 10px #f9ff55, 0 0 10px #f9ff55; }
   .card .image {

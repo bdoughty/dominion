@@ -17,7 +17,7 @@ export class ClientGame {
   public buys = 0;
 
   public nonactionCards: Card[] =
-    [new Card(0), new Card(1), new Card(2), new Card(3), new Card(4), new Card(5)];
+    [new Card(0), new Card(1), new Card(2), new Card(3), new Card(4), new Card(5), new Card(6)];
 
   constructor(public players: Player[],
               public ownPlayerId: number,
@@ -92,6 +92,7 @@ export class ClientGame {
   public addToCart(card: Card): void {
     const cardToAdd = new Card(card.id);
     if (this.canBuy(card)) {
+      card.pileCount -= 1;
       this.cart.push(cardToAdd);
       this.gold -= card.cost;
       this.buys -= 1;
@@ -99,6 +100,7 @@ export class ClientGame {
   }
 
   public removeFromCart(card: Card): void {
+    card.pileCount += 1;
     this.gold += card.cost;
     this.buys += 1;
     this.cart.splice(this.cart.indexOf(card), 1);

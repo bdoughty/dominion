@@ -17,8 +17,8 @@ public class Remodel extends AbstractAction {
 
   @Override
   public void play(Player p) {
-    List<Integer> handIds = p.getHand().stream().map(Card::getId)
-        .collect(Collectors.toList());
+    List<Integer> handIds =
+        p.getHand().stream().map(Card::getId).collect(Collectors.toList());
     int toTrash = 0;
     if (!handIds.isEmpty()) {
       try {
@@ -30,8 +30,8 @@ public class Remodel extends AbstractAction {
         return;
       }
       Card c = p.trash(toTrash);
-      List<Integer> boardIds = p.getGame().getBoard()
-          .getCardsUnderValue(c.getCost() + 2);
+      List<Integer> boardIds =
+          p.getGame().getBoard().getCardsUnderValue(c.getCost() + 2);
       int toGain = 0;
       try {
         toGain = p.selectBoard(boardIds, false, "remodel board");
@@ -41,7 +41,7 @@ public class Remodel extends AbstractAction {
       try {
         p.gain(p.getGame().gain(toGain), true, false);
       } catch (EmptyPileException | NoPileException ignored) {
-        System.out.println("Pile is empty");
+        System.out.println("Cannot remodel, pile is empty");
       }
     }
   }
