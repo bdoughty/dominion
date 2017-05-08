@@ -11,6 +11,8 @@ import edu.brown.cs.dominion.Card;
 import edu.brown.cs.dominion.Mapper;
 import edu.brown.cs.dominion.AI.Strategy.Strategy;
 import edu.brown.cs.dominion.games.Game;
+import edu.brown.cs.dominion.gameutil.CardFactory;
+import edu.brown.cs.dominion.gameutil.NoPileException;
 import edu.brown.cs.dominion.io.send.Button;
 import edu.brown.cs.dominion.players.Player;
 
@@ -46,8 +48,13 @@ public class AIPlayer extends Player {
   public List<Integer> buyCards() {
     List<Integer> out = new ArrayList<>();
     int left = getBuys();
-    while (left > 0 && st.buy(getMoney(), this) != -1) {
-      out.add(st.buy(getMoney(), this));
+    int money = getMoney();
+    while (left > 0 && st.buy(money, this) != -1) {
+      int a = st.buy(getMoney(), this);
+      try {
+        money -= getGame().getBoard().getCostFromId(a);
+      } catch (NoPileException ignored) {}
+      out.add(a);
       left--;
     }
 
