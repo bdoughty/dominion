@@ -65,10 +65,11 @@ public class UserGame extends Game {
   }
 
   @Override
-  public void playTurn(Player p) {
+  public boolean playTurn(Player p) {
     sendAll(MessageType.TURN, Integer.toString(p.getId()));
-    super.playTurn(p);
+    boolean b = super.playTurn(p);
     sendAll(MessageType.VICTORY_POINTS, GSON.toJson(getVictoryPointMap()));
+    return b;
   }
 
   @Override
