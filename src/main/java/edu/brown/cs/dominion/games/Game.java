@@ -1,6 +1,10 @@
 package edu.brown.cs.dominion.games;
 
-import java.io.File;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,16 +31,13 @@ public class Game extends GameStub {
 
   private boolean turnCanceled = false;
 
-  private int turn = 0;
-  private Player first;
-  private File stats = new File("stats.txt");
+  private int turn = 1;
 
   public Game(List<Player> usersTurns, List<Integer> actionCardIds) {
     usersTurns.forEach(u -> u.setGame(this));
     this.allPlayers = new LinkedList<>(usersTurns);
     this.board = new Board(actionCardIds);
     currentPlayer = allPlayers.get(0);
-    first = allPlayers.get(0);
   }
 
   public void play() {
@@ -53,6 +54,7 @@ public class Game extends GameStub {
       if (board.gameHasEnded() || allPlayers.size() == 0) {
         break;
       }
+      turn++;
     }
     win();
   }
@@ -92,14 +94,52 @@ public class Game extends GameStub {
   }
 
   public void win() {
-    // System.out.println("Game Over");
-    // // TODO
-    // try (FileWriter fw = new FileWriter(stats)) {
-    // for (Player p : allPlayers) {
-    // fw.write(p.getName() + ": " + p.scoreDeck());
-    // }
-    // } catch (IOException ioe) {
-    // }
+    System.out.println("Game Over");
+    try {
+      updateDatabase();
+    } catch (ClassNotFoundException e) {
+      System.out.println(e.getMessage());
+    }
+  }
+
+  public void updateDatabase() throws ClassNotFoundException {
+    Class.forName("org.sqlite.JDBC");
+    String url = "jdbc:sqlite:stats.sqlite3";
+    try (Connection conn = DriverManager.getConnection(url);
+        Statement stat = conn.createStatement();
+        PreparedStatement prep1 = conn.prepareStatement(
+            "INSERT INTO games (ID, NUMPLAYERS, NUMTURNS) VALUES (?, ?, ?);");
+        PreparedStatement prep2 = conn.prepareStatement(
+            "INSERT INTO players (ID, DECKSIZE, NUMVPS, NUMACTS, NUMMONEY, TOTVP, TOTMONEY, FIRST) VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
+        PreparedStatement prep3 = conn.prepareStatement(
+            "INSERT INTO gameplayers (GAMEID, PLAYERID) VALUES (?, ?);")) {
+
+      stat.executeUpdate("PRAGMA foreign_keys = ON;");
+
+      prep1.setInt(1, getId());
+      prep1.setInt(2, allPlayers.size());
+      prep1.setInt(3, turn);
+      prep1.executeUpdate();
+
+      for (Player p : allPlayers) {
+        prep2.setInt(1, p.getId());
+        prep2.setInt(2,
+            p.getDeck().size() + p.getDiscard().size() + p.getHand().size());
+        prep2.setInt(3, p.getNumVps());
+        prep2.setInt(4, p.getNumActs());
+        prep2.setInt(5, p.getNumMoney());
+        prep2.setInt(6, p.scoreDeck());
+        prep2.setInt(7, p.countMoney());
+        prep2.setInt(8, allPlayers.indexOf(p) + 1);
+        prep2.executeUpdate();
+
+        prep3.setInt(1, getId());
+        prep3.setInt(2, p.getId());
+        prep3.executeUpdate();
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
   }
 
   public boolean playTurn(Player p) {
