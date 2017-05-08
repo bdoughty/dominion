@@ -38,6 +38,26 @@ public class Game extends GameStub {
     this.allPlayers = new LinkedList<>(usersTurns);
     this.board = new Board(actionCardIds);
     currentPlayer = allPlayers.get(0);
+
+    try {
+      clearDatabase();
+    } catch (ClassNotFoundException cnfe) {
+      System.out.println(cnfe.getMessage());
+    }
+  }
+
+  public void clearDatabase() throws ClassNotFoundException {
+    Class.forName("org.sqlite.JDBC");
+    String url = "jdbc:sqlite:stats.sqlite3";
+    try (Connection conn = DriverManager.getConnection(url);
+        Statement stat = conn.createStatement()) {
+      stat.executeUpdate("PRAGMA foreign_keys = ON;");
+      stat.executeUpdate("DELETE FROM games;");
+      stat.executeUpdate("DELETE FROM gameplayers;");
+      stat.executeUpdate("DELETE FROM players;");
+    } catch (SQLException sqle) {
+      System.out.println(sqle.getMessage());
+    }
   }
 
   public void play() {
@@ -110,7 +130,7 @@ public class Game extends GameStub {
         PreparedStatement prep1 = conn.prepareStatement(
             "INSERT INTO games (ID, NUMPLAYERS, NUMTURNS) VALUES (?, ?, ?);");
         PreparedStatement prep2 = conn.prepareStatement(
-            "INSERT INTO players (ID, DECKSIZE, NUMVPS, NUMACTS, NUMMONEY, TOTVP, TOTMONEY, FIRST) VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
+            "INSERT INTO players (ID, DECKSIZE, NUMVPS, NUMACTS, NUMMONEY, TOTVP, TOTMONEY, POSN) VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
         PreparedStatement prep3 = conn.prepareStatement(
             "INSERT INTO gameplayers (GAMEID, PLAYERID) VALUES (?, ?);")) {
 
