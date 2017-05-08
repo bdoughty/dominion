@@ -1,5 +1,8 @@
 package edu.brown.cs.dominion.games;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,16 +29,21 @@ public class Game extends GameStub {
 
   private boolean turnCanceled = false;
 
+  private int turn = 0;
+  private Player first;
+  private File stats = new File("stats.txt");
+
   public Game(List<Player> usersTurns, List<Integer> actionCardIds) {
     usersTurns.forEach(u -> u.setGame(this));
     this.allPlayers = new LinkedList<>(usersTurns);
     this.board = new Board(actionCardIds);
     currentPlayer = allPlayers.get(0);
+    first = allPlayers.get(0);
   }
 
   public void play() {
     while (true) {
-      for (int i = 0;i < allPlayers.size();i++) {
+      for (int i = 0; i < allPlayers.size(); i++) {
         Player p = allPlayers.get(i);
         if (playTurn(p)) {
           i--;
@@ -87,7 +95,13 @@ public class Game extends GameStub {
 
   public void win() {
     System.out.println("Game Over");
-    // nothing is necessary
+    // TODO
+    try (FileWriter fw = new FileWriter(stats)) {
+      for (Player p : allPlayers) {
+        fw.write(p.getName() + ": " + p.scoreDeck());
+      }
+    } catch (IOException ioe) {
+    }
   }
 
   public boolean playTurn(Player p) {
