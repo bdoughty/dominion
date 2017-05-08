@@ -88,7 +88,7 @@ public class PendingGame extends GameStub {
     users.forEach(u -> ws.send(u, MessageType.REDIRECT, "game"));
     aiTypes.forEach(type -> {
       switch (type) {
-        case "Enhanced Neural Net":
+        case "Enhanced Neural Net (beta)":
           g.addPlayer(new UserAIPlayer(g, new NeuralNetMine(1)));
           return;
         case "Medium":
