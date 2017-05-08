@@ -6,6 +6,9 @@ import java.util.List;
 
 import com.google.gson.JsonObject;
 
+
+import edu.brown.cs.dominion.Card;
+import edu.brown.cs.dominion.Mapper;
 import edu.brown.cs.dominion.AI.Strategy.Strategy;
 import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.io.send.Button;
@@ -19,38 +22,10 @@ public class AIPlayer extends Player {
     this.st = st;
   }
 
-  /*
-   * <<<<<<< HEAD
-   * 
-   * @Override public void play(Game g) { System.out.println(
-   * "started the game!!!!!"); while (g.getPlayerFromUser(this).getActions() >
-   * 0) { int actionLoc = st.playAction(g, this); if (actionLoc == -1) { break;
-   * } } g.endActionPhase(this); int buys = g.getPlayerFromUser(this).getBuys();
-   * int money = g.getPlayerFromUser(this).getMoney(); List<Integer> toBuy = new
-   * LinkedList<>(); while (buys > 0) { int buyId = st.buy(money, g, this); if
-   * (buyId == -1) { break; } try { toBuy.add(buyId); buys--; money -=
-   * g.getBoard().getCostFromId(buyId); } catch (NoPileException npe) {
-   * System.out.println(npe.getMessage()); break; } } g.endBuyPhase(this,
-   * toBuy); } =======
-   * 
-   * @Override public void play(Game g) { System.out.println(
-   * "started the game!!!!!"); while (g.getPlayerFromUser(this).getActions() >
-   * 0) { int actionLoc = st.playAction(g, this); if (actionLoc == -1) { break;
-   * } } g.endActionPhase(this); int buys = g.getPlayerFromUser(this).getBuys();
-   * int money = g.getPlayerFromUser(this).getMoney(); List<Integer> toBuy = new
-   * LinkedList<>(); while (buys > 0) { int buyId = st.buy(money, g, this); if
-   * (buyId == -1) { break; } try { toBuy.add(buyId); buys--; money -=
-   * g.getBoard().getCostFromId(buyId); } catch (NoPileException npe) {
-   * System.out.println(npe.getMessage()); break; } } g.endBuyPhase(this,
-   * toBuy); } >>>>>>> d2e08df82acb2aa4492a8085b698d766b94dfa55
-   */
-
-  /*
-   * @Override public void doCallback(Game g, Callback c, List<ButtonCall>
-   * buttons) { if (!c.equals(null)) { switch (c.getName()) { case
-   * "militiadiscard": int toDiscard = st.discard(g, this); if (toDiscard >= 0)
-   * { c.getCallback().call(this, true, toDiscard); } break; } } }
-   */
+  public AIPlayer(Strategy st) {
+    super();
+    this.st = st;
+  }
 
   /**
    * Play a card from your hand
@@ -93,20 +68,27 @@ public class AIPlayer extends Player {
   @Override
   public int selectHand(List<Integer> cardIds, boolean cancelable,
       String name) {
-    if (cardIds.size() == 0 || !getHand().containsAll(cardIds)) {
+    if ((cardIds.size() == 0 && !cancelable)
+        || !Mapper.map(getHand(), Card::getId).containsAll(cardIds)) {
       throw new RuntimeException();
+    } else if (cardIds.size() == 0) {
+      if (!cancelable) {
+        throw new RuntimeException();
+      }
+      return -1;
     }
+
     switch (name) {
       case "reveal bureaucrat":
         if (cardIds.contains(6)) {
-          return getHand().indexOf(6);
+          return Mapper.map(getHand(), Card::getId).indexOf(6);
         } else if (cardIds.contains(3)) {
-          return getHand().indexOf(3);
+          return Mapper.map(getHand(), Card::getId).indexOf(3);
         } else if (cardIds.contains(4)) {
-          return getHand().indexOf(4);
+          return Mapper.map(getHand(), Card::getId).indexOf(4);
         } else {
           assert (cardIds.contains(5));
-          return getHand().indexOf(5);
+          return Mapper.map(getHand(), Card::getId).indexOf(5);
         }
       case "cellardiscard":
         int out = st.discard(this);
@@ -122,7 +104,7 @@ public class AIPlayer extends Player {
         return st.trashForMine(this);
       case "MoneyLender":
         assert (Collections.singleton(0).containsAll(cardIds));
-        return getHand().indexOf(0);
+        return Mapper.map(getHand(), Card::getId).indexOf(0);
       case "remodel trash":
         return st.trashForRemodel(this);
       case "throne room play":

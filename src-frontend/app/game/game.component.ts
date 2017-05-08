@@ -230,8 +230,8 @@ export class GameComponent implements OnInit {
 
       if (!this._firstTimer) {
         this._currTime = MAX_TIME;
-        this._firstTimer = false;
       }
+      this._firstTimer = false;
 
       const updateRate = 10; // Reset timer after every turn
       clearInterval(this._timerInterval);

@@ -8,6 +8,7 @@ import edu.brown.cs.dominion.gameutil.NoActionsException;
 import edu.brown.cs.dominion.gameutil.NotActionException;
 import edu.brown.cs.dominion.players.Player;
 import edu.brown.cs.dominion.players.UserInteruptedException;
+import edu.brown.cs.dominion.players.UserPlayer;
 
 public class ThroneRoom extends AbstractAction {
 
@@ -17,12 +18,21 @@ public class ThroneRoom extends AbstractAction {
 
   @Override
   public void play(Player p) {
-    List<Integer> handIds = p.getHand().stream()
-        .filter(c -> c instanceof AbstractAction).map(Card::getId)
-        .collect(Collectors.toList());
+    List<Integer> handIds =
+        p.getHand().stream().filter(c -> c instanceof AbstractAction)
+            .map(Card::getId).collect(Collectors.toList());
+    if (handIds.isEmpty()) {
+      if (p instanceof UserPlayer) {
+        ((UserPlayer) p).sendNotify("You don't have any actions!");
+      }
+      return;
+    }
     int toPlay = 0;
     try {
-      toPlay = p.selectHand(handIds, false, "throne room play");
+      toPlay = p.selectHand(handIds, true, "throne room play");
+      if (toPlay == -1) {
+        return;
+      }
     } catch (UserInteruptedException e) {
       return;
     }

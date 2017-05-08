@@ -1,5 +1,6 @@
 package edu.brown.cs.dominion.AI.Strategy;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -23,20 +24,17 @@ public class DumbStrategy implements Strategy {
 
   @Override
   public int trashForChapel(Player who) {
-    // TODO Auto-generated method stub
-    return 0;
+    return r.nextInt(who.getHand().size() + 1) - 1;
   }
 
   @Override
   public int trashForRemodel(Player who) {
-    // TODO Auto-generated method stub
-    return 0;
+    return discard(who);
   }
 
   @Override
   public int playThroneRoom(Player who) {
-    // TODO Auto-generated method stub
-    return 0;
+    return playAction(who);
   }
 
   @Override
@@ -45,8 +43,11 @@ public class DumbStrategy implements Strategy {
         who.getHand().stream().filter((card) -> card instanceof AbstractAction)
             .collect(Collectors.toList());
     if (actions.size() > 0) {
-      return who.getHand()
-          .indexOf(actions.get(r.nextInt(actions.size())).getId());
+      int toPlay = r.nextInt(actions.size());
+      System.out.println("has actions: " + Arrays.toString(actions.toArray())
+          + ", going to play: " + toPlay + ", hand is: "
+          + Arrays.toString(who.getHand().toArray()));
+      return who.getHand().indexOf(actions.get(toPlay));
     }
 
     return -1;
@@ -67,6 +68,15 @@ public class DumbStrategy implements Strategy {
     List<Integer> buyable = who.getGame().getBoard().getCardsUnderValue(money);
     if (buyable.size() > 0) {
       return buyable.get(r.nextInt(buyable.size()));
+    }
+
+    return -1;
+  }
+
+  @Override
+  public int gain(List<Integer> cardIds, Player who) {
+    if (cardIds.size() > 0) {
+      return cardIds.get(r.nextInt(cardIds.size()));
     }
 
     return -1;

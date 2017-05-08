@@ -220,6 +220,7 @@ public class Websocket {
           try {
             uml.handleMessage(this, u, data);
           } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("ERROR: handling the message \"" + message + "\"");
             System.out.println("ERROR MESSAGE: " + e.getMessage());
           }

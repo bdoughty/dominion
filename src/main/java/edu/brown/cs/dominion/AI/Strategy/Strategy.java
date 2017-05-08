@@ -22,12 +22,11 @@ public interface Strategy {
     if (hand.contains(0)) {
       return hand.indexOf(0);
     }
-    if (hand.contains(1)
-        && !who.getGame().getBoard().getPiles().get(1).isEmpty()) {
+    if (hand.contains(1)) {
       return hand.indexOf(1);
     }
 
-    return -1;
+    return hand.indexOf(2);
   }
 
   int trashForRemodel(Player who);

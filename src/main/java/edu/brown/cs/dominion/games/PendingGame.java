@@ -1,24 +1,27 @@
 package edu.brown.cs.dominion.games;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import edu.brown.cs.dominion.AI.AIPlayer;
+
+import edu.brown.cs.dominion.AI.UserAIPlayer;
 import edu.brown.cs.dominion.AI.Strategy.AttackDefense;
 import edu.brown.cs.dominion.AI.Strategy.BigMoneyBigVictoryPoints;
-import edu.brown.cs.dominion.AI.Strategy.ChapelHeavy;
 import edu.brown.cs.dominion.AI.Strategy.DumbStrategy;
 import edu.brown.cs.dominion.AI.Strategy.NeuralNetAi;
 import edu.brown.cs.dominion.io.User;
 import edu.brown.cs.dominion.io.Websocket;
 import edu.brown.cs.dominion.io.send.MessageType;
 
-import java.util.*;
-
 /**
  * Created by henry on 4/15/2017.
  */
-public class PendingGame extends GameStub{
+public class PendingGame extends GameStub {
   private static Gson GSON = new Gson();
 
   private List<User> users;
@@ -35,12 +38,13 @@ public class PendingGame extends GameStub{
     this.aiTypes = Collections.emptyList();
   }
 
-  public PendingGame(String name, int numPlayers, int[] crds, List<String> aiTypes) {
+  public PendingGame(String name, int numPlayers, int[] crds,
+      List<String> aiTypes) {
     this(name, numPlayers - aiTypes.size(), crds);
     this.aiTypes = aiTypes;
   }
 
-  public JsonObject toJson(){
+  public JsonObject toJson() {
     JsonObject main = new JsonObject();
     main.addProperty("maxusers", maxusers + aiTypes.size());
 
@@ -56,8 +60,8 @@ public class PendingGame extends GameStub{
     return main;
   }
 
-  public boolean addUser(User u){
-    if(users.size() == maxusers || users.contains(u)) {
+  public boolean addUser(User u) {
+    if (users.size() == maxusers || users.contains(u)) {
       return false;
     } else {
       users.add(u);
@@ -73,34 +77,36 @@ public class PendingGame extends GameStub{
     users.remove(u);
   }
 
-  //TODO
-  public UserGame convertAndRedirect(Websocket ws, GameManager gameManager){
+  // TODO
+  public UserGame convertAndRedirect(Websocket ws, GameManager gameManager) {
     List<Integer> cards = new LinkedList<>();
-    for(int i : actioncardids){
+    for (int i : actioncardids) {
       cards.add(i);
     }
     gameManager.removePendingByUser(users);
     UserGame g = new UserGame(users, cards, gameManager.web(), gameManager);
     users.forEach(u -> ws.send(u, MessageType.REDIRECT, "game"));
     aiTypes.forEach(type -> {
-      switch(type) {
-        case "AttackDefense": g.addPlayer(new AIPlayer(g, new AttackDefense()
-        )); return;
-        case "BigMoneyBigVictoryPoints": g.addPlayer(new AIPlayer(g, new BigMoneyBigVictoryPoints()
-        )); return;
-        case "ChapelHeavy": g.addPlayer(new AIPlayer(g, new ChapelHeavy()
-        )); return;
-        case "DumbStrategy": g.addPlayer(new AIPlayer(g, new DumbStrategy()
-        )); return;
-        case "NeuralNetAi": g.addPlayer(new AIPlayer(g, new NeuralNetAi()
-        )); return;
+      switch (type) {
+        case "AttackDefense":
+          g.addPlayer(new UserAIPlayer(g, new AttackDefense()));
+          return;
+        case "BigMoneyBigVictoryPoints":
+          g.addPlayer(new UserAIPlayer(g, new BigMoneyBigVictoryPoints()));
+          return;
+        case "DumbStrategy":
+          g.addPlayer(new UserAIPlayer(g, new DumbStrategy()));
+          return;
+        case "NeuralNetAi":
+          g.addPlayer(new UserAIPlayer(g, new NeuralNetAi()));
+          return;
       }
     });
     new Thread(g::play).start();
     return g;
   }
 
-  public List<User> getUsers(){
+  public List<User> getUsers() {
     return users;
   }
 }
