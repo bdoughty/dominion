@@ -96,13 +96,15 @@ public class Game extends GameStub {
     return board.buyCard(buyId, money);
   }
 
-  public Set<Integer> win() {
-    System.out.println("Game Over");
-    try {
-      updateDatabase();
-    } catch (ClassNotFoundException e) {
-      System.out.println(e.getMessage());
-    }
+  public void win() {
+    // try {
+    // updateDatabase();
+    // } catch (ClassNotFoundException e) {
+    // System.out.println(e.getMessage());
+    // }
+  }
+
+  public Set<Integer> winners() {
     Map<Integer, Integer> vps = getVictoryPointMap();
     int maxScore = Collections.max(vps.values());
     return vps.keySet().stream().filter((key) -> {
@@ -118,7 +120,7 @@ public class Game extends GameStub {
         PreparedStatement prep1 = conn.prepareStatement(
             "INSERT INTO games (ID, NUMPLAYERS, NUMTURNS) VALUES (?, ?, ?);");
         PreparedStatement prep2 = conn.prepareStatement(
-            "INSERT INTO players (ID, DECKSIZE, NUMVPS, NUMACTS, NUMMONEY, TOTVP, TOTMONEY, FIRST) VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
+            "INSERT INTO players (ID, DECKSIZE, NUMVPS, NUMACTS, NUMMONEY, TOTVP, TOTMONEY, POSN) VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
         PreparedStatement prep3 = conn.prepareStatement(
             "INSERT INTO gameplayers (GAMEID, PLAYERID) VALUES (?, ?);")) {
 

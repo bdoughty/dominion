@@ -18,6 +18,12 @@ public class NeuralNetMine implements Strategy {
   private static List<Integer> DISCARD_PREFERENCES =
       Arrays.asList(6, 3, 4, 5, 0, 1, 2);
 
+  private int mines;
+
+  public NeuralNetMine(int miness) {
+    mines = miness;
+  }
+
   private static NeuralNetwork nn =
       NeuralNetworkIO.load("src/main/resources/best.nn");
 
@@ -52,7 +58,7 @@ public class NeuralNetMine implements Strategy {
     List<Integer> out = new ArrayList<>();
     if (countOccurrances(
         allCards.stream().map(Card::getId).collect(Collectors.toList()),
-        10) < 3) {
+        10) < mines) {
       out.add(10);
     }
 

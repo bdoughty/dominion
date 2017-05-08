@@ -3,7 +3,6 @@ package edu.brown.cs.dominion.games;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.jetty.websocket.api.Session;
@@ -97,10 +96,10 @@ public class UserGame extends Game {
   }
 
   @Override
-  public Set<Integer> win() {
+  public void win() {
+    super.win();
     sendAll(MessageType.WINNER, GSON.toJson(getVictoryPointMap()));
     gm.finish(allUsers);
-    return super.win();
   }
 
   public void sendTurn(Session s) {
