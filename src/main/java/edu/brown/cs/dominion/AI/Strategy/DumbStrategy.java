@@ -24,19 +24,16 @@ public class DumbStrategy implements Strategy {
 
   @Override
   public int trashForChapel(Player who) {
-    // TODO Auto-generated method stub
     return r.nextInt(who.getHand().size() + 1) - 1;
   }
 
   @Override
   public int trashForRemodel(Player who) {
-    // TODO Auto-generated method stub
     return discard(who);
   }
 
   @Override
   public int playThroneRoom(Player who) {
-    // TODO Auto-generated method stub
     return playAction(who);
   }
 
