@@ -6,9 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-
-import com.google.common.collect.ImmutableList;
+import java.util.Map.Entry;
 
 import edu.brown.cs.dominion.AI.AIPlayer;
 import edu.brown.cs.dominion.AI.Strategy.NeuralNetMine;
@@ -19,94 +17,47 @@ import edu.brown.cs.dominion.players.Player;
  * Use random play ai to test game functionality. Created by henry on 5/7/2017.
  */
 public class AITest {
-  private static Random r = new Random();
+  // private static Random r = new Random();
 
   public static void main(String[] args) {
-    // double sampleSize = 50000.0;
-    // int[] numWon = new int[] {0, 0, 0, 0};
-    // Map<Integer, Integer> idsToPositions = new HashMap<>();
-    // for (int i = 0; i < sampleSize; i++) {
-    // Player zero = new AIPlayer(new NeuralNetMine(0)),
-    // one = new AIPlayer(new NeuralNetMine(1)),
-    // two = new AIPlayer(new NeuralNetMine(2)),
-    // three = new AIPlayer(new NeuralNetMine(3));
-    // idsToPositions.put(zero.getId(), 0);
-    // idsToPositions.put(one.getId(), 1);
-    // idsToPositions.put(two.getId(), 2);
-    // idsToPositions.put(three.getId(), 3);
-    //
-    // List<Player> players =
-    // new ArrayList<>(ImmutableList.of(zero, one, two, three));
-    // Collections.shuffle(players);
-    //
-    // Game g = new Game(players, get10cards());
-    // g.play();
-    // for (int w : g.winners()) {
-    // numWon[idsToPositions.get(w)] = numWon[idsToPositions.get(w)] + 1;
-    // }
-    //
-    // if ((int) (i * 100.0 / sampleSize) > (int) ((i - 1) * 100.0
-    // / sampleSize)) {
-    // System.out.println((int) (i * 100.0 / sampleSize) + "%");
-    // }
-    // }
-    // System.out.println(Arrays.toString(numWon));
-
-    // double sampleSize = 50000.0;
-    // int[] numWon = new int[] {0, 0, 0};
-    // Map<Integer, Integer> idsToPositions = new HashMap<>();
-    // for (int i = 0; i < sampleSize; i++) {
-    // Player zero = new AIPlayer(new NeuralNetMine(0)),
-    // one = new AIPlayer(new NeuralNetMine(1)),
-    // two = new AIPlayer(new NeuralNetMine(2));
-    // idsToPositions.put(zero.getId(), 0);
-    // idsToPositions.put(one.getId(), 1);
-    // idsToPositions.put(two.getId(), 2);
-    //
-    // List<Player> players = new ArrayList<>(ImmutableList.of(zero, one, two));
-    // Collections.shuffle(players);
-    //
-    // Game g = new Game(players, get10cards());
-    // g.play();
-    // for (int w : g.winners()) {
-    // numWon[idsToPositions.get(w)] = numWon[idsToPositions.get(w)] + 1;
-    // }
-    //
-    // if ((int) (i * 100.0 / sampleSize) > (int) ((i - 1) * 100.0
-    // / sampleSize)) {
-    // System.out.println((int) (i * 100.0 / sampleSize) + "%");
-    // }
-    // }
-    // System.out.println(Arrays.toString(numWon));
-
-    double sampleSize = 50000.0;
-    int[] numWon = new int[] {0, 0};
+    double sampleSize = 500.0;
+    int numAis = 2;
+    double[] totalVPs = new double[numAis];
+    for (int i = 0; i < numAis; i++) {
+      totalVPs[i] = 0.0;
+    }
     Map<Integer, Integer> idsToPositions = new HashMap<>();
     for (int i = 0; i < sampleSize; i++) {
-      Player zero = new AIPlayer(new NeuralNetMine(0)),
-          one = new AIPlayer(new NeuralNetMine(1));
-      idsToPositions.put(zero.getId(), 0);
-      idsToPositions.put(one.getId(), 1);
+      List<Player> players = new ArrayList<>();
+      for (int j = 0; j < numAis; j++) {
+        Player next = new AIPlayer(new NeuralNetMine(j));
+        idsToPositions.put(next.getId(), j);
+        players.add(next);
+      }
 
-      List<Player> players = new ArrayList<>(ImmutableList.of(zero, one));
       Collections.shuffle(players);
 
       Game g = new Game(players, get10cards());
       g.play();
-      for (int w : g.winners()) {
-        numWon[idsToPositions.get(w)] = numWon[idsToPositions.get(w)] + 1;
+      for (Entry<Integer, Integer> e : g.getVictoryPointMap().entrySet()) {
+        totalVPs[idsToPositions.get(e.getKey())] =
+            totalVPs[idsToPositions.get(e.getKey())] + e.getValue();
       }
+      // for (int w : g.winners()) {
+      // totalVPs[idsToPositions.get(w)] = totalVPs[idsToPositions.get(w)] + 1;
+      // }
 
       if ((int) (i * 100.0 / sampleSize) > (int) ((i - 1) * 100.0
           / sampleSize)) {
         System.out.println((int) (i * 100.0 / sampleSize) + "%");
       }
     }
-    System.out.println(Arrays.toString(numWon));
+    double[] averages = Arrays.copyOf(totalVPs, totalVPs.length);
+    for (int i = 0; i < averages.length; i++) {
+      averages[i] = totalVPs[i] / sampleSize;
+    }
 
-    // NeuralNetwork nn = NeuralNetworkIO.load("src/main/resources/best.nn");
-    // System.out
-    // .println(Arrays.toString(nn.run(new double[] {0.7, 0, 0, 0.3, 0, 0})));
+    System.out.println(Arrays.toString(averages));
 
     // double sampleSize = 50000.0;
     // for (int i = 0; i < sampleSize; i++) {
