@@ -13,7 +13,7 @@ public class Library extends AbstractAction {
   }
 
   @Override
-  public void play(Player p) {
+  public void play(Player p) throws UserInteruptedException {
     while (p.getHand().size() < 7) {
       try {
         Card justDrawn = p.drawOne();
@@ -27,7 +27,7 @@ public class Library extends AbstractAction {
         } else {
           p.selectButtons("library keep", b1).pressed();
         }
-      } catch (EmptyDeckException | UserInteruptedException e) {
+      } catch (EmptyDeckException e) {
         System.out.println(e.getMessage());
         break;
       }

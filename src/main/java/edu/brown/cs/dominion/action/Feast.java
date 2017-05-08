@@ -12,13 +12,13 @@ public class Feast extends AbstractAction {
   }
 
   @Override
-  public void play(Player p) {
+  public void play(Player p) throws UserInteruptedException {
     p.trashFeast();
     try {
       int selected = p.selectBoard(p.getGame().getBoard().getCardsUnderValue(5),
           false, "feast");
       p.gain(p.getGame().gain(selected), false, false);
-    } catch (EmptyPileException | NoPileException | UserInteruptedException e) {
+    } catch (EmptyPileException | NoPileException e) {
       System.out.println(e.getMessage());
     }
   }

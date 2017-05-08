@@ -16,28 +16,18 @@ public class Remodel extends AbstractAction {
   }
 
   @Override
-  public void play(Player p) {
+  public void play(Player p) throws UserInteruptedException {
     List<Integer> handIds = p.getHand().stream().map(Card::getId)
         .collect(Collectors.toList());
-    int toTrash = 0;
     if (!handIds.isEmpty()) {
-      try {
-        toTrash = p.selectHand(handIds, true, "remodel trash");
-      } catch (UserInteruptedException e) {
-        return;
-      }
+      int toTrash = p.selectHand(handIds, true, "remodel trash");
       if (toTrash == -1) {
         return;
       }
       Card c = p.trash(toTrash);
       List<Integer> boardIds = p.getGame().getBoard()
           .getCardsUnderValue(c.getCost() + 2);
-      int toGain = 0;
-      try {
-        toGain = p.selectBoard(boardIds, false, "remodel board");
-      } catch (UserInteruptedException e) {
-        return;
-      }
+      int toGain = p.selectBoard(boardIds, false, "remodel board");
       try {
         p.gain(p.getGame().gain(toGain), false, false);
       } catch (EmptyPileException | NoPileException ignored) {

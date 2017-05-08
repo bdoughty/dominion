@@ -197,7 +197,7 @@ public class UserPlayer extends Player {
     return -2;
   }
 
-  public void lazySend(ButtonCallback bc){
+  public void lazySend(ButtonCallback bc) throws UserInteruptedException{
     lazy.sendLazyHand(this, bc);
   }
 

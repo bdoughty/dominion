@@ -13,20 +13,16 @@ public class Chapel extends AbstractAction {
   }
 
   @Override
-  public void play(Player p) {
+  public void play(Player p) throws UserInteruptedException {
     int ndiscarded = 0;
     while (ndiscarded++ < 4) {
-      try {
-        int selected = p.selectHand(
-            p.getHand().stream().map(Card::getId).collect(Collectors.toList()),
-            true, "chapel");
-        if (selected == -1) {
-          break;
-        } else {
-          p.trash(selected);
-        }
-      } catch (UserInteruptedException uie) {
+      int selected = p.selectHand(
+          p.getHand().stream().map(Card::getId).collect(Collectors.toList()),
+          true, "chapel");
+      if (selected == -1) {
         break;
+      } else {
+        p.trash(selected);
       }
     }
   }

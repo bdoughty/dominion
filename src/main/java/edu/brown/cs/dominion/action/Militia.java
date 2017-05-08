@@ -35,13 +35,22 @@ public class Militia extends AbstractAction {
                 } catch (UserInteruptedException e) {
                   while (p.getHand().size() > 3) {
                     p.discard(0);
+                    System.out.println("malitia interrupred");
                   }
                 }
               };
               if (p instanceof UserPlayer) {
-                ((UserPlayer) p).lazySend(send);
+                try {
+                  ((UserPlayer) p).lazySend(send);
+                } catch (UserInteruptedException e) {
+                  System.out.println("malitia failed to send");
+                }
               } else {
-                send.pressed();
+                try {
+                  send.pressed();
+                } catch (UserInteruptedException e) {
+                  System.out.println("malitia interrupred");
+                }
               }
             }
           }).start();

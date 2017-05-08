@@ -12,14 +12,10 @@ public class Workshop extends AbstractAction {
   }
 
   @Override
-  public void play(Player p) {
+  public void play(Player p) throws UserInteruptedException {
     int toGain = 0;
-    try {
-      toGain = p.selectBoard(p.getGame().getBoard().getCardsUnderValue(4),
-        false, "workshop");
-    } catch (UserInteruptedException e) {
-      return;
-    }
+    toGain = p.selectBoard(p.getGame().getBoard().getCardsUnderValue(4),
+      false, "workshop");
 
     try {
       p.gain(p.getGame().gain(toGain), false, false);

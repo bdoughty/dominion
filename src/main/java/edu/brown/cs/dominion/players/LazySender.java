@@ -13,7 +13,8 @@ class LazySender{
   private static int id = 0;
   List<Integer> toSend = new LinkedList<>();
 
-  public synchronized void sendLazyHand(UserPlayer p, ButtonCallback bc) {
+  public synchronized void sendLazyHand(UserPlayer p, ButtonCallback bc)
+    throws UserInteruptedException{
     if (!p.hasUserActions() && toSend.isEmpty()) {
       bc.pressed();
       return;
