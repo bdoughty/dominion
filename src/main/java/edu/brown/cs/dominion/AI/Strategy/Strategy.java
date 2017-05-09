@@ -38,11 +38,9 @@ public interface Strategy {
   default int discard(Player who) {
     List<Integer> hand = currentHand(who);
     if (hand.size() > 0) {
-      return who.getHand()
-          .indexOf(Collections.min(hand,
-              (one, two) -> Integer.compare(
-                  getDiscardPreferences(who).indexOf(one),
-                  getDiscardPreferences(who).indexOf(two))));
+      return hand.indexOf(Collections.min(hand,
+          (one, two) -> Integer.compare(getDiscardPreferences(who).indexOf(one),
+              getDiscardPreferences(who).indexOf(two))));
     }
 
     return -1;

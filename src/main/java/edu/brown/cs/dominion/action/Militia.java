@@ -28,8 +28,9 @@ public class Militia extends AbstractAction {
                 }
                 try {
                   if (p.getHand().size() > 3) {
-                    int discard = p.selectHand(p.getHand().stream().map(Card::getId)
-                      .collect(Collectors.toList()), false, "militiadiscard");
+                    int discard = p.selectHand(p.getHand().stream()
+                        .map(Card::getId).collect(Collectors.toList()), false,
+                        "militiadiscard");
                     p.discard(discard);
                   }
                 } catch (UserInteruptedException e) {

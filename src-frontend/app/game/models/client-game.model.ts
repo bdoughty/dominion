@@ -107,16 +107,20 @@ export class ClientGame {
   }
 
   public removePlayer(id: number): void {
+    for (let i = 0; i < this.orderedPlayers.length; i++) {
+      const player = this.orderedPlayers[i];
+      if (player.id == id) {
+        this.orderedPlayers.splice(i, 1);
+        break;
+      }
+    }
     for (let i = 0; i < this.players.length; i++) {
-      console.log("looping");
       const player = this.players[i];
       if (player.id == id) {
-        console.log("Removing player");
         this.players.splice(i, 1);
         break;
       }
     }
-    console.log("broke");
   }
 
   public setTurn(id: number): void {
