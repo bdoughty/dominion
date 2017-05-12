@@ -66,7 +66,7 @@ public class Game extends GameStub {
         System.out.println("starting turn of player " + pt);
         Player p = allPlayers.get(pt);
         if (playTurn(p)) {
-          pt--;
+          pt++;
         }
         if (board.gameHasEnded() || allPlayers.size() == 0) {
           break;
