@@ -19,7 +19,7 @@ public class NeuralNetAi implements Strategy {
       Arrays.asList(6, 3, 4, 5, 0, 1, 2);
 
   private static NeuralNetwork nn =
-      NeuralNetworkIO.load("src/main/resources/best.nn");
+      NeuralNetworkIO.load("src/main/resources/bestMoreTurns.nn");
 
   @Override
   public List<Integer> getDiscardPreferences(Player who) {
@@ -28,12 +28,12 @@ public class NeuralNetAi implements Strategy {
 
   @Override
   public List<Integer> getBuyPreferences(Player who) {
-    double[] possessions = new double[] {0, 0, 0, 0, 0, 0};
+    double[] possessions = new double[] {0, 0, 0, 0, 0, 0, 0};
     List<Card> allCards = new ArrayList<>(who.getDeck());
     allCards.addAll(who.getHand());
     allCards.addAll(who.getDiscard());
     allCards.forEach((card) -> {
-      if (card.getId() < 6) {
+      if (card.getId() < 7) {
         possessions[card.getId()] = possessions[card.getId()] + 0.1;
       }
     });
@@ -42,11 +42,11 @@ public class NeuralNetAi implements Strategy {
     // + Arrays.toString(possessions));
 
     double[] results = nn.run(possessions);
-    assert (results.length == 6);
+    assert (results.length == 7);
     // System.out.println(Arrays.toString(results));
 
     Map<Integer, Double> map = new HashMap<>();
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 7; i++) {
       map.put(i, results[i]);
     }
     List<Integer> out = new ArrayList<>();

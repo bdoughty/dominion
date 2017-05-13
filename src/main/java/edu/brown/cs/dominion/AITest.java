@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import edu.brown.cs.dominion.AI.AIPlayer;
+import edu.brown.cs.dominion.AI.Strategy.NeuralNetAi;
 import edu.brown.cs.dominion.AI.Strategy.NeuralNetMine;
 import edu.brown.cs.dominion.games.Game;
 import edu.brown.cs.dominion.players.Player;
@@ -21,7 +22,7 @@ public class AITest {
 
   public static void main(String[] args) {
     double sampleSize = 500.0;
-    int numAis = 2;
+    int numAis = 3;
     double[] totalVPs = new double[numAis];
     for (int i = 0; i < numAis; i++) {
       totalVPs[i] = 0.0;
@@ -30,7 +31,12 @@ public class AITest {
     for (int i = 0; i < sampleSize; i++) {
       List<Player> players = new ArrayList<>();
       for (int j = 0; j < numAis; j++) {
-        Player next = new AIPlayer(new NeuralNetMine(j));
+
+        Player next;
+        if (j % 2 == 0)
+          next = new AIPlayer(new NeuralNetMine(j));
+        else
+          next = new AIPlayer(new NeuralNetAi());
         idsToPositions.put(next.getId(), j);
         players.add(next);
       }
@@ -81,7 +87,7 @@ public class AITest {
     List<Integer> a = new ArrayList<>();
     while (a.size() < 10) {
       int n = (int) (Math.random() * 22 + 7);
-      if (!a.contains(n) && n != 22 && n != 9 && n != 20) {
+      if (!a.contains(n) && n != 22 && n != 9 && n != 20 && n != 10) {
         a.add(n);
       }
     }
