@@ -37,6 +37,8 @@ public class Game extends GameStub {
 
   private int turn = 1;
 
+  private int pt;
+
   public Game(List<Player> usersTurns, List<Integer> actionCardIds) {
     usersTurns.forEach(u -> u.setGame(this));
     this.allPlayers = new LinkedList<>(usersTurns);
@@ -61,11 +63,11 @@ public class Game extends GameStub {
 
   public void play() {
     while (true) {
-      for (int i = 0; i < allPlayers.size(); i++) {
-        // System.out.println("starting turn of player " + i);
-        Player p = allPlayers.get(i);
+      for (pt = 0; pt < allPlayers.size(); pt++) {
+        // System.out.println("starting turn of player " + pt);
+        Player p = allPlayers.get(pt);
         if (playTurn(p)) {
-          i--;
+          pt++;
         }
         if (board.gameHasEnded() || allPlayers.size() == 0) {
           break;
@@ -177,6 +179,7 @@ public class Game extends GameStub {
         Thread.sleep(61000);
         cancelTurn();
         System.out.println("ending turn");
+        pt--;
       } catch (InterruptedException ignored) {
       }
     });
