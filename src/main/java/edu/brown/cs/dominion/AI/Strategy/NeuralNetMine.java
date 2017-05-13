@@ -25,7 +25,7 @@ public class NeuralNetMine implements Strategy {
   }
 
   private static NeuralNetwork nn =
-      NeuralNetworkIO.load("src/main/resources/best.nn");
+      NeuralNetworkIO.load("src/main/resources/bestMoreTurns.nn");
 
   @Override
   public List<Integer> getDiscardPreferences(Player who) {
